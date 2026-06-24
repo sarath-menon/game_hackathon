@@ -1162,3 +1162,26 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - `BLOCKED_PROVIDER` for provider/shell/iframe/startup/ad/consent path blockers;
   - `BLOCKED_ENVIRONMENT` for local browser-harness/WebGL/audio/input/storage environment blockers.
 - Tester must not try alternate provider URLs itself; blocked results return to the orchestrator for the next retry plan.
+
+## PolyTrack Poki External QA Retry 1 BLOCKED_ENVIRONMENT - 2026-06-25
+
+- Canonical cross-game tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed PolyTrack Poki shared-window retry 1.
+- Evidence folder: `evidence/external/polytrack-poki-shared-window-retry-1/`.
+- Required files are present:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `BLOCKED_ENVIRONMENT`.
+- Important distinction:
+  - Poki provider access is not blocked; the page loaded, redirected to `https://poki.com/id/g/polytrack`, exposed the `games.poki.com` iframe, and reached PolyTrack's in-game menu/settings.
+  - This is not a final game `FAIL`; the game was not playable deeply enough to evaluate driving quality.
+  - The blocker is shared-window browser-harness input targeting/recovery: the clean evidence did not reliably activate the Play flow or enter a drivable track.
+- Tester also recorded methodology carry-forward:
+  - close duplicate PolyTrack/Poki tabs before a clean pass because PolyTrack detects another open instance;
+  - keep contaminated stale-tab captures out of final evidence;
+  - derive click targets from visible menu tile layout for canvas/iframe games;
+  - separate provider menu reachability from actual gameplay reachability.
+- Next action:
+  - update dashboard to show PolyTrack Poki retry 1 as `BLOCKED_ENVIRONMENT / needs retry`, not failed-game QA;
+  - route a fresh PolyTrack Poki retry through the same canonical tester with a more deliberate visible Play-menu interaction plan and no duplicate PolyTrack tabs;
+  - if that still cannot reach a drivable track, move to the next reputable/direct provider path rather than treating PolyTrack as final `FAIL`.

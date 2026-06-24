@@ -112,8 +112,9 @@ A popular external browser game must not receive final `FAIL` solely because one
   - Settings and hotfix tester reports are handled only by the single canonical cross-game tester. If a report says `FAIL`, route only the summarized blocker to that game's builder; if it says `PASS` with `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`, close that phase and select the next highest-impact settings or quality improvement.
   - Browser-game research thread `019efaae-20f8-7473-8e01-69d4ae206994` is used for direct-URL game candidates, alternate provider paths, and settings/options quality references.
   - External browser-game QA:
-    - PolyTrack is reclassified as `BLOCKED_PROVIDER` / needs retry; the first provider hit a startup runtime error before gameplay, and an interrupted retry must be rerun through the canonical tester in the shared Chrome window.
-    - Current active external QA handoff: PolyTrack Poki provider shared-window retry 1 through the canonical tester, evidence target `evidence/external/polytrack-poki-shared-window-retry-1/`.
+    - PolyTrack original/Kodub provider failures are reclassified as blocked/needs retry, not game `FAIL`.
+    - PolyTrack Poki provider shared-window retry 1 is `BLOCKED_ENVIRONMENT` at `evidence/external/polytrack-poki-shared-window-retry-1/`: provider and in-game menu/settings loaded, but harness targeting did not reliably enter a drivable track.
+    - Next PolyTrack action: retry the reachable Poki provider through the canonical tester with a deliberate visible Play-menu interaction plan and no duplicate PolyTrack tabs; if it remains blocked, route the next reputable/direct provider path instead of treating the game as failed.
     - OvO is reclassified as `BLOCKED_PROVIDER` / needs retry; the first provider stayed on a loading spinner before gameplay, and an interrupted retry must be rerun through the canonical tester in the shared Chrome window.
     - Cookie Clicker completed as `PASS with limitations`; load, click/purchase loop, Options, save/export, and persistence were verified, with narrow viewport capture limited by the harness.
     - Dungeons & Degenerate Gamblers completed as `PASS with nonblocking findings`; launch, run start, deck selection, tavern entry, and first table interaction were verified.
