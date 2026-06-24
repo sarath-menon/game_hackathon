@@ -2026,3 +2026,36 @@ python3 -m http.server 8765 --bind 127.0.0.1
 - External QA classification preserved:
   - `PASS_WITH_FINDINGS`, `FAIL`, `BLOCKED_PROVIDER`, or `BLOCKED_ENVIRONMENT`;
   - provider/setup/harness blockers must not be treated as final game failures.
+
+## Cookie Clicker External QA Follow-Up Pass 2 PASS_WITH_FINDINGS - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` produced required artifacts for Cookie Clicker Follow-up Pass 2.
+- Evidence folder: `evidence/external/cookie-clicker-followup-pass-2/`.
+- Required outputs exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS_WITH_FINDINGS`.
+- Provider/environment classification:
+  - not `BLOCKED_PROVIDER`: the direct official URL `https://orteil.dashnet.org/cookieclicker/` reached a playable game state;
+  - not whole-pass `BLOCKED_ENVIRONMENT`: shared-window browser-harness completed playable desktop/narrow testing, report, flow, and MP4 evidence;
+  - true mobile emulation is a low environment-limited sub-scope because the browser-harness CDP helper blocked device metrics.
+- Verified:
+  - playable state reached without sign-in or personal-data submission;
+  - backup reminder was dismissible and nonblocking;
+  - cookie clicks changed the cookie count;
+  - safe Grandma purchase succeeded and changed production to 1.2 CPS with Grandma owned count 1;
+  - manual Save plus reload preserved distinctive state;
+  - Options exposed manual Save, Export save, Import save, Save to file, Load from file, language controls, volume/audio controls, visual/performance toggles, warning toggles, screen-reader mode, mod data, and separated Wipe save controls;
+  - export/import were opened only to safe modal level and dismissed without submitting data;
+  - destructive reset was inspected only by visible separation/warning text and not triggered;
+  - 782 x 859 narrow desktop viewport remained usable despite dense UI.
+- Methodology carry-forward:
+  - for idle/incremental games, create distinctive non-destructive state using currency plus production/owned-count changes, then manually save before reload comparison;
+  - import/export testing should verify clarity and exit paths without pasting/submitting data;
+  - destructive controls should be verified by visible separation/warning text, not activation;
+  - viewport-tooling failures should be separated from game verdict when the game remains playable and key QA coverage is complete.
+- Next orchestration action:
+  - dashboard updated to show Pass 2 `PASS_WITH_FINDINGS` with evidence links and low mobile-emulation limitation;
+  - canonical tester reported complete and idle after artifact verification;
+  - next action is to select the highest-impact local-game polish or external QA-methodology follow-up, then hand it to the canonical tester only after dashboard/log are current.
