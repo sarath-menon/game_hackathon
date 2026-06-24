@@ -27,8 +27,11 @@ Current live state:
 - Platformer Upgrade Phase A is closed `PASS`.
 - Dashboard has been verified as current through the Platformer closure.
 - Next active lane selected: Turn-Based Deckbuilder, Upgrade Phase 1: Combat Feedback And Math Preview.
-- Deckbuilder builder handoff is being sent to thread `019ef96e-7780-7763-b444-12cf7698a97a`; tester remains on standby until builder completion and orchestrator handoff.
-- Dashboard must be updated now to show Deckbuilder selected/builder-active, evidence pending at `evidence/deckbuilder/upgrade-phase-1-combat-feedback/`, and next action waiting for builder completion.
+- Deckbuilder builder completed the upgrade in thread `019ef96e-7780-7763-b444-12cf7698a97a`.
+- Builder changed `games/deckbuilder/index.html` and `games/deckbuilder/README.md`, preserving the deterministic two-encounter run while adding visible HP bars, floating feedback chips, card-play trail animation, live card previews using the same Focus/Fractured math as resolution, and inline disabled-card reasons.
+- Builder self-checks passed: hosted game/manual `200 OK`, embedded script parses, normal run reaches reward, encounter 2, and final victory, zero-energy state explains disabled cards, and Focus/Fractured previews match resolved combat log damage.
+- Deckbuilder tester handoff is being sent to thread `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` with evidence target `evidence/deckbuilder/upgrade-phase-1-combat-feedback/`.
+- Dashboard must be updated now to show Deckbuilder builder-complete/tester-active, evidence pending at `evidence/deckbuilder/upgrade-phase-1-combat-feedback/`, and next action waiting for tester verdict.
 
 Continuous QA loop history, first upgrade lane:
 

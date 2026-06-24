@@ -47,7 +47,8 @@ There is no terminal success condition for this loop. Keep iterating through hig
   - The Platformer upgrade report verifies short-tap versus held-jump readability, jump forgiveness, lower-deck completion, hazard/failure/restart behavior, checkpoint recovery, route readability, and no blocking runtime errors.
   - Required evidence exists at `evidence/platformer/upgrade-phase-a-movement-feel/`: `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`.
   - Current active continuous-upgrade lane: Turn-Based Deckbuilder, Upgrade Phase 1: Combat Feedback And Math Preview.
-  - Deckbuilder builder handoff is being sent to thread `019ef96e-7780-7763-b444-12cf7698a97a`; tester remains on standby until builder completion and an orchestrator handoff.
+  - Deckbuilder builder completed the upgrade in thread `019ef96e-7780-7763-b444-12cf7698a97a`.
+  - Deckbuilder tester handoff is being sent to thread `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
   - Active evidence target: `evidence/deckbuilder/upgrade-phase-1-combat-feedback/`.
   - The dashboard must reflect the live loop as it changes, including selected-upgrade, builder-active, builder-complete, tester-handoff, tester-active, FAIL, fix-active, retest-pending, retest-active, PASS closure, and next-upgrade selection states.
 - QA upgrade artifacts:

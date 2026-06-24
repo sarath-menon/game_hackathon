@@ -653,14 +653,14 @@
     <section class="attention-panel" id="attention-panel" data-state="active">
       <div>
         <h2>Continuous QA Loop</h2>
-        <p><strong>Deckbuilder Combat Feedback upgrade is in build.</strong> Kart Upgrade Phase A and Platformer Upgrade Phase A are closed PASS; the active lane is now Deckbuilder Upgrade Phase 1.</p>
+        <p><strong>Deckbuilder Combat Feedback upgrade is in black-box QA.</strong> Builder work is complete; the tester handoff is active and verdict is pending.</p>
         <p><strong>Freshness gate:</strong> after every builder handoff, completion, tester handoff, FAIL, fix request, retest, PASS closure, or new upgrade selection, this dashboard must be updated and verified or visibly in progress.</p>
         <div class="loop-grid" aria-label="Active upgrade status">
           <div class="loop-cell"><strong>Active Game</strong>Turn-Based Deckbuilder</div>
           <div class="loop-cell"><strong>Upgrade Phase</strong>Upgrade Phase 1: Combat Feedback And Math Preview</div>
-          <div class="loop-cell"><strong>Builder</strong>Handoff sent / active in 019ef96e-7780-7763-b444-12cf7698a97a</div>
-          <div class="loop-cell"><strong>Tester</strong>Standby; no tester handoff yet</div>
-          <div class="loop-cell"><strong>Next Action</strong>Wait for builder completion, then send URL/manual/evidence handoff</div>
+          <div class="loop-cell"><strong>Builder</strong>Complete in 019ef96e-7780-7763-b444-12cf7698a97a</div>
+          <div class="loop-cell"><strong>Tester</strong>Active / verdict pending in 019ef96e-99ee-7f62-b4d2-7d2c3cd29217</div>
+          <div class="loop-cell"><strong>Next Action</strong>Wait for tester verdict; close on PASS or route fix on FAIL</div>
         </div>
         <div class="qa-links" aria-label="QA upgrade research links">
           <span>Gate: <strong>dashboard fresh/verified before transition complete</strong></span>
@@ -687,7 +687,7 @@
     <section class="open-issues" aria-label="Open issues">
       <header><h2>Active QA Work</h2></header>
       <div class="issue-list">
-        <div class="empty-state">Deckbuilder Upgrade Phase 1 is in builder implementation. Goal: improve combat feedback and math preview while preserving prior card-combat, tactical-variety, and run-structure PASS behavior.</div>
+        <div class="empty-state">Deckbuilder Upgrade Phase 1 is in tester black-box QA. Builder completed combat feedback and math preview work; required tester report, expected-flow, and gameplay recording are pending.</div>
       </div>
     </section>
   </main>
@@ -788,8 +788,8 @@
         id: "deckbuilder",
         name: "Turn-Based Deckbuilder",
         status: "attention",
-        statusLabel: "UPGRADE BUILD",
-        summary: "Historical phases are PASS; Upgrade Phase 1 Combat Feedback And Math Preview is active in builder implementation.",
+        statusLabel: "UPGRADE TESTING",
+        summary: "Historical phases are PASS; Upgrade Phase 1 Combat Feedback And Math Preview is in tester QA with verdict pending.",
         gameUrl: "games/deckbuilder/index.html",
         readmeUrl: "games/deckbuilder/README.md",
         primaryPhase: "upgrade-a",
@@ -803,7 +803,7 @@
           { label: "Phase 1: Basic Card Combat", status: "PASS", evidenceDir: "evidence/deckbuilder/phase-1" },
           { label: "Phase 2: Tactical Variety", status: "PASS", evidenceDir: "evidence/deckbuilder/phase-2" },
           { label: "Phase 3: Run Structure", status: "PASS", evidenceDir: "evidence/deckbuilder/phase-3" },
-          { label: "Upgrade Phase 1: Combat Feedback And Math Preview", status: "BUILD ACTIVE / EVIDENCE PENDING", hydrateStatus: true, evidenceDir: "evidence/deckbuilder/upgrade-phase-1-combat-feedback" }
+          { label: "Upgrade Phase 1: Combat Feedback And Math Preview", status: "TESTING ACTIVE / VERDICT PENDING", hydrateStatus: true, evidenceDir: "evidence/deckbuilder/upgrade-phase-1-combat-feedback" }
         ]
       }
     ];
@@ -848,8 +848,8 @@
       ],
       "deckbuilder:upgrade-a": [
         ["Upgrade selected", "Deckbuilder Upgrade Phase 1: Combat Feedback And Math Preview is the active continuous QA upgrade."],
-        ["Builder active", "Builder thread 019ef96e-7780-7763-b444-12cf7698a97a has the handoff and is implementing combat feedback and math preview improvements."],
-        ["Tester standby", "No tester handoff yet. After builder completion, orchestrator sends URL/manual/evidence paths to the deckbuilder tester."],
+        ["Builder complete", "Builder thread 019ef96e-7780-7763-b444-12cf7698a97a completed the combat feedback and math preview implementation."],
+        ["Tester active / verdict pending", "Black-box QA handoff was sent to tester thread 019ef96e-99ee-7f62-b4d2-7d2c3cd29217. Await TEST_REPORT.md, expected-flow.md, and gameplay-recording.mp4."],
         ["Evidence pending", "Expected tester artifacts will land in evidence/deckbuilder/upgrade-phase-1-combat-feedback/: TEST_REPORT.md, expected-flow.md, and gameplay-recording.mp4."]
       ]
     };
