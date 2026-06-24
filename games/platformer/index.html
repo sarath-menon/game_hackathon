@@ -300,6 +300,7 @@
       }
 
       function startGame() {
+        keys.clear();
         for (const core of collectibles) core.collected = false;
         player.health = 3;
         checkpoint.active = false;
@@ -313,7 +314,13 @@
         title.classList.add("hidden");
         complete.classList.add("hidden");
         status.textContent = "Reach the exit beacon";
+        healthText.textContent = "Health: 3";
+        checkpointHud.textContent = "Checkpoint: start";
+        coresText.textContent = `Cores: 0/${collectibles.length}`;
+        distance.textContent = `${Math.max(0, Math.round((exit.x - player.x) / 10))} m`;
+        lastTime = performance.now();
         startButton.blur();
+        resultButton.blur();
       }
 
       function completeLevel() {

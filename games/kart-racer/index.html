@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Arcade Kart Racer - Phase 1</title>
+  <title>Arcade Kart Racer - Phase 3</title>
   <style>
     :root {
       color-scheme: dark;
@@ -87,6 +87,22 @@
       font-size: 28px;
       font-weight: 760;
       line-height: 1;
+    }
+
+    .speed-track {
+      height: 6px;
+      margin-top: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .speed-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #49d38a, #ffcf45, #ff6b7a);
+      transition: width 120ms linear;
     }
 
     .hint {
@@ -182,6 +198,13 @@
       cursor: pointer;
     }
 
+    .secondary {
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+    }
+
     .complete h1 {
       color: var(--good);
     }
@@ -228,12 +251,13 @@
       <div class="panel">
         <div class="label">Objective</div>
         <div>Clear checkpoints in order, then cross the yellow finish gate.</div>
-        <div class="hint">Clear CP1, CP2, CP3, then finish. Lap starts at 0/1.</div>
+        <div class="hint">Clear CP1, CP2, CP3, then finish. Hit cyan boost pads. Avoid red barriers. Press R to restart.</div>
       </div>
       <div class="stats">
         <div class="panel stat">
           <div class="label">Speed</div>
           <div class="value"><span id="speed">0</span></div>
+          <div class="speed-track" aria-hidden="true"><div class="speed-fill" id="speedFill"></div></div>
         </div>
         <div class="panel stat">
           <div class="label">Lap</div>
@@ -255,12 +279,13 @@
   <div id="start" class="center">
     <section class="card">
       <h1>Arcade Kart Racer</h1>
-      <p>Phase 2: clear three checkpoint gates in order, then cross the yellow finish gate to complete the scored lap.</p>
+      <p>Phase 3: clear the checkpoint route, use cyan boost pads, avoid red barriers, then cross the yellow finish gate.</p>
       <div class="controls">
         <div class="control"><kbd>W</kbd><kbd>↑</kbd> Accelerate</div>
         <div class="control"><kbd>S</kbd><kbd>↓</kbd> Brake / reverse</div>
         <div class="control"><kbd>A</kbd><kbd>←</kbd> Steer left</div>
         <div class="control"><kbd>D</kbd><kbd>→</kbd> Steer right</div>
+        <div class="control"><kbd>R</kbd> Restart</div>
       </div>
       <button id="startButton" type="button">Start Race</button>
     </section>
@@ -270,6 +295,7 @@
     <section class="card complete">
       <h1>Race Complete</h1>
       <p id="completeText">Lap complete.</p>
+      <button id="restartButton" class="secondary" type="button">Restart Race</button>
     </section>
   </div>
 
@@ -282,7 +308,9 @@
       const startOverlay = document.getElementById("start");
       const completeOverlay = document.getElementById("complete");
       const startButton = document.getElementById("startButton");
+      const restartButton = document.getElementById("restartButton");
       const speedEl = document.getElementById("speed");
+      const speedFill = document.getElementById("speedFill");
       const lapEl = document.getElementById("lap");
       const timeEl = document.getElementById("time");
       const nextEl = document.getElementById("next");
@@ -302,6 +330,16 @@
         { angle: 1.78, label: "CP1", color: "#5ac8fa" },
         { angle: 1.99, label: "CP2", color: "#ff6b7a" },
         { angle: 2.2, label: "CP3", color: "#6ee787" }
+      ];
+
+      const boostPads = [
+        { angle: 1.88, offset: 0, label: "BOOST" },
+        { angle: 2.13, offset: -5, label: "BOOST" }
+      ];
+
+      const obstacles = [
+        { angle: 2.08, offset: 31, radius: 12, label: "BARRIER" },
+        { angle: 2.52, offset: -31, radius: 12, label: "CONE" }
       ];
 
       const kart = {
@@ -326,6 +364,10 @@
       let finalTime = 0;
       let statusMessage = "Start the race and aim for Checkpoint 1.";
       let messageUntil = 0;
+      let boostTimer = 0;
+      let collisionTimer = 0;
+      let shakeTimer = 0;
+      let lastBoostPad = -1;
 
       function resize() {
         dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -362,6 +404,16 @@
         };
       }
 
+      function trackPoint(angle, offset) {
+        const c = centerPoint(angle);
+        const n = ellipseNormal(angle);
+        return {
+          x: c.x + n.x * offset,
+          y: 0,
+          z: c.z + n.z * offset
+        };
+      }
+
       function nearestTrackInfo(x, z) {
         const angle = Math.atan2(z / track.radiusZ, x / track.radiusX);
         const c = centerPoint(angle);
@@ -388,10 +440,11 @@
 
       function makeCamera() {
         const f = forwardVector();
+        const shake = shakeTimer > 0 ? (Math.random() - 0.5) * 5 : 0;
         const cam = {
-          x: kart.x - f.x * 88,
+          x: kart.x - f.x * 88 + shake,
           y: 44,
-          z: kart.z - f.z * 88
+          z: kart.z - f.z * 88 - shake
         };
         const target = {
           x: kart.x + f.x * 52,
@@ -475,8 +528,11 @@
         ctx.fillRect(0, height * 0.48, width, height * 0.52);
 
         drawTrack(camera);
+        drawBoostPads(camera);
+        drawObstacles(camera);
         drawRaceMarkers(camera);
         drawKart(camera);
+        drawSpeedEffects();
         drawMiniMap();
       }
 
@@ -525,6 +581,65 @@
           mark2.z += t.z * 5;
           line3d(mark, mark2, camera, "rgba(255, 207, 69, 0.45)", 2);
         }
+      }
+
+      function drawBoostPads(camera) {
+        boostPads.forEach((pad, index) => {
+          const points = padShape(pad, 23, 18).map((point) => project(point, camera));
+          const active = boostTimer > 0 && lastBoostPad === index;
+          polygon(points, active ? "rgba(103, 235, 255, 0.92)" : "rgba(71, 213, 232, 0.68)", "rgba(255,255,255,0.58)", active ? 3 : 2);
+          const label = trackPoint(pad.angle, pad.offset);
+          label.y = 3;
+          text3d(label, camera, "BOOST", active ? "#ffffff" : "#8df5ff", 13);
+        });
+      }
+
+      function padShape(pad, length, width) {
+        const c = trackPoint(pad.angle, pad.offset);
+        const t = tangentAt(pad.angle);
+        const n = ellipseNormal(pad.angle);
+        return [
+          { x: c.x - t.x * length - n.x * width, y: 0.8, z: c.z - t.z * length - n.z * width },
+          { x: c.x + t.x * length - n.x * width, y: 0.8, z: c.z + t.z * length - n.z * width },
+          { x: c.x + t.x * length + n.x * width, y: 0.8, z: c.z + t.z * length + n.z * width },
+          { x: c.x - t.x * length + n.x * width, y: 0.8, z: c.z - t.z * length + n.z * width }
+        ];
+      }
+
+      function drawObstacles(camera) {
+        obstacles.forEach((obstacle) => {
+          const base = trackPoint(obstacle.angle, obstacle.offset);
+          const left = { ...base, y: 2 };
+          const top = { ...base, y: 32 };
+          const n = ellipseNormal(obstacle.angle);
+          const a = { x: base.x - n.x * obstacle.radius, y: 4, z: base.z - n.z * obstacle.radius };
+          const b = { x: base.x + n.x * obstacle.radius, y: 4, z: base.z + n.z * obstacle.radius };
+          line3d(left, top, camera, collisionTimer > 0 ? "#ffef8f" : "#ff5d56", 8);
+          line3d(a, b, camera, "#ff5d56", 7);
+          text3d({ ...base, y: 40 }, camera, obstacle.label, "#ffb2ad", 12);
+        });
+      }
+
+      function drawSpeedEffects() {
+        const speedRatio = Math.min(1, Math.abs(kart.speed) / 150);
+        if (speedRatio < 0.52 && boostTimer <= 0) return;
+        const intensity = Math.max(speedRatio, boostTimer > 0 ? 0.9 : 0);
+        ctx.save();
+        ctx.globalAlpha = 0.16 + intensity * 0.2;
+        ctx.strokeStyle = boostTimer > 0 ? "#8df5ff" : "#ffffff";
+        ctx.lineWidth = 2;
+        const lines = 9;
+        for (let i = 0; i < lines; i += 1) {
+          const y = height * (0.55 + i * 0.045);
+          const inset = 20 + i * 18;
+          ctx.beginPath();
+          ctx.moveTo(inset, y);
+          ctx.lineTo(width * (0.35 + intensity * 0.16), y - 22 * intensity);
+          ctx.moveTo(width - inset, y);
+          ctx.lineTo(width * (0.65 - intensity * 0.16), y - 22 * intensity);
+          ctx.stroke();
+        }
+        ctx.restore();
       }
 
       function drawRaceMarkers(camera) {
@@ -655,6 +770,18 @@
           ctx.arc(p.x * scale, p.z * scale, index === nextCheckpoint ? 5 : 4, 0, Math.PI * 2);
           ctx.fill();
         });
+        boostPads.forEach((pad) => {
+          const p = trackPoint(pad.angle, pad.offset);
+          ctx.fillStyle = "#67ebff";
+          ctx.fillRect(p.x * scale - 3, p.z * scale - 3, 6, 6);
+        });
+        obstacles.forEach((obstacle) => {
+          const p = trackPoint(obstacle.angle, obstacle.offset);
+          ctx.fillStyle = "#ff5d56";
+          ctx.beginPath();
+          ctx.arc(p.x * scale, p.z * scale, 4, 0, Math.PI * 2);
+          ctx.fill();
+        });
         const kx = kart.x * scale;
         const kz = kart.z * scale;
         ctx.fillStyle = "#d84f3f";
@@ -671,6 +798,9 @@
           return;
         }
 
+        boostTimer = Math.max(0, boostTimer - dt);
+        collisionTimer = Math.max(0, collisionTimer - dt);
+        shakeTimer = Math.max(0, shakeTimer - dt);
         raceTime += dt;
         previousX = kart.x;
         previousZ = kart.z;
@@ -687,7 +817,8 @@
           kart.speed += kart.speed > 0 ? -drag : drag;
         }
 
-        kart.speed = Math.max(-46, Math.min(128, kart.speed));
+        const maxSpeed = boostTimer > 0 ? 172 : 128;
+        kart.speed = Math.max(-46, Math.min(maxSpeed, kart.speed));
         const steer = (left ? 1 : 0) - (right ? 1 : 0);
         const steerStrength = Math.min(1, Math.abs(kart.speed) / 45);
         kart.yaw += steer * steerStrength * 2.25 * dt * (kart.speed >= 0 ? 1 : -1);
@@ -712,10 +843,43 @@
           kart.yaw += clamp(angleDelta(desiredYaw, kart.yaw), -0.7, 0.7) * 0.9 * dt;
         }
 
+        checkBoostPads();
+        checkObstacleCollisions();
         updateRaceRules(previousX, previousZ, kart.x, kart.z);
 
         speedEl.textContent = String(Math.round(Math.abs(kart.speed)));
         updateHud();
+      }
+
+      function checkBoostPads() {
+        boostPads.forEach((pad, index) => {
+          if (index === lastBoostPad && boostTimer > 0.35) return;
+          if (!reachedGate(pad.angle, kart.x, kart.z, 30, track.halfWidth + 12)) return;
+          kart.speed = Math.max(kart.speed + 44, 148);
+          boostTimer = 1.15;
+          lastBoostPad = index;
+          setMessage("Boost pad hit: speed surge.");
+        });
+      }
+
+      function checkObstacleCollisions() {
+        if (collisionTimer > 0) return;
+        for (const obstacle of obstacles) {
+          const point = trackPoint(obstacle.angle, obstacle.offset);
+          const dx = kart.x - point.x;
+          const dz = kart.z - point.z;
+          const distance = Math.hypot(dx, dz);
+          if (distance > obstacle.radius + 14) continue;
+          const nx = dx / (distance || 1);
+          const nz = dz / (distance || 1);
+          kart.x = point.x + nx * (obstacle.radius + 18);
+          kart.z = point.z + nz * (obstacle.radius + 18);
+          kart.speed = -24;
+          collisionTimer = 0.75;
+          shakeTimer = 0.34;
+          setMessage(`${obstacle.label} hit: recover with throttle and steering.`);
+          break;
+        }
       }
 
       function updateRaceRules(ax, az, bx, bz) {
@@ -784,6 +948,8 @@
         lapEl.textContent = `${completedLaps}/${totalLaps}`;
         timeEl.textContent = formatTime(state === "complete" ? finalTime : raceTime);
         nextEl.textContent = state === "complete" ? "Done" : checkpoints[nextCheckpoint]?.label || "Finish";
+        const speedRatio = Math.min(100, Math.round(Math.abs(kart.speed) / 172 * 100));
+        speedFill.style.width = `${speedRatio}%`;
         if (performance.now() > messageUntil && state === "racing") {
           statusMessage = checkpoints[nextCheckpoint] ? `Next gate: ${checkpoints[nextCheckpoint].label}.` : "All checkpoints cleared. Cross the yellow finish gate.";
         }
@@ -817,10 +983,20 @@
 
       function startRace() {
         state = "racing";
+        kart.x = 0;
+        kart.z = track.radiusZ;
+        kart.yaw = -Math.PI / 2;
+        kart.speed = 0;
+        kart.distanceFromStart = 0;
+        keys.clear();
         completedLaps = 0;
         nextCheckpoint = 0;
         raceTime = 0;
         finalTime = 0;
+        boostTimer = 0;
+        collisionTimer = 0;
+        shakeTimer = 0;
+        lastBoostPad = -1;
         statusMessage = "Aim for Checkpoint 1.";
         messageUntil = performance.now() + 1800;
         startOverlay.classList.add("hidden");
@@ -836,6 +1012,10 @@
           event.preventDefault();
           keys.add(key);
         }
+        if (key === "r") {
+          event.preventDefault();
+          startRace();
+        }
         if ((key === "enter" || key === " ") && state === "title") {
           event.preventDefault();
           startRace();
@@ -845,6 +1025,7 @@
         keys.delete(event.key.toLowerCase());
       });
       startButton.addEventListener("click", startRace);
+      restartButton.addEventListener("click", startRace);
 
       resize();
       requestAnimationFrame(frame);

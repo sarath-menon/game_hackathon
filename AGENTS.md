@@ -35,6 +35,7 @@ python3 -m http.server 8765 --bind 127.0.0.1
 - Platformer tester thread: `019ef96e-42e6-7121-b9ea-bf266ce55a2e`
 - Deckbuilder builder thread: `019ef96e-7780-7763-b444-12cf7698a97a`
 - Deckbuilder tester thread: `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`
+- Browser maintenance thread: `019ef9ba-1477-7662-b7a3-c5da570cdb77`
 - Historical Signal Runner builder threads:
   - `019ef904-9758-7582-a5c6-cc57eae0f91e`
   - `019ef95a-9fae-7be3-8965-e261781023ab`
@@ -61,6 +62,33 @@ For browser automation or browser-harness work, the tester must first read and f
 `/Users/sarathmenon/Documents/startup/image_generation/browser-use-trial/browser-harness/SKILL.md`
 
 The tester must not use Codex native browser use. If browser support is blocked, the tester should modify or repair the browser harness instead.
+
+### Browser Maintenance Thread
+
+The browser maintenance thread keeps browser-harness and Chrome state from accumulating stale tabs. It reports only to the main orchestrator and must not communicate with builders or testers. It must not modify game files, manuals, protocol docs, dashboard files, or evidence reports unless the orchestrator explicitly asks.
+
+Cleanup policy:
+
+- Close stale browser-harness/Chrome tabs related to this project, including old dashboard, game, manual, evidence, duplicate, completed probe, or idle test-attempt tabs.
+- Preserve any tab that may be part of an active current test run or active recording.
+- If uncertain whether a tab is active, leave it open and report it as skipped.
+- Do not use Codex native browser use.
+- If browser-harness work is needed, first read and follow `/Users/sarathmenon/Documents/startup/image_generation/browser-use-trial/browser-harness/SKILL.md`.
+- Do not kill the local HTTP server unless explicitly instructed.
+
+The main heartbeat automation includes this maintenance lane and should wake every 10 minutes. On each maintenance pass, the orchestrator should check whether the maintenance thread is idle; if it is idle, send a cleanup prompt, and if it is active, avoid starting an overlapping cleanup.
+
+### Dashboard Thread
+
+The dashboard thread owns dashboard UI updates and reports only to the main orchestrator. It must not communicate with builders or testers and must not modify game files or tester evidence.
+
+The dashboard should make the lockstep process auditable. In addition to phase status, evidence videos, and inline `TEST_REPORT.md` rendering, it should show a feedback/fix tracker that links tester feedback to the builder's next fix iteration and the later retest status. Each tracked item should identify:
+
+- tester blocker or feedback summary
+- builder fix summary from the next iteration
+- current status: fixed, still open, retesting, or superseded
+- related phase report path
+- related evidence/video state when present
 
 ## Communication Rules
 
@@ -112,6 +140,8 @@ For every testing pass, the orchestrator must send the tester one explicit hando
 - README/manual URL or path
 - Evidence folder path
 - Exact `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4` paths
+- For spatial games, a reminder that readability/orientation is a blocking criterion, including first-action clarity, route alignment, sequential objective discoverability, and blocker classification.
+- For UI/card games, a reminder that state/action clarity is a blocking criterion, including visibility of current state, available actions, consequences, intent, and end states.
 - Reminder that source files, builder notes, diffs, implementation details, and builder summaries are out of scope
 
 The tester should remain on standby until this handoff packet is received.
@@ -180,9 +210,12 @@ Each phase report must include:
 - Summary
 - Findings with severity, status, repro steps, expected behavior, actual behavior, and evidence
 - Readability / route clarity assessment:
+  - This section is mandatory and must have an explicit `PASS` or `FAIL`.
   - For spatial games, state whether the camera, labels, minimap, start pose, objective markers, and intended route make the next action visually clear from normal play.
   - For UI/card games, state whether important state, intent, card effects, status effects, and next actions are visually clear from normal play.
   - Ambiguous orientation, off-route labels, misleading minimaps, hidden objective order, or unclear safe/risk paths must be reported even when a functional script can brute-force progress.
+  - If an objective cannot be completed, classify the likely blocker as mechanical, collision/trigger, control/input, readability/orientation, documentation/manual mismatch, or unknown.
+  - If completion required repeated probing, hidden knowledge, or a route found only by scripted search, explain why normal black-box play would or would not discover it.
 - Regression checklist
 - Approval statement
 
@@ -195,6 +228,7 @@ A phase is approved only when:
 - `gameplay-recording.mp4` exists
 - The recording shows smooth continuous play rather than sparse checkpoint jumps
 - The recording demonstrates the phase's required end state
+- The mandatory readability/orientation or state/action clarity gate says `PASS`
 - No unresolved critical or high-priority findings remain
 - Observed behavior matches the README/manual
 
@@ -204,11 +238,22 @@ Ambiguous behavior should be reported as a documentation or design issue.
 
 Tester approval must include explicit human-readable clarity checks, not only mechanical completion. These checks are black-box and must rely only on the hosted game and README/manual.
 
+This is a hard approval gate. A phase cannot pass if the tester can complete it only through repeated trial-and-error, hidden implementation knowledge, or a scripted route that is not understandable from visible in-game cues and the README/manual.
+
+The tester must evaluate these items before assigning `PASS`:
+
+1. **First-action clarity:** from the start or reset state, the next intended action/direction is visually obvious.
+2. **Route/state alignment:** camera, labels, arrows/markers, minimap, HUD text, and world layout agree on the next objective or action.
+3. **Sequential discoverability:** after each required objective/action, the next required objective/action becomes visually reachable and understandable.
+4. **Approach readability:** required gates, hazards, platforms, cards, targets, or buttons are readable from the direction/state where the player naturally encounters them.
+5. **Failure diagnosis:** if progress blocks, the tester must classify the blocker as mechanical, collision/trigger, control/input, readability/orientation, documentation/manual mismatch, or unknown.
+6. **Evidence:** `expected-flow.md` must describe the intended visible flow step by step. For spatial games it must include a frame/screenshot list or timestamp list showing the route from start to required end state. For UI/card games it must include the expected visible state transitions.
+
 - **Arcade Kart Racer:** the start pose, camera, track, checkpoint labels, minimap, and HUD must align so normal forward driving clearly reads as the documented checkpoint order. CP1, CP2, CP3, and the finish must be visibly on the drivable route, readable from the approach direction, and consistent with minimap marker order.
 - **Side-Scrolling Platformer:** the safe route, optional risk route, hazards, collectibles, checkpoints, patrols/moving platforms, and exit must be visually distinguishable. A tester should not need source knowledge to understand which path is safe and which path is optional or dangerous.
 - **Turn-Based Deckbuilder:** player HP, enemy HP, energy, hand, draw/discard counts, enemy intent, status effects, reward choices, deck changes, encounter number, and final victory/defeat states must be visibly understandable and consistent with the README/manual.
 
-If a phase passes scripted mechanics but fails readability/orientation in a way that could mislead normal black-box play, the tester should report `FAIL` or a finding with enough severity to block approval.
+If a phase passes scripted mechanics but fails readability/orientation or state/action clarity in a way that could mislead normal black-box play, the tester must report `FAIL` or a high-priority blocking finding.
 
 ## Current Resume Procedure
 

@@ -1,10 +1,10 @@
 # Arcade Kart Racer
 
-Phase 2 is a single-kart race on a simple 3D loop track with ordered checkpoints, lap counting, and a race timer.
+Phase 3 is a single-kart race on a simple 3D loop track with ordered checkpoints, lap counting, boost pads, recoverable obstacles, and a race timer.
 
 ## Objective
 
-Start the race, clear the checkpoint gates in order, and cross the yellow finish gate to complete the scored lap.
+Start the race, clear the checkpoint gates in order, use boost pads when helpful, avoid obstacles, and cross the yellow finish gate to complete the scored lap.
 The required gates appear in sequence along the opening left-hand bend: `CP1`, then `CP2`, then `CP3`, then the yellow finish gate.
 
 ## Controls
@@ -13,6 +13,7 @@ The required gates appear in sequence along the opening left-hand bend: `CP1`, t
 - `S` or `Arrow Down`: brake or reverse
 - `A` or `Arrow Left`: steer left
 - `D` or `Arrow Right`: steer right
+- `R`: restart the race
 - `Enter` or `Space`: start from the title screen
 
 ## Track Rules
@@ -31,6 +32,20 @@ Stay between the white guard rails. If the kart reaches the edge of the track, i
 ## Timer
 
 The race timer starts when the race begins and stops when the scored lap is completed.
+
+## Boosts And Obstacles
+
+- Cyan `BOOST` pads give a short speed surge and stronger visual speed streaks.
+- Red barriers and cones slow or bump the kart backward when hit.
+- Obstacle hits show a message and camera shake, but the kart remains recoverable with throttle and steering.
+
+## Speed Feedback
+
+The HUD speed bar fills as speed increases. Boosting and high speed also add motion streaks.
+
+## Restart
+
+Press `R` at any time to restart from the beginning. After race completion, use `R` or the `Restart Race` button.
 
 ## Win Behavior
 

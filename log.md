@@ -521,6 +521,175 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 - No new action. Deckbuilder remains complete through Phase 3.
 
+## Three-Game Suite Monitor Update - 2026-06-24 13:33
+
+### Arcade Kart Racer
+
+- Kart Phase 3 tester report is `PASS`.
+- Required evidence exists in `evidence/kart-racer/phase-3/`: `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`.
+- Tester confirmed boost pads, obstacle collision/recovery feedback, speed feedback, restart from completion, Phase 2 checkpoint/race rules, minimap/object markers, stable performance, and route clarity.
+- Arcade Kart Racer is complete through Phase 3.
+
+### Side-Scrolling Platformer
+
+- Platformer Phase 3 retest report is `PASS`.
+- Required evidence exists in `evidence/platformer/phase-3/`: `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`.
+- Tester confirmed the previous restart-from-failure blocker is fixed: after `Run Ended`, pressing Enter resets to full run state (`Health: 3`, `Checkpoint: start`, `Cores: 0/8`) and remains playable.
+- Side-Scrolling Platformer is complete through Phase 3.
+
+### Turn-Based Deckbuilder
+
+- No new action. Deckbuilder remains complete through Phase 3.
+
+### Dashboard And Maintenance
+
+- All nine planned phase gates across the three-game suite now have `PASS` reports and required evidence files.
+- Orchestrator sent the dashboard thread a scoped refresh request so `dashboard.html` reflects the completed suite and feedback/fix tracker state.
+- Browser maintenance thread completed the prior pass by inspecting 5 targets, closing 3 stale dashboard tabs, skipping 2 ambiguous/unrelated targets, and reporting no blockers; a new scheduled cleanup pass was queued because the maintenance thread was idle.
+
+## Three-Game Suite Monitor Update - 2026-06-24 13:43
+
+### Suite Completion
+
+- Confirmed all 27 required evidence artifacts exist: `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4` for all 9 game phases.
+- Local dashboard endpoint is healthy at `http://127.0.0.1:8765/dashboard.html`.
+
+### Dashboard
+
+- Dashboard thread completed the final suite refresh in `dashboard.html`.
+- Verified by dashboard thread: 9 phase panels render, all 9 workflow badges are `PASS`, all 9 live report verdicts hydrate as `Report: PASS`, all 9 videos are visible, Feedback Fix Tracker shows final fixes/completion, and Markdown links still open in the in-page viewer.
+
+### Browser Maintenance
+
+- Browser maintenance thread completed the scheduled cleanup pass: inspected 34 page targets, closed 29 stale project targets, skipped 5 ambiguous or unrelated targets, and reported no blockers.
+- Because the build/test lockstep is complete, the recurring heartbeat should be narrowed to browser maintenance only rather than continuing to poll completed phase gates.
+
+## Protocol Update - 2026-06-24 12:55
+
+- Strengthened `AGENTS.md` testing criteria so readability/orientation and state/action clarity are hard approval gates, not optional notes.
+- Tester handoff packets must now remind testers to check first-action clarity, route/state alignment, sequential discoverability, and blocker classification.
+- `TEST_REPORT.md` must include a mandatory `PASS` or `FAIL` readability/clarity section.
+- If progress blocks, testers must classify the likely cause as mechanical, collision/trigger, control/input, readability/orientation, documentation/manual mismatch, or unknown.
+- `expected-flow.md` must describe the intended visible flow step by step, including frame/screenshot or timestamp lists for spatial routes.
+- A phase cannot pass if completion only works through repeated trial-and-error, hidden implementation knowledge, or a scripted route that is not understandable from visible cues and the README/manual.
+
+## Browser Maintenance Setup - 2026-06-24 13:01
+
+- Created browser maintenance thread `019ef9ba-1477-7662-b7a3-c5da570cdb77`.
+- Purpose: periodically close stale browser-harness/Chrome tabs related to this project while preserving active test/recording tabs.
+- Cleanup thread is isolated from game builders/testers and reports only to the main orchestrator.
+- Updated `AGENTS.md` with the maintenance role and cleanup policy.
+- Updated existing heartbeat automation `three-game-suite-lockstep-monitor` to run every 10 minutes and include browser maintenance checks, because this Codex thread supports only one active heartbeat automation.
+- The heartbeat should send a cleanup-pass prompt to the maintenance thread when it is idle and avoid overlapping cleanup if it is already active.
+
+## Dashboard Feedback/Fix Tracker Request - 2026-06-24 13:01
+
+- User asked to clearly see in the UI which tester feedback items were fixed by the builder in the next iteration.
+- Current process already performs this loop through orchestrator-summarized fix requests, but the dashboard did not make the lineage explicit enough.
+- Orchestrator sent a dashboard-thread request to add a feedback/fix tracker to `dashboard.html`.
+- Tracker should show tester blocker, builder next-iteration fix summary, current status, related report path, and evidence/video state.
+- Current examples to show include:
+  - Kart Phase 2: CP1/lap HUD blockers fixed; CP2/readability blocker fixed; final-gate scoring fix is in retest.
+  - Platformer Phase 2: exit unreachable fixed after second builder fix and passed retest.
+  - Platformer Phase 3: health-zero failure-state blocker fixed by builder and retest is finalizing.
+  - Deckbuilder phases complete with no active blockers.
+
+## Three-Game Suite Monitor Update - 2026-06-24 13:13
+
+### Arcade Kart Racer
+
+- Kart Phase 2 final-gate retest is `PASS`.
+- Evidence complete:
+  - `evidence/kart-racer/phase-2/TEST_REPORT.md`
+  - `evidence/kart-racer/phase-2/expected-flow.md`
+  - `evidence/kart-racer/phase-2/gameplay-recording.mp4`
+- Tester verified `Race Complete`, `LAP 1/1`, `NEXT Done`, and final time after CP1/CP2/CP3.
+- Tester report includes the mandatory `PASS` route-clarity assessment: first-action clarity, route alignment, sequential discoverability, and final-gate approach readability.
+- Orchestrator approved Kart Phase 2 and started Kart Phase 3 builder goal.
+
+### Side-Scrolling Platformer
+
+- Platformer Phase 3 retest is `FAIL`.
+- Previous blocker is fixed: health-zero `Run Ended` is reproducible via the documented red vent left of start.
+- New blocker: pressing Enter after `Run Ended` does not reset health. It returns to objective text while HUD remains `Health: 0`, `Checkpoint: start`, `Cores: 0/8`, about `308 m`.
+- Orchestrator sent a narrow Phase 3 fix request to the platformer builder focused only on restart-from-failure state reset while preserving completion route, failure trigger, checkpoint recovery, patrols, route markers, and restart from completion.
+
+### Dashboard
+
+- Dashboard thread completed the initial feedback/fix tracker update and verified it in browser-harness.
+- Tracker currently shows tester feedback -> builder fix -> status rows and preserves 9 phase panels, inline reports, and videos.
+- Because Kart Phase 2 is now `PASS` and Platformer Phase 3 has a new blocker, orchestrator sent a follow-up dashboard update request to refresh tracker statuses.
+
+### Browser Maintenance
+
+- Initial browser maintenance cleanup completed.
+- Inspected 23 page targets, closed 17 stale project targets, skipped 5 possibly active/project-sensitive targets plus 1 non-project Google tab, and reported no remaining blocker.
+- Orchestrator sent the scheduled cleanup prompt again because the maintenance thread was idle at this heartbeat.
+
+### Turn-Based Deckbuilder
+
+- No new action. Deckbuilder remains complete through Phase 3.
+
+## Three-Game Suite Monitor Update - 2026-06-24 13:23
+
+### Arcade Kart Racer
+
+- Kart builder completed Phase 3 Game Feel.
+- Builder summary:
+  - added two cyan boost pads
+  - added red recoverable obstacles
+  - added collision feedback with camera shake/message
+  - added stronger speed feedback via HUD bar and motion streaks
+  - added minimap markers for boosts/obstacles
+  - added restart via `R` or completion-screen button
+  - preserved Phase 2 `LAP 0/1`, ordered `CP1 -> CP2 -> CP3 -> Finish`, timer, finish lock, and final-time completion
+- Builder verification passed: syntax, local `200 OK`, route completion with boosts active, and recoverable obstacle collision.
+- Orchestrator sent Kart Phase 3 test handoff to the kart tester with evidence folder `evidence/kart-racer/phase-3/` and mandatory clarity-gate requirements.
+
+### Side-Scrolling Platformer
+
+- Platformer builder completed the Phase 3 restart-from-failure fix.
+- Builder summary: `startGame()` now clears held input, resets health/checkpoint/cores/respawn state, forces HUD back to full-health start values immediately, and resets timing/focus when restarting from either completion or failure.
+- Builder verification passed: hosted URLs, JS parse, restart reset hooks, rightward completion still reaches checkpoint/exit, and holding left into start vent still reaches health-zero failure.
+- Orchestrator sent Platformer Phase 3 retest handoff to the platformer tester with the same evidence folder `evidence/platformer/phase-3/` and mandatory clarity-gate requirements.
+
+### Dashboard
+
+- Dashboard thread completed the Markdown viewer fix.
+- Markdown links in `dashboard.html` now open in an in-page viewer/modal instead of navigating/downloading by default.
+- Verified through browser-harness by clicking `games/kart-racer/README.md`: page stayed on `dashboard.html`, viewer opened with rendered Markdown, and missing Markdown shows an in-viewer 404 state.
+- Existing dashboard behavior preserved: 9 phase panels, 9 report regions, 7 tracker items, 8 visible videos, and 1 missing-video state.
+- Orchestrator sent a follow-up dashboard update request to reflect Kart Phase 3 testing active and Platformer Phase 3 retesting active after restart fix.
+
+### Browser Maintenance
+
+- Previous scheduled cleanup inspected 0 Chrome page targets and closed 0, with no blockers.
+- Orchestrator sent the next scheduled cleanup prompt because the maintenance thread was idle.
+
+### Turn-Based Deckbuilder
+
+- No new action. Deckbuilder remains complete through Phase 3.
+
+## Three-Game Suite Monitor Update - 2026-06-24 13:01
+
+### Arcade Kart Racer
+
+- Kart builder completed a narrow Phase 2 final-gate scoring fix.
+- Builder summary: moved the yellow finish gate closer to CP3, added a visible `FINISH` label, and made the post-checkpoint finish scoring zone generous enough to score when the kart stops under or near the gate.
+- Early finish contact remains locked until CP1, CP2, and CP3 are cleared.
+- Builder verification passed: embedded JS syntax, local `200 OK`, forward-only route `CP1 -> CP2 -> CP3 -> complete`, and steered route `CP1 -> CP2 -> CP3 -> complete`.
+- Orchestrator sent a fresh Kart Phase 2 retest handoff to the kart tester. The handoff includes the strengthened mandatory readability/orientation gate from `AGENTS.md`.
+
+### Side-Scrolling Platformer
+
+- Platformer Phase 3 retest remains active.
+- Tester has confirmed the prior failure-state blocker is fixed in probe form: the left-start vent can now reach `Run Ended`.
+- Tester is still completing current-build probes and final evidence/report writing. No final PASS/FAIL retest report yet.
+
+### Turn-Based Deckbuilder
+
+- No new action. Deckbuilder remains complete through Phase 3.
+
 ## Three-Game Suite Monitor Update - 2026-06-24 12:50
 
 ### Arcade Kart Racer

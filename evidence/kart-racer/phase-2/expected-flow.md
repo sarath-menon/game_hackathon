@@ -1,12 +1,10 @@
-# Expected Flow: Arcade Kart Racer Phase 2 Second Retest
+# Expected Flow: Arcade Kart Racer Phase 2 Final-Gate Retest
 
-1. The hosted game opens to the Arcade Kart Racer Phase 2 start screen.
-2. Starting the race begins the timer and shows speed, lap progress, race time, and next checkpoint.
-3. The lap HUD starts at `0/1` while the scored lap is in progress.
-4. The opening bend clearly presents CP1, CP2, CP3, then the yellow finish gate.
-5. The player clears CP1, then CP2, then CP3 in order through normal W/A/S/D or arrow-key driving.
-6. The HUD advances from CP1 to CP2 to CP3 to `Finish`.
-7. After CP1, CP2, and CP3 are cleared, crossing the yellow finish gate completes lap `1/1`.
-8. The completion screen displays the final race time.
+1. Start screen: `finalfix-record-00-title.png`, about 0.0s in the recording. The HUD/manual text says clear CP1, CP2, CP3, then finish, with lap at `0/1`.
+2. Race start: `finalfix-record-01-started.png`, about 0.7s. The timer runs, HUD shows `NEXT CP1`, and the first gate is directly on the opening bend.
+3. Opening bend: `finalfix-record-step-00.png`, about 1.9s. The kart accelerates through the opening bend and the HUD has already advanced through early checkpoint progress to `NEXT CP3`.
+4. Final scoring: `finalfix-record-step-01.png` and `finalfix-record-final.png`, about 2.0s. The yellow finish gate scores after ordered checkpoints, the HUD reaches `LAP 1/1`, and the race-complete screen shows the final time.
 
-Recording notes: `gameplay-recording.mp4` is the fresh second-retest recording captured continuously from the browser canvas with `HTMLCanvasElement.captureStream(30)` and `MediaRecorder`, then converted from WebM to H.264 MP4 with ffmpeg. It demonstrates the route reaching `NEXT Finish` after checkpoints, then remaining unable to score the visible yellow finish gate.
+Intended visible route: from the start, drive into the opening left-hand bend and follow the labeled gate sequence CP1 -> CP2 -> CP3 -> yellow finish. The camera, world labels, HUD `NEXT` panel, and minimap all point to the same short opening-bend route. The final gate is visibly on the road and scores once the ordered checkpoints are complete.
+
+Recording notes: `gameplay-recording.mp4` is the fresh final-gate retest recording captured continuously from the browser canvas with `HTMLCanvasElement.captureStream(30)` and `MediaRecorder`, then converted from WebM to H.264 MP4 with ffmpeg.
