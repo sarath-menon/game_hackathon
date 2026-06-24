@@ -1203,3 +1203,33 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - derive Play/menu targets from visible UI rather than assuming canvas-center click behavior;
   - classify any remaining inability to enter gameplay as `BLOCKED_ENVIRONMENT`, not game `FAIL`;
   - do not try alternate URLs directly; report back so the orchestrator can route the next provider if needed.
+
+## PolyTrack Poki External QA Retry 2 PASS_WITH_FINDINGS - 2026-06-25
+
+- Canonical tester completed PolyTrack Poki shared-window retry 2.
+- Evidence folder: `evidence/external/polytrack-poki-shared-window-retry-2/`.
+- Required files are present:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS_WITH_FINDINGS`.
+- Verified:
+  - Poki provider loaded and redirected to `https://poki.com/id/g/polytrack`;
+  - embedded PolyTrack menu appeared;
+  - visible Play/menu targeting reached track selection;
+  - visible track-selection Play button started a drivable track;
+  - W, W+A, and ArrowUp+ArrowRight moved/steered the car;
+  - route/camera readability from race start passed;
+  - timer/run feedback advanced during driving;
+  - R and T reset returned the car/timer to start states;
+  - Settings/options were reachable.
+- Nonblocking findings:
+  - provider shell redirected to Indonesian locale while game UI remained readable in English;
+  - settings persistence/audio/graphics coverage remains partial;
+  - Space pause state was not visibly confirmed.
+- Methodology carry-forward:
+  - close duplicate game tabs before a clean external run;
+  - derive canvas/menu click targets from visible tile layout;
+  - treat track selection Play as a second target after main menu Play;
+  - keep provider-language issues separate from game UI issues.
+- Dashboard must show PolyTrack as `PASS_WITH_FINDINGS` with retry 2 evidence and make OvO the next external retry.

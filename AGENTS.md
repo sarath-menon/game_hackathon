@@ -114,8 +114,8 @@ A popular external browser game must not receive final `FAIL` solely because one
   - External browser-game QA:
     - PolyTrack original/Kodub provider failures are reclassified as blocked/needs retry, not game `FAIL`.
     - PolyTrack Poki provider shared-window retry 1 is `BLOCKED_ENVIRONMENT` at `evidence/external/polytrack-poki-shared-window-retry-1/`: provider and in-game menu/settings loaded, but harness targeting did not reliably enter a drivable track.
-    - Current active external QA handoff: PolyTrack Poki provider shared-window retry 2 through the canonical tester, evidence target `evidence/external/polytrack-poki-shared-window-retry-2/`. Goal is to enter a drivable track using visible Play-menu targeting, not center-canvas assumptions.
-    - If retry 2 remains blocked, route the next reputable/direct provider path instead of treating the game as failed.
+    - PolyTrack Poki provider shared-window retry 2 is `PASS_WITH_FINDINGS` at `evidence/external/polytrack-poki-shared-window-retry-2/`: provider, menu, track selection, drivable track, keyboard driving, timer/readability, reset, and settings access were verified; remaining findings are nonblocking localization/settings-depth items.
+    - Next external QA action: OvO needs a fresh shared-window retry through the canonical tester using an alternate reputable provider/manual, preserving the provider/environment taxonomy.
     - OvO is reclassified as `BLOCKED_PROVIDER` / needs retry; the first provider stayed on a loading spinner before gameplay, and an interrupted retry must be rerun through the canonical tester in the shared Chrome window.
     - Cookie Clicker completed as `PASS with limitations`; load, click/purchase loop, Options, save/export, and persistence were verified, with narrow viewport capture limited by the harness.
     - Dungeons & Degenerate Gamblers completed as `PASS with nonblocking findings`; launch, run start, deck selection, tavern entry, and first table interaction were verified.
