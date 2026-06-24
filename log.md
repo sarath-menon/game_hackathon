@@ -1351,3 +1351,59 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - `BLOCKED_PROVIDER` for provider/shell/iframe/startup/ad/consent path blockers;
   - `BLOCKED_ENVIRONMENT` for local browser-harness/input/WebGL/storage environment blockers.
 - This pass must use browser-harness only in the single shared Chrome window and must not inspect old reports or evidence.
+
+## Townscaper Deep QA Evidence Captured / Report Pending - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` recovered from the initial loading-bar state and reached a playable WebGL scene.
+- Evidence folder: `evidence/external/townscaper-settings-removal-mobile-pass-1/`.
+- Captured evidence currently includes:
+  - `01-initial-load.png`: initial loading bar;
+  - `02-after-long-load-wait.png` and `03-playable-scene.png`: WebGL scene reached after longer startup;
+  - `04-after-place-click-1.png` through `07-after-place-with-new-color.png`: placement and color-selection interactions;
+  - `08-after-right-click-removal-attempt.png`, `09-after-ctrl-z-undo-attempt.png`, and `10-after-cmd-z-undo-attempt.png`: removal/undo attempts;
+  - `11-after-gear-click.png` and `12-after-gear-second-click.png`: gear/settings attempts;
+  - `13-after-left-drag-camera.png`, `14-after-scroll-zoom-in.png`, and `15-after-scroll-zoom-out.png`: camera/zoom checks;
+  - `16-mobile-viewport.png`, `17-mobile-after-center-click.png`, and `18-after-clear-mobile-viewport.png`: mobile/narrow viewport checks;
+  - `gameplay-recording.mp4`: encoded from the existing evidence screenshots.
+- Current blocker:
+  - `TEST_REPORT.md` and `expected-flow.md` are still missing.
+  - The canonical tester acknowledged the fallback instruction to write Markdown from screenshots 01-18, but the thread remains active/stalled before writing those files.
+- This is not a Townscaper game `FAIL` and not `BLOCKED_PROVIDER`: the direct provider reached playable state and accepted interactions.
+- Do not close this pass until the canonical tester produces the Markdown report and expected-flow file, or until the orchestrator explicitly replaces the stalled tester thread under a revised single-tester protocol.
+
+## Townscaper Deep Settings/Removal/Mobile External QA PASS_WITH_FINDINGS - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed the Townscaper Web deep settings/removal/mobile pass after fallback artifact ordering.
+- Evidence folder: `evidence/external/townscaper-settings-removal-mobile-pass-1/`.
+- Required outputs now exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS_WITH_FINDINGS`.
+- Provider/environment classification:
+  - not `BLOCKED_PROVIDER`: the direct Townscaper URL reached a playable WebGL scene after extended startup;
+  - not `BLOCKED_ENVIRONMENT`: the shared-window browser-harness captured interaction evidence and recording.
+- Verified:
+  - direct URL load after startup delay;
+  - playable WebGL scene;
+  - placement/build smoke path;
+  - color-swatch selection and placement attempt with new color;
+  - right-click removal attempt;
+  - Ctrl-Z and Cmd-Z undo attempts;
+  - gear/settings click attempts;
+  - camera drag/orbit;
+  - scroll zoom in/out;
+  - narrow/mobile viewport rendering and center click;
+  - recording encoded from screenshots 01-18.
+- Nonblocking findings:
+  - removal/undo behavior was not clearly discoverable or verified;
+  - gear icon did not expose a readable settings/options panel in captured evidence;
+  - placement feedback was subtle from the tested camera angle;
+  - startup required an extended wait.
+- Methodology carry-forward:
+  - creative/WebGL QA should capture tightly framed before/after placement shots from the same camera angle;
+  - startup delay must be separated from provider block when playable state eventually appears;
+  - icon-only tools need explicit click-response and readable-panel checks;
+  - removal/undo should be verified with a clearly isolated placed object;
+  - mobile/narrow checks should verify both control layout and build-target reachability.
+- No alternate-provider retry is required for this Townscaper pass.
