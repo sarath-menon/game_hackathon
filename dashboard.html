@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Three-Game Lockstep Dashboard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7f8;
+      --panel: #ffffff;
+      --soft: #eef3f4;
+      --line: #ccd8dc;
+      --ink: #182225;
+      --muted: #607077;
+      --pass: #0f766e;
+      --active: #1d4ed8;
+      --testing: #9a5b00;
+      --queued: #667085;
+      --fail: #b42318;
+      --shadow: 0 8px 24px rgba(22, 34, 38, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.42;
+    }
+
+    a {
+      color: #175cd3;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    .shell {
+      width: min(1540px, 100%);
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: end;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0 0 4px;
+      font-size: clamp(1.35rem, 2vw, 2rem);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      max-width: 82ch;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(78px, 1fr));
+      gap: 8px;
+      min-width: min(470px, 100%);
+    }
+
+    .metric {
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .lanes {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      padding-top: 14px;
+    }
+
+    .lane {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .lane-header {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfc;
+    }
+
+    .lane-title {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .lane-summary {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.84rem;
+    }
+
+    .links a,
+    .path-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--soft);
+      overflow-wrap: anywhere;
+    }
+
+    .phase-list {
+      display: grid;
+      gap: 10px;
+      padding: 0 14px 14px;
+    }
+
+    .phase {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-left-width: 5px;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .phase[data-status="pass"] {
+      border-left-color: var(--pass);
+    }
+
+    .phase[data-status="active"] {
+      border-left-color: var(--active);
+    }
+
+    .phase[data-status="testing"] {
+      border-left-color: var(--testing);
+    }
+
+    .phase[data-status="queued"] {
+      border-left-color: var(--queued);
+    }
+
+    .phase[data-status="fail"] {
+      border-left-color: var(--fail);
+    }
+
+    .phase-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 0.98rem;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--soft);
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .phase[data-status="pass"] .badge {
+      border-color: rgba(15, 118, 110, 0.3);
+      background: rgba(15, 118, 110, 0.1);
+      color: var(--pass);
+    }
+
+    .phase[data-status="active"] .badge {
+      border-color: rgba(29, 78, 216, 0.3);
+      background: rgba(29, 78, 216, 0.1);
+      color: var(--active);
+    }
+
+    .phase[data-status="testing"] .badge {
+      border-color: rgba(154, 91, 0, 0.3);
+      background: rgba(154, 91, 0, 0.1);
+      color: var(--testing);
+    }
+
+    .phase[data-status="fail"] .badge {
+      border-color: rgba(180, 35, 24, 0.3);
+      background: rgba(180, 35, 24, 0.1);
+      color: var(--fail);
+    }
+
+    .description {
+      margin: 0;
+      color: var(--ink);
+      font-size: 0.9rem;
+    }
+
+    .evidence {
+      display: grid;
+      gap: 8px;
+    }
+
+    .video-frame {
+      display: grid;
+      min-height: 172px;
+      aspect-ratio: 16 / 9;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #172326;
+    }
+
+    video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: #172326;
+    }
+
+    .pending-media {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      color: #d7e0e2;
+      text-align: center;
+      font-size: 0.86rem;
+    }
+
+    .meta {
+      display: grid;
+      gap: 5px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .meta code {
+      color: var(--ink);
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 1120px) {
+      .topbar,
+      .lanes {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics {
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .shell {
+        padding: 12px;
+      }
+
+      .metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .lane-header,
+      .phase-list {
+        padding: 12px;
+      }
+
+      .video-frame {
+        min-height: 145px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <h1>Three-Game Lockstep Dashboard</h1>
+        <p class="subtitle">Operational status for Arcade Kart Racer, Side-Scrolling Platformer, and Turn-Based Deckbuilder build/test phases.</p>
+      </div>
+      <section class="metrics" aria-label="Phase status totals">
+        <div class="metric"><strong id="pass-count">0</strong><span>Pass</span></div>
+        <div class="metric"><strong id="fail-count">0</strong><span>Fail</span></div>
+        <div class="metric"><strong id="testing-count">0</strong><span>Testing</span></div>
+        <div class="metric"><strong id="active-count">0</strong><span>Active</span></div>
+        <div class="metric"><strong id="queued-count">0</strong><span>Queued</span></div>
+      </section>
+    </header>
+
+    <section class="lanes" id="lanes" aria-label="Game lanes"></section>
+  </main>
+
+  <script>
+    const games = [
+      {
+        name: "Arcade Kart Racer",
+        summary: "3D loop track driving with vehicle control, laps/checkpoints, collisions, boost pads, and race completion.",
+        gameUrl: "games/kart-racer/index.html",
+        readmeUrl: "games/kart-racer/README.md",
+        phases: [
+          {
+            label: "Arcade Kart Racer Phase 1: Basic Drivable Track",
+            status: "fail",
+            statusLabel: "FAIL",
+            description: "Single kart on a simple 3D loop track with start screen, steering, acceleration/brake, track boundaries, and finish line.",
+            evidencePath: "evidence/kart-racer/phase-1/gameplay-recording.mp4",
+            reportPath: "evidence/kart-racer/phase-1/TEST_REPORT.md",
+            videoAvailable: true,
+            reportDriven: true
+          },
+          {
+            label: "Arcade Kart Racer Phase 2: Race Rules",
+            status: "queued",
+            statusLabel: "Queued",
+            description: "Checkpoints, lap counting, wrong-way/checkpoint validation, race timer, and completion screen.",
+            evidencePath: "evidence/kart-racer/phase-2/gameplay-recording.mp4",
+            reportPath: "evidence/kart-racer/phase-2/TEST_REPORT.md",
+            videoAvailable: false
+          },
+          {
+            label: "Arcade Kart Racer Phase 3: Game Feel",
+            status: "queued",
+            statusLabel: "Queued",
+            description: "Boost pads, obstacle cones/barriers, speed feedback, restart flow, and polish.",
+            evidencePath: "evidence/kart-racer/phase-3/gameplay-recording.mp4",
+            reportPath: "evidence/kart-racer/phase-3/TEST_REPORT.md",
+            videoAvailable: false
+          }
+        ]
+      },
+      {
+        name: "Side-Scrolling Platformer",
+        summary: "Running, jumping, gravity, platforms, hazards/enemies, collectibles, and a level exit.",
+        gameUrl: "games/platformer/index.html",
+        readmeUrl: "games/platformer/README.md",
+        phases: [
+          {
+            label: "Side-Scrolling Platformer Phase 1: Core Movement",
+            status: "pass",
+            statusLabel: "PASS",
+            description: "Side-scrolling level with player movement, jump, gravity, platforms, camera follow, start screen, and level exit.",
+            evidencePath: "evidence/platformer/phase-1/gameplay-recording.mp4",
+            reportPath: "evidence/platformer/phase-1/TEST_REPORT.md",
+            videoAvailable: true
+          },
+          {
+            label: "Side-Scrolling Platformer Phase 2: Hazards And Collectibles",
+            status: "active",
+            statusLabel: "Active",
+            description: "Hazards/enemies, collectibles, health/lives or fail state, respawn, and completion summary.",
+            evidencePath: "evidence/platformer/phase-2/gameplay-recording.mp4",
+            reportPath: "evidence/platformer/phase-2/TEST_REPORT.md",
+            videoAvailable: false
+          },
+          {
+            label: "Side-Scrolling Platformer Phase 3: Level Polish",
+            status: "queued",
+            statusLabel: "Queued",
+            description: "Moving platforms or simple enemy patrols, checkpoints, clearer level readability, and restart flow.",
+            evidencePath: "evidence/platformer/phase-3/gameplay-recording.mp4",
+            reportPath: "evidence/platformer/phase-3/TEST_REPORT.md",
+            videoAvailable: false
+          }
+        ]
+      },
+      {
+        name: "Turn-Based Deckbuilder",
+        summary: "Card combat with draw pile, hand, energy, attacks, block, enemy intent, discard, turn transitions, and win/loss.",
+        gameUrl: "games/deckbuilder/index.html",
+        readmeUrl: "games/deckbuilder/README.md",
+        phases: [
+          {
+            label: "Turn-Based Deckbuilder Phase 1: Basic Card Combat",
+            status: "pass",
+            statusLabel: "PASS",
+            description: "Combat screen with player HP, enemy HP, draw pile, hand, energy, attack/block cards, end turn, enemy attack, and victory/defeat.",
+            evidencePath: "evidence/deckbuilder/phase-1/gameplay-recording.mp4",
+            reportPath: "evidence/deckbuilder/phase-1/TEST_REPORT.md",
+            videoAvailable: true,
+            reportDriven: true
+          },
+          {
+            label: "Turn-Based Deckbuilder Phase 2: Tactical Variety",
+            status: "queued",
+            statusLabel: "Queued",
+            description: "Enemy intent, multiple card types, status effects or buffs, and at least two enemy turns.",
+            evidencePath: "evidence/deckbuilder/phase-2/gameplay-recording.mp4",
+            reportPath: "evidence/deckbuilder/phase-2/TEST_REPORT.md",
+            videoAvailable: false
+          },
+          {
+            label: "Turn-Based Deckbuilder Phase 3: Run Structure",
+            status: "queued",
+            statusLabel: "Queued",
+            description: "Reward choice after combat, deck updates, second encounter, and final victory screen.",
+            evidencePath: "evidence/deckbuilder/phase-3/gameplay-recording.mp4",
+            reportPath: "evidence/deckbuilder/phase-3/TEST_REPORT.md",
+            videoAvailable: false
+          }
+        ]
+      }
+    ];
+
+    const statusLabels = {
+      pass: "PASS",
+      fail: "FAIL",
+      active: "Active",
+      testing: "Testing",
+      queued: "Queued"
+    };
+
+    const lanes = document.querySelector("#lanes");
+
+    function renderEvidence(phase) {
+      if (phase.videoAvailable) {
+        return `<div class="video-frame"><video controls preload="metadata" src="${phase.evidencePath}"></video></div>`;
+      }
+
+      const text = phase.status === "testing"
+        ? "Testing evidence is pending."
+        : phase.status === "active"
+          ? "Build is active; test evidence is not available yet."
+          : phase.status === "fail"
+            ? "Failure report exists; passing evidence is pending."
+            : "Queued phase; evidence is not available yet.";
+      return `<div class="video-frame"><div class="pending-media">${text}</div></div>`;
+    }
+
+    function renderPhase(phase) {
+      return `
+        <article class="phase" data-status="${phase.status}" data-report-path="${phase.reportPath}">
+          <div class="phase-head">
+            <h3>${phase.label}</h3>
+            <span class="badge" data-badge>${phase.statusLabel}</span>
+          </div>
+          <p class="description">${phase.description}</p>
+          <div class="evidence" data-evidence>${renderEvidence(phase)}</div>
+          <dl class="meta">
+            <div>Evidence: <code>${phase.evidencePath}</code></div>
+            <div>Report: <code>${phase.reportPath}</code></div>
+          </dl>
+        </article>
+      `;
+    }
+
+    function renderGame(game) {
+      const lane = document.createElement("section");
+      lane.className = "lane";
+      lane.innerHTML = `
+        <header class="lane-header">
+          <div class="lane-title">
+            <h2>${game.name}</h2>
+          </div>
+          <p class="lane-summary">${game.summary}</p>
+          <div class="links">
+            <a href="${game.gameUrl}">Game</a>
+            <a href="${game.readmeUrl}">README</a>
+            <span class="path-pill">${game.gameUrl}</span>
+          </div>
+        </header>
+        <div class="phase-list">
+          ${game.phases.map(renderPhase).join("")}
+        </div>
+      `;
+      return lane;
+    }
+
+    function updateCounts() {
+      const counts = { pass: 0, fail: 0, testing: 0, active: 0, queued: 0 };
+      document.querySelectorAll(".phase").forEach((phase) => {
+        const status = phase.dataset.status;
+        if (counts[status] !== undefined) counts[status] += 1;
+      });
+      document.querySelector("#pass-count").textContent = counts.pass;
+      document.querySelector("#fail-count").textContent = counts.fail;
+      document.querySelector("#testing-count").textContent = counts.testing;
+      document.querySelector("#active-count").textContent = counts.active;
+      document.querySelector("#queued-count").textContent = counts.queued;
+    }
+
+    function applyReportStatus(card, verdict) {
+      if (verdict !== "PASS" && verdict !== "FAIL") return;
+      const status = verdict === "PASS" ? "pass" : "fail";
+      card.dataset.status = status;
+      card.querySelector("[data-badge]").textContent = statusLabels[status];
+      const pending = card.querySelector(".pending-media");
+      if (pending) {
+        pending.textContent = verdict === "PASS"
+          ? "PASS report exists; gameplay MP4 was not found in the dashboard evidence set."
+          : "FAIL report exists; passing gameplay evidence is pending.";
+      }
+    }
+
+    async function refreshReportDrivenStatuses() {
+      const reportCards = [...document.querySelectorAll('.phase[data-status="testing"]')];
+      await Promise.all(reportCards.map(async (card) => {
+        const reportPath = card.dataset.reportPath;
+        try {
+          const response = await fetch(reportPath, { cache: "no-store" });
+          if (!response.ok) return;
+          const text = await response.text();
+          const verdict = text.match(/Verdict:\s*`?(PASS|FAIL)`?/i)?.[1]
+            || text.match(/(?:^|\n)\s*(PASS|FAIL)\s*(?:\n|$)/)?.[1];
+          applyReportStatus(card, verdict);
+        } catch {
+          return;
+        }
+      }));
+      updateCounts();
+    }
+
+    games.forEach((game) => lanes.append(renderGame(game)));
+    updateCounts();
+    refreshReportDrivenStatuses();
+  </script>
+</body>
+</html>

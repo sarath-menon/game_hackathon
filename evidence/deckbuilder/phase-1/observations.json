@@ -1,0 +1,1799 @@
+{
+  "target": "8140B4F21355ED17A2984CD6810010EB",
+  "frames": 154,
+  "observations": [
+    {
+      "label": "initial load before start",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 1: choose cards or end turn.\n\nHP\n40 / 40\nGUARD\n0\nEnergy\n3 / 3\n10\nDRAW\n0\nHAND\n0\nDISCARD\nYour turn 1. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nWhen the draw pile is empty, the discard pile refills it in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n32 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\n\nNo cards in hand.\n\nAsh Circuit\n\nDefeat the Glass Warden with a deterministic starter deck. Each player turn starts with 3 energy and a five-card hand. Attack cards damage the enemy. Guard cards add block for the next enemy attack.\n\nNo rewards, upgrades, map, or run structure are included in this phase.\n\nStart Combat",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": []
+      }
+    },
+    {
+      "label": "started combat with five-card hand",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 1: choose cards or end turn.\n\nHP\n40 / 40\nGUARD\n0\nEnergy\n3 / 3\n5\nDRAW\n5\nHAND\n0\nDISCARD\nYour turn 1. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nWhen the draw pile is empty, the discard pile refills it in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n32 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nHeavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nDrew 5 cards.\nCombat begins. Turn 1 starts with 3 energy.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 7,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 8,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "played Heavy Spark for 2 energy and 10 damage",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 1: choose cards or end turn.\n\nHP\n40 / 40\nGUARD\n0\nEnergy\n1 / 3\n5\nDRAW\n4\nHAND\n1\nDISCARD\nYour turn 1. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nWhen the draw pile is empty, the discard pile refills it in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n22 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nHeavy Spark: spent 2 energy and dealt 10 damage.\nDrew 5 cards.\nCombat begins. Turn 1 starts with 3 energy.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 7,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "played Guard for 1 energy, energy spent",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 1: choose cards or end turn.\n\nHP\n40 / 40\nGUARD\n5\nEnergy\n0 / 3\n5\nDRAW\n3\nHAND\n2\nDISCARD\nYour turn 1. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nWhen the draw pile is empty, the discard pile refills it in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n22 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nGuard: spent 1 energy and gained 5 guard.\nHeavy Spark: spent 2 energy and dealt 10 damage.\nDrew 5 cards.\nCombat begins. Turn 1 starts with 3 energy.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 6,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "zero energy cards disabled check",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 1: choose cards or end turn.\n\nHP\n40 / 40\nGUARD\n5\nEnergy\n0 / 3\n5\nDRAW\n3\nHAND\n2\nDISCARD\nYour turn 1. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nWhen the draw pile is empty, the discard pile refills it in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n22 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nGuard: spent 1 energy and gained 5 guard.\nHeavy Spark: spent 2 energy and dealt 10 damage.\nDrew 5 cards.\nCombat begins. Turn 1 starts with 3 energy.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 6,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "enemy attacks after guarded end turn",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 2: choose cards or end turn.\n\nHP\n39 / 40\nGUARD\n0\nEnergy\n3 / 3\n0\nDRAW\n5\nHAND\n5\nDISCARD\nYour turn 2. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nNext draw will refill from the discard pile in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n22 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nBrace\n2\n\nGain 9 guard.\n\nGuard 9\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nHeavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10\nTurn 2 begins with 3 energy.\nDrew 5 cards.\nEnemy attacked for 6. Guard blocked 5; player took 1.\nEnded turn. Remaining hand moved to discard.\nGuard: spent 1 energy and gained 5 guard.\nHeavy Spark: spent 2 energy and dealt 10 damage.\nDrew 5 cards.\nCombat begins. Turn 1 starts with 3 energy.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 7,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 8,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "attack attempt turn 2.1: {'clicked': True, 'text': 'Heavy Spark\\n2\\n\\nDeal 10 damage.\\n\\nAttack 10'}",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 2: choose cards or end turn.\n\nHP\n39 / 40\nGUARD\n0\nEnergy\n1 / 3\n0\nDRAW\n4\nHAND\n6\nDISCARD\nYour turn 2. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nNext draw will refill from the discard pile in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n12 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nBrace\n2\n\nGain 9 guard.\n\nGuard 9\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nHeavy Spark: spent 2 energy and dealt 10 damage.\nTurn 2 begins with 3 energy.\nDrew 5 cards.\nEnemy attacked for 6. Guard blocked 5; player took 1.\nEnded turn. Remaining hand moved to discard.\nGuard: spent 1 energy and gained 5 guard.\nHeavy Spark: spent 2 energy and dealt 10 damage.\nDrew 5 cards.\nCombat begins. Turn 1 starts with 3 energy.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 7,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "attack attempt turn 2.2: {'clicked': True, 'text': 'Strike\\n1\\n\\nDeal 6 damage.\\n\\nAttack 6'}",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 2: choose cards or end turn.\n\nHP\n39 / 40\nGUARD\n0\nEnergy\n0 / 3\n0\nDRAW\n3\nHAND\n7\nDISCARD\nYour turn 2. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nNext draw will refill from the discard pile in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n6 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nBrace\n2\n\nGain 9 guard.\n\nGuard 9\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nStrike: spent 1 energy and dealt 6 damage.\nHeavy Spark: spent 2 energy and dealt 10 damage.\nTurn 2 begins with 3 energy.\nDrew 5 cards.\nEnemy attacked for 6. Guard blocked 5; player took 1.\nEnded turn. Remaining hand moved to discard.\nGuard: spent 1 energy and gained 5 guard.\nHeavy Spark: spent 2 energy and dealt 10 damage.\nDrew 5 cards.\nCombat begins. Turn 1 starts with 3 energy.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 6,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "attack attempt turn 2.3: {'clicked': False}",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 2: choose cards or end turn.\n\nHP\n39 / 40\nGUARD\n0\nEnergy\n0 / 3\n0\nDRAW\n3\nHAND\n7\nDISCARD\nYour turn 2. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nNext draw will refill from the discard pile in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n6 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nBrace\n2\n\nGain 9 guard.\n\nGuard 9\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nStrike: spent 1 energy and dealt 6 damage.\nHeavy Spark: spent 2 energy and dealt 10 damage.\nTurn 2 begins with 3 energy.\nDrew 5 cards.\nEnemy attacked for 6. Guard blocked 5; player took 1.\nEnded turn. Remaining hand moved to discard.\nGuard: spent 1 energy and gained 5 guard.\nHeavy Spark: spent 2 energy and dealt 10 damage.\nDrew 5 cards.\nCombat begins. Turn 1 starts with 3 energy.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 6,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "attack attempt turn 2.4: {'clicked': False}",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 2: choose cards or end turn.\n\nHP\n39 / 40\nGUARD\n0\nEnergy\n0 / 3\n0\nDRAW\n3\nHAND\n7\nDISCARD\nYour turn 2. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nNext draw will refill from the discard pile in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n6 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nBrace\n2\n\nGain 9 guard.\n\nGuard 9\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nStrike: spent 1 energy and dealt 6 damage.\nHeavy Spark: spent 2 energy and dealt 10 damage.\nTurn 2 begins with 3 energy.\nDrew 5 cards.\nEnemy attacked for 6. Guard blocked 5; player took 1.\nEnded turn. Remaining hand moved to discard.\nGuard: spent 1 energy and gained 5 guard.\nHeavy Spark: spent 2 energy and dealt 10 damage.\nDrew 5 cards.\nCombat begins. Turn 1 starts with 3 energy.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 6,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "end turn 2",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 3: choose cards or end turn.\n\nHP\n33 / 40\nGUARD\n0\nEnergy\n3 / 3\n5\nDRAW\n5\nHAND\n0\nDISCARD\nYour turn 3. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nWhen the draw pile is empty, the discard pile refills it in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n6 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nHeavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nTurn 3 begins with 3 energy.\nDrew 5 cards.\nDraw pile empty: discard pile refilled the draw pile in fixed order.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nStrike: spent 1 energy and dealt 6 damage.\nHeavy Spark: spent 2 energy and dealt 10 damage.\nTurn 2 begins with 3 energy.\nDrew 5 cards.\nEnemy attacked for 6. Guard blocked 5; player took 1.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 7,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 8,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "attack attempt turn 3.1: {'clicked': True, 'text': 'Heavy Spark\\n2\\n\\nDeal 10 damage.\\n\\nAttack 10'}",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nEnemy is resolving its attack.\n\nHP\n33 / 40\nGUARD\n0\nEnergy\n1 / 3\n5\nDRAW\n4\nHAND\n1\nDISCARD\nEnemy turn. The Glass Warden attacks once, then your next turn begins.\n\nWhen the draw pile is empty, the discard pile refills it in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n0 / 32\nNEXT ATTACK\n6\nHand\nWaiting for the enemy attack.\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nVictory: enemy HP reached 0.\nHeavy Spark: spent 2 energy and dealt 6 damage.\nTurn 3 begins with 3 energy.\nDrew 5 cards.\nDraw pile empty: discard pile refilled the draw pile in fixed order.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nStrike: spent 1 energy and dealt 6 damage.\nHeavy Spark: spent 2 energy and dealt 10 damage.\nTurn 2 begins with 3 energy.\nVictory\n\nThe Glass Warden reached 0 HP. Basic combat is complete.\n\nPlay Again",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 7,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": true
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "victory verification state",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nEnemy is resolving its attack.\n\nHP\n33 / 40\nGUARD\n0\nEnergy\n1 / 3\n5\nDRAW\n4\nHAND\n1\nDISCARD\nEnemy turn. The Glass Warden attacks once, then your next turn begins.\n\nWhen the draw pile is empty, the discard pile refills it in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n0 / 32\nNEXT ATTACK\n6\nHand\nWaiting for the enemy attack.\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nVictory: enemy HP reached 0.\nHeavy Spark: spent 2 energy and dealt 6 damage.\nTurn 3 begins with 3 energy.\nDrew 5 cards.\nDraw pile empty: discard pile refilled the draw pile in fixed order.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nStrike: spent 1 energy and dealt 6 damage.\nHeavy Spark: spent 2 energy and dealt 10 damage.\nTurn 2 begins with 3 energy.\nVictory\n\nThe Glass Warden reached 0 HP. Basic combat is complete.\n\nPlay Again",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 7,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": true
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": true,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "restart via play again",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 1: choose cards or end turn.\n\nHP\n40 / 40\nGUARD\n0\nEnergy\n3 / 3\n5\nDRAW\n5\nHAND\n0\nDISCARD\nYour turn 1. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nWhen the draw pile is empty, the discard pile refills it in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n32 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nHeavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nDrew 5 cards.\nCombat begins. Turn 1 starts with 3 energy.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 7,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 8,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "defeat path end turn 1",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 2: choose cards or end turn.\n\nHP\n34 / 40\nGUARD\n0\nEnergy\n3 / 3\n0\nDRAW\n5\nHAND\n5\nDISCARD\nYour turn 2. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nNext draw will refill from the discard pile in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n32 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nBrace\n2\n\nGain 9 guard.\n\nGuard 9\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nHeavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10\nTurn 2 begins with 3 energy.\nDrew 5 cards.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nDrew 5 cards.\nCombat begins. Turn 1 starts with 3 energy.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 7,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 8,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "defeat path end turn 2",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 3: choose cards or end turn.\n\nHP\n28 / 40\nGUARD\n0\nEnergy\n3 / 3\n5\nDRAW\n5\nHAND\n0\nDISCARD\nYour turn 3. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nWhen the draw pile is empty, the discard pile refills it in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n32 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nHeavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nTurn 3 begins with 3 energy.\nDrew 5 cards.\nDraw pile empty: discard pile refilled the draw pile in fixed order.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nTurn 2 begins with 3 energy.\nDrew 5 cards.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nDrew 5 cards.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 7,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 8,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "defeat path end turn 3",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 4: choose cards or end turn.\n\nHP\n22 / 40\nGUARD\n0\nEnergy\n3 / 3\n0\nDRAW\n5\nHAND\n5\nDISCARD\nYour turn 4. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nNext draw will refill from the discard pile in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n32 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nBrace\n2\n\nGain 9 guard.\n\nGuard 9\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nHeavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10\nTurn 4 begins with 3 energy.\nDrew 5 cards.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nTurn 3 begins with 3 energy.\nDrew 5 cards.\nDraw pile empty: discard pile refilled the draw pile in fixed order.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nTurn 2 begins with 3 energy.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 7,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 8,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "defeat path end turn 4",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 5: choose cards or end turn.\n\nHP\n16 / 40\nGUARD\n0\nEnergy\n3 / 3\n5\nDRAW\n5\nHAND\n0\nDISCARD\nYour turn 5. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nWhen the draw pile is empty, the discard pile refills it in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n32 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nHeavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nTurn 5 begins with 3 energy.\nDrew 5 cards.\nDraw pile empty: discard pile refilled the draw pile in fixed order.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nTurn 4 begins with 3 energy.\nDrew 5 cards.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nTurn 3 begins with 3 energy.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 7,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 8,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "defeat path end turn 5",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 6: choose cards or end turn.\n\nHP\n10 / 40\nGUARD\n0\nEnergy\n3 / 3\n0\nDRAW\n5\nHAND\n5\nDISCARD\nYour turn 6. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nNext draw will refill from the discard pile in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n32 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nBrace\n2\n\nGain 9 guard.\n\nGuard 9\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nHeavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10\nTurn 6 begins with 3 energy.\nDrew 5 cards.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nTurn 5 begins with 3 energy.\nDrew 5 cards.\nDraw pile empty: discard pile refilled the draw pile in fixed order.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nTurn 4 begins with 3 energy.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 7,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 8,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Brace\n2\n\nGain 9 guard.\n\nGuard 9",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "defeat path end turn 6",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nTurn 7: choose cards or end turn.\n\nHP\n4 / 40\nGUARD\n0\nEnergy\n3 / 3\n5\nDRAW\n5\nHAND\n0\nDISCARD\nYour turn 7. Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.\n\nWhen the draw pile is empty, the discard pile refills it in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n32 / 32\nNEXT ATTACK\n6\nHand\nClick a card to play it.\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nStrike\n1\n\nDeal 6 damage.\n\nAttack 6\nHeavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10\nGuard\n1\n\nGain 5 guard.\n\nGuard 5\nTurn 7 begins with 3 energy.\nDrew 5 cards.\nDraw pile empty: discard pile refilled the draw pile in fixed order.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nTurn 6 begins with 3 energy.\nDrew 5 cards.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nTurn 5 begins with 3 energy.",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 7,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 8,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": false
+          }
+        ],
+        "cards": [
+          {
+            "i": 2,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 3,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 4,
+            "text": "Strike\n1\n\nDeal 6 damage.\n\nAttack 6",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 5,
+            "text": "Heavy Spark\n2\n\nDeal 10 damage.\n\nAttack 10",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 6,
+            "text": "Guard\n1\n\nGain 5 guard.\n\nGuard 5",
+            "disabled": false,
+            "visible": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "defeat path end turn 7",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nEnemy is resolving its attack.\n\nHP\n0 / 40\nGUARD\n0\nEnergy\n3 / 3\n5\nDRAW\n0\nHAND\n5\nDISCARD\nEnemy turn. The Glass Warden attacks once, then your next turn begins.\n\nWhen the draw pile is empty, the discard pile refills it in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n32 / 32\nNEXT ATTACK\n6\nHand\nWaiting for the enemy attack.\n\nHand discarded at end of turn.\n\nDefeat: player HP reached 0.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nTurn 7 begins with 3 energy.\nDrew 5 cards.\nDraw pile empty: discard pile refilled the draw pile in fixed order.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nTurn 6 begins with 3 energy.\nDrew 5 cards.\nDefeat\n\nYour HP reached 0. Restart to try the deterministic fight again.\n\nPlay Again",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 3,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": true
+          }
+        ],
+        "cards": []
+      }
+    },
+    {
+      "label": "defeat verification state",
+      "state": {
+        "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+        "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+        "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nEnemy is resolving its attack.\n\nHP\n0 / 40\nGUARD\n0\nEnergy\n3 / 3\n5\nDRAW\n0\nHAND\n5\nDISCARD\nEnemy turn. The Glass Warden attacks once, then your next turn begins.\n\nWhen the draw pile is empty, the discard pile refills it in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n32 / 32\nNEXT ATTACK\n6\nHand\nWaiting for the enemy attack.\n\nHand discarded at end of turn.\n\nDefeat: player HP reached 0.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nTurn 7 begins with 3 energy.\nDrew 5 cards.\nDraw pile empty: discard pile refilled the draw pile in fixed order.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nTurn 6 begins with 3 energy.\nDrew 5 cards.\nDefeat\n\nYour HP reached 0. Restart to try the deterministic fight again.\n\nPlay Again",
+        "buttons": [
+          {
+            "i": 0,
+            "text": "New Combat",
+            "disabled": false,
+            "visible": true
+          },
+          {
+            "i": 1,
+            "text": "End Turn",
+            "disabled": true,
+            "visible": true
+          },
+          {
+            "i": 2,
+            "text": "Start Combat",
+            "disabled": false,
+            "visible": false
+          },
+          {
+            "i": 3,
+            "text": "Play Again",
+            "disabled": false,
+            "visible": true
+          }
+        ],
+        "cards": []
+      }
+    }
+  ],
+  "final": {
+    "url": "http://127.0.0.1:8765/games/deckbuilder/index.html",
+    "title": "\ud83d\udc34 Ash Circuit: Basic Card Combat",
+    "text": "Ash Circuit\n\nPhase 1 deck combat: spend energy, play attack and guard cards, then end your turn.\n\nNew Combat\nEnd Turn\nPlayer\n\nEnemy is resolving its attack.\n\nHP\n0 / 40\nGUARD\n0\nEnergy\n3 / 3\n5\nDRAW\n0\nHAND\n5\nDISCARD\nEnemy turn. The Glass Warden attacks once, then your next turn begins.\n\nWhen the draw pile is empty, the discard pile refills it in fixed order.\n\nGlass Warden\n\nEnemy will strike for 6 after you end turn.\n\nHP\n32 / 32\nNEXT ATTACK\n6\nHand\nWaiting for the enemy attack.\n\nHand discarded at end of turn.\n\nDefeat: player HP reached 0.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nTurn 7 begins with 3 energy.\nDrew 5 cards.\nDraw pile empty: discard pile refilled the draw pile in fixed order.\nEnemy attacked for 6. Guard blocked 0; player took 6.\nEnded turn. Remaining hand moved to discard.\nTurn 6 begins with 3 energy.\nDrew 5 cards.\nDefeat\n\nYour HP reached 0. Restart to try the deterministic fight again.\n\nPlay Again",
+    "buttons": [
+      {
+        "i": 0,
+        "text": "New Combat",
+        "disabled": false,
+        "visible": true
+      },
+      {
+        "i": 1,
+        "text": "End Turn",
+        "disabled": true,
+        "visible": true
+      },
+      {
+        "i": 2,
+        "text": "Start Combat",
+        "disabled": false,
+        "visible": false
+      },
+      {
+        "i": 3,
+        "text": "Play Again",
+        "disabled": false,
+        "visible": true
+      }
+    ],
+    "cards": []
+  }
+}

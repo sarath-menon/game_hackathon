@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Skyline Stepper</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --panel: rgba(12, 18, 28, 0.78);
+      --line: rgba(255, 255, 255, 0.18);
+      --text: #f4f7fb;
+      --muted: #b9c5d6;
+      --accent: #60d394;
+      --accent-2: #ffd166;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #101722;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+    }
+
+    .shell {
+      width: min(100vw, 1280px);
+      height: min(100vh, 720px);
+      position: relative;
+      background: #111b28;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: #18283a;
+    }
+
+    .hud {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      pointer-events: none;
+      font-weight: 700;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+    }
+
+    .hud-left,
+    .hud-right {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .hud-right {
+      justify-content: flex-end;
+    }
+
+    .hud span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      background: rgba(8, 12, 18, 0.36);
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      background: linear-gradient(180deg, rgba(12, 20, 32, 0.76), rgba(7, 11, 18, 0.92));
+    }
+
+    .panel {
+      width: min(520px, 92vw);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 26px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 0.96;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 16px;
+    }
+
+    .keys {
+      display: grid;
+      gap: 8px;
+      margin: 18px 0 22px;
+      color: var(--text);
+      font-size: 15px;
+    }
+
+    .keys div {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 8px;
+    }
+
+    kbd {
+      min-width: 34px;
+      display: inline-block;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-bottom-color: rgba(255, 255, 255, 0.48);
+      border-radius: 6px;
+      padding: 2px 7px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      text-align: center;
+      font: 700 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    button {
+      width: 100%;
+      min-height: 44px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #0b1712;
+      cursor: pointer;
+      font: 800 16px Inter, ui-sans-serif, system-ui, sans-serif;
+    }
+
+    button:focus-visible {
+      outline: 3px solid var(--accent-2);
+      outline-offset: 3px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <main class="shell" aria-label="Skyline Stepper game">
+    <canvas id="game" width="960" height="540"></canvas>
+    <div class="hud" aria-hidden="true">
+      <div class="hud-left">
+        <span id="status">Reach the exit beacon</span>
+        <span id="health">Health: 3</span>
+      </div>
+      <div class="hud-right">
+        <span id="cores">Cores: 0/0</span>
+        <span id="distance">0 m</span>
+      </div>
+    </div>
+
+    <section id="title" class="overlay">
+      <div class="panel">
+        <h1>Skyline Stepper</h1>
+        <p>Run across the rooftop route, collect glow cores, avoid red vent hazards, and touch the green exit beacon at the far end.</p>
+        <div class="keys" aria-label="Controls">
+          <div><strong>Move</strong><span><kbd>A</kbd> <kbd>D</kbd> or <kbd>&larr;</kbd> <kbd>&rarr;</kbd></span></div>
+          <div><strong>Jump</strong><span><kbd>W</kbd> <kbd>&uarr;</kbd> or <kbd>Space</kbd></span></div>
+          <div><strong>Start</strong><span><kbd>Enter</kbd></span></div>
+        </div>
+        <button id="startButton" type="button">Start Run</button>
+      </div>
+    </section>
+
+    <section id="complete" class="overlay hidden">
+      <div class="panel">
+        <h2 id="resultTitle">Level Complete</h2>
+        <p id="resultSummary">You reached the exit beacon.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const canvas = document.getElementById("game");
+      const ctx = canvas.getContext("2d");
+      const title = document.getElementById("title");
+      const complete = document.getElementById("complete");
+      const startButton = document.getElementById("startButton");
+      const status = document.getElementById("status");
+      const healthText = document.getElementById("health");
+      const coresText = document.getElementById("cores");
+      const distance = document.getElementById("distance");
+      const resultTitle = document.getElementById("resultTitle");
+      const resultSummary = document.getElementById("resultSummary");
+
+      const keys = new Set();
+      const world = {
+        width: 3400,
+        height: 540,
+        gravity: 2600
+      };
+
+      const platforms = [
+        { x: -80, y: 520, w: 3560, h: 80 },
+        { x: -80, y: 476, w: 640, h: 80 },
+        { x: 680, y: 446, w: 330, h: 42 },
+        { x: 1110, y: 396, w: 250, h: 42 },
+        { x: 1450, y: 456, w: 440, h: 42 },
+        { x: 2010, y: 410, w: 280, h: 42 },
+        { x: 2390, y: 350, w: 280, h: 42 },
+        { x: 2790, y: 448, w: 470, h: 80 }
+      ];
+
+      const exit = { x: 3120, y: 342, w: 70, h: 106 };
+      const hazards = [
+        { x: 760, y: 416, w: 68, h: 30, label: "steam vent" },
+        { x: 1248, y: 366, w: 58, h: 30, label: "steam vent" },
+        { x: 1655, y: 426, w: 74, h: 30, label: "steam vent" },
+        { x: 2110, y: 380, w: 64, h: 30, label: "steam vent" },
+        { x: 2506, y: 320, w: 64, h: 30, label: "steam vent" },
+        { x: 2926, y: 418, w: 72, h: 30, label: "steam vent" }
+      ];
+      const collectibles = [
+        { x: 360, y: 420, r: 14, collected: false },
+        { x: 745, y: 394, r: 14, collected: false },
+        { x: 1190, y: 342, r: 14, collected: false },
+        { x: 1540, y: 402, r: 14, collected: false },
+        { x: 1810, y: 402, r: 14, collected: false },
+        { x: 2070, y: 356, r: 14, collected: false },
+        { x: 2450, y: 296, r: 14, collected: false },
+        { x: 3020, y: 394, r: 14, collected: false }
+      ];
+      const player = {
+        x: 110,
+        y: 388,
+        w: 36,
+        h: 54,
+        vx: 0,
+        vy: 0,
+        grounded: false,
+        facing: 1,
+        health: 3,
+        invulnerable: 0
+      };
+
+      let cameraX = 0;
+      let mode = "title";
+      let lastTime = performance.now();
+
+      function resetPlayer(invulnerabilitySeconds = 0) {
+        player.x = 110;
+        player.y = 388;
+        player.vx = 0;
+        player.vy = 0;
+        player.grounded = false;
+        player.facing = 1;
+        player.invulnerable = invulnerabilitySeconds;
+        cameraX = 0;
+      }
+
+      function startGame() {
+        for (const core of collectibles) core.collected = false;
+        player.health = 3;
+        resetPlayer();
+        mode = "playing";
+        title.classList.add("hidden");
+        complete.classList.add("hidden");
+        status.textContent = "Reach the exit beacon";
+        startButton.blur();
+      }
+
+      function completeLevel() {
+        mode = "complete";
+        const total = collectibles.length;
+        const collected = collectibles.filter((core) => core.collected).length;
+        resultTitle.textContent = "Level Complete";
+        resultSummary.textContent = `Exit reached with ${collected}/${total} glow cores and ${player.health} health remaining.`;
+        complete.classList.remove("hidden");
+        status.textContent = "Level complete";
+      }
+
+      function failRun() {
+        mode = "complete";
+        const total = collectibles.length;
+        const collected = collectibles.filter((core) => core.collected).length;
+        resultTitle.textContent = "Run Ended";
+        resultSummary.textContent = `Health reached 0 after collecting ${collected}/${total} glow cores.`;
+        complete.classList.remove("hidden");
+        status.textContent = "Run ended";
+      }
+
+      function isDown(...codes) {
+        return codes.some((code) => keys.has(code));
+      }
+
+      function rectsOverlap(a, b) {
+        return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+      }
+
+      function circleOverlapsRect(circle, rect) {
+        const nearestX = Math.max(rect.x, Math.min(circle.x, rect.x + rect.w));
+        const nearestY = Math.max(rect.y, Math.min(circle.y, rect.y + rect.h));
+        const dx = circle.x - nearestX;
+        const dy = circle.y - nearestY;
+        return dx * dx + dy * dy <= circle.r * circle.r;
+      }
+
+      function damagePlayer() {
+        if (player.invulnerable > 0 || mode !== "playing") return;
+        player.health -= 1;
+        if (player.health <= 0) {
+          player.health = 0;
+          failRun();
+          return;
+        }
+        status.textContent = "Damaged - respawned";
+        resetPlayer(1.1);
+      }
+
+      function moveAndCollide(dt) {
+        player.invulnerable = Math.max(0, player.invulnerable - dt);
+        const speed = 360;
+        const accel = player.grounded ? 3400 : 2500;
+        const brake = player.grounded ? 4200 : 1200;
+        const maxFall = 1200;
+        const moveLeft = isDown("ArrowLeft", "KeyA");
+        const moveRight = isDown("ArrowRight", "KeyD");
+        const jump = isDown("Space", "ArrowUp", "KeyW");
+
+        let target = 0;
+        if (moveLeft) target -= speed;
+        if (moveRight) target += speed;
+
+        if (target !== 0) {
+          player.vx += Math.sign(target - player.vx) * accel * dt;
+          if (Math.sign(target - player.vx) !== Math.sign(target)) player.vx = target;
+          player.vx = Math.max(-speed, Math.min(speed, player.vx));
+          player.facing = target > 0 ? 1 : -1;
+        } else {
+          const drag = Math.min(Math.abs(player.vx), brake * dt);
+          player.vx -= Math.sign(player.vx) * drag;
+        }
+
+        if (jump && player.grounded) {
+          player.vy = -820;
+          player.grounded = false;
+        }
+
+        player.vy = Math.min(maxFall, player.vy + world.gravity * dt);
+
+        player.x += player.vx * dt;
+        for (const platform of platforms) {
+          if (!rectsOverlap(player, platform)) continue;
+          if (player.vx > 0) player.x = platform.x - player.w;
+          if (player.vx < 0) player.x = platform.x + platform.w;
+          player.vx = 0;
+        }
+
+        player.y += player.vy * dt;
+        player.grounded = false;
+        for (const platform of platforms) {
+          if (!rectsOverlap(player, platform)) continue;
+          if (player.vy > 0) {
+            player.y = platform.y - player.h;
+            player.grounded = true;
+          } else if (player.vy < 0) {
+            player.y = platform.y + platform.h;
+          }
+          player.vy = 0;
+        }
+
+        if (player.x < 0) {
+          player.x = 0;
+          player.vx = 0;
+        }
+
+        for (const core of collectibles) {
+          if (!core.collected && circleOverlapsRect(core, player)) {
+            core.collected = true;
+            status.textContent = "Glow core collected";
+          }
+        }
+
+        for (const hazard of hazards) {
+          if (rectsOverlap(player, hazard)) {
+            damagePlayer();
+            break;
+          }
+        }
+
+        if (rectsOverlap(player, exit)) {
+          completeLevel();
+        }
+      }
+
+      function updateCamera() {
+        const target = player.x + player.w / 2 - canvas.width * 0.42;
+        const max = world.width - canvas.width;
+        cameraX += (Math.max(0, Math.min(max, target)) - cameraX) * 0.12;
+      }
+
+      function drawBackground() {
+        const sky = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        sky.addColorStop(0, "#182c45");
+        sky.addColorStop(0.55, "#27455e");
+        sky.addColorStop(1, "#24313f");
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.save();
+        ctx.translate(-cameraX * 0.24, 0);
+        for (let i = -1; i < 18; i++) {
+          const x = i * 220;
+          const h = 130 + (i % 5) * 28;
+          ctx.fillStyle = i % 2 ? "rgba(18, 34, 48, 0.58)" : "rgba(24, 45, 63, 0.62)";
+          ctx.fillRect(x, 360 - h, 150, h + 240);
+          ctx.fillStyle = "rgba(255, 218, 130, 0.22)";
+          for (let wy = 245; wy < 360; wy += 26) {
+            for (let wx = x + 20; wx < x + 135; wx += 32) {
+              ctx.fillRect(wx, wy, 12, 9);
+            }
+          }
+        }
+        ctx.restore();
+
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.16)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, 118);
+        ctx.bezierCurveTo(250, 92, 430, 142, 680, 110);
+        ctx.bezierCurveTo(840, 88, 1040, 128, 1160, 100);
+        ctx.stroke();
+      }
+
+      function drawPlatform(platform) {
+        const x = Math.round(platform.x - cameraX);
+        ctx.fillStyle = "#596a54";
+        ctx.fillRect(x, platform.y, platform.w, platform.h);
+        ctx.fillStyle = "#8ba66f";
+        ctx.fillRect(x, platform.y, platform.w, 12);
+        ctx.fillStyle = "rgba(0, 0, 0, 0.18)";
+        for (let tx = x + 20; tx < x + platform.w; tx += 44) {
+          ctx.fillRect(tx, platform.y + 18, 18, 8);
+        }
+      }
+
+      function drawHazard(hazard) {
+        const x = Math.round(hazard.x - cameraX);
+        ctx.fillStyle = "#d83a34";
+        ctx.fillRect(x, hazard.y, hazard.w, hazard.h);
+        ctx.fillStyle = "#ffb3a7";
+        for (let spike = 8; spike < hazard.w; spike += 18) {
+          ctx.beginPath();
+          ctx.moveTo(x + spike, hazard.y);
+          ctx.lineTo(x + spike + 7, hazard.y - 18);
+          ctx.lineTo(x + spike + 14, hazard.y);
+          ctx.closePath();
+          ctx.fill();
+        }
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.38)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let i = 0; i < 3; i++) {
+          const sx = x + 12 + i * 18;
+          ctx.moveTo(sx, hazard.y - 6);
+          ctx.bezierCurveTo(sx - 8, hazard.y - 22, sx + 12, hazard.y - 28, sx, hazard.y - 44);
+        }
+        ctx.stroke();
+      }
+
+      function drawCollectible(core) {
+        if (core.collected) return;
+        const pulse = 2 + Math.sin(performance.now() / 160 + core.x) * 2;
+        const x = core.x - cameraX;
+        ctx.fillStyle = "rgba(88, 205, 255, 0.22)";
+        ctx.beginPath();
+        ctx.arc(x, core.y, core.r + 8 + pulse, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#58cdff";
+        ctx.beginPath();
+        ctx.arc(x, core.y, core.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#f6fbff";
+        ctx.beginPath();
+        ctx.arc(x - 4, core.y - 4, 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function drawExit() {
+        const x = exit.x - cameraX;
+        ctx.fillStyle = "rgba(96, 211, 148, 0.14)";
+        ctx.fillRect(x - 26, exit.y - 16, exit.w + 52, exit.h + 16);
+        ctx.strokeStyle = "#60d394";
+        ctx.lineWidth = 6;
+        ctx.strokeRect(x + 10, exit.y + 10, exit.w - 20, exit.h - 10);
+        ctx.fillStyle = "#60d394";
+        ctx.beginPath();
+        ctx.arc(x + exit.w / 2, exit.y + 22, 18 + Math.sin(performance.now() / 180) * 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#eafff2";
+        ctx.font = "700 16px Inter, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("EXIT", x + exit.w / 2, exit.y - 12);
+      }
+
+      function drawPlayer() {
+        const x = Math.round(player.x - cameraX);
+        const y = Math.round(player.y);
+        if (player.invulnerable > 0 && Math.floor(performance.now() / 90) % 2 === 0) return;
+        ctx.fillStyle = "rgba(0, 0, 0, 0.28)";
+        ctx.beginPath();
+        ctx.ellipse(x + player.w / 2, y + player.h + 5, 23, 6, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#ffd166";
+        ctx.fillRect(x + 5, y + 12, player.w - 10, player.h - 12);
+        ctx.fillStyle = "#f15bb5";
+        ctx.fillRect(x + 9, y + 4, player.w - 18, 18);
+        ctx.fillStyle = "#222831";
+        ctx.fillRect(x + (player.facing > 0 ? 22 : 7), y + 18, 7, 7);
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(x + (player.facing > 0 ? 24 : 9), y + 20, 3, 3);
+      }
+
+      function draw() {
+        drawBackground();
+        ctx.save();
+        for (const platform of platforms) drawPlatform(platform);
+        for (const hazard of hazards) drawHazard(hazard);
+        for (const core of collectibles) drawCollectible(core);
+        drawExit();
+        drawPlayer();
+        ctx.restore();
+
+        const remaining = Math.max(0, Math.round((exit.x - player.x) / 10));
+        const collected = collectibles.filter((core) => core.collected).length;
+        healthText.textContent = `Health: ${player.health}`;
+        coresText.textContent = `Cores: ${collected}/${collectibles.length}`;
+        distance.textContent = `${remaining} m`;
+      }
+
+      function frame(now) {
+        const dt = Math.min(0.033, (now - lastTime) / 1000);
+        lastTime = now;
+        if (mode === "playing") {
+          moveAndCollide(dt);
+          updateCamera();
+        }
+        draw();
+        requestAnimationFrame(frame);
+      }
+
+      window.addEventListener("keydown", (event) => {
+        if (["ArrowLeft", "ArrowRight", "ArrowUp", "Space"].includes(event.code)) event.preventDefault();
+        keys.add(event.code);
+        if (mode === "title" && event.code === "Enter") startGame();
+      });
+
+      window.addEventListener("keyup", (event) => {
+        keys.delete(event.code);
+      });
+
+      startButton.addEventListener("click", startGame);
+      requestAnimationFrame(frame);
+    })();
+  </script>
+</body>
+</html>

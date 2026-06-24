@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arcade Kart Racer - Phase 1</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --panel: rgba(12, 18, 24, 0.84);
+      --line: rgba(255, 255, 255, 0.18);
+      --text: #f5f7fb;
+      --muted: #b8c2cf;
+      --accent: #ffcf45;
+      --good: #49d38a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #0b1018;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      background: #11202a;
+    }
+
+    .hud {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .topbar {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .panel {
+      max-width: min(420px, calc(100vw - 32px));
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.26);
+      backdrop-filter: blur(14px);
+    }
+
+    .stat {
+      min-width: 140px;
+      text-align: right;
+    }
+
+    .label {
+      margin-bottom: 2px;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .value {
+      font-size: 28px;
+      font-weight: 760;
+      line-height: 1;
+    }
+
+    .hint {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .center {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: radial-gradient(circle at 50% 38%, rgba(29, 51, 64, 0.58), rgba(5, 9, 14, 0.8));
+      pointer-events: auto;
+    }
+
+    .card {
+      width: min(560px, calc(100vw - 32px));
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(9, 14, 21, 0.9);
+      box-shadow: 0 18px 70px rgba(0, 0, 0, 0.48);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(34px, 7vw, 58px);
+      line-height: 0.96;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin: 18px 0;
+    }
+
+    .control {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    kbd {
+      display: inline-block;
+      min-width: 24px;
+      margin-right: 4px;
+      padding: 2px 6px;
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.11);
+      color: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 720;
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 18px;
+      padding: 13px 16px;
+      border: 0;
+      border-radius: 7px;
+      background: var(--accent);
+      color: #15120a;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .complete h1 {
+      color: var(--good);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+      }
+
+      .panel {
+        padding: 10px;
+      }
+
+      .stat {
+        min-width: 104px;
+      }
+
+      .value {
+        font-size: 22px;
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game" aria-label="Arcade kart racer game canvas"></canvas>
+
+  <div class="hud">
+    <div class="topbar">
+      <div class="panel">
+        <div class="label">Objective</div>
+        <div>Drive the loop and cross the yellow finish gate.</div>
+        <div class="hint">Arrow keys or WASD steer and throttle. Stay between the white guard rails.</div>
+      </div>
+      <div class="panel stat">
+        <div class="label">Speed</div>
+        <div class="value"><span id="speed">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="start" class="center">
+    <section class="card">
+      <h1>Arcade Kart Racer</h1>
+      <p>Phase 1: a single-kart shakedown on a simple 3D loop track. Cross the yellow finish gate to complete the run.</p>
+      <div class="controls">
+        <div class="control"><kbd>W</kbd><kbd>↑</kbd> Accelerate</div>
+        <div class="control"><kbd>S</kbd><kbd>↓</kbd> Brake / reverse</div>
+        <div class="control"><kbd>A</kbd><kbd>←</kbd> Steer left</div>
+        <div class="control"><kbd>D</kbd><kbd>→</kbd> Steer right</div>
+      </div>
+      <button id="startButton" type="button">Start Race</button>
+    </section>
+  </div>
+
+  <div id="complete" class="center hidden">
+    <section class="card complete">
+      <h1>Finish Crossed</h1>
+      <p>The Phase 1 run is complete. Reload the page to drive again.</p>
+    </section>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const canvas = document.getElementById("game");
+      const ctx = canvas.getContext("2d");
+      const startOverlay = document.getElementById("start");
+      const completeOverlay = document.getElementById("complete");
+      const startButton = document.getElementById("startButton");
+      const speedEl = document.getElementById("speed");
+
+      const track = {
+        radiusX: 260,
+        radiusZ: 170,
+        halfWidth: 34,
+        finishAngle: -Math.PI / 2
+      };
+
+      const kart = {
+        x: 0,
+        z: track.radiusZ,
+        yaw: -Math.PI / 2,
+        speed: 0,
+        distanceFromStart: 0,
+        hasLeftStart: false
+      };
+
+      const keys = new Set();
+      let state = "title";
+      let lastTime = performance.now();
+      let dpr = 1;
+      let width = 0;
+      let height = 0;
+      let previousX = kart.x;
+      let previousZ = kart.z;
+
+      function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = Math.max(320, window.innerWidth);
+        height = Math.max(240, window.innerHeight);
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function centerPoint(angle) {
+        return {
+          x: Math.cos(angle) * track.radiusX,
+          z: Math.sin(angle) * track.radiusZ
+        };
+      }
+
+      function ellipseNormal(angle) {
+        const nx = Math.cos(angle) / track.radiusX;
+        const nz = Math.sin(angle) / track.radiusZ;
+        const len = Math.hypot(nx, nz) || 1;
+        return { x: nx / len, z: nz / len };
+      }
+
+      function edgePoint(angle, side) {
+        const c = centerPoint(angle);
+        const n = ellipseNormal(angle);
+        return {
+          x: c.x + n.x * track.halfWidth * side,
+          y: 0,
+          z: c.z + n.z * track.halfWidth * side
+        };
+      }
+
+      function nearestTrackInfo(x, z) {
+        const angle = Math.atan2(z / track.radiusZ, x / track.radiusX);
+        const c = centerPoint(angle);
+        const n = ellipseNormal(angle);
+        const dx = x - c.x;
+        const dz = z - c.z;
+        const offset = dx * n.x + dz * n.z;
+        return { angle, center: c, normal: n, offset };
+      }
+
+      function forwardVector() {
+        return {
+          x: Math.sin(kart.yaw),
+          z: Math.cos(kart.yaw)
+        };
+      }
+
+      function tangentAt(angle) {
+        const tx = -Math.sin(angle) * track.radiusX;
+        const tz = Math.cos(angle) * track.radiusZ;
+        const len = Math.hypot(tx, tz) || 1;
+        return { x: tx / len, z: tz / len };
+      }
+
+      function makeCamera() {
+        const f = forwardVector();
+        const cam = {
+          x: kart.x - f.x * 88,
+          y: 44,
+          z: kart.z - f.z * 88
+        };
+        const target = {
+          x: kart.x + f.x * 52,
+          y: 10,
+          z: kart.z + f.z * 52
+        };
+        const fx = target.x - cam.x;
+        const fy = target.y - cam.y;
+        const fz = target.z - cam.z;
+        const flen = Math.hypot(fx, fy, fz) || 1;
+        const forward = { x: fx / flen, y: fy / flen, z: fz / flen };
+        const rightLen = Math.hypot(forward.z, forward.x) || 1;
+        const right = { x: forward.z / rightLen, y: 0, z: -forward.x / rightLen };
+        const up = {
+          x: right.y * forward.z - right.z * forward.y,
+          y: right.z * forward.x - right.x * forward.z,
+          z: right.x * forward.y - right.y * forward.x
+        };
+        return { cam, forward, right, up };
+      }
+
+      function project(point, camera) {
+        const rx = point.x - camera.cam.x;
+        const ry = point.y - camera.cam.y;
+        const rz = point.z - camera.cam.z;
+        const x = rx * camera.right.x + ry * camera.right.y + rz * camera.right.z;
+        const y = rx * camera.up.x + ry * camera.up.y + rz * camera.up.z;
+        const z = rx * camera.forward.x + ry * camera.forward.y + rz * camera.forward.z;
+        if (z < 3) return null;
+        const scale = Math.min(width, height) * 0.94;
+        return {
+          x: width / 2 + x * scale / z,
+          y: height * 0.55 - y * scale / z,
+          z
+        };
+      }
+
+      function polygon(points, fill, stroke, lineWidth) {
+        const visible = points.every(Boolean);
+        if (!visible) return;
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i += 1) {
+          ctx.lineTo(points[i].x, points[i].y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = fill;
+        ctx.fill();
+        if (stroke) {
+          ctx.lineWidth = lineWidth || 1;
+          ctx.strokeStyle = stroke;
+          ctx.stroke();
+        }
+      }
+
+      function line3d(a, b, camera, color, size) {
+        const pa = project(a, camera);
+        const pb = project(b, camera);
+        if (!pa || !pb) return;
+        ctx.beginPath();
+        ctx.moveTo(pa.x, pa.y);
+        ctx.lineTo(pb.x, pb.y);
+        ctx.lineWidth = size;
+        ctx.strokeStyle = color;
+        ctx.stroke();
+      }
+
+      function drawWorld() {
+        const camera = makeCamera();
+        const sky = ctx.createLinearGradient(0, 0, 0, height * 0.62);
+        sky.addColorStop(0, "#789ec6");
+        sky.addColorStop(0.58, "#c6d7e7");
+        sky.addColorStop(1, "#e7c887");
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, width, height);
+
+        const ground = ctx.createLinearGradient(0, height * 0.46, 0, height);
+        ground.addColorStop(0, "#466f4e");
+        ground.addColorStop(1, "#203e2f");
+        ctx.fillStyle = ground;
+        ctx.fillRect(0, height * 0.48, width, height * 0.52);
+
+        drawTrack(camera);
+        drawFinishGate(camera);
+        drawKart(camera);
+        drawMiniMap();
+      }
+
+      function drawTrack(camera) {
+        const segments = 112;
+        const strips = [];
+        for (let i = 0; i < segments; i += 1) {
+          const a1 = i / segments * Math.PI * 2;
+          const a2 = (i + 1) / segments * Math.PI * 2;
+          const near = centerPoint((a1 + a2) / 2);
+          const dx = near.x - camera.cam.x;
+          const dz = near.z - camera.cam.z;
+          const dist = Math.hypot(dx, dz);
+          strips.push({ a1, a2, dist });
+        }
+        strips.sort((a, b) => b.dist - a.dist);
+
+        for (const strip of strips) {
+          const p1 = project(edgePoint(strip.a1, -1), camera);
+          const p2 = project(edgePoint(strip.a2, -1), camera);
+          const p3 = project(edgePoint(strip.a2, 1), camera);
+          const p4 = project(edgePoint(strip.a1, 1), camera);
+          const shade = Math.floor(48 + 18 * Math.sin(strip.a1 * 3));
+          polygon([p1, p2, p3, p4], `rgb(${shade}, ${shade + 5}, ${shade + 6})`, "rgba(255,255,255,0.06)", 1);
+
+          if (strip.dist < 620) {
+            const leftA = edgePoint(strip.a1, -1);
+            const leftB = edgePoint(strip.a2, -1);
+            const rightA = edgePoint(strip.a1, 1);
+            const rightB = edgePoint(strip.a2, 1);
+            leftA.y = leftB.y = rightA.y = rightB.y = 2;
+            line3d(leftA, leftB, camera, "rgba(248, 249, 242, 0.88)", 2);
+            line3d(rightA, rightB, camera, "rgba(248, 249, 242, 0.88)", 2);
+          }
+        }
+
+        for (let i = 0; i < segments; i += 4) {
+          const a = i / segments * Math.PI * 2;
+          const c = centerPoint(a);
+          const mark = { x: c.x, y: 0.5, z: c.z };
+          const mark2 = { x: c.x, y: 0.5, z: c.z };
+          const t = tangentAt(a);
+          mark.x -= t.x * 5;
+          mark.z -= t.z * 5;
+          mark2.x += t.x * 5;
+          mark2.z += t.z * 5;
+          line3d(mark, mark2, camera, "rgba(255, 207, 69, 0.45)", 2);
+        }
+      }
+
+      function drawFinishGate(camera) {
+        const a = track.finishAngle;
+        const left = edgePoint(a, -1);
+        const right = edgePoint(a, 1);
+        const topLeft = { ...left, y: 38 };
+        const topRight = { ...right, y: 38 };
+        left.y = 1;
+        right.y = 1;
+
+        line3d(left, right, camera, "#ffcf45", 8);
+        line3d(left, topLeft, camera, "#ffffff", 5);
+        line3d(right, topRight, camera, "#ffffff", 5);
+        line3d(topLeft, topRight, camera, "#ffcf45", 5);
+
+        for (let i = 0; i < 7; i += 1) {
+          const side = i % 2 === 0 ? -1 : 1;
+          const p = edgePoint(a, side);
+          p.y = 9 + i * 4;
+          const q = edgePoint(a, -side);
+          q.y = 9 + i * 4;
+          line3d(p, q, camera, i % 2 === 0 ? "#ffffff" : "#151515", 3);
+        }
+      }
+
+      function drawKart(camera) {
+        const f = forwardVector();
+        const r = { x: f.z, z: -f.x };
+        const base = [
+          { x: kart.x + f.x * 15 + r.x * 10, y: 3, z: kart.z + f.z * 15 + r.z * 10 },
+          { x: kart.x + f.x * 15 - r.x * 10, y: 3, z: kart.z + f.z * 15 - r.z * 10 },
+          { x: kart.x - f.x * 13 - r.x * 11, y: 3, z: kart.z - f.z * 13 - r.z * 11 },
+          { x: kart.x - f.x * 13 + r.x * 11, y: 3, z: kart.z - f.z * 13 + r.z * 11 }
+        ].map((p) => project(p, camera));
+        polygon(base, "#d84f3f", "#fff1dc", 2);
+
+        const cabin = [
+          { x: kart.x + f.x * 7 + r.x * 7, y: 12, z: kart.z + f.z * 7 + r.z * 7 },
+          { x: kart.x + f.x * 7 - r.x * 7, y: 12, z: kart.z + f.z * 7 - r.z * 7 },
+          { x: kart.x - f.x * 7 - r.x * 6, y: 12, z: kart.z - f.z * 7 - r.z * 6 },
+          { x: kart.x - f.x * 7 + r.x * 6, y: 12, z: kart.z - f.z * 7 + r.z * 6 }
+        ].map((p) => project(p, camera));
+        polygon(cabin, "#f4b24a", "rgba(255,255,255,0.72)", 1.5);
+      }
+
+      function drawMiniMap() {
+        const mapSize = Math.min(160, Math.max(112, width * 0.16));
+        const x = width - mapSize - 18;
+        const y = height - mapSize - 18;
+        ctx.save();
+        ctx.globalAlpha = 0.9;
+        ctx.fillStyle = "rgba(8, 13, 18, 0.76)";
+        ctx.strokeStyle = "rgba(255,255,255,0.18)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.roundRect(x, y, mapSize, mapSize, 8);
+        ctx.fill();
+        ctx.stroke();
+        ctx.translate(x + mapSize / 2, y + mapSize / 2);
+        const scale = mapSize / 650;
+        ctx.strokeStyle = "rgba(255,255,255,0.86)";
+        ctx.lineWidth = Math.max(8, track.halfWidth * 2 * scale);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, track.radiusX * scale, track.radiusZ * scale, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.strokeStyle = "#ffcf45";
+        ctx.lineWidth = 4;
+        const f = centerPoint(track.finishAngle);
+        ctx.beginPath();
+        ctx.moveTo(f.x * scale - 14, f.z * scale);
+        ctx.lineTo(f.x * scale + 14, f.z * scale);
+        ctx.stroke();
+        const kx = kart.x * scale;
+        const kz = kart.z * scale;
+        ctx.fillStyle = "#d84f3f";
+        ctx.beginPath();
+        ctx.arc(kx, kz, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function update(dt) {
+        if (state !== "racing") {
+          speedEl.textContent = "0";
+          return;
+        }
+
+        previousX = kart.x;
+        previousZ = kart.z;
+
+        const accelerating = keys.has("arrowup") || keys.has("w");
+        const braking = keys.has("arrowdown") || keys.has("s");
+        const left = keys.has("arrowleft") || keys.has("a");
+        const right = keys.has("arrowright") || keys.has("d");
+
+        if (accelerating) kart.speed += 95 * dt;
+        if (braking) kart.speed -= 130 * dt;
+        if (!accelerating && !braking) {
+          const drag = Math.min(Math.abs(kart.speed), 45 * dt);
+          kart.speed += kart.speed > 0 ? -drag : drag;
+        }
+
+        kart.speed = Math.max(-46, Math.min(128, kart.speed));
+        const steer = (left ? 1 : 0) - (right ? 1 : 0);
+        const steerStrength = Math.min(1, Math.abs(kart.speed) / 45);
+        kart.yaw += steer * steerStrength * 2.25 * dt * (kart.speed >= 0 ? 1 : -1);
+
+        const f = forwardVector();
+        kart.x += f.x * kart.speed * dt;
+        kart.z += f.z * kart.speed * dt;
+        kart.distanceFromStart += Math.abs(kart.speed * dt);
+
+        const info = nearestTrackInfo(kart.x, kart.z);
+        const maxOffset = track.halfWidth - 5;
+        if (Math.abs(info.offset) > maxOffset) {
+          const clampedOffset = Math.sign(info.offset) * maxOffset;
+          kart.x = info.center.x + info.normal.x * clampedOffset;
+          kart.z = info.center.z + info.normal.z * clampedOffset;
+          kart.speed *= 0.42;
+        }
+
+        if (kart.distanceFromStart > 90) {
+          kart.hasLeftStart = true;
+        }
+
+        if (kart.hasLeftStart && crossedFinish(previousX, previousZ, kart.x, kart.z)) {
+          state = "complete";
+          kart.speed = 0;
+          completeOverlay.classList.remove("hidden");
+        }
+
+        speedEl.textContent = String(Math.round(Math.abs(kart.speed)));
+      }
+
+      function crossedFinish(ax, az, bx, bz) {
+        const finish = centerPoint(track.finishAngle);
+        const t = tangentAt(track.finishAngle);
+        const n = ellipseNormal(track.finishAngle);
+        const aLong = (ax - finish.x) * t.x + (az - finish.z) * t.z;
+        const bLong = (bx - finish.x) * t.x + (bz - finish.z) * t.z;
+        const bAcross = Math.abs((bx - finish.x) * n.x + (bz - finish.z) * n.z);
+        return aLong < 0 && bLong >= 0 && bAcross <= track.halfWidth;
+      }
+
+      function frame(now) {
+        const dt = Math.min(0.033, (now - lastTime) / 1000);
+        lastTime = now;
+        update(dt);
+        drawWorld();
+        requestAnimationFrame(frame);
+      }
+
+      function startRace() {
+        state = "racing";
+        startOverlay.classList.add("hidden");
+        completeOverlay.classList.add("hidden");
+        lastTime = performance.now();
+      }
+
+      window.addEventListener("resize", resize);
+      window.addEventListener("keydown", (event) => {
+        const key = event.key.toLowerCase();
+        if (["arrowup", "arrowdown", "arrowleft", "arrowright", "w", "a", "s", "d"].includes(key)) {
+          event.preventDefault();
+          keys.add(key);
+        }
+        if ((key === "enter" || key === " ") && state === "title") {
+          event.preventDefault();
+          startRace();
+        }
+      }, { passive: false });
+      window.addEventListener("keyup", (event) => {
+        keys.delete(event.key.toLowerCase());
+      });
+      startButton.addEventListener("click", startRace);
+
+      resize();
+      requestAnimationFrame(frame);
+    })();
+  </script>
+</body>
+</html>

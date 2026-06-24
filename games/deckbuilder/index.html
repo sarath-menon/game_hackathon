@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ash Circuit: Basic Card Combat</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101419;
+      --panel: #1b2229;
+      --panel-2: #232d35;
+      --line: #40505f;
+      --text: #f4f0e8;
+      --muted: #a9b5bc;
+      --accent: #f2b84b;
+      --attack: #d65f4a;
+      --guard: #4d9b8a;
+      --good: #76d46f;
+      --bad: #ff6b6b;
+      --focus: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+        radial-gradient(circle at 18% 10%, #2d3640 0, transparent 34%),
+        radial-gradient(circle at 82% 22%, #42332b 0, transparent 28%),
+        var(--bg);
+      background-size: 42px 42px, 42px 42px, auto, auto, auto;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .screen {
+      width: min(1180px, 100%);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 18px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 14px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+    }
+
+    h1,
+    h2,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(1.35rem, 2.7vw, 2.25rem);
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-top: 4px;
+      font-size: 0.95rem;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: var(--text);
+      border-radius: 8px;
+      min-height: 42px;
+      padding: 9px 14px;
+      cursor: pointer;
+      transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+    }
+
+    .btn:hover:not(:disabled),
+    .card:hover:not(:disabled) {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+    }
+
+    .btn:focus-visible,
+    .card:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .btn:disabled,
+    .card:disabled {
+      cursor: not-allowed;
+      opacity: 0.52;
+    }
+
+    .btn.primary {
+      border-color: #d39c3e;
+      background: #6b4f24;
+    }
+
+    .battlefield {
+      display: grid;
+      grid-template-columns: 1fr minmax(260px, 340px) 1fr;
+      gap: 14px;
+      align-items: stretch;
+      min-height: 440px;
+    }
+
+    .combatant,
+    .center-panel,
+    .hand-zone,
+    .log-panel {
+      border: 1px solid var(--line);
+      background: rgba(27, 34, 41, 0.92);
+      border-radius: 8px;
+      box-shadow: 0 16px 42px rgba(0,0,0,0.28);
+    }
+
+    .combatant {
+      padding: 16px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .combatant h2 {
+      font-size: 1.35rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #151b21;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 3px;
+      font-size: 1.25rem;
+    }
+
+    .portrait {
+      position: relative;
+      min-height: 190px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid #2f3a43;
+      background:
+        linear-gradient(160deg, rgba(255,255,255,0.05), transparent 45%),
+        #151b21;
+    }
+
+    .portrait::before {
+      content: "";
+      width: 132px;
+      height: 132px;
+      border-radius: 22px;
+      transform: rotate(45deg);
+      border: 9px solid currentColor;
+      box-shadow: inset 0 0 0 18px rgba(255,255,255,0.08), 0 18px 36px rgba(0,0,0,0.34);
+    }
+
+    .player .portrait {
+      color: #5fb0c2;
+    }
+
+    .enemy .portrait {
+      color: #d66254;
+    }
+
+    .portrait::after {
+      content: "";
+      position: absolute;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      border: 7px solid var(--accent);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .status-line {
+      min-height: 32px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .center-panel {
+      padding: 16px;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 12px;
+    }
+
+    .energy {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border: 1px solid #72572b;
+      border-radius: 8px;
+      background: #2b2418;
+      padding: 12px;
+    }
+
+    .energy strong {
+      font-size: 1.75rem;
+      color: var(--accent);
+    }
+
+    .piles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .pile {
+      min-height: 78px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 8px;
+      background: #151b21;
+    }
+
+    .pile strong {
+      display: block;
+      font-size: 1.45rem;
+    }
+
+    .pile span {
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+
+    .turn-banner {
+      min-height: 72px;
+      border: 1px solid #4f5f6d;
+      background: #17212a;
+      border-radius: 8px;
+      padding: 12px;
+      line-height: 1.35;
+    }
+
+    .turn-banner strong {
+      color: var(--accent);
+    }
+
+    .hand-zone {
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .hand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+    }
+
+    .hand {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(132px, 1fr));
+      gap: 10px;
+    }
+
+    .card {
+      min-height: 168px;
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      background: #202932;
+      color: var(--text);
+      padding: 12px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 10px;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 120ms ease, border-color 120ms ease, opacity 120ms ease;
+    }
+
+    .card.attack {
+      border-color: #9f493c;
+      background: linear-gradient(180deg, #392321, #211c1e);
+    }
+
+    .card.guard {
+      border-color: #3f7d75;
+      background: linear-gradient(180deg, #1e3334, #1b2024);
+    }
+
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: flex-start;
+      font-weight: 800;
+    }
+
+    .cost {
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #6b4f24;
+      border: 1px solid var(--accent);
+      color: #fff7df;
+    }
+
+    .card p {
+      color: var(--muted);
+      line-height: 1.35;
+      font-size: 0.94rem;
+    }
+
+    .card footer {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .log-panel {
+      max-height: 154px;
+      overflow-y: auto;
+      padding: 10px 14px;
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .log-panel ol {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(7, 10, 13, 0.82);
+      backdrop-filter: blur(7px);
+    }
+
+    .overlay[hidden] {
+      display: none;
+    }
+
+    .modal {
+      width: min(620px, 100%);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #172029;
+      padding: 24px;
+      box-shadow: 0 26px 80px rgba(0,0,0,0.5);
+    }
+
+    .modal h2 {
+      font-size: clamp(1.7rem, 5vw, 3rem);
+      margin-bottom: 10px;
+    }
+
+    .modal p {
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 12px;
+    }
+
+    .result-title.win {
+      color: var(--good);
+    }
+
+    .result-title.loss {
+      color: var(--bad);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 920px) {
+      .screen {
+        padding: 12px;
+      }
+
+      header,
+      .battlefield {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        align-items: flex-start;
+      }
+
+      .top-actions {
+        justify-content: flex-start;
+      }
+
+      .battlefield {
+        min-height: 0;
+      }
+
+      .combatant {
+        min-height: 320px;
+      }
+
+      .hand {
+        grid-template-columns: repeat(2, minmax(136px, 1fr));
+      }
+    }
+
+    @media (max-width: 520px) {
+      .hand {
+        grid-template-columns: 1fr;
+      }
+
+      .stats,
+      .piles {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="screen" aria-live="polite">
+    <header>
+      <div>
+        <h1>Ash Circuit</h1>
+        <p class="subtitle">Phase 1 deck combat: spend energy, play attack and guard cards, then end your turn.</p>
+      </div>
+      <div class="top-actions">
+        <button class="btn" id="newGameButton" type="button">New Combat</button>
+        <button class="btn primary" id="endTurnButton" type="button">End Turn</button>
+      </div>
+    </header>
+
+    <section class="battlefield" aria-label="Combat area">
+      <article class="combatant player" aria-label="Player status">
+        <div>
+          <h2>Player</h2>
+          <p class="status-line" id="playerLine">Ready.</p>
+        </div>
+        <div class="portrait" aria-hidden="true"></div>
+        <div class="stats">
+          <div class="stat"><span>HP</span><strong id="playerHp">40 / 40</strong></div>
+          <div class="stat"><span>Guard</span><strong id="playerBlock">0</strong></div>
+        </div>
+      </article>
+
+      <aside class="center-panel" aria-label="Turn controls and piles">
+        <div class="energy">
+          <span>Energy</span>
+          <strong id="energy">3 / 3</strong>
+        </div>
+        <div class="piles">
+          <div class="pile"><div><strong id="drawCount">0</strong><span>Draw</span></div></div>
+          <div class="pile"><div><strong id="handCount">0</strong><span>Hand</span></div></div>
+          <div class="pile"><div><strong id="discardCount">0</strong><span>Discard</span></div></div>
+        </div>
+        <div class="turn-banner" id="turnBanner">
+          <strong>Your turn.</strong> Play cards or end turn.
+        </div>
+        <p class="status-line" id="reshuffleLine">When the draw pile is empty, the discard pile refills it in fixed order.</p>
+      </aside>
+
+      <article class="combatant enemy" aria-label="Enemy status">
+        <div>
+          <h2>Glass Warden</h2>
+          <p class="status-line" id="enemyLine">Enemy will strike for 6 after you end turn.</p>
+        </div>
+        <div class="portrait" aria-hidden="true"></div>
+        <div class="stats">
+          <div class="stat"><span>HP</span><strong id="enemyHp">32 / 32</strong></div>
+          <div class="stat"><span>Next Attack</span><strong id="enemyAttack">6</strong></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="hand-zone" aria-label="Player hand">
+      <div class="hand-header">
+        <strong>Hand</strong>
+        <span id="handHint">Click a card to play it.</span>
+      </div>
+      <div class="hand" id="hand"></div>
+    </section>
+
+    <section class="log-panel" aria-label="Combat log">
+      <ol id="combatLog"></ol>
+    </section>
+  </main>
+
+  <div class="overlay" id="startOverlay">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="startTitle">
+      <h2 id="startTitle">Ash Circuit</h2>
+      <p>Defeat the Glass Warden with a deterministic starter deck. Each player turn starts with 3 energy and a five-card hand. Attack cards damage the enemy. Guard cards add block for the next enemy attack.</p>
+      <p>No rewards, upgrades, map, or run structure are included in this phase.</p>
+      <button class="btn primary" id="startButton" type="button">Start Combat</button>
+    </section>
+  </div>
+
+  <div class="overlay" id="resultOverlay" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+      <h2 id="resultTitle" class="result-title">Result</h2>
+      <p id="resultText">Combat finished.</p>
+      <button class="btn primary" id="restartButton" type="button">Play Again</button>
+    </section>
+  </div>
+
+  <script>
+    const STARTER_DECK = [
+      { id: "strike-a", name: "Strike", type: "attack", cost: 1, amount: 6, text: "Deal 6 damage." },
+      { id: "guard-a", name: "Guard", type: "guard", cost: 1, amount: 5, text: "Gain 5 guard." },
+      { id: "strike-b", name: "Strike", type: "attack", cost: 1, amount: 6, text: "Deal 6 damage." },
+      { id: "heavy", name: "Heavy Spark", type: "attack", cost: 2, amount: 10, text: "Deal 10 damage." },
+      { id: "guard-b", name: "Guard", type: "guard", cost: 1, amount: 5, text: "Gain 5 guard." },
+      { id: "strike-c", name: "Strike", type: "attack", cost: 1, amount: 6, text: "Deal 6 damage." },
+      { id: "brace", name: "Brace", type: "guard", cost: 2, amount: 9, text: "Gain 9 guard." },
+      { id: "strike-d", name: "Strike", type: "attack", cost: 1, amount: 6, text: "Deal 6 damage." },
+      { id: "guard-c", name: "Guard", type: "guard", cost: 1, amount: 5, text: "Gain 5 guard." },
+      { id: "heavy-b", name: "Heavy Spark", type: "attack", cost: 2, amount: 10, text: "Deal 10 damage." }
+    ];
+
+    const MAX_PLAYER_HP = 40;
+    const MAX_ENEMY_HP = 32;
+    const MAX_ENERGY = 3;
+    const HAND_SIZE = 5;
+    const ENEMY_ATTACK = 6;
+
+    const elements = {
+      startOverlay: document.getElementById("startOverlay"),
+      resultOverlay: document.getElementById("resultOverlay"),
+      startButton: document.getElementById("startButton"),
+      restartButton: document.getElementById("restartButton"),
+      newGameButton: document.getElementById("newGameButton"),
+      endTurnButton: document.getElementById("endTurnButton"),
+      playerHp: document.getElementById("playerHp"),
+      playerBlock: document.getElementById("playerBlock"),
+      enemyHp: document.getElementById("enemyHp"),
+      enemyAttack: document.getElementById("enemyAttack"),
+      energy: document.getElementById("energy"),
+      drawCount: document.getElementById("drawCount"),
+      handCount: document.getElementById("handCount"),
+      discardCount: document.getElementById("discardCount"),
+      hand: document.getElementById("hand"),
+      handHint: document.getElementById("handHint"),
+      combatLog: document.getElementById("combatLog"),
+      turnBanner: document.getElementById("turnBanner"),
+      reshuffleLine: document.getElementById("reshuffleLine"),
+      playerLine: document.getElementById("playerLine"),
+      enemyLine: document.getElementById("enemyLine"),
+      resultTitle: document.getElementById("resultTitle"),
+      resultText: document.getElementById("resultText")
+    };
+
+    let state;
+
+    function freshState() {
+      return {
+        playerHp: MAX_PLAYER_HP,
+        enemyHp: MAX_ENEMY_HP,
+        block: 0,
+        energy: MAX_ENERGY,
+        drawPile: STARTER_DECK.map(card => ({ ...card })),
+        hand: [],
+        discardPile: [],
+        turn: 1,
+        playerTurn: true,
+        gameOver: false,
+        log: []
+      };
+    }
+
+    function startCombat() {
+      state = freshState();
+      elements.startOverlay.hidden = true;
+      elements.resultOverlay.hidden = true;
+      addLog("Combat begins. Turn 1 starts with 3 energy.");
+      drawCards(HAND_SIZE);
+      render();
+    }
+
+    function addLog(message) {
+      state.log.unshift(message);
+      state.log = state.log.slice(0, 10);
+    }
+
+    function drawCards(count) {
+      let drawn = 0;
+      for (let i = 0; i < count; i += 1) {
+        if (state.drawPile.length === 0) {
+          if (state.discardPile.length === 0) break;
+          state.drawPile = state.discardPile.splice(0);
+          addLog("Draw pile empty: discard pile refilled the draw pile in fixed order.");
+        }
+        state.hand.push(state.drawPile.shift());
+        drawn += 1;
+      }
+      if (drawn > 0) addLog(`Drew ${drawn} card${drawn === 1 ? "" : "s"}.`);
+    }
+
+    function playCard(index) {
+      if (!state.playerTurn || state.gameOver) return;
+      const card = state.hand[index];
+      if (!card) return;
+      if (card.cost > state.energy) {
+        addLog(`${card.name} needs ${card.cost} energy, but only ${state.energy} remains.`);
+        render();
+        return;
+      }
+
+      state.energy -= card.cost;
+      state.hand.splice(index, 1);
+      state.discardPile.push(card);
+
+      if (card.type === "attack") {
+        const previousHp = state.enemyHp;
+        state.enemyHp = Math.max(0, state.enemyHp - card.amount);
+        addLog(`${card.name}: spent ${card.cost} energy and dealt ${previousHp - state.enemyHp} damage.`);
+      } else {
+        state.block += card.amount;
+        addLog(`${card.name}: spent ${card.cost} energy and gained ${card.amount} guard.`);
+      }
+
+      if (state.enemyHp <= 0) {
+        endCombat(true);
+      }
+      render();
+    }
+
+    function endTurn() {
+      if (!state.playerTurn || state.gameOver) return;
+      state.playerTurn = false;
+      while (state.hand.length) {
+        state.discardPile.push(state.hand.shift());
+      }
+      addLog("Ended turn. Remaining hand moved to discard.");
+      render();
+
+      window.setTimeout(() => {
+        if (state.gameOver) return;
+        enemyAction();
+        if (!state.gameOver) beginPlayerTurn();
+        render();
+      }, 520);
+    }
+
+    function enemyAction() {
+      const blocked = Math.min(state.block, ENEMY_ATTACK);
+      const damage = ENEMY_ATTACK - blocked;
+      state.playerHp = Math.max(0, state.playerHp - damage);
+      addLog(`Enemy attacked for ${ENEMY_ATTACK}. Guard blocked ${blocked}; player took ${damage}.`);
+      state.block = 0;
+      if (state.playerHp <= 0) {
+        endCombat(false);
+      }
+    }
+
+    function beginPlayerTurn() {
+      state.turn += 1;
+      state.playerTurn = true;
+      state.energy = MAX_ENERGY;
+      drawCards(HAND_SIZE);
+      addLog(`Turn ${state.turn} begins with ${MAX_ENERGY} energy.`);
+    }
+
+    function endCombat(won) {
+      state.gameOver = true;
+      state.playerTurn = false;
+      elements.resultTitle.textContent = won ? "Victory" : "Defeat";
+      elements.resultTitle.className = `result-title ${won ? "win" : "loss"}`;
+      elements.resultText.textContent = won
+        ? "The Glass Warden reached 0 HP. Basic combat is complete."
+        : "Your HP reached 0. Restart to try the deterministic fight again.";
+      addLog(won ? "Victory: enemy HP reached 0." : "Defeat: player HP reached 0.");
+      window.setTimeout(() => {
+        elements.resultOverlay.hidden = false;
+        elements.restartButton.focus();
+      }, 250);
+    }
+
+    function render() {
+      elements.playerHp.textContent = `${state.playerHp} / ${MAX_PLAYER_HP}`;
+      elements.playerBlock.textContent = String(state.block);
+      elements.enemyHp.textContent = `${state.enemyHp} / ${MAX_ENEMY_HP}`;
+      elements.enemyAttack.textContent = String(ENEMY_ATTACK);
+      elements.energy.textContent = `${state.energy} / ${MAX_ENERGY}`;
+      elements.drawCount.textContent = String(state.drawPile.length);
+      elements.handCount.textContent = String(state.hand.length);
+      elements.discardCount.textContent = String(state.discardPile.length);
+      elements.endTurnButton.disabled = !state.playerTurn || state.gameOver;
+      elements.playerLine.textContent = state.playerTurn ? `Turn ${state.turn}: choose cards or end turn.` : "Enemy is resolving its attack.";
+      elements.enemyLine.textContent = `Enemy will strike for ${ENEMY_ATTACK} after you end turn.`;
+      elements.handHint.textContent = state.playerTurn ? "Click a card to play it." : "Waiting for the enemy attack.";
+      elements.reshuffleLine.textContent = state.drawPile.length === 0 && state.discardPile.length > 0
+        ? "Next draw will refill from the discard pile in fixed order."
+        : "When the draw pile is empty, the discard pile refills it in fixed order.";
+      elements.turnBanner.innerHTML = state.playerTurn
+        ? `<strong>Your turn ${state.turn}.</strong> Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.`
+        : `<strong>Enemy turn.</strong> The Glass Warden attacks once, then your next turn begins.`;
+
+      renderHand();
+      renderLog();
+    }
+
+    function renderHand() {
+      elements.hand.textContent = "";
+      if (state.hand.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "status-line";
+        empty.textContent = state.playerTurn ? "No cards in hand." : "Hand discarded at end of turn.";
+        elements.hand.append(empty);
+        return;
+      }
+
+      state.hand.forEach((card, index) => {
+        const button = document.createElement("button");
+        button.className = `card ${card.type}`;
+        button.type = "button";
+        button.disabled = !state.playerTurn || state.gameOver || card.cost > state.energy;
+        button.setAttribute("aria-label", `${card.name}, cost ${card.cost}, ${card.text}`);
+        button.innerHTML = `
+          <div class="card-title">
+            <span>${card.name}</span>
+            <span class="cost">${card.cost}</span>
+          </div>
+          <p>${card.text}</p>
+          <footer>${card.type === "attack" ? "Attack" : "Guard"} ${card.amount}</footer>
+        `;
+        button.addEventListener("click", () => playCard(index));
+        elements.hand.append(button);
+      });
+    }
+
+    function renderLog() {
+      elements.combatLog.textContent = "";
+      state.log.forEach(entry => {
+        const item = document.createElement("li");
+        item.textContent = entry;
+        elements.combatLog.append(item);
+      });
+    }
+
+    elements.startButton.addEventListener("click", startCombat);
+    elements.restartButton.addEventListener("click", startCombat);
+    elements.newGameButton.addEventListener("click", startCombat);
+    elements.endTurnButton.addEventListener("click", endTurn);
+
+    state = freshState();
+    render();
+  </script>
+</body>
+</html>
