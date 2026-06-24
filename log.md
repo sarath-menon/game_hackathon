@@ -1142,3 +1142,23 @@ python3 -m http.server 8765 --bind 127.0.0.1
 - Retest 1 blocking finding is closed. Cross-game audio-default hotfix is now `PASS` for Platformer, Deckbuilder, and Kart.
 - Dashboard thread must update the visible state from `BUILDER FIX COMPLETE -> RETEST ACTIVE` to `PASS / CLOSED`, preserve retest 1 as failed evidence, show retest 2 as the closing evidence, and mark the next actionable lane as external-game QA retry.
 - Next external QA priority: resume provider-blocker retries through the canonical tester in the single shared Chrome window, starting with PolyTrack and OvO alternate provider paths.
+
+## PolyTrack Poki External QA Handoff Active - 2026-06-25
+
+- Orchestrator started the next Track 2 external-game QA retry after the cross-game local audio-default hotfix closed.
+- Canonical tester: `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Game: PolyTrack.
+- Provider path: `https://poki.com/en/g/polytrack`.
+- Manual: `external-qa/polytrack-poki/README.md`.
+- Fresh evidence target: `evidence/external/polytrack-poki-shared-window-retry-1/`.
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Reason for fresh folder: older `evidence/external/polytrack-poki/` contained only an incomplete screenshot from a stopped/invalid attempt.
+- Tester instructions preserve the external QA taxonomy:
+  - `PASS_WITH_FINDINGS` if playable and acceptable with nonblocking issues;
+  - `FAIL` only if playable enough to evaluate but failing QA criteria;
+  - `BLOCKED_PROVIDER` for provider/shell/iframe/startup/ad/consent path blockers;
+  - `BLOCKED_ENVIRONMENT` for local browser-harness/WebGL/audio/input/storage environment blockers.
+- Tester must not try alternate provider URLs itself; blocked results return to the orchestrator for the next retry plan.

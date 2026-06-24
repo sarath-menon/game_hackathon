@@ -113,6 +113,7 @@ A popular external browser game must not receive final `FAIL` solely because one
   - Browser-game research thread `019efaae-20f8-7473-8e01-69d4ae206994` is used for direct-URL game candidates, alternate provider paths, and settings/options quality references.
   - External browser-game QA:
     - PolyTrack is reclassified as `BLOCKED_PROVIDER` / needs retry; the first provider hit a startup runtime error before gameplay, and an interrupted retry must be rerun through the canonical tester in the shared Chrome window.
+    - Current active external QA handoff: PolyTrack Poki provider shared-window retry 1 through the canonical tester, evidence target `evidence/external/polytrack-poki-shared-window-retry-1/`.
     - OvO is reclassified as `BLOCKED_PROVIDER` / needs retry; the first provider stayed on a loading spinner before gameplay, and an interrupted retry must be rerun through the canonical tester in the shared Chrome window.
     - Cookie Clicker completed as `PASS with limitations`; load, click/purchase loop, Options, save/export, and persistence were verified, with narrow viewport capture limited by the harness.
     - Dungeons & Degenerate Gamblers completed as `PASS with nonblocking findings`; launch, run start, deck selection, tavern entry, and first table interaction were verified.
