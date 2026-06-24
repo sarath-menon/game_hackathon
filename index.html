@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Signal Runner</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #10151b;
+      --panel: #18212a;
+      --panel-2: #202b34;
+      --line: #3c4a52;
+      --text: #edf3f4;
+      --muted: #a7b8bb;
+      --green: #58d68d;
+      --amber: #f4c85f;
+      --red: #ff6b6b;
+      --cyan: #62d3ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(180deg, rgba(98, 211, 255, 0.08), transparent 36%),
+        radial-gradient(circle at 50% -10%, rgba(88, 214, 141, 0.14), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+      overflow: hidden;
+    }
+
+    main {
+      width: min(100vw, 1080px);
+      padding: 16px;
+    }
+
+    .shell {
+      display: grid;
+      gap: 10px;
+    }
+
+    .topbar {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 4px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    .status strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .game-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      min-height: 320px;
+      max-height: calc(100vh - 108px);
+      overflow: hidden;
+      border: 1px solid rgba(237, 243, 244, 0.16);
+      border-radius: 8px;
+      background: #0f171d;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(10, 16, 20, 0.68);
+      backdrop-filter: blur(4px);
+    }
+
+    .overlay[hidden] {
+      display: none;
+    }
+
+    .menu {
+      width: min(520px, 100%);
+      display: grid;
+      justify-items: center;
+      gap: 16px;
+      text-align: center;
+    }
+
+    .menu h2 {
+      margin: 0;
+      font-size: clamp(2rem, 8vw, 4rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .menu p {
+      margin: 0;
+      max-width: 34rem;
+      color: var(--muted);
+      font-size: clamp(1rem, 2.4vw, 1.15rem);
+      line-height: 1.5;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    button {
+      min-width: 132px;
+      min-height: 44px;
+      border: 1px solid rgba(237, 243, 244, 0.22);
+      border-radius: 8px;
+      background: var(--panel-2);
+      color: var(--text);
+      font: inherit;
+      font-weight: 750;
+      letter-spacing: 0;
+      cursor: pointer;
+    }
+
+    button.primary {
+      border-color: rgba(88, 214, 141, 0.9);
+      background: var(--green);
+      color: #092013;
+    }
+
+    button:focus-visible {
+      outline: 3px solid var(--cyan);
+      outline-offset: 2px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      background: var(--cyan);
+    }
+
+    .dot.target {
+      background: var(--amber);
+    }
+
+    @media (max-width: 680px) {
+      body {
+        overflow: auto;
+      }
+
+      main {
+        padding: 10px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        min-height: 78px;
+      }
+
+      .status {
+        white-space: normal;
+      }
+
+      .game-frame {
+        min-height: 380px;
+        max-height: none;
+        aspect-ratio: 4 / 5;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="shell">
+      <div class="topbar" aria-live="polite">
+        <h1>Signal Runner</h1>
+        <div class="status">
+          <span>Status: <strong id="statusText">Awaiting launch</strong></span>
+          <span>Target: <strong id="targetText">Dock 01</strong></span>
+        </div>
+      </div>
+
+      <section class="game-frame" aria-label="Signal Runner game">
+        <canvas id="gameCanvas" width="960" height="600"></canvas>
+
+        <div class="overlay" id="startOverlay">
+          <div class="menu">
+            <h2>Signal Runner</h2>
+            <p>Pilot the courier drone through the city grid and dock at the active relay.</p>
+            <div class="legend" aria-hidden="true">
+              <span><i class="dot"></i> Courier</span>
+              <span><i class="dot target"></i> Delivery target</span>
+            </div>
+            <div class="button-row">
+              <button class="primary" id="startButton" type="button">Start Run</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="overlay" id="winOverlay" hidden>
+          <div class="menu">
+            <h2>Delivered</h2>
+            <p>The signal reached Dock 01.</p>
+            <div class="button-row">
+              <button class="primary" id="restartButton" type="button">Run Again</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+      const startOverlay = document.getElementById("startOverlay");
+      const winOverlay = document.getElementById("winOverlay");
+      const startButton = document.getElementById("startButton");
+      const restartButton = document.getElementById("restartButton");
+      const statusText = document.getElementById("statusText");
+
+      const WORLD = { width: 960, height: 600 };
+      const PLAYER_SIZE = 28;
+      const PLAYER_SPEED = 238;
+      const WALLS = [
+        { x: 0, y: 0, w: 960, h: 28 },
+        { x: 0, y: 572, w: 960, h: 28 },
+        { x: 0, y: 0, w: 28, h: 600 },
+        { x: 932, y: 0, w: 28, h: 600 },
+        { x: 130, y: 112, w: 460, h: 34 },
+        { x: 700, y: 82, w: 34, h: 250 },
+        { x: 238, y: 226, w: 34, h: 272 },
+        { x: 370, y: 246, w: 350, h: 34 },
+        { x: 492, y: 382, w: 34, h: 162 },
+        { x: 610, y: 452, w: 210, h: 34 }
+      ];
+      const target = { x: 815, y: 142, r: 34 };
+      const startPosition = { x: 82, y: 506 };
+      const keys = new Set();
+
+      let state = "title";
+      let lastTime = 0;
+      let player = createPlayer();
+
+      function createPlayer() {
+        return {
+          x: startPosition.x,
+          y: startPosition.y,
+          w: PLAYER_SIZE,
+          h: PLAYER_SIZE,
+          pulse: 0,
+          facingX: 1,
+          facingY: 0
+        };
+      }
+
+      function startRun() {
+        player = createPlayer();
+        keys.clear();
+        state = "playing";
+        statusText.textContent = "In transit";
+        startOverlay.hidden = true;
+        winOverlay.hidden = true;
+        canvas.focus();
+      }
+
+      function winRun() {
+        state = "won";
+        keys.clear();
+        statusText.textContent = "Delivered";
+        winOverlay.hidden = false;
+        restartButton.focus();
+      }
+
+      function rectsOverlap(a, b) {
+        return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+      }
+
+      function circleRectOverlap(circle, rect) {
+        const nearestX = Math.max(rect.x, Math.min(circle.x, rect.x + rect.w));
+        const nearestY = Math.max(rect.y, Math.min(circle.y, rect.y + rect.h));
+        const dx = circle.x - nearestX;
+        const dy = circle.y - nearestY;
+        return dx * dx + dy * dy <= circle.r * circle.r;
+      }
+
+      function collides(rect) {
+        return WALLS.some((wall) => rectsOverlap(rect, wall));
+      }
+
+      function movePlayer(dt) {
+        let dx = 0;
+        let dy = 0;
+
+        if (keys.has("ArrowLeft") || keys.has("KeyA")) dx -= 1;
+        if (keys.has("ArrowRight") || keys.has("KeyD")) dx += 1;
+        if (keys.has("ArrowUp") || keys.has("KeyW")) dy -= 1;
+        if (keys.has("ArrowDown") || keys.has("KeyS")) dy += 1;
+
+        if (dx !== 0 || dy !== 0) {
+          const length = Math.hypot(dx, dy);
+          dx /= length;
+          dy /= length;
+          player.facingX = dx;
+          player.facingY = dy;
+        }
+
+        const amount = PLAYER_SPEED * dt;
+        const nextX = { ...player, x: player.x + dx * amount };
+        if (!collides(nextX)) player.x = nextX.x;
+
+        const nextY = { ...player, y: player.y + dy * amount };
+        if (!collides(nextY)) player.y = nextY.y;
+
+        const playerCenter = {
+          x: player.x + player.w / 2,
+          y: player.y + player.h / 2,
+          r: Math.min(player.w, player.h) / 2
+        };
+
+        if (circleRectOverlap(playerCenter, { x: target.x - target.r, y: target.y - target.r, w: target.r * 2, h: target.r * 2 })) {
+          winRun();
+        }
+      }
+
+      function drawGrid() {
+        ctx.fillStyle = "#111922";
+        ctx.fillRect(0, 0, WORLD.width, WORLD.height);
+
+        ctx.strokeStyle = "rgba(237, 243, 244, 0.055)";
+        ctx.lineWidth = 1;
+        for (let x = 28; x < WORLD.width; x += 48) {
+          ctx.beginPath();
+          ctx.moveTo(x, 28);
+          ctx.lineTo(x, WORLD.height - 28);
+          ctx.stroke();
+        }
+        for (let y = 28; y < WORLD.height; y += 48) {
+          ctx.beginPath();
+          ctx.moveTo(28, y);
+          ctx.lineTo(WORLD.width - 28, y);
+          ctx.stroke();
+        }
+
+        ctx.strokeStyle = "rgba(98, 211, 255, 0.13)";
+        ctx.lineWidth = 3;
+        ctx.setLineDash([18, 18]);
+        ctx.beginPath();
+        ctx.moveTo(startPosition.x + PLAYER_SIZE / 2, startPosition.y + PLAYER_SIZE / 2);
+        ctx.lineTo(168, 512);
+        ctx.lineTo(168, 184);
+        ctx.lineTo(650, 184);
+        ctx.lineTo(650, 368);
+        ctx.lineTo(858, 368);
+        ctx.lineTo(target.x, target.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      function drawWalls() {
+        for (const wall of WALLS) {
+          const gradient = ctx.createLinearGradient(wall.x, wall.y, wall.x + wall.w, wall.y + wall.h);
+          gradient.addColorStop(0, "#26313a");
+          gradient.addColorStop(1, "#46535d");
+          ctx.fillStyle = gradient;
+          ctx.fillRect(wall.x, wall.y, wall.w, wall.h);
+          ctx.strokeStyle = "rgba(237, 243, 244, 0.16)";
+          ctx.lineWidth = 2;
+          ctx.strokeRect(wall.x + 1, wall.y + 1, wall.w - 2, wall.h - 2);
+        }
+      }
+
+      function drawTarget(time) {
+        const pulse = 1 + Math.sin(time * 3.4) * 0.08;
+
+        ctx.save();
+        ctx.translate(target.x, target.y);
+        ctx.fillStyle = "rgba(244, 200, 95, 0.12)";
+        ctx.beginPath();
+        ctx.arc(0, 0, target.r * 1.7 * pulse, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = "#f4c85f";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(0, 0, target.r * pulse, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = "#f7d987";
+        ctx.fillRect(-20, -20, 40, 40);
+        ctx.fillStyle = "#7c5d14";
+        ctx.fillRect(-11, -11, 22, 22);
+        ctx.restore();
+      }
+
+      function drawPlayer(time) {
+        player.pulse += 0.04;
+        const cx = player.x + player.w / 2;
+        const cy = player.y + player.h / 2;
+
+        ctx.save();
+        ctx.translate(cx, cy);
+
+        ctx.fillStyle = "rgba(98, 211, 255, 0.14)";
+        ctx.beginPath();
+        ctx.arc(0, 0, 28 + Math.sin(time * 6) * 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#62d3ff";
+        ctx.strokeStyle = "#d8f6ff";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(-14, -12, 28, 24, 6);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "#0a2530";
+        ctx.beginPath();
+        ctx.arc(player.facingX * 8, player.facingY * 8, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = "#58d68d";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(-20, -18);
+        ctx.lineTo(-10, -10);
+        ctx.moveTo(20, -18);
+        ctx.lineTo(10, -10);
+        ctx.moveTo(-20, 18);
+        ctx.lineTo(-10, 10);
+        ctx.moveTo(20, 18);
+        ctx.lineTo(10, 10);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawLabels() {
+        ctx.font = "700 16px ui-sans-serif, system-ui, sans-serif";
+        ctx.fillStyle = "rgba(237, 243, 244, 0.82)";
+        ctx.fillText("START", 58, 552);
+        ctx.fillText("DOCK 01", 777, 94);
+      }
+
+      function render(timestamp) {
+        const time = timestamp / 1000;
+        drawGrid();
+        drawTarget(time);
+        drawWalls();
+        drawPlayer(time);
+        drawLabels();
+      }
+
+      function loop(timestamp) {
+        const dt = Math.min((timestamp - lastTime) / 1000 || 0, 0.033);
+        lastTime = timestamp;
+
+        if (state === "playing") {
+          movePlayer(dt);
+        }
+
+        render(timestamp);
+        requestAnimationFrame(loop);
+      }
+
+      function normalizeKey(event) {
+        if (event.code === "Space") return "Space";
+        return event.code;
+      }
+
+      window.addEventListener("keydown", (event) => {
+        const key = normalizeKey(event);
+        const movementKey = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyA", "KeyD", "KeyW", "KeyS"].includes(key);
+
+        if (movementKey) {
+          event.preventDefault();
+          keys.add(key);
+        }
+
+        if ((key === "Enter" || key === "Space") && state !== "playing") {
+          event.preventDefault();
+          startRun();
+        }
+      });
+
+      window.addEventListener("keyup", (event) => {
+        keys.delete(normalizeKey(event));
+      });
+
+      window.addEventListener("blur", () => {
+        keys.clear();
+      });
+
+      startButton.addEventListener("click", startRun);
+      restartButton.addEventListener("click", startRun);
+      requestAnimationFrame(loop);
+    })();
+  </script>
+</body>
+</html>
