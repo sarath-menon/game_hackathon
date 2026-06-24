@@ -866,3 +866,18 @@ python3 -m http.server 8765 --bind 127.0.0.1
 ### Turn-Based Deckbuilder
 
 - No new action. Deckbuilder remains complete through Phase 3.
+## Settings QA Goal Restart - 2026-06-25
+
+- User redirected the active project goal from broad gameplay-polish iterations to detailed settings panels and settings QA for the three completed games.
+- The prior Deckbuilder continuous upgrade, `Upgrade Phase 1: Combat Feedback And Math Preview`, is approved as `PASS`.
+  - Evidence folder: `evidence/deckbuilder/upgrade-phase-1-combat-feedback/`
+  - Required artifacts present: `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`
+  - Tester verified previews, Focus/Fractured math, disabled-card reasons, HP bars, feedback chips, logs, reward choice, encounter transition, final victory, defeat, restart, and state/action clarity.
+  - Remaining note: low-severity, non-blocking start overlay presentation issue.
+- New active suite work:
+  - Arcade Kart Racer settings panel: steering/handling sensitivity, assists/readability, minimap/checkpoint aids, reduced motion/effects, persistence, and reset defaults.
+  - Side-Scrolling Platformer settings panel: jump assist/forgiveness profile, camera options, reduced motion/effects, readability/HUD sizing, persistence, and reset defaults.
+  - Turn-Based Deckbuilder settings panel: animation speed, reduced motion, tooltip/detail level, text size, confirmation options, feedback intensity, persistence, and reset defaults.
+- Settings QA standard: testers must verify discoverability, README/manual match, defaults, persistence, reset behavior, edge cases, accessibility/readability controls, responsive layout, regression paths, and continuous evidence.
+- Dashboard must be updated through dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` so the new settings goal appears in the same per-game panels/timelines as prior phases and upgrades.
+- Browser-game research thread `019efaae-20f8-7473-8e01-69d4ae206994` should expand its research to settings/options panels and identify enough player-facing instruction material for selecting five diverse direct-URL browser games for later parallel black-box QA.

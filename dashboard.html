@@ -160,6 +160,15 @@
       font-size: 0.9rem;
     }
 
+    .attention-panel.compact {
+      grid-template-columns: minmax(0, 1fr) auto;
+      padding: 11px 14px;
+    }
+
+    .attention-panel.compact .loop-grid {
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+    }
+
     .loop-grid {
       display: grid;
       grid-template-columns: repeat(5, minmax(140px, 1fr));
@@ -324,6 +333,52 @@
       gap: 5px;
       color: var(--muted);
       font-size: 0.82rem;
+    }
+
+    .card-timeline {
+      display: grid;
+      gap: 7px;
+      padding-top: 2px;
+    }
+
+    .timeline-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      padding: 8px;
+      border: 1px solid #e1e9ec;
+      border-left: 4px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfc;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .timeline-row[data-status="pass"] {
+      border-left-color: var(--pass);
+    }
+
+    .timeline-row[data-status="attention"] {
+      border-left-color: var(--attention);
+    }
+
+    .timeline-row[data-status="fail"] {
+      border-left-color: var(--fail);
+    }
+
+    .timeline-title {
+      display: block;
+      color: var(--ink);
+      font-size: 0.84rem;
+      font-weight: 850;
+    }
+
+    .timeline-note {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 0.76rem;
     }
 
     .card-actions {
@@ -624,7 +679,8 @@
 
       .attention-panel,
       .issue-row,
-      .loop-grid {
+      .loop-grid,
+      .attention-panel.compact .loop-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -650,17 +706,15 @@
       <section class="status-strip" id="status-strip" aria-label="Game status summary"></section>
     </header>
 
-    <section class="attention-panel" id="attention-panel" data-state="active">
+    <section class="attention-panel compact" id="attention-panel" data-state="clear">
       <div>
-        <h2>Continuous QA Loop</h2>
-        <p><strong>Deckbuilder Combat Feedback upgrade is in black-box QA.</strong> Builder work is complete; the tester handoff is active and verdict is pending.</p>
-        <p><strong>Freshness gate:</strong> after every builder handoff, completion, tester handoff, FAIL, fix request, retest, PASS closure, or new upgrade selection, this dashboard must be updated and verified or visibly in progress.</p>
+        <h2>Current Live Status</h2>
+        <p><strong>Deckbuilder Upgrade Phase 1 is closed PASS.</strong> The game cards below are the canonical timeline for phases, fixes, upgrades, and evidence.</p>
         <div class="loop-grid" aria-label="Active upgrade status">
           <div class="loop-cell"><strong>Active Game</strong>Turn-Based Deckbuilder</div>
-          <div class="loop-cell"><strong>Upgrade Phase</strong>Upgrade Phase 1: Combat Feedback And Math Preview</div>
-          <div class="loop-cell"><strong>Builder</strong>Complete in 019ef96e-7780-7763-b444-12cf7698a97a</div>
-          <div class="loop-cell"><strong>Tester</strong>Active / verdict pending in 019ef96e-99ee-7f62-b4d2-7d2c3cd29217</div>
-          <div class="loop-cell"><strong>Next Action</strong>Wait for tester verdict; close on PASS or route fix on FAIL</div>
+          <div class="loop-cell"><strong>Upgrade</strong>Combat Feedback And Math Preview PASS</div>
+          <div class="loop-cell"><strong>Tester</strong>PASS / approved in 019ef96e-99ee-7f62-b4d2c3cd29217</div>
+          <div class="loop-cell"><strong>Next Action</strong>Select the next continuous QA upgrade</div>
         </div>
         <div class="qa-links" aria-label="QA upgrade research links">
           <span>Gate: <strong>dashboard fresh/verified before transition complete</strong></span>
@@ -683,13 +737,6 @@
     </nav>
 
     <section class="games" id="games" aria-label="Game cards"></section>
-
-    <section class="open-issues" aria-label="Open issues">
-      <header><h2>Active QA Work</h2></header>
-      <div class="issue-list">
-        <div class="empty-state">Deckbuilder Upgrade Phase 1 is in tester black-box QA. Builder completed combat feedback and math preview work; required tester report, expected-flow, and gameplay recording are pending.</div>
-      </div>
-    </section>
   </main>
 
   <div class="drawer-backdrop" id="evidence-drawer" hidden>
@@ -753,6 +800,11 @@
           { number: 2, title: "Race Rules", current: "pass", evidenceDir: "evidence/kart-racer/phase-2" },
           { number: 3, title: "Game Feel / Orientation Closure", current: "pass", evidenceDir: "evidence/kart-racer/orientation-retest", extraEvidenceDir: "evidence/kart-racer/phase-3" }
         ],
+        timeline: [
+          { label: "Phases 1-3", status: "pass", statusLabel: "PASS", note: "Drivable track, race rules, game feel, and orientation closure approved.", openKey: "kart-racer:3" },
+          { label: "Orientation Closure Retest", status: "pass", statusLabel: "PASS", note: "Natural orientation sanity check closed.", openKey: "kart-racer:3" },
+          { label: "Drift/Boost Upgrade A", status: "pass", statusLabel: "FAIL -> PASS", note: "Original QA failed; Retest 1 fixed drift stages and release boost.", openKey: "kart-racer:upgrade-a" }
+        ],
         evidenceSeries: [
           { label: "Phase 1: Basic Drivable Track", status: "PASS", evidenceDir: "evidence/kart-racer/phase-1" },
           { label: "Phase 2: Race Rules", status: "PASS", evidenceDir: "evidence/kart-racer/phase-2" },
@@ -777,6 +829,10 @@
           { number: 2, title: "Hazards And Collectibles", current: "pass", evidenceDir: "evidence/platformer/phase-2" },
           { number: 3, title: "Level Polish", current: "pass", evidenceDir: "evidence/platformer/phase-3" }
         ],
+        timeline: [
+          { label: "Phases 1-3", status: "pass", statusLabel: "PASS", note: "Core movement, hazards/collectibles, and level polish approved.", openKey: "platformer:3" },
+          { label: "Movement Feel Upgrade A", status: "pass", statusLabel: "PASS", note: "Coyote time, buffering, variable jumps, landing feedback approved.", openKey: "platformer:upgrade-a" }
+        ],
         evidenceSeries: [
           { label: "Phase 1: Core Movement", status: "PASS", evidenceDir: "evidence/platformer/phase-1" },
           { label: "Phase 2: Hazards And Collectibles", status: "PASS", evidenceDir: "evidence/platformer/phase-2" },
@@ -787,23 +843,27 @@
       {
         id: "deckbuilder",
         name: "Turn-Based Deckbuilder",
-        status: "attention",
-        statusLabel: "UPGRADE TESTING",
-        summary: "Historical phases are PASS; Upgrade Phase 1 Combat Feedback And Math Preview is in tester QA with verdict pending.",
+        status: "pass",
+        statusLabel: "UPGRADE PASS",
+        summary: "Historical phases are PASS; Upgrade Phase 1 Combat Feedback And Math Preview is approved with complete evidence.",
         gameUrl: "games/deckbuilder/index.html",
         readmeUrl: "games/deckbuilder/README.md",
         primaryPhase: "upgrade-a",
-        upgrade: { number: "A", upgradeLabel: "Upgrade Phase 1", title: "Upgrade Phase 1: Combat Feedback And Math Preview", current: "attention", evidenceDir: "evidence/deckbuilder/upgrade-phase-1-combat-feedback" },
+        upgrade: { number: "A", upgradeLabel: "Upgrade Phase 1", title: "Upgrade Phase 1: Combat Feedback And Math Preview", current: "pass", evidenceDir: "evidence/deckbuilder/upgrade-phase-1-combat-feedback" },
         phases: [
           { number: 1, title: "Basic Card Combat", current: "pass", evidenceDir: "evidence/deckbuilder/phase-1" },
           { number: 2, title: "Tactical Variety", current: "pass", evidenceDir: "evidence/deckbuilder/phase-2" },
           { number: 3, title: "Run Structure", current: "pass", evidenceDir: "evidence/deckbuilder/phase-3" }
         ],
+        timeline: [
+          { label: "Phases 1-3", status: "pass", statusLabel: "PASS", note: "Card combat, tactical variety, and run structure approved.", openKey: "deckbuilder:3" },
+          { label: "Upgrade Phase 1: Combat Feedback And Math Preview", status: "pass", statusLabel: "PASS", note: "Math previews, feedback chips, combat log, rewards, and state/action clarity approved.", openKey: "deckbuilder:upgrade-a" }
+        ],
         evidenceSeries: [
           { label: "Phase 1: Basic Card Combat", status: "PASS", evidenceDir: "evidence/deckbuilder/phase-1" },
           { label: "Phase 2: Tactical Variety", status: "PASS", evidenceDir: "evidence/deckbuilder/phase-2" },
           { label: "Phase 3: Run Structure", status: "PASS", evidenceDir: "evidence/deckbuilder/phase-3" },
-          { label: "Upgrade Phase 1: Combat Feedback And Math Preview", status: "TESTING ACTIVE / VERDICT PENDING", hydrateStatus: true, evidenceDir: "evidence/deckbuilder/upgrade-phase-1-combat-feedback" }
+          { label: "Upgrade Phase 1: Combat Feedback And Math Preview", status: "PASS - UPGRADE 1", hydrateStatus: true, evidenceDir: "evidence/deckbuilder/upgrade-phase-1-combat-feedback" }
         ]
       }
     ];
@@ -849,8 +909,8 @@
       "deckbuilder:upgrade-a": [
         ["Upgrade selected", "Deckbuilder Upgrade Phase 1: Combat Feedback And Math Preview is the active continuous QA upgrade."],
         ["Builder complete", "Builder thread 019ef96e-7780-7763-b444-12cf7698a97a completed the combat feedback and math preview implementation."],
-        ["Tester active / verdict pending", "Black-box QA handoff was sent to tester thread 019ef96e-99ee-7f62-b4d2-7d2c3cd29217. Await TEST_REPORT.md, expected-flow.md, and gameplay-recording.mp4."],
-        ["Evidence pending", "Expected tester artifacts will land in evidence/deckbuilder/upgrade-phase-1-combat-feedback/: TEST_REPORT.md, expected-flow.md, and gameplay-recording.mp4."]
+        ["Tester PASS / closed", "Tester report says PASS with card previews, Focus and Fractured math, disabled reasons, HP bars, feedback chips, combat log, rewards, encounter transition, final victory, defeat/restart, and state/action clarity approved."],
+        ["Evidence complete", "TEST_REPORT.md, expected-flow.md, and gameplay-recording.mp4 are present in evidence/deckbuilder/upgrade-phase-1-combat-feedback/."]
       ]
     };
 
@@ -1049,6 +1109,17 @@
             ${game.phases.map((phase) => `
               <button class="phase-chip" data-open-phase="${game.id}:${phase.number}" title="Open ${escapeHtml(phase.title)} evidence">
               <span class="chip" data-status="${phase.current}">P${phase.number} ${currentLabel(phase.current)}</span>
+              </button>
+            `).join("")}
+          </div>
+          <div class="card-timeline" aria-label="${escapeHtml(game.name)} timeline">
+            ${(game.timeline || []).map((item) => `
+              <button class="timeline-row" data-status="${item.status}" data-open-phase="${item.openKey}" title="Open ${escapeHtml(item.label)} evidence">
+                <span>
+                  <span class="timeline-title">${escapeHtml(item.label)}</span>
+                  <span class="timeline-note">${escapeHtml(item.note)}</span>
+                </span>
+                <span class="badge" data-status="${item.status}">${escapeHtml(item.statusLabel)}</span>
               </button>
             `).join("")}
           </div>

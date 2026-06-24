@@ -4,7 +4,7 @@ This file is the canonical handoff document for the active project in `/Users/sa
 
 ## Active Project Goal
 
-Continuously improve and retest the three-game suite toward genre-leading browser game quality while avoiding copyrighted names, characters, art, music, maps, branding, and other protected assets. The initial three-game build/test phases are complete; the active work is an open-ended QA and polish loop.
+Expand and retest the three-game suite with detailed player-facing settings panels, while continuing to avoid copyrighted names, characters, art, music, maps, branding, and other protected assets. The initial three-game build/test phases and the first round of gameplay-polish upgrades are complete; the active work is a settings implementation and settings QA loop.
 
 The suite contains:
 
@@ -14,24 +14,34 @@ The suite contains:
 
 The previous Signal Runner work is historical only. Do not continue Signal Runner milestones unless the user explicitly restores that goal.
 
-## Continuous QA Upgrade Goal
+## Active Settings QA Goal
 
-The active project is an ongoing quality loop: continuously improve one game at a time toward genre-leading browser game quality without copying protected IP.
+The active project is an ongoing settings-quality loop. Each built game should gain a detailed settings panel that is useful to real players and testable to industry-style QA standards.
 
 Each cycle:
 
-- benchmark one game against genre references for quality-bar signals only
-- identify the highest-impact gap in feel, clarity, visuals, UI, performance, accessibility, or polish
-- send a scoped upgrade goal to that game's builder
+- send a scoped settings-panel goal to that game's builder
 - after the builder reports completion, send the updated URL/manual/evidence paths to that game's tester
-- require industry-style black-box QA with test cases, severity, regression checks, readability/usability gates, browser checks, and continuous gameplay evidence
+- require industry-style black-box settings QA with test cases, severity, regression checks, defaults, persistence, reset behavior, edge cases, accessibility/readability controls, responsive layout, browser checks, and continuous gameplay/settings evidence
 - route failures back to the builder, then retest
 - update dashboard/log as work moves, not only at the end: active goal, selected upgrade, current builder/tester status, pending evidence, completed evidence, fixed feedback, and next action must stay visible in the UI
 - treat dashboard freshness as a hard orchestration gate: after a builder handoff, builder completion, tester handoff, FAIL, fix request, retest, PASS closure, or new upgrade selection, the transition is not complete until the dashboard thread has been given the new state and either verified the UI or is actively working on that update
 - if the dashboard lags the true project state, prioritize a dashboard-thread refresh before selecting more polish work, so the UI remains the user's source of truth
 - commit often after coherent, verified progress
 
-There is no terminal success condition for this loop. Keep iterating through higher-quality upgrades unless the user pauses or redirects.
+There is no terminal success condition for this loop. Keep improving settings depth, clarity, accessibility, and test coverage unless the user pauses or redirects.
+
+### Required Settings Scope
+
+- **Arcade Kart Racer:** settings for steering/handling sensitivity, acceleration or assist behavior, camera/readability aids, minimap/checkpoint marker visibility, reduced motion/effect intensity, audio/volume if present, persistence, and reset defaults.
+- **Side-Scrolling Platformer:** settings for jump assist or forgiveness profile, camera smoothing/lookahead, reduced motion/effects, readability assists, HUD/text sizing, audio/volume if present, persistence, and reset defaults.
+- **Turn-Based Deckbuilder:** settings for animation speed, reduced motion, tooltip/detail level, text size, confirm-end-turn or confirm-risky-action behavior, feedback intensity, persistence, and reset defaults.
+
+Tester settings QA must verify that settings are discoverable, documented in the README/manual, actually change visible or mechanical behavior as documented, persist across reloads where documented, reset correctly, remain usable in narrow and desktop viewports, and do not regress already-approved gameplay paths.
+
+## External Browser Game QA Goal
+
+A browser-game research lane is active to identify popular games that can be played directly by URL. After the research lane identifies candidates and enough player-facing manual/instruction material, the orchestrator should select five diverse games and create separate tester threads for parallel black-box QA. These testers receive only the game URL, game manual/instructions, and evidence/report paths. They cannot fix hosted games; they only produce industry-style QA reports with findings, severity, reproduction steps, evidence, and limitations.
 
 ## Current State
 
@@ -46,10 +56,10 @@ There is no terminal success condition for this loop. Keep iterating through hig
   - Side-Scrolling Platformer, Upgrade Phase A: Movement Feel Pass is closed as `PASS`.
   - The Platformer upgrade report verifies short-tap versus held-jump readability, jump forgiveness, lower-deck completion, hazard/failure/restart behavior, checkpoint recovery, route readability, and no blocking runtime errors.
   - Required evidence exists at `evidence/platformer/upgrade-phase-a-movement-feel/`: `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`.
-  - Current active continuous-upgrade lane: Turn-Based Deckbuilder, Upgrade Phase 1: Combat Feedback And Math Preview.
-  - Deckbuilder builder completed the upgrade in thread `019ef96e-7780-7763-b444-12cf7698a97a`.
-  - Deckbuilder tester handoff is being sent to thread `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
-  - Active evidence target: `evidence/deckbuilder/upgrade-phase-1-combat-feedback/`.
+  - Turn-Based Deckbuilder, Upgrade Phase 1: Combat Feedback And Math Preview is closed as `PASS`.
+  - Required evidence exists at `evidence/deckbuilder/upgrade-phase-1-combat-feedback/`: `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`.
+  - Current active suite lane: settings-panel implementation and settings QA for all three games.
+  - Browser-game research thread `019efaae-20f8-7473-8e01-69d4ae206994` is used for direct-URL game candidates and settings/options quality references.
   - The dashboard must reflect the live loop as it changes, including selected-upgrade, builder-active, builder-complete, tester-handoff, tester-active, FAIL, fix-active, retest-pending, retest-active, PASS closure, and next-upgrade selection states.
 - QA upgrade artifacts:
   - `qa-upgrade/QA_STANDARDS_PROPOSAL.md`
@@ -69,6 +79,8 @@ python3 -m http.server 8765 --bind 127.0.0.1
 - Deckbuilder builder thread: `019ef96e-7780-7763-b444-12cf7698a97a`
 - Deckbuilder tester thread: `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`
 - Browser maintenance thread: `019ef9ba-1477-7662-b7a3-c5da570cdb77`
+- Dashboard thread: `019ef963-dc84-72f1-9542-1431bafaf31d`
+- Browser-game research thread: `019efaae-20f8-7473-8e01-69d4ae206994`
 - Historical Signal Runner builder threads:
   - `019ef904-9758-7582-a5c6-cc57eae0f91e`
   - `019ef95a-9fae-7be3-8965-e261781023ab`

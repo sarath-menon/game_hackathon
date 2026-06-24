@@ -14,6 +14,7 @@ Ash Circuit is a two-encounter, turn-based deck run. Defeat the first enemy, cho
 
 - Click **Start Run** to begin.
 - Click a card in your hand to play it.
+- Read the card preview before clicking; it shows the current damage, guard, draw, and status outcome using active Focus or Fractured modifiers.
 - Click **End Turn** when finished playing cards.
 - Click one reward card after encounter 1 to add it to your deck and start encounter 2.
 - Click **New Run** or **Play Again** to restart the deterministic run.
@@ -23,7 +24,7 @@ Ash Circuit is a two-encounter, turn-based deck run. Defeat the first enemy, cho
 - Each player turn starts with 3 energy.
 - A five-card hand is drawn at the start of each player turn.
 - Playing a card spends its listed energy cost.
-- Cards that cost more than your remaining energy are disabled.
+- Cards that cost more than your remaining energy are disabled and show a visible reason such as the energy needed and energy available.
 - Ending your turn moves all unplayed hand cards to the discard pile.
 - The enemy then resolves the intent shown in the center panel.
 - Guard blocks the next enemy attack and resets to 0 after that attack.
@@ -72,7 +73,15 @@ The chosen reward is added to the run deck before encounter 2. The run status li
 - **Focus** is a player buff. Each point of Focus adds 1 damage to every attack or mixed attack card.
 - **Fractured** is a player debuff from Static Hex. It reduces the next attack or mixed attack card by 2 damage, then clears.
 - Focus and Fractured are visible in the player status area.
+- Card previews include Focus and Fractured changes before play, and the combat log reports the same resolved math after play.
 - Guard still blocks only the next enemy attack and then resets to 0.
+
+## Feedback Display
+
+- Player and enemy HP are shown as numbers and animated HP bars.
+- Damage, guard, draw, and status changes appear as floating feedback chips over the affected area.
+- Played cards briefly travel toward the enemy, player, or center panel to show which target receives the effect.
+- Disabled cards keep their card text visible and add an inline reason explaining why they cannot be played.
 
 ## Draw And Discard
 
