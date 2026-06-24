@@ -98,7 +98,7 @@ A popular external browser game must not receive final `FAIL` solely because one
   - Required evidence exists at `evidence/deckbuilder/upgrade-phase-1-combat-feedback/`: `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`.
   - Current active suite lanes: local settings-panel quality and external browser-game QA methodology.
   - Arcade Kart Racer Settings Panel Phase 1 was superseded by the audio-default hotfix and must be retested through the canonical tester before approval.
-  - Current active local builder handoff: Arcade Kart Racer settings-depth upgrade through the Kart builder, targeting grouped settings, additional player-facing controls, safe persistence/defaults, keyboard/focus accessibility, and README accuracy before a future canonical tester retest.
+  - Arcade Kart Racer settings-depth upgrade is builder-complete and awaiting a future canonical tester handoff after the active Cookie Clicker external QA pass closes. Changed files are `games/kart-racer/index.html` and `games/kart-racer/README.md`; do not mark approved until the canonical tester writes passing evidence.
   - Side-Scrolling Platformer Settings Panel Phase 1 is closed as `PASS`.
   - Turn-Based Deckbuilder Settings Panel Phase 1 is closed as `PASS`; Deckbuilder Settings Panel Polish 1 is also closed as `PASS`.
   - Cross-game audio-default hotfix:
@@ -121,10 +121,11 @@ A popular external browser game must not receive final `FAIL` solely because one
     - Dungeons & Degenerate Gamblers shared-window canonical retry 1 is `PASS_WITH_FINDINGS` at `evidence/external/dungeons-degenerate-gamblers-shared-window-retry-1/`: itch embed launch, main menu, deck selection, tavern/node entry, first table/combat, card-state readability, HIT/STAND feedback, and short-run performance were verified; remaining findings are nonblocking hit-target, settings-depth, and unavailable-action coverage items.
     - Older Dungeons evidence at `evidence/external/dungeons-degenerate-gamblers/` is historical only because it predates the current single shared Chrome window rule and used an isolated browser profile.
     - Cookie Clicker completed as `PASS with limitations`; load, click/purchase loop, Options, save/export, and persistence were verified, with narrow viewport capture limited by the harness.
+    - Cookie Clicker deeper settings/persistence/narrow-viewport pass 1 is `PASS_WITH_FINDINGS` at `evidence/external/cookie-clicker-settings-persistence-mobile-pass-1/`: direct provider load, language selection, banner dismissal, click/purchase loop, Options access/scrolling, export-save access, expected-flow, and MP4 evidence were completed; persistence/reload and narrow/mobile remain documented coverage gaps from the interrupted run.
     - Dungeons & Degenerate Gamblers completed as `PASS with nonblocking findings`; launch, run start, deck selection, tavern entry, and first table interaction were verified.
     - Townscaper completed as `PASS WITH FINDINGS`; WebGL load, block placement, URL hash state, camera movement/zoom, and mobile rendering were verified.
     - Townscaper deep settings/removal/mobile pass 1 is `PASS_WITH_FINDINGS` at `evidence/external/townscaper-settings-removal-mobile-pass-1/`: playable WebGL, placement, color selection, removal/undo attempts, gear clicks, camera drag, zoom, mobile viewport, and recording evidence were completed; remaining findings are nonblocking discoverability and subtle-feedback items.
-    - Current active external QA handoff: Cookie Clicker deeper settings/persistence/narrow-viewport pass 1 through the canonical tester, evidence target `evidence/external/cookie-clicker-settings-persistence-mobile-pass-1/`.
+    - Current next QA handoff: Arcade Kart Racer settings-depth retest should go to the canonical tester after the Cookie Clicker tester thread is idle.
   - The dashboard must reflect the live loop as it changes, including selected-upgrade, builder-active, builder-complete, tester-handoff, tester-active, FAIL, fix-active, retest-pending, retest-active, PASS closure, and next-upgrade selection states.
 - QA upgrade artifacts:
   - `qa-upgrade/QA_STANDARDS_PROPOSAL.md`

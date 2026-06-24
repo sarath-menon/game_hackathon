@@ -13,6 +13,7 @@
       --muted: #b8c2cf;
       --accent: #ffcf45;
       --good: #49d38a;
+      --hud-scale: 1;
     }
 
     * {
@@ -51,6 +52,8 @@
       display: grid;
       gap: 8px;
       pointer-events: auto;
+      transform: scale(var(--hud-scale));
+      transform-origin: bottom right;
     }
 
     .hud-button {
@@ -74,6 +77,9 @@
       align-items: flex-start;
       justify-content: space-between;
       gap: 12px;
+      transform: scale(var(--hud-scale));
+      transform-origin: top left;
+      width: calc(100% / var(--hud-scale));
     }
 
     .stats {
@@ -155,7 +161,8 @@
       left: 50%;
       bottom: 22px;
       width: min(520px, calc(100vw - 32px));
-      transform: translateX(-50%);
+      transform: translateX(-50%) scale(var(--hud-scale));
+      transform-origin: bottom center;
       text-align: center;
     }
 
@@ -194,6 +201,19 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
       margin-top: 18px;
+    }
+
+    .settings-section {
+      margin-top: 18px;
+    }
+
+    .settings-section-title {
+      margin: 0 0 9px;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 820;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     .setting-row {
@@ -333,6 +353,10 @@
       display: none;
     }
 
+    .hide-input-help .hint {
+      display: none;
+    }
+
     @media (max-width: 640px) {
       .topbar {
         top: 10px;
@@ -445,56 +469,106 @@
     <section class="card settings-card" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
       <h1 id="settingsTitle">Settings</h1>
       <p id="settingsContext">Adjust handling, readability, effects, and sound. Changes save automatically on this browser.</p>
-      <div class="settings-grid">
-        <label class="setting-row">
-          <span class="setting-title">Steering sensitivity <span id="steeringValue">100%</span></span>
-          <input id="steeringSetting" type="range" min="70" max="135" step="5">
-          <span class="setting-copy">Changes how sharply the kart turns while driving and drifting.</span>
-        </label>
-        <label class="setting-row">
-          <span class="setting-title">Driving assist</span>
-          <select id="assistSetting">
-            <option value="stable">Stable</option>
-            <option value="standard">Standard</option>
-            <option value="sport">Sport</option>
-          </select>
-          <span class="setting-copy">Stable adds stronger route alignment and gentler edge recovery. Sport gives punchier throttle with less assist.</span>
-        </label>
-        <label class="setting-row">
-          <span class="setting-title">Camera readability <span id="cameraValue">Balanced</span></span>
-          <input id="cameraSetting" type="range" min="85" max="115" step="5">
-          <span class="setting-copy">Zooms the heading-up chase view in or out while keeping CP1 forward from the start.</span>
-        </label>
-        <label class="setting-row">
-          <span class="setting-title">Effect intensity <span id="effectValue">100%</span></span>
-          <input id="effectSetting" type="range" min="0" max="100" step="10">
-          <span class="setting-copy">Scales speed streaks, skid trails, and exhaust particles without changing physics.</span>
-        </label>
-        <div class="setting-row">
-          <label class="setting-check"><input id="routeCueSetting" type="checkbox"> Show route chevrons</label>
-          <span class="setting-copy">Toggles the blue forward-route arrows between the kart and next gate.</span>
+      <div class="settings-section">
+        <h2 class="settings-section-title">Controls / Handling</h2>
+        <div class="settings-grid">
+          <label class="setting-row">
+            <span class="setting-title">Steering sensitivity <span id="steeringValue">100%</span></span>
+            <input id="steeringSetting" type="range" min="70" max="135" step="5">
+            <span class="setting-copy">Changes how sharply the kart turns while driving and drifting.</span>
+          </label>
+          <label class="setting-row">
+            <span class="setting-title">Driving assist</span>
+            <select id="assistSetting">
+              <option value="stable">Stable</option>
+              <option value="standard">Standard</option>
+              <option value="sport">Sport</option>
+            </select>
+            <span class="setting-copy">Stable adds stronger route alignment and gentler edge recovery. Sport gives punchier throttle with less assist.</span>
+          </label>
         </div>
-        <div class="setting-row">
-          <label class="setting-check"><input id="markerSetting" type="checkbox"> Show checkpoint labels</label>
-          <span class="setting-copy">Toggles large CP/finish labels and active gate posts while keeping the drivable gate line visible.</span>
+      </div>
+      <div class="settings-section">
+        <h2 class="settings-section-title">Visual / Readability</h2>
+        <div class="settings-grid">
+          <label class="setting-row">
+            <span class="setting-title">Effect intensity <span id="effectValue">100%</span></span>
+            <input id="effectSetting" type="range" min="0" max="100" step="10">
+            <span class="setting-copy">Scales speed streaks, skid trails, and exhaust particles without changing physics.</span>
+          </label>
+          <label class="setting-row">
+            <span class="setting-title">Marker intensity <span id="markerIntensityValue">100%</span></span>
+            <input id="markerIntensitySetting" type="range" min="45" max="130" step="5">
+            <span class="setting-copy">Changes active checkpoint and finish gate brightness and line weight.</span>
+          </label>
+          <div class="setting-row">
+            <label class="setting-check"><input id="motionSetting" type="checkbox"> Reduced motion</label>
+            <span class="setting-copy">Cuts shake and motion streaks, and reduces particle output for readability.</span>
+          </div>
+          <div class="setting-row">
+            <label class="setting-check"><input id="contrastSetting" type="checkbox"> High contrast readability</label>
+            <span class="setting-copy">Uses brighter guard rails, darker road surfaces, and stronger label outlines.</span>
+          </div>
         </div>
-        <div class="setting-row">
-          <label class="setting-check"><input id="minimapSetting" type="checkbox"> Show heading-up minimap</label>
-          <span class="setting-copy">Toggles the lower-right minimap and its checkpoint, boost, and obstacle markers.</span>
+      </div>
+      <div class="settings-section">
+        <h2 class="settings-section-title">Camera / HUD</h2>
+        <div class="settings-grid">
+          <label class="setting-row">
+            <span class="setting-title">Camera distance <span id="cameraValue">Balanced</span></span>
+            <input id="cameraSetting" type="range" min="85" max="115" step="5">
+            <span class="setting-copy">Zooms the heading-up chase view in or out while keeping CP1 forward from the start.</span>
+          </label>
+          <label class="setting-row">
+            <span class="setting-title">HUD scale <span id="hudScaleValue">100%</span></span>
+            <input id="hudScaleSetting" type="range" min="85" max="125" step="5">
+            <span class="setting-copy">Scales the objective panel, stats, message, and settings button.</span>
+          </label>
+          <label class="setting-row">
+            <span class="setting-title">Minimap size <span id="minimapSizeValue">100%</span></span>
+            <input id="minimapSizeSetting" type="range" min="80" max="145" step="5">
+            <span class="setting-copy">Changes the heading-up minimap size without changing the track route.</span>
+          </label>
+          <div class="setting-row">
+            <label class="setting-check"><input id="minimapSetting" type="checkbox"> Show heading-up minimap</label>
+            <span class="setting-copy">Toggles the lower-right minimap and its checkpoint, boost, and obstacle markers.</span>
+          </div>
+          <div class="setting-row">
+            <label class="setting-check"><input id="routeCueSetting" type="checkbox"> Show route chevrons</label>
+            <span class="setting-copy">Toggles the blue forward-route arrows between the kart and next gate.</span>
+          </div>
+          <div class="setting-row">
+            <label class="setting-check"><input id="markerSetting" type="checkbox"> Show checkpoint labels</label>
+            <span class="setting-copy">Toggles large CP/finish labels and active gate posts while keeping the drivable gate line visible.</span>
+          </div>
+          <div class="setting-row">
+            <label class="setting-check"><input id="inputHelpSetting" type="checkbox"> Show input help</label>
+            <span class="setting-copy">Toggles the compact control reminder under the objective panel.</span>
+          </div>
         </div>
-        <div class="setting-row">
-          <label class="setting-check"><input id="motionSetting" type="checkbox"> Reduced motion</label>
-          <span class="setting-copy">Cuts shake and motion streaks, and reduces particle output for readability.</span>
+      </div>
+      <div class="settings-section">
+        <h2 class="settings-section-title">Audio</h2>
+        <div class="settings-grid">
+          <div class="setting-row">
+            <label class="setting-check"><input id="soundSetting" type="checkbox"> UI sounds</label>
+            <span class="setting-copy">Off by default. Enables short generated tones only after you opt in here.</span>
+          </div>
+          <label class="setting-row">
+            <span class="setting-title">Volume <span id="volumeValue">0%</span></span>
+            <input id="volumeSetting" type="range" min="0" max="100" step="5">
+            <span class="setting-copy">Defaults to muted. Controls generated UI sound volume only after UI sounds are enabled.</span>
+          </label>
         </div>
-        <div class="setting-row">
-          <label class="setting-check"><input id="soundSetting" type="checkbox"> UI sounds</label>
-          <span class="setting-copy">Off by default. Enables short generated tones only after you opt in here.</span>
+      </div>
+      <div class="settings-section">
+        <h2 class="settings-section-title">Data / Reset</h2>
+        <div class="settings-grid">
+          <div class="setting-row">
+            <span class="setting-title">Persistent local settings</span>
+            <span class="setting-copy">Changes save in this browser only. Reset Defaults restores every setting, including UI sounds off and Volume 0%.</span>
+          </div>
         </div>
-        <label class="setting-row">
-          <span class="setting-title">Volume <span id="volumeValue">0%</span></span>
-          <input id="volumeSetting" type="range" min="0" max="100" step="5">
-          <span class="setting-copy">Defaults to muted. Controls generated UI sound volume only after UI sounds are enabled.</span>
-        </label>
       </div>
       <div class="settings-actions">
         <button id="closeSettingsButton" type="button">Close Settings</button>
@@ -531,10 +605,18 @@
       const cameraValue = document.getElementById("cameraValue");
       const effectSetting = document.getElementById("effectSetting");
       const effectValue = document.getElementById("effectValue");
+      const markerIntensitySetting = document.getElementById("markerIntensitySetting");
+      const markerIntensityValue = document.getElementById("markerIntensityValue");
+      const hudScaleSetting = document.getElementById("hudScaleSetting");
+      const hudScaleValue = document.getElementById("hudScaleValue");
+      const minimapSizeSetting = document.getElementById("minimapSizeSetting");
+      const minimapSizeValue = document.getElementById("minimapSizeValue");
       const routeCueSetting = document.getElementById("routeCueSetting");
       const markerSetting = document.getElementById("markerSetting");
       const minimapSetting = document.getElementById("minimapSetting");
       const motionSetting = document.getElementById("motionSetting");
+      const contrastSetting = document.getElementById("contrastSetting");
+      const inputHelpSetting = document.getElementById("inputHelpSetting");
       const soundSetting = document.getElementById("soundSetting");
       const volumeSetting = document.getElementById("volumeSetting");
       const volumeValue = document.getElementById("volumeValue");
@@ -555,16 +637,22 @@
         assist: "standard",
         camera: 100,
         effects: 100,
+        markerIntensity: 100,
+        hudScale: 100,
+        minimapSize: 100,
         routeCues: true,
         markers: true,
         minimap: true,
         reducedMotion: false,
+        highContrast: false,
+        inputHelp: true,
         sound: false,
         volume: 0,
         audioOptIn: false
       };
       let settings = loadSettings();
       let settingsOpen = false;
+      let lastSettingsTrigger = null;
       let audioContext = null;
 
       const track = {
@@ -663,10 +751,15 @@
           assist: ["stable", "standard", "sport"].includes(value.assist) ? value.assist : defaultSettings.assist,
           camera: clamp(Number(value.camera) || defaultSettings.camera, 85, 115),
           effects: clamp(Number(value.effects ?? defaultSettings.effects), 0, 100),
+          markerIntensity: clamp(Number(value.markerIntensity ?? defaultSettings.markerIntensity), 45, 130),
+          hudScale: clamp(Number(value.hudScale ?? defaultSettings.hudScale), 85, 125),
+          minimapSize: clamp(Number(value.minimapSize ?? defaultSettings.minimapSize), 80, 145),
           routeCues: Boolean(value.routeCues),
           markers: Boolean(value.markers),
           minimap: Boolean(value.minimap),
           reducedMotion: Boolean(value.reducedMotion),
+          highContrast: Boolean(value.highContrast),
+          inputHelp: value.inputHelp === undefined ? defaultSettings.inputHelp : Boolean(value.inputHelp),
           sound: audioOptIn && Boolean(value.sound),
           volume: audioOptIn ? clamp(Number(value.volume ?? defaultSettings.volume), 0, 100) : 0,
           audioOptIn
@@ -689,13 +782,23 @@
         cameraValue.textContent = settings.camera < 98 ? "Wide" : settings.camera > 102 ? "Close" : "Balanced";
         effectSetting.value = String(settings.effects);
         effectValue.textContent = settings.reducedMotion ? "Reduced" : `${settings.effects}%`;
+        markerIntensitySetting.value = String(settings.markerIntensity);
+        markerIntensityValue.textContent = `${settings.markerIntensity}%`;
+        hudScaleSetting.value = String(settings.hudScale);
+        hudScaleValue.textContent = `${settings.hudScale}%`;
+        minimapSizeSetting.value = String(settings.minimapSize);
+        minimapSizeValue.textContent = `${settings.minimapSize}%`;
         routeCueSetting.checked = settings.routeCues;
         markerSetting.checked = settings.markers;
         minimapSetting.checked = settings.minimap;
         motionSetting.checked = settings.reducedMotion;
+        contrastSetting.checked = settings.highContrast;
+        inputHelpSetting.checked = settings.inputHelp;
         soundSetting.checked = settings.sound;
         volumeSetting.value = String(settings.volume);
         volumeValue.textContent = `${settings.volume}%`;
+        document.documentElement.style.setProperty("--hud-scale", String(settings.hudScale / 100));
+        document.body.classList.toggle("hide-input-help", !settings.inputHelp);
       }
 
       function updateSettingsFromControls() {
@@ -704,10 +807,15 @@
           assist: assistSetting.value,
           camera: Number(cameraSetting.value),
           effects: Number(effectSetting.value),
+          markerIntensity: Number(markerIntensitySetting.value),
+          hudScale: Number(hudScaleSetting.value),
+          minimapSize: Number(minimapSizeSetting.value),
           routeCues: routeCueSetting.checked,
           markers: markerSetting.checked,
           minimap: minimapSetting.checked,
           reducedMotion: motionSetting.checked,
+          highContrast: contrastSetting.checked,
+          inputHelp: inputHelpSetting.checked,
           sound: soundSetting.checked,
           volume: Number(volumeSetting.value),
           audioOptIn: soundSetting.checked
@@ -719,13 +827,15 @@
         saveSettings();
       }
 
-      function openSettings() {
+      function openSettings(trigger) {
+        lastSettingsTrigger = trigger || document.activeElement;
         settingsOpen = true;
         settingsContext.textContent = state === "racing"
           ? "Settings are open. The race is paused until you close this panel."
           : "Adjust handling, readability, effects, and sound. Changes save automatically on this browser.";
         syncSettingsControls();
         settingsOverlay.classList.remove("hidden");
+        closeSettingsButton.focus({ preventScroll: true });
         playTone(520, 0.05, "triangle", 0.45);
       }
 
@@ -733,6 +843,9 @@
         settingsOpen = false;
         settingsOverlay.classList.add("hidden");
         lastTime = performance.now();
+        if (lastSettingsTrigger && typeof lastSettingsTrigger.focus === "function") {
+          lastSettingsTrigger.focus({ preventScroll: true });
+        }
         playTone(360, 0.04, "triangle", 0.35);
       }
 
@@ -969,7 +1082,7 @@
         }
         ctx.beginPath();
         backPath.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
-        ctx.strokeStyle = "rgba(24, 30, 31, 0.38)";
+        ctx.strokeStyle = settings.highContrast ? "rgba(8, 10, 10, 0.72)" : "rgba(24, 30, 31, 0.38)";
         ctx.lineWidth = track.halfWidth * 1.8 * scale;
         ctx.stroke();
 
@@ -980,21 +1093,21 @@
         }
         ctx.beginPath();
         visiblePath.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
-        ctx.strokeStyle = "#303637";
+        ctx.strokeStyle = settings.highContrast ? "#14181a" : "#303637";
         ctx.lineWidth = track.halfWidth * 2 * scale;
         ctx.stroke();
 
         ctx.beginPath();
         visiblePath.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
-        ctx.strokeStyle = "rgba(248,249,242,0.88)";
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = settings.highContrast ? "#ffffff" : "rgba(248,249,242,0.88)";
+        ctx.lineWidth = settings.highContrast ? 4 : 2;
         ctx.stroke();
 
         ctx.setLineDash([18, 20]);
         ctx.beginPath();
         visiblePath.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
-        ctx.strokeStyle = "rgba(255, 207, 69, 0.55)";
-        ctx.lineWidth = 3;
+        ctx.strokeStyle = settings.highContrast ? "rgba(255, 236, 120, 0.88)" : "rgba(255, 207, 69, 0.55)";
+        ctx.lineWidth = settings.highContrast ? 5 : 3;
         ctx.stroke();
         ctx.setLineDash([]);
 
@@ -1071,9 +1184,10 @@
       }
 
       function drawReadableFinishGate(toScreen, active) {
+        const intensity = settings.markerIntensity / 100;
         const left = toScreen(edgePoint(track.finishAngle, -1));
         const right = toScreen(edgePoint(track.finishAngle, 1));
-        drawGate2d(left, right, active ? "#ffcf45" : "rgba(255, 207, 69, 0.32)", active ? 8 : 4, active && settings.markers);
+        drawGate2d(left, right, active ? "#ffcf45" : `rgba(255, 207, 69, ${0.32 * intensity})`, (active ? 8 : 4) * intensity, active && settings.markers);
         if (active && settings.markers) {
           const c = toScreen(centerPoint(track.finishAngle));
           drawLabel(c.x, c.y - 30, "FINISH", "#ffcf45", 18);
@@ -1081,11 +1195,12 @@
       }
 
       function drawReadableCheckpointGate(toScreen, checkpoint, cleared, current) {
+        const intensity = settings.markerIntensity / 100;
         const left = toScreen(edgePoint(checkpoint.angle, -1));
         const right = toScreen(edgePoint(checkpoint.angle, 1));
-        const alpha = cleared ? 0.25 : current ? 1 : 0.28;
+        const alpha = Math.min(1, (cleared ? 0.25 : current ? 1 : 0.28) * intensity);
         const color = withAlpha(checkpoint.color, alpha);
-        drawGate2d(left, right, color, current ? 8 : 4, current && settings.markers);
+        drawGate2d(left, right, color, (current ? 8 : 4) * intensity, current && settings.markers);
         if (settings.markers && (current || cleared)) {
           const c = toScreen(centerPoint(checkpoint.angle));
           drawLabel(c.x, c.y - (current ? 34 : 24), checkpoint.label, color, current ? 18 : 13);
@@ -1176,8 +1291,8 @@
         ctx.font = `800 ${size}px Inter, system-ui, sans-serif`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.lineWidth = 4;
-        ctx.strokeStyle = "rgba(0,0,0,0.68)";
+        ctx.lineWidth = settings.highContrast ? 7 : 4;
+        ctx.strokeStyle = settings.highContrast ? "rgba(0,0,0,0.92)" : "rgba(0,0,0,0.68)";
         ctx.fillStyle = color;
         ctx.strokeText(text, x, y);
         ctx.fillText(text, x, y);
@@ -1418,7 +1533,7 @@
       }
 
       function drawMiniMap() {
-        const mapSize = Math.min(160, Math.max(112, width * 0.16));
+        const mapSize = Math.min(210, Math.max(88, width * 0.16 * settings.minimapSize / 100));
         const x = width - mapSize - 18;
         const y = height - mapSize - 18;
         ctx.save();
@@ -1924,7 +2039,7 @@
         if (key === "o") {
           event.preventDefault();
           if (settingsOpen) closeSettings();
-          else openSettings();
+          else openSettings(event.target);
           return;
         }
         if (key === "escape" && settingsOpen) {
@@ -1956,9 +2071,9 @@
       });
       startButton.addEventListener("click", startRace);
       restartButton.addEventListener("click", startRace);
-      titleSettingsButton.addEventListener("click", openSettings);
-      completeSettingsButton.addEventListener("click", openSettings);
-      hudSettingsButton.addEventListener("click", openSettings);
+      titleSettingsButton.addEventListener("click", () => openSettings(titleSettingsButton));
+      completeSettingsButton.addEventListener("click", () => openSettings(completeSettingsButton));
+      hudSettingsButton.addEventListener("click", () => openSettings(hudSettingsButton));
       closeSettingsButton.addEventListener("click", closeSettings);
       resetSettingsButton.addEventListener("click", resetSettings);
       [
@@ -1966,10 +2081,15 @@
         assistSetting,
         cameraSetting,
         effectSetting,
+        markerIntensitySetting,
+        hudScaleSetting,
+        minimapSizeSetting,
         routeCueSetting,
         markerSetting,
         minimapSetting,
         motionSetting,
+        contrastSetting,
+        inputHelpSetting,
         soundSetting,
         volumeSetting
       ].forEach((control) => {

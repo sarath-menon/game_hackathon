@@ -1444,3 +1444,55 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - improve safe persistence/defaults and keyboard/focus accessibility.
 - This is build-only while the canonical tester is busy with the active Cookie Clicker external QA pass.
 - Future approval requires a serialized canonical tester handoff with URL/manual/evidence paths after the builder reports complete.
+
+## Arcade Kart Racer Settings-Depth Build Complete / Pending Retest - 2026-06-25
+
+- Kart builder `019ef96d-c407-7be3-9934-6595866643ee` reported the settings-depth build complete.
+- Changed files:
+  - `games/kart-racer/index.html`
+  - `games/kart-racer/README.md`
+- Builder summary:
+  - settings panel now has grouped sections for Controls/Handling, Visual/Readability, Camera/HUD, Audio, and Data/Reset;
+  - added or exposed HUD scale, minimap size, marker intensity, high contrast readability, and input help visibility controls;
+  - kept steering sensitivity, driving assist, camera distance, route chevrons, checkpoint labels, minimap visibility, reduced motion, effect intensity, UI sounds, and volume controls;
+  - opening settings focuses the close button and closing returns focus to the opener;
+  - Reset Defaults restores all settings, including audio off and volume `0%`.
+- Orchestrator non-acceptance checks:
+  - hosted game returns `200 OK`;
+  - hosted README returns `200 OK`;
+  - inline script parses.
+- Status: pending serialized canonical tester retest. This build is not approved yet.
+
+## Cookie Clicker Deeper Settings/Persistence/Narrow External QA PASS_WITH_FINDINGS - 2026-06-25
+
+- Canonical tester produced required artifacts for `evidence/external/cookie-clicker-settings-persistence-mobile-pass-1/` after fallback finalization from screenshots 01-13.
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS_WITH_FINDINGS`.
+- Provider/environment classification:
+  - not `BLOCKED_PROVIDER`: the direct Cookie Clicker URL loaded playable state, language modal, cookie banner, large cookie, store, and Options;
+  - not overall `BLOCKED_ENVIRONMENT`: the shared-window browser-harness produced evidence for language selection, banner dismissal, click loop, purchase attempts, Options open/scroll, and export-save access;
+  - not `FAIL`: missing persistence/reload and narrow/mobile evidence are coverage gaps from the interrupted run, not observed game-quality failures.
+- Verified:
+  - direct URL load;
+  - English language selection;
+  - cookie banner dismissal;
+  - core cookie-click state creation;
+  - purchase/store feedback;
+  - cursor ownership / cookies-per-second feedback;
+  - Options open and scroll evidence;
+  - export-save access and safe exit.
+- Open coverage findings:
+  - persistence/reload not verified;
+  - narrow/mobile viewport not captured;
+  - deeper Options coverage for audio, visual/performance, accessibility, warnings, import safety, and destructive reset separation remains partial.
+- Methodology carry-forward:
+  - idle/incremental QA should capture a distinctive state before settings checks;
+  - Options should be captured in sections;
+  - persistence should be tested with a non-destructive reload after recording exact state;
+  - import/export and reset controls need safe modal/warning evidence without destructive activation;
+  - narrow/mobile should capture both production and store/options layout.
+- No provider retry is required. A follow-up focused Cookie pass may target the remaining coverage gaps later.
+- Next serialized canonical tester handoff should be Arcade Kart Racer settings-depth retest once the tester thread is idle.

@@ -58,16 +58,23 @@ The HUD speed bar fills as speed increases. Boosting, drift release, and high sp
 
 Open settings from the title screen, the in-race `Settings` button, the completion screen, or with `O`. Opening settings during a race pauses the timer and kart movement until the panel is closed.
 
+Settings are grouped into Controls/Handling, Visual/Readability, Camera/HUD, Audio, and Data/Reset sections.
+
 - Steering sensitivity changes how sharply the kart turns while driving and drifting.
 - Driving assist changes acceleration, route alignment, and edge recovery. `Stable` is easiest to keep on route, `Standard` is the default, and `Sport` gives punchier throttle with less assist.
-- Camera readability zooms the heading-up chase view in or out.
-- Route chevrons, checkpoint labels, and the heading-up minimap can be shown or hidden independently.
+- Camera distance zooms the heading-up chase view in or out.
+- HUD scale changes the size of the objective panel, stats, message, and settings button.
+- Minimap size changes the heading-up minimap size.
+- Route chevrons, checkpoint labels, input help, and the heading-up minimap can be shown or hidden independently.
+- Marker intensity changes checkpoint and finish gate brightness and line weight.
+- High contrast readability uses stronger guard rails, darker road surfaces, and heavier label outlines.
 - Effect intensity scales speed streaks, skid trails, and exhaust particles. Reduced motion cuts motion-heavy effects further.
 - Audio is off and muted by default on first load and after `Reset Defaults`; no sound plays before you opt in.
 - UI sounds enables short generated tones for start, boost, drift, collision, completion, and settings actions. Turn on `UI sounds` in settings and raise `Volume` above `0%` to hear them.
 - Older saved settings that predate the audio opt-in are treated as muted until you enable sounds again.
 - Settings save automatically in this browser and persist after reload.
-- `Reset Defaults` restores the default handling, readability, effect, audio, and marker settings.
+- `Reset Defaults` restores every setting, including handling, camera/HUD, readability, effects, audio off, and volume `0%`.
+- Keyboard focus moves into the settings panel when opened and returns to the opener when closed.
 
 ## Restart
 
