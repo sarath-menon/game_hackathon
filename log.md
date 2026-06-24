@@ -1280,3 +1280,22 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - separate provider-shell localization from in-game usability;
   - future platformer passes should explicitly capture finish crossing and next-level transition.
 - No Coolmath retry is required for basic playability because the Poki provider reached playable state and passed with findings.
+
+## Dungeons External QA Shared-Window Retry 1 Active - 2026-06-25
+
+- Orchestrator started Dungeons & Degenerate Gamblers Demo shared-window canonical retry 1 through canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Provider path: `https://purplemosscollectors.itch.io/dndg`.
+- Manual: `external-qa/dungeons-degenerate-gamblers/README.md`.
+- Fresh evidence target: `evidence/external/dungeons-degenerate-gamblers-shared-window-retry-1/`.
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Reason for this pass:
+  - the older Dungeons report used an isolated browser/CDP profile and predates the current single shared Chrome window rule;
+  - this retry should improve external card/deckbuilder methodology by focusing on card-state readability, legal/illegal action clarity, settings/options discovery, first encounter progression, and load/performance behavior.
+- Tester instructions preserve the external QA taxonomy:
+  - `PASS_WITH_FINDINGS` if playable and acceptable with nonblocking issues;
+  - `FAIL` only if playable enough to evaluate but failing QA criteria;
+  - `BLOCKED_PROVIDER` for provider/shell/iframe/startup/ad/consent path blockers;
+  - `BLOCKED_ENVIRONMENT` for local browser-harness/input/storage environment blockers.
