@@ -1570,3 +1570,22 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - `expected-flow.md`
   - `gameplay-recording.mp4`
 - Scope matches retest 1: documented settings-depth coverage, audio defaults/reset, persistence, and route/checkpoint/drift/boost regression smoke.
+
+## Platformer Settings Polish 2 Builder Handoff Active - 2026-06-25
+
+- Orchestrator sent a new local-game improvement goal to Platformer builder `019ef96e-1dd7-7f13-91d4-855909736edc` while the canonical tester continues the serialized Kart settings-depth retest 2.
+- Game: Side-Scrolling Platformer / Skyline Stepper.
+- Build scope: Advanced Player Settings.
+- Allowed files:
+  - `games/platformer/index.html`;
+  - `games/platformer/README.md`.
+- Requested setting areas:
+  - accessibility/readability, such as high contrast hazards, larger objective labels, route cue style, or color-safe hazard cues;
+  - controls/feel, such as jump buffer/coyote assist strength, air-control profile, or camera lookahead preset;
+  - difficulty/forgiveness, such as hazard damage profile, checkpoint assist, or practice-friendly mode;
+  - display/performance, such as parallax/effects detail, background motion, or HUD density.
+- Constraints:
+  - keep audio off/muted by default and after Reset Defaults;
+  - preserve all approved platformer gameplay flows;
+  - update the player manual for defaults, persistence, reset behavior, and audio default behavior.
+- Status: builder active. This is not approved until the canonical tester performs a later black-box QA handoff after the active Kart retest finishes.
