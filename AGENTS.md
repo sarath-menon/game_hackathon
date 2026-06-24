@@ -4,20 +4,25 @@ This file is the canonical handoff document for the active project in `/Users/sa
 
 ## Active Project Goal
 
-Continuously improve the Three-Game Lockstep Suite toward genre-leading browser game quality while avoiding copyrighted names, characters, art, music, maps, branding, and other protected assets.
+Continuously improve the full Game QA Suite across two first-class tracks while avoiding copyrighted names, characters, art, music, maps, branding, and other protected assets.
+
+Track 1 is the three locally built single-file HTML games. Builders keep improving settings, feel, accessibility, visuals, performance, and polish; every change is tested before approval.
+
+Track 2 is the five discovered online browser games. These hosted games are not fixed by this project, but the canonical tester performs industry-style black-box QA on them so the methodology improves across diverse real games.
 
 Each cycle:
 
-- benchmark one game against genre references without copying protected IP
-- identify the highest-impact gap in feel, clarity, visuals, UI, performance, accessibility, settings, or polish
-- send a scoped upgrade goal to that game's builder
-- send the updated URL/manual/evidence paths to that game's tester after the builder reports completion
-- require industry-style black-box QA with test cases, severity, regression checks, readability/usability gates, browser checks, and continuous gameplay evidence
-- route failures back to the builder, then retest
-- update dashboard/log with what changed, what was fixed, current evidence, and next action
+- choose either one local-game improvement or one external-game QA target
+- for local games, send a scoped upgrade goal to that game's builder, then send the updated URL/manual/evidence paths to the canonical tester after builder completion
+- for external games, send only the playable URL/manual/evidence paths to the canonical tester
+- require industry-style black-box QA with test cases, severity, regression checks, settings/options checks, accessibility/usability gates, provider/environment classification, browser checks, and continuous gameplay evidence
+- route local-game failures back to the relevant builder, then retest
+- route external-game provider/environment blockers into alternate reputable URL retries rather than treating setup failure as final game failure
+- carry QA methodology lessons from every local and external test into later tests
+- update dashboard/log with changes, findings, fixes, QA outcomes, evidence, methodology improvements, and next action
 - commit often after coherent verified progress
 
-There is no terminal success condition. Keep looping through higher-quality iterations unless the user pauses or redirects.
+There is no terminal success condition. Keep improving both the games and the tester unless the user pauses or redirects.
 
 The suite contains:
 
@@ -27,14 +32,14 @@ The suite contains:
 
 The previous Signal Runner work is historical only. Do not continue Signal Runner milestones unless the user explicitly restores that goal.
 
-## Current Cycle: Settings Panels And Settings QA
+## Current Cycle: Settings Panels And External-Game QA
 
-The current cycle inside the broader continuous-improvement loop is settings quality. Each built game should gain a detailed settings panel that is useful to real players and testable to industry-style QA standards.
+The current local-game cycle inside the broader continuous-improvement loop is settings quality. Each built game should gain a detailed settings panel that is useful to real players and testable to industry-style QA standards.
 
 Each cycle:
 
 - send a scoped settings-panel goal to that game's builder
-- after the builder reports completion, send the updated URL/manual/evidence paths to that game's tester
+- after the builder reports completion, send the updated URL/manual/evidence paths to the single canonical cross-game tester
 - require industry-style black-box settings QA with test cases, severity, regression checks, defaults, persistence, reset behavior, edge cases, accessibility/readability controls, responsive layout, browser checks, and continuous gameplay/settings evidence
 - route failures back to the builder, then retest
 - update dashboard/log as work moves, not only at the end: active goal, selected upgrade, current builder/tester status, pending evidence, completed evidence, fixed feedback, and next action must stay visible in the UI
@@ -52,9 +57,19 @@ There is no terminal success condition for this loop. Keep improving settings de
 
 Tester settings QA must verify that settings are discoverable, documented in the README/manual, actually change visible or mechanical behavior as documented, persist across reloads where documented, reset correctly, remain usable in narrow and desktop viewports, and do not regress already-approved gameplay paths.
 
-## External Browser Game QA Goal
+## External Browser Game QA Track
 
-A browser-game research lane is active to identify popular games that can be played directly by URL. After the research lane identifies candidates and enough player-facing manual/instruction material, the orchestrator should select five diverse games and create separate tester threads for parallel black-box QA. These testers receive only the game URL, game manual/instructions, and evidence/report paths. They cannot fix hosted games; they only produce industry-style QA reports with findings, severity, reproduction steps, evidence, and limitations.
+The external browser-game QA track is a first-class part of the project, not a side activity. It uses five diverse discovered online browser games to improve the same canonical tester's QA methodology across real hosted games. The tester receives only the game URL, game manual/instructions, and evidence/report paths. It cannot fix hosted games; it only produces industry-style QA reports with findings, severity, reproduction steps, evidence, limitations, and methodology improvements that carry forward to later local and external tests.
+
+Current external games:
+
+- PolyTrack
+- OvO
+- Cookie Clicker
+- Dungeons & Degenerate Gamblers
+- Townscaper
+
+External tests must run serially through the canonical tester in the same single shared Chrome window, not in parallel tester threads.
 
 External game reports must distinguish game quality failures from provider or environment blockers:
 
@@ -81,15 +96,24 @@ A popular external browser game must not receive final `FAIL` solely because one
   - Required evidence exists at `evidence/platformer/upgrade-phase-a-movement-feel/`: `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`.
   - Turn-Based Deckbuilder, Upgrade Phase 1: Combat Feedback And Math Preview is closed as `PASS`.
   - Required evidence exists at `evidence/deckbuilder/upgrade-phase-1-combat-feedback/`: `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`.
-  - Current active suite lane: settings QA for all three games.
-  - Arcade Kart Racer Settings Panel Phase 1: builder complete; tester handoff sent to `019ef96d-ef59-7d20-9dbe-b5d06edc720f`; active evidence folder `evidence/kart-racer/settings-phase-1/`.
-  - Side-Scrolling Platformer Settings Panel Phase 1: builder complete; tester handoff sent to `019ef96e-42e6-7121-b9ea-bf266ce55a2e`; active evidence folder `evidence/platformer/settings-phase-1/`.
-  - Turn-Based Deckbuilder Settings Panel Phase 1: builder complete; tester handoff sent to `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`; active evidence folder `evidence/deckbuilder/settings-phase-1/`.
-  - Settings tester reports are pending. If a settings report says `FAIL`, route only the summarized blocker to that game's builder; if it says `PASS` with `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`, close that settings phase and select the next highest-impact quality/settings improvement.
-  - Browser-game research thread `019efaae-20f8-7473-8e01-69d4ae206994` is used for direct-URL game candidates and settings/options quality references.
+  - Current active suite lanes: local settings-panel quality and external browser-game QA methodology.
+  - Arcade Kart Racer Settings Panel Phase 1 was superseded by the audio-default hotfix and must be retested through the canonical tester before approval.
+  - Side-Scrolling Platformer Settings Panel Phase 1 is closed as `PASS`.
+  - Turn-Based Deckbuilder Settings Panel Phase 1 is closed as `PASS`; Deckbuilder Settings Panel Polish 1 is also closed as `PASS`.
+  - Cross-game audio-default hotfix:
+    - Platformer is `PASS` at `evidence/platformer/audio-default-hotfix/`.
+    - Deckbuilder shared-window retest is `PASS` at `evidence/deckbuilder/audio-default-hotfix-shared-window-retest-1/`.
+    - Kart shared-window retest 1 is invalid/superseded by shared-window contention at `evidence/kart-racer/audio-default-hotfix-shared-window-retest-1/`.
+    - Kart retest 2 through the old Kart tester was stopped before browser control.
+    - Kart audio-default hotfix single-tester retest 1 through the canonical tester is `FAIL` at `evidence/kart-racer/audio-default-hotfix-single-tester-retest-1/`.
+    - Kart builder completed a narrow reset/opt-out audio leak fix after that `FAIL`.
+    - Kart audio-default hotfix single-tester retest 2 through the canonical tester is `PASS` at `evidence/kart-racer/audio-default-hotfix-single-tester-retest-2/`.
+    - Cross-game audio-default hotfix is now closed for all three local games.
+  - Settings and hotfix tester reports are handled only by the single canonical cross-game tester. If a report says `FAIL`, route only the summarized blocker to that game's builder; if it says `PASS` with `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`, close that phase and select the next highest-impact settings or quality improvement.
+  - Browser-game research thread `019efaae-20f8-7473-8e01-69d4ae206994` is used for direct-URL game candidates, alternate provider paths, and settings/options quality references.
   - External browser-game QA:
-    - PolyTrack is reclassified as `BLOCKED_PROVIDER` / needs retry; the first provider hit a startup runtime error before gameplay.
-    - OvO is reclassified as `BLOCKED_PROVIDER` / needs retry; the first provider stayed on a loading spinner before gameplay.
+    - PolyTrack is reclassified as `BLOCKED_PROVIDER` / needs retry; the first provider hit a startup runtime error before gameplay, and an interrupted retry must be rerun through the canonical tester in the shared Chrome window.
+    - OvO is reclassified as `BLOCKED_PROVIDER` / needs retry; the first provider stayed on a loading spinner before gameplay, and an interrupted retry must be rerun through the canonical tester in the shared Chrome window.
     - Cookie Clicker completed as `PASS with limitations`; load, click/purchase loop, Options, save/export, and persistence were verified, with narrow viewport capture limited by the harness.
     - Dungeons & Degenerate Gamblers completed as `PASS with nonblocking findings`; launch, run start, deck selection, tavern entry, and first table interaction were verified.
     - Townscaper completed as `PASS WITH FINDINGS`; WebGL load, block placement, URL hash state, camera movement/zoom, and mobile rendering were verified.
@@ -106,14 +130,15 @@ python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
 - Kart builder thread: `019ef96d-c407-7be3-9934-6595866643ee`
-- Kart tester thread: `019ef96d-ef59-7d20-9dbe-b5d06edc720f`
+- Canonical cross-game QA tester thread: `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`
 - Platformer builder thread: `019ef96e-1dd7-7f13-91d4-855909736edc`
-- Platformer tester thread: `019ef96e-42e6-7121-b9ea-bf266ce55a2e`
 - Deckbuilder builder thread: `019ef96e-7780-7763-b444-12cf7698a97a`
-- Deckbuilder tester thread: `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`
 - Browser maintenance thread: `019ef9ba-1477-7662-b7a3-c5da570cdb77`
 - Dashboard thread: `019ef963-dc84-72f1-9542-1431bafaf31d`
 - Browser-game research thread: `019efaae-20f8-7473-8e01-69d4ae206994`
+- Deprecated per-game tester threads, kept only for historical evidence and standby unless the user explicitly reactivates them:
+  - Kart tester thread: `019ef96d-ef59-7d20-9dbe-b5d06edc720f`
+  - Platformer tester thread: `019ef96e-42e6-7121-b9ea-bf266ce55a2e`
 - Historical Signal Runner builder threads:
   - `019ef904-9758-7582-a5c6-cc57eae0f91e`
   - `019ef95a-9fae-7be3-8965-e261781023ab`
@@ -123,17 +148,19 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 ### Main Orchestrator
 
-The main agent is the only orchestrator. It owns scope, sequencing, phase approval, thread isolation, and all communication. It must not build game features and must not perform acceptance testing directly. It sends scoped phase goals to the correct game builder, sends only approved testing inputs to the matching game tester, reads the active phase report, and decides whether a phase is approved or needs another builder pass.
+The main agent is the only orchestrator. It owns scope, sequencing, phase approval, thread isolation, and all communication. It must not build game features and must not perform acceptance testing directly. It sends scoped phase goals to the correct game builder, sends only approved testing inputs to the canonical cross-game tester, reads the active phase report, and decides whether a phase is approved or needs another builder pass.
 
-The orchestrator should be proactive. Each game has its own lockstep lane, and those lanes may progress independently. As soon as a builder reports a phase complete, the orchestrator should hand that same game's URL and README/manual to that game's tester. As soon as a tester reports `PASS`, the orchestrator should start that game's next phase builder goal without waiting for unrelated games, unless the user explicitly pauses. As soon as a tester reports `FAIL`, the orchestrator should send a narrow fix request to that game's builder.
+The orchestrator should be proactive. Each game has its own builder lane, but QA is intentionally centralized into one cross-game tester so its methodology improves across kart, platformer, deckbuilder, and external browser games. As soon as a builder reports a phase complete, the orchestrator should queue that game's URL and README/manual for the canonical tester. As soon as the tester reports `PASS`, the orchestrator should start that game's next phase builder goal without waiting for unrelated builder work, unless the user explicitly pauses. As soon as the tester reports `FAIL`, the orchestrator should send a narrow fix request to that game's builder.
 
 ### Builder Thread
 
 Each game has a dedicated builder. The builder creates and updates that game's files and player manual only. It reports only to the main orchestrator, and should report immediately when the assigned phase is complete or blocked. It must not communicate with testers or other builders. It must not inspect tester reports or evidence unless the orchestrator explicitly sends a summarized fix request.
 
-### Tester Thread
+### Canonical Cross-Game Tester Thread
 
-Each game has a dedicated tester. The tester performs black-box testing only. It receives only the hosted game URL and README/manual from the orchestrator, plus evidence/report output paths. It should report immediately when its test pass is complete or blocked. The tester must not inspect source files, builder notes, git diffs, implementation details, or builder thread summaries.
+There is one active tester for all built and external games: `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`. The tester performs black-box testing only. It receives only the hosted game URL and README/manual from the orchestrator, plus evidence/report output paths. It should report immediately when its test pass is complete or blocked. The tester must not inspect source files, builder notes, git diffs, implementation details, builder thread summaries, old implementation notes, or unrelated evidence.
+
+This single-tester model is deliberate. The tester must improve its QA methodology across diverse games and carry forward lessons from one genre to the next. Reports should include not only findings and verdicts, but also any methodology improvement that should apply to future settings, gameplay, provider, accessibility, performance, or regression testing.
 
 For browser automation or browser-harness work, the tester must first read and follow:
 
@@ -142,6 +169,8 @@ For browser automation or browser-harness work, the tester must first read and f
 The tester must not use Codex native browser use or Codex Computer Use. If browser support is blocked, the tester should modify or repair the browser harness instead.
 
 Hard browser rule: all project browser-harness testing must use one shared Chrome window with controlled tabs; testers must not launch separate Chrome windows/profiles or remote sessions, and must report `BLOCKED_ENVIRONMENT` if shared-window testing is unavailable.
+
+Shared-window browser-harness tests must be serialized by the orchestrator and run through the canonical tester only; do not run two active browser-harness gameplay tests at the same time in the shared Chrome window.
 
 When testing Google AI Studio hosted games, first open the provided AI Studio app URL with browser-harness and inspect whether the actual playable app is embedded in a preview iframe. If an iframe points to a hosted preview origin such as a `run.app` URL, open that preview URL directly in a new browser-harness tab and test the game there as the black-box surface. Do not assume the lobby, room, create/join, start, or multiplayer flow is reusable across apps; those controls are app-specific and must be discovered from the visible UI and any user-provided manual. Reusable checks are only: confirm the AI Studio page or direct preview loads without an auth wall, identify the real playable surface, focus the game canvas or interactive area, use visible controls/documented keys through browser-harness, and stop for user help if Google login, permissions, or unavailable preview errors block access.
 
@@ -184,6 +213,7 @@ The dashboard should make the lockstep process auditable. In addition to phase s
 - A tester receives only the game URL, README/manual, and required evidence/report paths.
 - The tester writes all findings only to that phase's evidence-folder report.
 - A phase cannot advance until its report says `PASS`, required evidence exists, and the orchestrator accepts that result.
+- Old per-game tester threads are historical/standby only. Do not send new QA handoffs to them unless the user explicitly changes the model.
 
 ## Artifact Layout
 
@@ -237,14 +267,14 @@ For each game lane:
 
 1. Orchestrator sends one scoped phase build goal to that game's builder.
 2. Builder implements only that phase, updates that game's README/manual, and reports artifacts plus URL to the orchestrator.
-3. Orchestrator sends only the hosted game URL and README/manual to that game's tester, plus evidence paths.
-4. Tester performs black-box testing and writes only that phase's evidence-folder report.
+3. Orchestrator sends only the hosted game URL and README/manual to the canonical cross-game tester, plus evidence paths.
+4. The canonical tester performs black-box testing and writes only that phase's evidence-folder report.
 5. Orchestrator reads the phase report.
 6. If the report says `FAIL`, orchestrator summarizes the blocker and sends a narrow fix request to that game's builder.
 7. The same phase repeats until approved.
 8. After approval, orchestrator immediately starts that game's next phase unless the user explicitly pauses.
 
-The three game lanes may be active at the same time, but no individual game may advance to its next phase until that game's current phase is approved.
+The three builder lanes may be active at the same time, but browser-harness QA runs must be serialized through the canonical tester in the single shared Chrome window. No individual game may advance to its next phase until that game's current phase is approved.
 
 ## Phase Plan
 
@@ -347,7 +377,7 @@ If a phase passes scripted mechanics but fails readability/orientation or state/
 2. Read `log.md`.
 3. Check `git status --short`.
 4. Verify or restart the local server.
-5. Read the active builder/tester thread statuses.
+5. Read the active builder statuses and the canonical cross-game tester status.
 6. If the current phase has not been built, send the builder the scoped phase goal.
 7. If the builder has reported artifacts and the tester has not received a handoff, send the tester only the URL, README/manual, and evidence paths.
 8. If the tester reports `FAIL`, summarize the blocker and send a narrow fix request to the builder.

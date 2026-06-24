@@ -712,6 +712,9 @@
           volume: Number(volumeSetting.value),
           audioOptIn: soundSetting.checked
         });
+        if (!settings.audioOptIn || !settings.sound || settings.volume <= 0) {
+          silenceAudio();
+        }
         syncSettingsControls();
         saveSettings();
       }
@@ -735,10 +738,10 @@
 
       function resetSettings() {
         settings = { ...defaultSettings };
+        silenceAudio();
         syncSettingsControls();
         saveSettings();
         setMessage("Settings reset to defaults.");
-        playTone(260, 0.08, "sine", 0.55);
       }
 
       function assistProfile() {
@@ -751,8 +754,22 @@
         return settings.reducedMotion ? 0.18 : settings.effects / 100;
       }
 
+      function silenceAudio() {
+        if (!audioContext) return;
+        try {
+          audioContext.close();
+        } catch {
+          try {
+            audioContext.suspend();
+          } catch {
+            // Audio shutdown is best-effort; the settings gate still blocks new tones.
+          }
+        }
+        audioContext = null;
+      }
+
       function playTone(frequency, duration, type, gainScale) {
-        if (!settings.sound || settings.volume <= 0) return;
+        if (!settings.audioOptIn || !settings.sound || settings.volume <= 0) return;
         try {
           audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
           if (audioContext.state === "suspended") audioContext.resume();
@@ -767,6 +784,9 @@
           oscillator.stop(audioContext.currentTime + duration + 0.02);
         } catch {
           settings.sound = false;
+          settings.volume = 0;
+          settings.audioOptIn = false;
+          silenceAudio();
           syncSettingsControls();
           saveSettings();
         }

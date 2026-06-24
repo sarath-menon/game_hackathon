@@ -1052,3 +1052,93 @@ python3 -m http.server 8765 --bind 127.0.0.1
 - Arcade Kart Racer and Turn-Based Deckbuilder audio-default hotfix retests were restarted as clean shared-window attempts:
   - Kart evidence target: `evidence/kart-racer/audio-default-hotfix-shared-window-retest-1/`.
   - Deckbuilder evidence target: `evidence/deckbuilder/audio-default-hotfix-shared-window-retest-1/`.
+- Shared-window contention was observed when Kart and Deckbuilder retests ran concurrently in the single Chrome window: the Kart recording switched into Deckbuilder during the stale-state portion, so the Kart shared-window attempt is invalid/superseded and must not be approved.
+- Protocol was updated to serialize active browser-harness gameplay tests in the shared Chrome window. Deckbuilder may finish its current run; Kart will be rerun alone afterward in a fresh shared-window retest folder.
+
+## Single Cross-Game Tester Correction - 2026-06-25
+
+- User clarified that the testing model must use one canonical cross-game tester for all built games and external browser games.
+- Purpose: the same tester should improve its methodology across diverse games and bring the overall QA process closer to industry-standard game QA.
+- Canonical tester thread: `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Deprecated per-game tester lanes are now historical/standby only:
+  - Kart tester `019ef96d-ef59-7d20-9dbe-b5d06edc720f`.
+  - Platformer tester `019ef96e-42e6-7121-b9ea-bf266ce55a2e`.
+- New QA handoffs must go only to the canonical tester unless the user explicitly changes the model.
+- Browser-harness QA remains serialized in the single shared Chrome window; parallel browser gameplay tests are disallowed because they can switch active tabs, contaminate recordings, or mix evidence.
+- External browser-game QA should also run through the same canonical tester, one game at a time, using only URL/manual/evidence paths and the provider/environment blocker taxonomy from `AGENTS.md`.
+- The prior Kart shared-window retest 2 handoff to the old Kart tester was stopped before browser control began and must not be treated as an active QA attempt.
+- Next required QA action: rerun Arcade Kart Racer audio-default hotfix through the canonical tester in a fresh evidence folder, after confirming no other browser-harness gameplay test is active.
+- Dashboard must be updated to show the single cross-game tester model, the methodology-improvement goal, Deckbuilder shared-window audio hotfix `PASS`, Kart shared-window retest 1 invalid/superseded by contention, and Kart retest pending through the canonical tester.
+
+## Revised Goal: Two-Track Game QA Suite - 2026-06-25
+
+- User clarified that the goal is not only continuous improvement of the three local games.
+- The active objective is now a two-track Game QA Suite:
+  - Track 1: improve the three local single-file HTML games, currently focused on detailed settings panels and related hotfixes.
+  - Track 2: improve the same canonical tester's methodology by testing the five discovered online browser games.
+- External-game QA is first-class project work. It should remain visible in `AGENTS.md`, `log.md`, and `dashboard.html`, not treated as a side research lane.
+- Five current external targets:
+  - PolyTrack
+  - OvO
+  - Cookie Clicker
+  - Dungeons & Degenerate Gamblers
+  - Townscaper
+- The same canonical tester must test local and external games serially through browser-harness only, in one shared Chrome window, using only URL/manual/evidence paths.
+- External provider/setup blockers are not final game failures. The orchestrator must retry reputable alternate URLs before marking a game untestable in the current environment.
+- Dashboard should show both tracks: local build/fix/test progress and external-game QA progress/methodology carry-forward.
+
+## Kart Audio Default Hotfix Canonical Retest FAIL - 2026-06-25
+
+- Canonical cross-game tester completed Arcade Kart Racer audio-default hotfix single-tester retest 1.
+- Evidence folder: `evidence/kart-racer/audio-default-hotfix-single-tester-retest-1/`.
+- Required files are present: `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`.
+- Verdict: `FAIL`.
+- Passing checks:
+  - first load defaults to UI sounds off and Volume `0%`;
+  - Reset Defaults from clean state keeps audio muted;
+  - short driving before explicit opt-in is silent;
+  - explicit opt-in can enable generated audio;
+  - stale saved non-audio settings reload muted;
+  - title/start/settings/short-driving smoke works.
+- Blocking finding:
+  - after explicit opt-in, then disabling UI sounds and pressing Reset Defaults, visible state returns to UI sounds off and Volume `0%`, but a new generated audio event still fires.
+- Orchestrator sent a narrow fix request to Kart builder `019ef96d-c407-7be3-9934-6595866643ee`.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` was asked to show Kart audio-default as `FAIL -> builder fix active` and preserve the failed canonical evidence row.
+- External-game QA should remain queued, not active, until this local hotfix blocker is fixed and handed back to the canonical tester.
+
+## Kart Audio Default Hotfix Builder Fix Complete - 2026-06-25
+
+- Kart builder `019ef96d-c407-7be3-9934-6595866643ee` completed the narrow reset/opt-out audio fix.
+- Changed file: `games/kart-racer/index.html`.
+- Builder reported:
+  - Reset Defaults tone removed.
+  - Audio is silenced on Reset Defaults and whenever settings resolve to sound off, no opt-in, or volume `0`.
+  - `playTone()` now requires `audioOptIn === true`, UI sounds on, and Volume above `0`.
+  - Audio failure handling forces sound off, volume `0`, clears opt-in, and silences the audio context.
+  - Hosted game and README return `200 OK`; script parses; static audio-gate checks passed.
+- README already described the required off-by-default and reset-muted behavior, so no README change was needed for this fix.
+- Orchestrator is handing the fixed build to the canonical tester for single shared-window retest 2.
+- New evidence target: `evidence/kart-racer/audio-default-hotfix-single-tester-retest-2/`.
+- Dashboard thread was asked to update from `FAIL -> fix active` to `BUILDER FIX COMPLETE -> RETEST ACTIVE`.
+
+## Kart Audio Default Hotfix Canonical Retest 2 PASS - 2026-06-25
+
+- Canonical cross-game tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Arcade Kart Racer audio-default hotfix single-tester retest 2.
+- Evidence folder: `evidence/kart-racer/audio-default-hotfix-single-tester-retest-2/`.
+- Required files are present:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS`.
+- Tester verified:
+  - first load defaults to UI sounds off and Volume `0%`;
+  - Reset Defaults from clean state restores UI sounds off and Volume `0%`;
+  - no generated audio occurs before explicit opt-in;
+  - explicit opt-in can enable generated audio;
+  - after explicit opt-in, disabling UI sounds and pressing Reset Defaults produces no new generated audio through reset or post-reset driving;
+  - stale saved non-audio settings reload muted;
+  - title/start/settings/short-driving smoke still works;
+  - manual matches visible behavior.
+- Retest 1 blocking finding is closed. Cross-game audio-default hotfix is now `PASS` for Platformer, Deckbuilder, and Kart.
+- Dashboard thread must update the visible state from `BUILDER FIX COMPLETE -> RETEST ACTIVE` to `PASS / CLOSED`, preserve retest 1 as failed evidence, show retest 2 as the closing evidence, and mark the next actionable lane as external-game QA retry.
+- Next external QA priority: resume provider-blocker retries through the canonical tester in the single shared Chrome window, starting with PolyTrack and OvO alternate provider paths.
