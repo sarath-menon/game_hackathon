@@ -180,6 +180,7 @@
       <div class="hud-left">
         <span id="status">Reach the exit beacon</span>
         <span id="health">Health: 3</span>
+        <span id="checkpointHud">Checkpoint: start</span>
       </div>
       <div class="hud-right">
         <span id="cores">Cores: 0/0</span>
@@ -204,6 +205,7 @@
       <div class="panel">
         <h2 id="resultTitle">Level Complete</h2>
         <p id="resultSummary">You reached the exit beacon.</p>
+        <button id="resultButton" type="button">Run Again</button>
       </div>
     </section>
   </main>
@@ -217,10 +219,12 @@
       const startButton = document.getElementById("startButton");
       const status = document.getElementById("status");
       const healthText = document.getElementById("health");
+      const checkpointHud = document.getElementById("checkpointHud");
       const coresText = document.getElementById("cores");
       const distance = document.getElementById("distance");
       const resultTitle = document.getElementById("resultTitle");
       const resultSummary = document.getElementById("resultSummary");
+      const resultButton = document.getElementById("resultButton");
 
       const keys = new Set();
       const world = {
@@ -232,32 +236,36 @@
       const platforms = [
         { x: -80, y: 520, w: 3560, h: 80 },
         { x: -80, y: 476, w: 640, h: 80 },
-        { x: 680, y: 446, w: 330, h: 42 },
-        { x: 1110, y: 396, w: 250, h: 42 },
-        { x: 1450, y: 456, w: 440, h: 42 },
-        { x: 2010, y: 410, w: 280, h: 42 },
-        { x: 2390, y: 350, w: 280, h: 42 },
-        { x: 2790, y: 448, w: 470, h: 80 }
+        { x: 680, y: 446, w: 330, h: 20 },
+        { x: 1110, y: 396, w: 250, h: 20 },
+        { x: 1450, y: 456, w: 440, h: 10 },
+        { x: 2010, y: 410, w: 280, h: 20 },
+        { x: 2390, y: 350, w: 280, h: 20 },
+        { x: 2790, y: 448, w: 470, h: 18 }
       ];
 
-      const exit = { x: 3120, y: 342, w: 70, h: 106 };
+      const exit = { x: 3120, y: 342, w: 70, h: 178 };
+      const respawnInvulnerability = 1.2;
       const hazards = [
-        { x: 760, y: 416, w: 68, h: 30, label: "steam vent" },
-        { x: 1248, y: 366, w: 58, h: 30, label: "steam vent" },
-        { x: 1655, y: 426, w: 74, h: 30, label: "steam vent" },
-        { x: 2110, y: 380, w: 64, h: 30, label: "steam vent" },
-        { x: 2506, y: 320, w: 64, h: 30, label: "steam vent" },
-        { x: 2926, y: 418, w: 72, h: 30, label: "steam vent" }
+        { x: 0, y: 466, w: 44, h: 10, label: "steam vent" },
+        { x: 920, y: 436, w: 24, h: 10, label: "steam vent" },
+        { x: 1288, y: 386, w: 22, h: 10, label: "steam vent" },
+        { x: 1762, y: 446, w: 26, h: 10, label: "steam vent" },
+        { x: 2188, y: 400, w: 24, h: 10, label: "steam vent" }
+      ];
+      const patrols = [
+        { x: 1500, y: 422, w: 34, h: 30, minX: 1500, maxX: 1840, speed: 62, dir: 1 },
+        { x: 2038, y: 376, w: 34, h: 30, minX: 2038, maxX: 2245, speed: 48, dir: 1 }
       ];
       const collectibles = [
         { x: 360, y: 420, r: 14, collected: false },
-        { x: 745, y: 394, r: 14, collected: false },
-        { x: 1190, y: 342, r: 14, collected: false },
-        { x: 1540, y: 402, r: 14, collected: false },
-        { x: 1810, y: 402, r: 14, collected: false },
-        { x: 2070, y: 356, r: 14, collected: false },
-        { x: 2450, y: 296, r: 14, collected: false },
-        { x: 3020, y: 394, r: 14, collected: false }
+        { x: 720, y: 392, r: 14, collected: false },
+        { x: 1165, y: 342, r: 14, collected: false },
+        { x: 1518, y: 402, r: 14, collected: false },
+        { x: 1854, y: 402, r: 14, collected: false },
+        { x: 2066, y: 356, r: 14, collected: false },
+        { x: 2440, y: 296, r: 14, collected: false },
+        { x: 2864, y: 394, r: 14, collected: false }
       ];
       const player = {
         x: 110,
@@ -271,14 +279,18 @@
         health: 3,
         invulnerable: 0
       };
+      const checkpoint = { x: 1692, y: 452, w: 46, h: 68, active: false };
+      const startRespawn = { x: 110, y: 388 };
+      const checkpointRespawn = { x: 1686, y: 466 };
+      let respawnPoint = { ...startRespawn };
 
       let cameraX = 0;
       let mode = "title";
       let lastTime = performance.now();
 
       function resetPlayer(invulnerabilitySeconds = 0) {
-        player.x = 110;
-        player.y = 388;
+        player.x = respawnPoint.x;
+        player.y = respawnPoint.y;
         player.vx = 0;
         player.vy = 0;
         player.grounded = false;
@@ -290,6 +302,12 @@
       function startGame() {
         for (const core of collectibles) core.collected = false;
         player.health = 3;
+        checkpoint.active = false;
+        respawnPoint = { ...startRespawn };
+        for (const patrol of patrols) {
+          patrol.x = patrol.minX;
+          patrol.dir = 1;
+        }
         resetPlayer();
         mode = "playing";
         title.classList.add("hidden");
@@ -334,6 +352,13 @@
         return dx * dx + dy * dy <= circle.r * circle.r;
       }
 
+      function activateCheckpoint() {
+        if (checkpoint.active) return;
+        checkpoint.active = true;
+        respawnPoint = { ...checkpointRespawn };
+        status.textContent = "Checkpoint reached";
+      }
+
       function damagePlayer() {
         if (player.invulnerable > 0 || mode !== "playing") return;
         player.health -= 1;
@@ -343,11 +368,25 @@
           return;
         }
         status.textContent = "Damaged - respawned";
-        resetPlayer(1.1);
+        resetPlayer(respawnInvulnerability);
+      }
+
+      function updatePatrols(dt) {
+        for (const patrol of patrols) {
+          patrol.x += patrol.dir * patrol.speed * dt;
+          if (patrol.x <= patrol.minX) {
+            patrol.x = patrol.minX;
+            patrol.dir = 1;
+          } else if (patrol.x >= patrol.maxX) {
+            patrol.x = patrol.maxX;
+            patrol.dir = -1;
+          }
+        }
       }
 
       function moveAndCollide(dt) {
         player.invulnerable = Math.max(0, player.invulnerable - dt);
+        updatePatrols(dt);
         const speed = 360;
         const accel = player.grounded ? 3400 : 2500;
         const brake = player.grounded ? 4200 : 1200;
@@ -417,6 +456,17 @@
           }
         }
 
+        for (const patrol of patrols) {
+          if (rectsOverlap(player, patrol)) {
+            damagePlayer();
+            break;
+          }
+        }
+
+        if (rectsOverlap(player, checkpoint)) {
+          activateCheckpoint();
+        }
+
         if (rectsOverlap(player, exit)) {
           completeLevel();
         }
@@ -461,15 +511,56 @@
         ctx.stroke();
       }
 
+      function drawRouteMarkers() {
+        ctx.save();
+        ctx.translate(-cameraX, 0);
+        ctx.strokeStyle = "rgba(96, 211, 148, 0.55)";
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(40, 506);
+        ctx.lineTo(world.width - 150, 506);
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(255, 209, 102, 0.48)";
+        ctx.lineWidth = 4;
+        ctx.setLineDash([16, 10]);
+        ctx.beginPath();
+        ctx.moveTo(700, 432);
+        ctx.lineTo(980, 432);
+        ctx.moveTo(1128, 382);
+        ctx.lineTo(1344, 382);
+        ctx.moveTo(1476, 442);
+        ctx.lineTo(1870, 442);
+        ctx.moveTo(2028, 396);
+        ctx.lineTo(2264, 396);
+        ctx.moveTo(2406, 336);
+        ctx.lineTo(2650, 336);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.font = "800 15px Inter, sans-serif";
+        ctx.textAlign = "left";
+        ctx.fillStyle = "#bdf8d0";
+        ctx.fillText("SAFE DECK", 92, 500);
+        ctx.fillStyle = "#ffe29b";
+        ctx.fillText("CORE ROUTE", 708, 422);
+        ctx.fillStyle = "#ffb3a7";
+        ctx.fillText("DANGER", 10, 458);
+        ctx.restore();
+      }
+
       function drawPlatform(platform) {
         const x = Math.round(platform.x - cameraX);
+        const capHeight = Math.min(12, platform.h);
         ctx.fillStyle = "#596a54";
         ctx.fillRect(x, platform.y, platform.w, platform.h);
         ctx.fillStyle = "#8ba66f";
-        ctx.fillRect(x, platform.y, platform.w, 12);
+        ctx.fillRect(x, platform.y, platform.w, capHeight);
         ctx.fillStyle = "rgba(0, 0, 0, 0.18)";
-        for (let tx = x + 20; tx < x + platform.w; tx += 44) {
-          ctx.fillRect(tx, platform.y + 18, 18, 8);
+        if (platform.h > 24) {
+          for (let tx = x + 20; tx < x + platform.w; tx += 44) {
+            ctx.fillRect(tx, platform.y + 18, 18, 8);
+          }
         }
       }
 
@@ -495,6 +586,43 @@
           ctx.bezierCurveTo(sx - 8, hazard.y - 22, sx + 12, hazard.y - 28, sx, hazard.y - 44);
         }
         ctx.stroke();
+      }
+
+      function drawPatrol(patrol) {
+        const x = Math.round(patrol.x - cameraX);
+        ctx.fillStyle = "rgba(0, 0, 0, 0.24)";
+        ctx.beginPath();
+        ctx.ellipse(x + patrol.w / 2, patrol.y + patrol.h + 3, 22, 5, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#ff7a59";
+        ctx.fillRect(x + 4, patrol.y + 8, patrol.w - 8, patrol.h - 6);
+        ctx.fillStyle = "#262d39";
+        ctx.fillRect(x + 8, patrol.y + 2, patrol.w - 16, 12);
+        ctx.fillStyle = "#fff4d6";
+        ctx.fillRect(x + (patrol.dir > 0 ? 21 : 9), patrol.y + 12, 6, 6);
+        ctx.strokeStyle = "rgba(255, 122, 89, 0.45)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(patrol.minX - cameraX, patrol.y + patrol.h + 10);
+        ctx.lineTo(patrol.maxX + patrol.w - cameraX, patrol.y + patrol.h + 10);
+        ctx.stroke();
+      }
+
+      function drawCheckpoint() {
+        const x = checkpoint.x - cameraX;
+        ctx.fillStyle = checkpoint.active ? "#60d394" : "#aeb8c7";
+        ctx.fillRect(x + 20, checkpoint.y + 8, 6, checkpoint.h - 8);
+        ctx.fillStyle = checkpoint.active ? "rgba(96, 211, 148, 0.32)" : "rgba(174, 184, 199, 0.28)";
+        ctx.beginPath();
+        ctx.moveTo(x + 26, checkpoint.y + 8);
+        ctx.lineTo(x + 62, checkpoint.y + 22);
+        ctx.lineTo(x + 26, checkpoint.y + 36);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = checkpoint.active ? "#eafff2" : "#f4f7fb";
+        ctx.font = "800 13px Inter, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("MID", x + 43, checkpoint.y - 4);
       }
 
       function drawCollectible(core) {
@@ -554,9 +682,12 @@
       function draw() {
         drawBackground();
         ctx.save();
+        drawRouteMarkers();
         for (const platform of platforms) drawPlatform(platform);
         for (const hazard of hazards) drawHazard(hazard);
+        for (const patrol of patrols) drawPatrol(patrol);
         for (const core of collectibles) drawCollectible(core);
+        drawCheckpoint();
         drawExit();
         drawPlayer();
         ctx.restore();
@@ -564,6 +695,7 @@
         const remaining = Math.max(0, Math.round((exit.x - player.x) / 10));
         const collected = collectibles.filter((core) => core.collected).length;
         healthText.textContent = `Health: ${player.health}`;
+        checkpointHud.textContent = `Checkpoint: ${checkpoint.active ? "mid" : "start"}`;
         coresText.textContent = `Cores: ${collected}/${collectibles.length}`;
         distance.textContent = `${remaining} m`;
       }
@@ -583,6 +715,7 @@
         if (["ArrowLeft", "ArrowRight", "ArrowUp", "Space"].includes(event.code)) event.preventDefault();
         keys.add(event.code);
         if (mode === "title" && event.code === "Enter") startGame();
+        if (mode === "complete" && event.code === "Enter") startGame();
       });
 
       window.addEventListener("keyup", (event) => {
@@ -590,6 +723,7 @@
       });
 
       startButton.addEventListener("click", startGame);
+      resultButton.addEventListener("click", startGame);
       requestAnimationFrame(frame);
     })();
   </script>

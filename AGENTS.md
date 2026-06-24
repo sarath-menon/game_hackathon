@@ -179,6 +179,10 @@ Each phase report must include:
   - recording method, including capture cadence or FPS
 - Summary
 - Findings with severity, status, repro steps, expected behavior, actual behavior, and evidence
+- Readability / route clarity assessment:
+  - For spatial games, state whether the camera, labels, minimap, start pose, objective markers, and intended route make the next action visually clear from normal play.
+  - For UI/card games, state whether important state, intent, card effects, status effects, and next actions are visually clear from normal play.
+  - Ambiguous orientation, off-route labels, misleading minimaps, hidden objective order, or unclear safe/risk paths must be reported even when a functional script can brute-force progress.
 - Regression checklist
 - Approval statement
 
@@ -195,6 +199,16 @@ A phase is approved only when:
 - Observed behavior matches the README/manual
 
 Ambiguous behavior should be reported as a documentation or design issue.
+
+## Readability And Orientation Gates
+
+Tester approval must include explicit human-readable clarity checks, not only mechanical completion. These checks are black-box and must rely only on the hosted game and README/manual.
+
+- **Arcade Kart Racer:** the start pose, camera, track, checkpoint labels, minimap, and HUD must align so normal forward driving clearly reads as the documented checkpoint order. CP1, CP2, CP3, and the finish must be visibly on the drivable route, readable from the approach direction, and consistent with minimap marker order.
+- **Side-Scrolling Platformer:** the safe route, optional risk route, hazards, collectibles, checkpoints, patrols/moving platforms, and exit must be visually distinguishable. A tester should not need source knowledge to understand which path is safe and which path is optional or dangerous.
+- **Turn-Based Deckbuilder:** player HP, enemy HP, energy, hand, draw/discard counts, enemy intent, status effects, reward choices, deck changes, encounter number, and final victory/defeat states must be visibly understandable and consistent with the README/manual.
+
+If a phase passes scripted mechanics but fails readability/orientation in a way that could mislead normal black-box play, the tester should report `FAIL` or a finding with enough severity to block approval.
 
 ## Current Resume Procedure
 

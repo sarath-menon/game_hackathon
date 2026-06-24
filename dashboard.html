@@ -41,7 +41,7 @@
     }
 
     .shell {
-      width: min(1540px, 100%);
+      width: min(1680px, 100%);
       margin: 0 auto;
       padding: 18px;
     }
@@ -64,7 +64,7 @@
 
     .subtitle {
       margin: 0;
-      max-width: 82ch;
+      max-width: 92ch;
       color: var(--muted);
       font-size: 0.94rem;
     }
@@ -102,6 +102,21 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
       padding-top: 14px;
+    }
+
+    .gate {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      color: var(--muted);
+      font-size: 0.86rem;
+      box-shadow: var(--shadow);
+    }
+
+    .gate strong {
+      color: var(--ink);
     }
 
     .lane {
@@ -213,6 +228,13 @@
       letter-spacing: 0;
     }
 
+    .badges {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
     .badge {
       display: inline-flex;
       align-items: center;
@@ -229,25 +251,25 @@
       white-space: nowrap;
     }
 
-    .phase[data-status="pass"] .badge {
+    .badge[data-kind="pass"] {
       border-color: rgba(15, 118, 110, 0.3);
       background: rgba(15, 118, 110, 0.1);
       color: var(--pass);
     }
 
-    .phase[data-status="active"] .badge {
+    .badge[data-kind="active"] {
       border-color: rgba(29, 78, 216, 0.3);
       background: rgba(29, 78, 216, 0.1);
       color: var(--active);
     }
 
-    .phase[data-status="testing"] .badge {
+    .badge[data-kind="testing"] {
       border-color: rgba(154, 91, 0, 0.3);
       background: rgba(154, 91, 0, 0.1);
       color: var(--testing);
     }
 
-    .phase[data-status="fail"] .badge {
+    .badge[data-kind="fail"] {
       border-color: rgba(180, 35, 24, 0.3);
       background: rgba(180, 35, 24, 0.1);
       color: var(--fail);
@@ -257,6 +279,12 @@
       margin: 0;
       color: var(--ink);
       font-size: 0.9rem;
+    }
+
+    .note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.82rem;
     }
 
     .evidence {
@@ -306,7 +334,108 @@
       overflow-wrap: anywhere;
     }
 
-    @media (max-width: 1120px) {
+    details.report {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfc;
+      overflow: hidden;
+    }
+
+    details.report summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 38px;
+      padding: 8px 10px;
+      cursor: pointer;
+      color: var(--ink);
+      font-size: 0.84rem;
+      font-weight: 800;
+    }
+
+    .report-state {
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    .markdown {
+      max-height: 460px;
+      overflow: auto;
+      padding: 10px 12px 14px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+      font-size: 0.82rem;
+    }
+
+    .markdown h1,
+    .markdown h2,
+    .markdown h3 {
+      margin: 0.75em 0 0.35em;
+      line-height: 1.2;
+    }
+
+    .markdown h1 {
+      font-size: 1.08rem;
+    }
+
+    .markdown h2 {
+      font-size: 0.98rem;
+      padding-top: 0.4em;
+      border-top: 1px solid #e5ecee;
+    }
+
+    .markdown h3 {
+      font-size: 0.9rem;
+    }
+
+    .markdown p,
+    .markdown ul,
+    .markdown ol {
+      margin: 0.45em 0;
+    }
+
+    .markdown ul,
+    .markdown ol {
+      padding-left: 1.2rem;
+    }
+
+    .markdown code {
+      padding: 0.08rem 0.25rem;
+      border-radius: 4px;
+      background: #eef3f4;
+      color: #111827;
+      font-size: 0.78rem;
+    }
+
+    .markdown pre {
+      overflow: auto;
+      padding: 10px;
+      border-radius: 6px;
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    .markdown pre code {
+      padding: 0;
+      background: transparent;
+      color: inherit;
+    }
+
+    .markdown blockquote {
+      margin: 0.5em 0;
+      padding-left: 0.8rem;
+      border-left: 3px solid var(--line);
+      color: var(--muted);
+    }
+
+    .missing {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    @media (max-width: 1220px) {
       .topbar,
       .lanes {
         grid-template-columns: 1fr;
@@ -342,16 +471,20 @@
     <header class="topbar">
       <div>
         <h1>Three-Game Lockstep Dashboard</h1>
-        <p class="subtitle">Operational status for Arcade Kart Racer, Side-Scrolling Platformer, and Turn-Based Deckbuilder build/test phases.</p>
+        <p class="subtitle">Operational status for each build/test phase. Every phase panel renders its Markdown test report when available, shows the evidence video, and separates current workflow state from the latest written verdict.</p>
       </div>
-      <section class="metrics" aria-label="Phase status totals">
+      <section class="metrics" aria-label="Phase workflow totals">
         <div class="metric"><strong id="pass-count">0</strong><span>Pass</span></div>
         <div class="metric"><strong id="fail-count">0</strong><span>Fail</span></div>
         <div class="metric"><strong id="testing-count">0</strong><span>Testing</span></div>
-        <div class="metric"><strong id="active-count">0</strong><span>Active</span></div>
+        <div class="metric"><strong id="active-count">0</strong><span>Building</span></div>
         <div class="metric"><strong id="queued-count">0</strong><span>Queued</span></div>
       </section>
     </header>
+
+    <section class="gate" aria-label="Current testing clarity gate">
+      <strong>Testing gate:</strong> spatial game reports must explicitly check readability, orientation, and route clarity; UI/card game reports must check visible state, intent, action clarity, and next-step clarity.
+    </section>
 
     <section class="lanes" id="lanes" aria-label="Game lanes"></section>
   </main>
@@ -365,32 +498,28 @@
         readmeUrl: "games/kart-racer/README.md",
         phases: [
           {
-            label: "Arcade Kart Racer Phase 1: Basic Drivable Track",
-            status: "fail",
-            statusLabel: "FAIL",
+            label: "Phase 1: Basic Drivable Track",
+            status: "pass",
+            statusLabel: "PASS",
             description: "Single kart on a simple 3D loop track with start screen, steering, acceleration/brake, track boundaries, and finish line.",
-            evidencePath: "evidence/kart-racer/phase-1/gameplay-recording.mp4",
-            reportPath: "evidence/kart-racer/phase-1/TEST_REPORT.md",
-            videoAvailable: true,
-            reportDriven: true
+            evidenceDir: "evidence/kart-racer/phase-1",
+            note: "Approved after retest."
           },
           {
-            label: "Arcade Kart Racer Phase 2: Race Rules",
-            status: "queued",
-            statusLabel: "Queued",
-            description: "Checkpoints, lap counting, wrong-way/checkpoint validation, race timer, and completion screen.",
-            evidencePath: "evidence/kart-racer/phase-2/gameplay-recording.mp4",
-            reportPath: "evidence/kart-racer/phase-2/TEST_REPORT.md",
-            videoAvailable: false
+            label: "Phase 2: Race Rules",
+            status: "testing",
+            statusLabel: "Retest active",
+            description: "Checkpoints, lap counting, wrong-way/checkpoint validation, race timer, route readability, and completion screen.",
+            evidenceDir: "evidence/kart-racer/phase-2",
+            note: "Retest is active after the orientation/readability fix; the displayed report may be the prior FAIL until the tester writes a new verdict."
           },
           {
-            label: "Arcade Kart Racer Phase 3: Game Feel",
+            label: "Phase 3: Game Feel",
             status: "queued",
             statusLabel: "Queued",
             description: "Boost pads, obstacle cones/barriers, speed feedback, restart flow, and polish.",
-            evidencePath: "evidence/kart-racer/phase-3/gameplay-recording.mp4",
-            reportPath: "evidence/kart-racer/phase-3/TEST_REPORT.md",
-            videoAvailable: false
+            evidenceDir: "evidence/kart-racer/phase-3",
+            note: "Blocked until Phase 2 is approved."
           }
         ]
       },
@@ -401,31 +530,27 @@
         readmeUrl: "games/platformer/README.md",
         phases: [
           {
-            label: "Side-Scrolling Platformer Phase 1: Core Movement",
+            label: "Phase 1: Core Movement",
             status: "pass",
             statusLabel: "PASS",
             description: "Side-scrolling level with player movement, jump, gravity, platforms, camera follow, start screen, and level exit.",
-            evidencePath: "evidence/platformer/phase-1/gameplay-recording.mp4",
-            reportPath: "evidence/platformer/phase-1/TEST_REPORT.md",
-            videoAvailable: true
+            evidenceDir: "evidence/platformer/phase-1"
           },
           {
-            label: "Side-Scrolling Platformer Phase 2: Hazards And Collectibles",
-            status: "active",
-            statusLabel: "Active",
-            description: "Hazards/enemies, collectibles, health/lives or fail state, respawn, and completion summary.",
-            evidencePath: "evidence/platformer/phase-2/gameplay-recording.mp4",
-            reportPath: "evidence/platformer/phase-2/TEST_REPORT.md",
-            videoAvailable: false
+            label: "Phase 2: Hazards And Collectibles",
+            status: "pass",
+            statusLabel: "PASS",
+            description: "Hazards/enemies, collectibles, health/lives or fail state, respawn, reliable lower-deck route, and completion summary.",
+            evidenceDir: "evidence/platformer/phase-2",
+            note: "Approved after the second builder fix."
           },
           {
-            label: "Side-Scrolling Platformer Phase 3: Level Polish",
-            status: "queued",
-            statusLabel: "Queued",
+            label: "Phase 3: Level Polish",
+            status: "testing",
+            statusLabel: "Testing active",
             description: "Moving platforms or simple enemy patrols, checkpoints, clearer level readability, and restart flow.",
-            evidencePath: "evidence/platformer/phase-3/gameplay-recording.mp4",
-            reportPath: "evidence/platformer/phase-3/TEST_REPORT.md",
-            videoAvailable: false
+            evidenceDir: "evidence/platformer/phase-3",
+            note: "Testing is active; report will appear here when written."
           }
         ]
       },
@@ -436,32 +561,26 @@
         readmeUrl: "games/deckbuilder/README.md",
         phases: [
           {
-            label: "Turn-Based Deckbuilder Phase 1: Basic Card Combat",
+            label: "Phase 1: Basic Card Combat",
             status: "pass",
             statusLabel: "PASS",
             description: "Combat screen with player HP, enemy HP, draw pile, hand, energy, attack/block cards, end turn, enemy attack, and victory/defeat.",
-            evidencePath: "evidence/deckbuilder/phase-1/gameplay-recording.mp4",
-            reportPath: "evidence/deckbuilder/phase-1/TEST_REPORT.md",
-            videoAvailable: true,
-            reportDriven: true
+            evidenceDir: "evidence/deckbuilder/phase-1"
           },
           {
-            label: "Turn-Based Deckbuilder Phase 2: Tactical Variety",
-            status: "queued",
-            statusLabel: "Queued",
+            label: "Phase 2: Tactical Variety",
+            status: "pass",
+            statusLabel: "PASS",
             description: "Enemy intent, multiple card types, status effects or buffs, and at least two enemy turns.",
-            evidencePath: "evidence/deckbuilder/phase-2/gameplay-recording.mp4",
-            reportPath: "evidence/deckbuilder/phase-2/TEST_REPORT.md",
-            videoAvailable: false
+            evidenceDir: "evidence/deckbuilder/phase-2"
           },
           {
-            label: "Turn-Based Deckbuilder Phase 3: Run Structure",
-            status: "queued",
-            statusLabel: "Queued",
+            label: "Phase 3: Run Structure",
+            status: "pass",
+            statusLabel: "PASS",
             description: "Reward choice after combat, deck updates, second encounter, and final victory screen.",
-            evidencePath: "evidence/deckbuilder/phase-3/gameplay-recording.mp4",
-            reportPath: "evidence/deckbuilder/phase-3/TEST_REPORT.md",
-            videoAvailable: false
+            evidenceDir: "evidence/deckbuilder/phase-3",
+            note: "All planned deckbuilder phases are approved."
           }
         ]
       }
@@ -470,41 +589,164 @@
     const statusLabels = {
       pass: "PASS",
       fail: "FAIL",
-      active: "Active",
+      active: "Building",
       testing: "Testing",
       queued: "Queued"
     };
 
     const lanes = document.querySelector("#lanes");
 
-    function renderEvidence(phase) {
-      if (phase.videoAvailable) {
-        return `<div class="video-frame"><video controls preload="metadata" src="${phase.evidencePath}"></video></div>`;
+    function escapeHtml(value) {
+      return value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function inlineMarkdown(value) {
+      let text = escapeHtml(value);
+      text = text.replace(/`([^`]+)`/g, "<code>$1</code>");
+      text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+      text = text.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+      return text;
+    }
+
+    function markdownToHtml(markdown) {
+      const lines = markdown.replace(/\r\n/g, "\n").split("\n");
+      const out = [];
+      let listType = null;
+      let inCode = false;
+      let codeLines = [];
+
+      function closeList() {
+        if (listType) {
+          out.push(`</${listType}>`);
+          listType = null;
+        }
       }
 
-      const text = phase.status === "testing"
-        ? "Testing evidence is pending."
-        : phase.status === "active"
-          ? "Build is active; test evidence is not available yet."
-          : phase.status === "fail"
-            ? "Failure report exists; passing evidence is pending."
-            : "Queued phase; evidence is not available yet.";
-      return `<div class="video-frame"><div class="pending-media">${text}</div></div>`;
+      function flushCode() {
+        if (inCode) {
+          out.push(`<pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`);
+          inCode = false;
+          codeLines = [];
+        }
+      }
+
+      for (const line of lines) {
+        if (line.startsWith("```")) {
+          closeList();
+          if (inCode) {
+            flushCode();
+          } else {
+            inCode = true;
+            codeLines = [];
+          }
+          continue;
+        }
+
+        if (inCode) {
+          codeLines.push(line);
+          continue;
+        }
+
+        if (!line.trim()) {
+          closeList();
+          continue;
+        }
+
+        const heading = line.match(/^(#{1,3})\s+(.+)$/);
+        if (heading) {
+          closeList();
+          out.push(`<h${heading[1].length}>${inlineMarkdown(heading[2])}</h${heading[1].length}>`);
+          continue;
+        }
+
+        const bullet = line.match(/^\s*[-*]\s+(.+)$/);
+        if (bullet) {
+          if (listType !== "ul") {
+            closeList();
+            listType = "ul";
+            out.push("<ul>");
+          }
+          out.push(`<li>${inlineMarkdown(bullet[1])}</li>`);
+          continue;
+        }
+
+        const ordered = line.match(/^\s*\d+\.\s+(.+)$/);
+        if (ordered) {
+          if (listType !== "ol") {
+            closeList();
+            listType = "ol";
+            out.push("<ol>");
+          }
+          out.push(`<li>${inlineMarkdown(ordered[1])}</li>`);
+          continue;
+        }
+
+        const quote = line.match(/^>\s?(.+)$/);
+        if (quote) {
+          closeList();
+          out.push(`<blockquote>${inlineMarkdown(quote[1])}</blockquote>`);
+          continue;
+        }
+
+        closeList();
+        out.push(`<p>${inlineMarkdown(line)}</p>`);
+      }
+
+      closeList();
+      flushCode();
+      return out.join("");
+    }
+
+    function phasePaths(phase) {
+      return {
+        video: `${phase.evidenceDir}/gameplay-recording.mp4`,
+        report: `${phase.evidenceDir}/TEST_REPORT.md`,
+        expected: `${phase.evidenceDir}/expected-flow.md`
+      };
+    }
+
+    function renderEvidence(phase) {
+      const paths = phasePaths(phase);
+      return `
+        <div class="video-frame" data-video-frame>
+          <video controls preload="metadata" src="${paths.video}" data-video></video>
+          <div class="pending-media" data-video-missing hidden>No gameplay MP4 found yet.</div>
+        </div>
+      `;
     }
 
     function renderPhase(phase) {
+      const paths = phasePaths(phase);
+      const note = phase.note ? `<p class="note">${escapeHtml(phase.note)}</p>` : "";
       return `
-        <article class="phase" data-status="${phase.status}" data-report-path="${phase.reportPath}">
+        <article class="phase" data-status="${phase.status}" data-report-path="${paths.report}" data-video-path="${paths.video}">
           <div class="phase-head">
-            <h3>${phase.label}</h3>
-            <span class="badge" data-badge>${phase.statusLabel}</span>
+            <h3>${escapeHtml(phase.label)}</h3>
+            <span class="badges">
+              <span class="badge" data-kind="${phase.status}">Workflow: ${phase.statusLabel}</span>
+              <span class="badge" data-kind="queued" data-report-verdict>Report: checking</span>
+            </span>
           </div>
-          <p class="description">${phase.description}</p>
-          <div class="evidence" data-evidence>${renderEvidence(phase)}</div>
+          <p class="description">${escapeHtml(phase.description)}</p>
+          ${note}
+          <div class="evidence">${renderEvidence(phase)}</div>
           <dl class="meta">
-            <div>Evidence: <code>${phase.evidencePath}</code></div>
-            <div>Report: <code>${phase.reportPath}</code></div>
+            <div>Evidence folder: <code>${phase.evidenceDir}/</code></div>
+            <div>Video: <code>${paths.video}</code></div>
+            <div>Report: <code>${paths.report}</code></div>
           </dl>
+          <details class="report" open>
+            <summary>
+              <span>TEST_REPORT.md</span>
+              <span class="report-state" data-report-state>Loading</span>
+            </summary>
+            <div class="markdown" data-report-markdown><p class="missing">Loading report markdown...</p></div>
+          </details>
         </article>
       `;
     }
@@ -515,9 +757,9 @@
       lane.innerHTML = `
         <header class="lane-header">
           <div class="lane-title">
-            <h2>${game.name}</h2>
+            <h2>${escapeHtml(game.name)}</h2>
           </div>
-          <p class="lane-summary">${game.summary}</p>
+          <p class="lane-summary">${escapeHtml(game.summary)}</p>
           <div class="links">
             <a href="${game.gameUrl}">Game</a>
             <a href="${game.readmeUrl}">README</a>
@@ -544,40 +786,59 @@
       document.querySelector("#queued-count").textContent = counts.queued;
     }
 
-    function applyReportStatus(card, verdict) {
-      if (verdict !== "PASS" && verdict !== "FAIL") return;
-      const status = verdict === "PASS" ? "pass" : "fail";
-      card.dataset.status = status;
-      card.querySelector("[data-badge]").textContent = statusLabels[status];
-      const pending = card.querySelector(".pending-media");
-      if (pending) {
-        pending.textContent = verdict === "PASS"
-          ? "PASS report exists; gameplay MP4 was not found in the dashboard evidence set."
-          : "FAIL report exists; passing gameplay evidence is pending.";
+    function findVerdict(markdown) {
+      return markdown.match(/Verdict:\s*`?(PASS|FAIL|PENDING)`?/i)?.[1]?.toUpperCase()
+        || markdown.match(/(?:^|\n)\s*(PASS|FAIL|PENDING)\s*(?:\n|$)/i)?.[1]?.toUpperCase()
+        || "Unknown";
+    }
+
+    async function refreshReport(card) {
+      const reportPath = card.dataset.reportPath;
+      const reportState = card.querySelector("[data-report-state]");
+      const reportMarkdown = card.querySelector("[data-report-markdown]");
+      const verdictBadge = card.querySelector("[data-report-verdict]");
+
+      try {
+        const response = await fetch(reportPath, { cache: "no-store" });
+        if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
+        const markdown = await response.text();
+        const verdict = findVerdict(markdown);
+        const kind = verdict === "PASS" ? "pass" : verdict === "FAIL" ? "fail" : "queued";
+        verdictBadge.dataset.kind = kind;
+        verdictBadge.textContent = `Report: ${verdict}`;
+        reportState.textContent = reportPath;
+        reportMarkdown.innerHTML = markdownToHtml(markdown);
+      } catch {
+        verdictBadge.dataset.kind = "queued";
+        verdictBadge.textContent = "Report: missing";
+        reportState.textContent = "Missing";
+        reportMarkdown.innerHTML = `<p class="missing">No TEST_REPORT.md is available yet at <code>${escapeHtml(reportPath)}</code>.</p>`;
       }
     }
 
-    async function refreshReportDrivenStatuses() {
-      const reportCards = [...document.querySelectorAll('.phase[data-status="testing"]')];
-      await Promise.all(reportCards.map(async (card) => {
-        const reportPath = card.dataset.reportPath;
-        try {
-          const response = await fetch(reportPath, { cache: "no-store" });
-          if (!response.ok) return;
-          const text = await response.text();
-          const verdict = text.match(/Verdict:\s*`?(PASS|FAIL)`?/i)?.[1]
-            || text.match(/(?:^|\n)\s*(PASS|FAIL)\s*(?:\n|$)/)?.[1];
-          applyReportStatus(card, verdict);
-        } catch {
-          return;
-        }
-      }));
-      updateCounts();
+    async function refreshVideo(card) {
+      const videoPath = card.dataset.videoPath;
+      const video = card.querySelector("[data-video]");
+      const missing = card.querySelector("[data-video-missing]");
+
+      try {
+        const response = await fetch(videoPath, { method: "HEAD", cache: "no-store" });
+        if (!response.ok) throw new Error(`${response.status}`);
+        video.hidden = false;
+        missing.hidden = true;
+      } catch {
+        video.hidden = true;
+        missing.hidden = false;
+      }
+    }
+
+    async function hydratePhase(card) {
+      await Promise.all([refreshReport(card), refreshVideo(card)]);
     }
 
     games.forEach((game) => lanes.append(renderGame(game)));
     updateCounts();
-    refreshReportDrivenStatuses();
+    Promise.all([...document.querySelectorAll(".phase")].map(hydratePhase));
   </script>
 </body>
 </html>

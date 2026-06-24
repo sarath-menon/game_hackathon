@@ -54,6 +54,13 @@
       gap: 12px;
     }
 
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(92px, 1fr));
+      gap: 8px;
+      min-width: min(430px, calc(100vw - 32px));
+    }
+
     .panel {
       max-width: min(420px, calc(100vw - 32px));
       padding: 12px 14px;
@@ -65,7 +72,6 @@
     }
 
     .stat {
-      min-width: 140px;
       text-align: right;
     }
 
@@ -88,6 +94,15 @@
       color: var(--muted);
       font-size: 14px;
       line-height: 1.35;
+    }
+
+    .message {
+      position: absolute;
+      left: 50%;
+      bottom: 22px;
+      width: min(520px, calc(100vw - 32px));
+      transform: translateX(-50%);
+      text-align: center;
     }
 
     .center {
@@ -187,7 +202,12 @@
       }
 
       .stat {
-        min-width: 104px;
+        text-align: left;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        min-width: 0;
       }
 
       .value {
@@ -207,20 +227,35 @@
     <div class="topbar">
       <div class="panel">
         <div class="label">Objective</div>
-        <div>Drive the loop and cross the yellow finish gate.</div>
-        <div class="hint">Arrow keys or WASD steer and throttle. Stay between the white guard rails.</div>
+        <div>Clear checkpoints in order, then cross the yellow finish gate.</div>
+        <div class="hint">Clear CP1, CP2, CP3, then finish. Lap starts at 0/1.</div>
       </div>
-      <div class="panel stat">
-        <div class="label">Speed</div>
-        <div class="value"><span id="speed">0</span></div>
+      <div class="stats">
+        <div class="panel stat">
+          <div class="label">Speed</div>
+          <div class="value"><span id="speed">0</span></div>
+        </div>
+        <div class="panel stat">
+          <div class="label">Lap</div>
+          <div class="value"><span id="lap">0/1</span></div>
+        </div>
+        <div class="panel stat">
+          <div class="label">Time</div>
+          <div class="value"><span id="time">0.0</span></div>
+        </div>
+        <div class="panel stat">
+          <div class="label">Next</div>
+          <div class="value"><span id="next">CP1</span></div>
+        </div>
       </div>
     </div>
+    <div class="panel message" id="message">Start the race and aim for Checkpoint 1.</div>
   </div>
 
   <div id="start" class="center">
     <section class="card">
       <h1>Arcade Kart Racer</h1>
-      <p>Phase 1: a single-kart shakedown on a simple 3D loop track. Cross the yellow finish gate to complete the run.</p>
+      <p>Phase 2: clear three checkpoint gates in order, then cross the yellow finish gate to complete the scored lap.</p>
       <div class="controls">
         <div class="control"><kbd>W</kbd><kbd>↑</kbd> Accelerate</div>
         <div class="control"><kbd>S</kbd><kbd>↓</kbd> Brake / reverse</div>
@@ -233,8 +268,8 @@
 
   <div id="complete" class="center hidden">
     <section class="card complete">
-      <h1>Finish Crossed</h1>
-      <p>The Phase 1 run is complete. Reload the page to drive again.</p>
+      <h1>Race Complete</h1>
+      <p id="completeText">Lap complete.</p>
     </section>
   </div>
 
@@ -248,21 +283,33 @@
       const completeOverlay = document.getElementById("complete");
       const startButton = document.getElementById("startButton");
       const speedEl = document.getElementById("speed");
+      const lapEl = document.getElementById("lap");
+      const timeEl = document.getElementById("time");
+      const nextEl = document.getElementById("next");
+      const messageEl = document.getElementById("message");
+      const completeText = document.getElementById("completeText");
+
+      const totalLaps = 1;
 
       const track = {
         radiusX: 260,
         radiusZ: 170,
         halfWidth: 34,
-        finishAngle: -Math.PI / 2
+        finishAngle: 2.34
       };
+
+      const checkpoints = [
+        { angle: 1.78, label: "CP1", color: "#5ac8fa" },
+        { angle: 1.99, label: "CP2", color: "#ff6b7a" },
+        { angle: 2.2, label: "CP3", color: "#6ee787" }
+      ];
 
       const kart = {
         x: 0,
         z: track.radiusZ,
         yaw: -Math.PI / 2,
         speed: 0,
-        distanceFromStart: 0,
-        hasLeftStart: false
+        distanceFromStart: 0
       };
 
       const keys = new Set();
@@ -273,6 +320,12 @@
       let height = 0;
       let previousX = kart.x;
       let previousZ = kart.z;
+      let completedLaps = 0;
+      let nextCheckpoint = 0;
+      let raceTime = 0;
+      let finalTime = 0;
+      let statusMessage = "Start the race and aim for Checkpoint 1.";
+      let messageUntil = 0;
 
       function resize() {
         dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -422,7 +475,7 @@
         ctx.fillRect(0, height * 0.48, width, height * 0.52);
 
         drawTrack(camera);
-        drawFinishGate(camera);
+        drawRaceMarkers(camera);
         drawKart(camera);
         drawMiniMap();
       }
@@ -474,6 +527,15 @@
         }
       }
 
+      function drawRaceMarkers(camera) {
+        drawFinishGate(camera);
+        checkpoints.forEach((checkpoint, index) => {
+          const cleared = index < nextCheckpoint;
+          const current = index === nextCheckpoint && state !== "complete";
+          drawCheckpointGate(camera, checkpoint, cleared, current);
+        });
+      }
+
       function drawFinishGate(camera) {
         const a = track.finishAngle;
         const left = edgePoint(a, -1);
@@ -496,6 +558,46 @@
           q.y = 9 + i * 4;
           line3d(p, q, camera, i % 2 === 0 ? "#ffffff" : "#151515", 3);
         }
+        text3d({ ...centerPoint(a), y: 48 }, camera, "FINISH", "#ffcf45", 18);
+      }
+
+      function drawCheckpointGate(camera, checkpoint, cleared, current) {
+        const left = edgePoint(checkpoint.angle, -1);
+        const right = edgePoint(checkpoint.angle, 1);
+        const topLeft = { ...left, y: current ? 42 : 30 };
+        const topRight = { ...right, y: current ? 42 : 30 };
+        left.y = 1;
+        right.y = 1;
+        const alpha = cleared ? 0.28 : current ? 1 : 0.52;
+        const color = withAlpha(checkpoint.color, alpha);
+        line3d(left, right, camera, color, current ? 7 : 4);
+        line3d(left, topLeft, camera, color, current ? 5 : 3);
+        line3d(right, topRight, camera, color, current ? 5 : 3);
+        line3d(topLeft, topRight, camera, color, current ? 5 : 3);
+        text3d({ ...centerPoint(checkpoint.angle), y: current ? 50 : 38 }, camera, checkpoint.label, color, current ? 18 : 14);
+      }
+
+      function text3d(point, camera, text, color, size) {
+        const p = project(point, camera);
+        if (!p) return;
+        ctx.save();
+        ctx.font = `800 ${Math.max(12, size * Math.min(1.15, 220 / p.z))}px Inter, system-ui, sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = "rgba(0,0,0,0.58)";
+        ctx.fillStyle = color;
+        ctx.strokeText(text, p.x, p.y);
+        ctx.fillText(text, p.x, p.y);
+        ctx.restore();
+      }
+
+      function withAlpha(hex, alpha) {
+        const n = Number.parseInt(hex.slice(1), 16);
+        const r = (n >> 16) & 255;
+        const g = (n >> 8) & 255;
+        const b = n & 255;
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
       }
 
       function drawKart(camera) {
@@ -541,10 +643,18 @@
         ctx.strokeStyle = "#ffcf45";
         ctx.lineWidth = 4;
         const f = centerPoint(track.finishAngle);
+        const fn = ellipseNormal(track.finishAngle);
         ctx.beginPath();
-        ctx.moveTo(f.x * scale - 14, f.z * scale);
-        ctx.lineTo(f.x * scale + 14, f.z * scale);
+        ctx.moveTo((f.x - fn.x * 18) * scale, (f.z - fn.z * 18) * scale);
+        ctx.lineTo((f.x + fn.x * 18) * scale, (f.z + fn.z * 18) * scale);
         ctx.stroke();
+        checkpoints.forEach((checkpoint, index) => {
+          const p = centerPoint(checkpoint.angle);
+          ctx.fillStyle = index < nextCheckpoint ? "rgba(255,255,255,0.35)" : checkpoint.color;
+          ctx.beginPath();
+          ctx.arc(p.x * scale, p.z * scale, index === nextCheckpoint ? 5 : 4, 0, Math.PI * 2);
+          ctx.fill();
+        });
         const kx = kart.x * scale;
         const kz = kart.z * scale;
         ctx.fillStyle = "#d84f3f";
@@ -557,9 +667,11 @@
       function update(dt) {
         if (state !== "racing") {
           speedEl.textContent = "0";
+          updateHud();
           return;
         }
 
+        raceTime += dt;
         previousX = kart.x;
         previousZ = kart.z;
 
@@ -594,27 +706,105 @@
           kart.speed *= 0.42;
         }
 
-        if (kart.distanceFromStart > 90) {
-          kart.hasLeftStart = true;
+        if (kart.speed > 12) {
+          const trackDirection = tangentAt(nearestTrackInfo(kart.x, kart.z).angle);
+          const desiredYaw = Math.atan2(trackDirection.x, trackDirection.z);
+          kart.yaw += clamp(angleDelta(desiredYaw, kart.yaw), -0.7, 0.7) * 0.9 * dt;
         }
 
-        if (kart.hasLeftStart && crossedFinish(previousX, previousZ, kart.x, kart.z)) {
-          state = "complete";
-          kart.speed = 0;
-          completeOverlay.classList.remove("hidden");
-        }
+        updateRaceRules(previousX, previousZ, kart.x, kart.z);
 
         speedEl.textContent = String(Math.round(Math.abs(kart.speed)));
+        updateHud();
       }
 
-      function crossedFinish(ax, az, bx, bz) {
-        const finish = centerPoint(track.finishAngle);
-        const t = tangentAt(track.finishAngle);
-        const n = ellipseNormal(track.finishAngle);
-        const aLong = (ax - finish.x) * t.x + (az - finish.z) * t.z;
+      function updateRaceRules(ax, az, bx, bz) {
+        const required = checkpoints[nextCheckpoint];
+        if (required && reachedGate(required.angle, bx, bz, 42, track.halfWidth + 22)) {
+          nextCheckpoint += 1;
+          setMessage(nextCheckpoint < checkpoints.length ? `Checkpoint ${nextCheckpoint} cleared. Next: ${checkpoints[nextCheckpoint].label}.` : "All checkpoints cleared. Cross the yellow finish gate.");
+          return;
+        }
+
+        for (let i = nextCheckpoint + 1; i < checkpoints.length; i += 1) {
+          if (reachedGate(checkpoints[i].angle, bx, bz, 28, track.halfWidth + 16)) {
+            setMessage(`Wrong checkpoint order. Aim for ${required ? required.label : "the finish gate"}.`);
+            return;
+          }
+        }
+
+        const finishTouched = nextCheckpoint >= checkpoints.length
+          ? reachedFinishGate(bx, bz)
+          : reachedGate(track.finishAngle, bx, bz, 42, track.halfWidth + 22);
+        if (finishTouched) {
+          if (nextCheckpoint < checkpoints.length) {
+            setMessage(`Finish locked. Clear ${checkpoints[nextCheckpoint].label} first.`);
+            return;
+          }
+
+          if (completedLaps + 1 >= totalLaps) {
+            completeRace();
+            return;
+          }
+
+          completedLaps += 1;
+          nextCheckpoint = 0;
+          setMessage(`Lap ${completedLaps}/${totalLaps} complete. Aim for ${checkpoints[0].label}.`);
+        }
+      }
+
+      function reachedGate(angle, bx, bz, lineSlack, roadSlack) {
+        const finish = centerPoint(angle);
+        const t = tangentAt(angle);
+        const n = ellipseNormal(angle);
         const bLong = (bx - finish.x) * t.x + (bz - finish.z) * t.z;
         const bAcross = Math.abs((bx - finish.x) * n.x + (bz - finish.z) * n.z);
-        return aLong < 0 && bLong >= 0 && bAcross <= track.halfWidth;
+        const insideGateZone = Math.abs(bLong) <= lineSlack && bAcross <= roadSlack;
+        return insideGateZone;
+      }
+
+      function reachedFinishGate(bx, bz) {
+        const finish = centerPoint(track.finishAngle);
+        const distanceToGate = Math.hypot(bx - finish.x, bz - finish.z);
+        return reachedGate(track.finishAngle, bx, bz, 78, track.halfWidth + 52) || distanceToGate <= 120;
+      }
+
+      function completeRace() {
+        state = "complete";
+        kart.speed = 0;
+        completedLaps = totalLaps;
+        finalTime = raceTime;
+        completeText.textContent = `Lap ${totalLaps}/${totalLaps} complete in ${formatTime(finalTime)}.`;
+        setMessage(`Race complete: ${formatTime(finalTime)}.`);
+        completeOverlay.classList.remove("hidden");
+        updateHud();
+      }
+
+      function updateHud() {
+        lapEl.textContent = `${completedLaps}/${totalLaps}`;
+        timeEl.textContent = formatTime(state === "complete" ? finalTime : raceTime);
+        nextEl.textContent = state === "complete" ? "Done" : checkpoints[nextCheckpoint]?.label || "Finish";
+        if (performance.now() > messageUntil && state === "racing") {
+          statusMessage = checkpoints[nextCheckpoint] ? `Next gate: ${checkpoints[nextCheckpoint].label}.` : "All checkpoints cleared. Cross the yellow finish gate.";
+        }
+        messageEl.textContent = statusMessage;
+      }
+
+      function setMessage(text) {
+        statusMessage = text;
+        messageUntil = performance.now() + 2200;
+      }
+
+      function formatTime(value) {
+        return value.toFixed(1);
+      }
+
+      function angleDelta(target, current) {
+        return Math.atan2(Math.sin(target - current), Math.cos(target - current));
+      }
+
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
       }
 
       function frame(now) {
@@ -627,9 +817,16 @@
 
       function startRace() {
         state = "racing";
+        completedLaps = 0;
+        nextCheckpoint = 0;
+        raceTime = 0;
+        finalTime = 0;
+        statusMessage = "Aim for Checkpoint 1.";
+        messageUntil = performance.now() + 1800;
         startOverlay.classList.add("hidden");
         completeOverlay.classList.add("hidden");
         lastTime = performance.now();
+        updateHud();
       }
 
       window.addEventListener("resize", resize);

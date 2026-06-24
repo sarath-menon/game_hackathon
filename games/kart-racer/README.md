@@ -1,10 +1,11 @@
 # Arcade Kart Racer
 
-Phase 1 is a single-kart driving test on a simple 3D loop track.
+Phase 2 is a single-kart race on a simple 3D loop track with ordered checkpoints, lap counting, and a race timer.
 
 ## Objective
 
-Start the race, drive around the loop, and cross the yellow finish gate. The run completes as soon as the kart reaches the finish line.
+Start the race, clear the checkpoint gates in order, and cross the yellow finish gate to complete the scored lap.
+The required gates appear in sequence along the opening left-hand bend: `CP1`, then `CP2`, then `CP3`, then the yellow finish gate.
 
 ## Controls
 
@@ -18,9 +19,22 @@ Start the race, drive around the loop, and cross the yellow finish gate. The run
 
 Stay between the white guard rails. If the kart reaches the edge of the track, it is pushed back onto the road and loses speed so the route remains readable.
 
+## Checkpoints And Laps
+
+- Clear `CP1`, `CP2`, and `CP3` in order.
+- The yellow finish gate only counts after all three checkpoints have been cleared.
+- Crossing checkpoints out of order does not advance race progress.
+- The lap counter starts at `0/1` while the scored lap is in progress.
+- Crossing the finish gate after the required checkpoints completes lap `1/1`.
+- The race is complete when the lap counter reaches `1/1`.
+
+## Timer
+
+The race timer starts when the race begins and stops when the scored lap is completed.
+
 ## Win Behavior
 
-Crossing the yellow finish gate shows the finish-complete screen. Reload the page to play again.
+Completing the scored lap shows the race-complete screen with the final time. Reload the page to play again.
 
 ## Browser Requirements
 

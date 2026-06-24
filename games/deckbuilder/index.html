@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ash Circuit: Basic Card Combat</title>
+  <title>Ash Circuit: Tactical Variety</title>
   <style>
     :root {
       color-scheme: dark;
@@ -333,6 +333,21 @@
       background: linear-gradient(180deg, #1e3334, #1b2024);
     }
 
+    .card.draw {
+      border-color: #8d75d8;
+      background: linear-gradient(180deg, #2b2643, #1d1e26);
+    }
+
+    .card.mixed {
+      border-color: #bf8545;
+      background: linear-gradient(180deg, #3b2f21, #202024);
+    }
+
+    .card.buff {
+      border-color: #79a95b;
+      background: linear-gradient(180deg, #243623, #1c2220);
+    }
+
     .card-title {
       display: flex;
       justify-content: space-between;
@@ -375,6 +390,44 @@
     .log-panel ol {
       margin: 0;
       padding-left: 22px;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .status-pill {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px;
+      background: #151b21;
+      min-height: 60px;
+    }
+
+    .status-pill span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .intent-panel {
+      border: 1px solid #805f32;
+      background: #2a2117;
+      border-radius: 8px;
+      padding: 10px;
+      line-height: 1.35;
+    }
+
+    .intent-panel span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      margin-bottom: 4px;
     }
 
     .overlay {
@@ -480,10 +533,11 @@
     <header>
       <div>
         <h1>Ash Circuit</h1>
-        <p class="subtitle">Phase 1 deck combat: spend energy, play attack and guard cards, then end your turn.</p>
+        <p class="subtitle">Phase 3 deck run: win a combat, choose a reward, update your deck, then clear the second encounter.</p>
+        <p class="subtitle" id="runLine">Encounter 1 of 2. Deck: 12 cards.</p>
       </div>
       <div class="top-actions">
-        <button class="btn" id="newGameButton" type="button">New Combat</button>
+        <button class="btn" id="newGameButton" type="button">New Run</button>
         <button class="btn primary" id="endTurnButton" type="button">End Turn</button>
       </div>
     </header>
@@ -498,6 +552,10 @@
         <div class="stats">
           <div class="stat"><span>HP</span><strong id="playerHp">40 / 40</strong></div>
           <div class="stat"><span>Guard</span><strong id="playerBlock">0</strong></div>
+        </div>
+        <div class="status-grid" aria-label="Player statuses">
+          <div class="status-pill"><span>Focus</span><strong id="playerFocus">0</strong></div>
+          <div class="status-pill"><span>Fractured</span><strong id="playerFractured">No</strong></div>
         </div>
       </article>
 
@@ -514,12 +572,17 @@
         <div class="turn-banner" id="turnBanner">
           <strong>Your turn.</strong> Play cards or end turn.
         </div>
+        <div class="intent-panel" aria-label="Enemy intent">
+          <span>Enemy Intent</span>
+          <strong id="intentName">Lance</strong>
+          <p id="intentText">Attack for 6.</p>
+        </div>
         <p class="status-line" id="reshuffleLine">When the draw pile is empty, the discard pile refills it in fixed order.</p>
       </aside>
 
       <article class="combatant enemy" aria-label="Enemy status">
         <div>
-          <h2>Glass Warden</h2>
+          <h2 id="enemyName">Glass Warden</h2>
           <p class="status-line" id="enemyLine">Enemy will strike for 6 after you end turn.</p>
         </div>
         <div class="portrait" aria-hidden="true"></div>
@@ -546,9 +609,17 @@
   <div class="overlay" id="startOverlay">
     <section class="modal" role="dialog" aria-modal="true" aria-labelledby="startTitle">
       <h2 id="startTitle">Ash Circuit</h2>
-      <p>Defeat the Glass Warden with a deterministic starter deck. Each player turn starts with 3 energy and a five-card hand. Attack cards damage the enemy. Guard cards add block for the next enemy attack.</p>
-      <p>No rewards, upgrades, map, or run structure are included in this phase.</p>
-      <button class="btn primary" id="startButton" type="button">Start Combat</button>
+      <p>Defeat the Glass Warden with a deterministic starter deck. Each player turn starts with 3 energy and a five-card hand. The enemy intent panel shows its next move before you end your turn.</p>
+      <p>After the first combat, choose one reward card. The selected card is added to your deck before the second encounter. Win the second encounter for final victory.</p>
+      <button class="btn primary" id="startButton" type="button">Start Run</button>
+    </section>
+  </div>
+
+  <div class="overlay" id="rewardOverlay" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="rewardTitle">
+      <h2 id="rewardTitle">Choose A Reward</h2>
+      <p id="rewardText">Pick one card. It is added to your deck for encounter 2.</p>
+      <div class="hand" id="rewardChoices"></div>
     </section>
   </div>
 
@@ -556,41 +627,75 @@
     <section class="modal" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
       <h2 id="resultTitle" class="result-title">Result</h2>
       <p id="resultText">Combat finished.</p>
-      <button class="btn primary" id="restartButton" type="button">Play Again</button>
+        <button class="btn primary" id="restartButton" type="button">Play Again</button>
     </section>
   </div>
 
   <script>
     const STARTER_DECK = [
-      { id: "strike-a", name: "Strike", type: "attack", cost: 1, amount: 6, text: "Deal 6 damage." },
-      { id: "guard-a", name: "Guard", type: "guard", cost: 1, amount: 5, text: "Gain 5 guard." },
-      { id: "strike-b", name: "Strike", type: "attack", cost: 1, amount: 6, text: "Deal 6 damage." },
-      { id: "heavy", name: "Heavy Spark", type: "attack", cost: 2, amount: 10, text: "Deal 10 damage." },
-      { id: "guard-b", name: "Guard", type: "guard", cost: 1, amount: 5, text: "Gain 5 guard." },
-      { id: "strike-c", name: "Strike", type: "attack", cost: 1, amount: 6, text: "Deal 6 damage." },
-      { id: "brace", name: "Brace", type: "guard", cost: 2, amount: 9, text: "Gain 9 guard." },
-      { id: "strike-d", name: "Strike", type: "attack", cost: 1, amount: 6, text: "Deal 6 damage." },
-      { id: "guard-c", name: "Guard", type: "guard", cost: 1, amount: 5, text: "Gain 5 guard." },
-      { id: "heavy-b", name: "Heavy Spark", type: "attack", cost: 2, amount: 10, text: "Deal 10 damage." }
+      { id: "strike-a", name: "Strike", type: "attack", cost: 1, damage: 6, text: "Deal 6 damage." },
+      { id: "guard-a", name: "Guard", type: "guard", cost: 1, block: 5, text: "Gain 5 guard." },
+      { id: "quick-study", name: "Quick Study", type: "draw", cost: 0, draw: 2, text: "Draw 2 cards." },
+      { id: "heavy", name: "Heavy Spark", type: "attack", cost: 2, damage: 10, text: "Deal 10 damage." },
+      { id: "drive-plate-a", name: "Drive Plate", type: "mixed", cost: 1, damage: 4, block: 4, text: "Deal 4 damage and gain 4 guard." },
+      { id: "charge-coil", name: "Charge Coil", type: "buff", cost: 1, focus: 2, text: "Gain 2 Focus." },
+      { id: "strike-b", name: "Strike", type: "attack", cost: 1, damage: 6, text: "Deal 6 damage." },
+      { id: "brace", name: "Brace", type: "guard", cost: 2, block: 9, text: "Gain 9 guard." },
+      { id: "drive-plate-b", name: "Drive Plate", type: "mixed", cost: 1, damage: 4, block: 4, text: "Deal 4 damage and gain 4 guard." },
+      { id: "guard-b", name: "Guard", type: "guard", cost: 1, block: 5, text: "Gain 5 guard." },
+      { id: "strike-c", name: "Strike", type: "attack", cost: 1, damage: 6, text: "Deal 6 damage." },
+      { id: "heavy-b", name: "Heavy Spark", type: "attack", cost: 2, damage: 10, text: "Deal 10 damage." }
     ];
 
     const MAX_PLAYER_HP = 40;
-    const MAX_ENEMY_HP = 32;
     const MAX_ENERGY = 3;
     const HAND_SIZE = 5;
-    const ENEMY_ATTACK = 6;
+    const ENCOUNTERS = [
+      {
+        name: "Glass Warden",
+        hp: 32,
+        intents: [
+          { name: "Lance", attack: 6, text: "Attack for 6." },
+          { name: "Static Hex", attack: 4, fractured: true, text: "Attack for 4 and apply Fractured." },
+          { name: "Crushing Arc", attack: 9, text: "Attack for 9." }
+        ]
+      },
+      {
+        name: "Mirror Sentinel",
+        hp: 42,
+        intents: [
+          { name: "Needle Burst", attack: 7, text: "Attack for 7." },
+          { name: "Splinter Mark", attack: 5, fractured: true, text: "Attack for 5 and apply Fractured." },
+          { name: "Overload Sweep", attack: 10, text: "Attack for 10." }
+        ]
+      }
+    ];
+    const REWARD_CARDS = [
+      { id: "reward-flare", name: "Flare Shot", type: "attack", cost: 1, damage: 8, text: "Deal 8 damage." },
+      { id: "reward-shield", name: "Shield Loom", type: "guard", cost: 1, block: 7, text: "Gain 7 guard." },
+      { id: "reward-surge", name: "Surge Plan", type: "mixed", cost: 1, damage: 5, block: 5, text: "Deal 5 damage and gain 5 guard." }
+    ];
 
     const elements = {
       startOverlay: document.getElementById("startOverlay"),
       resultOverlay: document.getElementById("resultOverlay"),
+      rewardOverlay: document.getElementById("rewardOverlay"),
       startButton: document.getElementById("startButton"),
       restartButton: document.getElementById("restartButton"),
       newGameButton: document.getElementById("newGameButton"),
       endTurnButton: document.getElementById("endTurnButton"),
+      rewardChoices: document.getElementById("rewardChoices"),
+      rewardText: document.getElementById("rewardText"),
+      runLine: document.getElementById("runLine"),
       playerHp: document.getElementById("playerHp"),
       playerBlock: document.getElementById("playerBlock"),
+      enemyName: document.getElementById("enemyName"),
       enemyHp: document.getElementById("enemyHp"),
       enemyAttack: document.getElementById("enemyAttack"),
+      playerFocus: document.getElementById("playerFocus"),
+      playerFractured: document.getElementById("playerFractured"),
+      intentName: document.getElementById("intentName"),
+      intentText: document.getElementById("intentText"),
       energy: document.getElementById("energy"),
       drawCount: document.getElementById("drawCount"),
       handCount: document.getElementById("handCount"),
@@ -611,13 +716,19 @@
     function freshState() {
       return {
         playerHp: MAX_PLAYER_HP,
-        enemyHp: MAX_ENEMY_HP,
+        enemyHp: ENCOUNTERS[0].hp,
         block: 0,
+        focus: 0,
+        fractured: false,
         energy: MAX_ENERGY,
-        drawPile: STARTER_DECK.map(card => ({ ...card })),
+        runDeck: cloneCards(STARTER_DECK),
+        drawPile: cloneCards(STARTER_DECK),
         hand: [],
         discardPile: [],
         turn: 1,
+        enemyIntentIndex: 0,
+        encounterIndex: 0,
+        selectedReward: null,
         playerTurn: true,
         gameOver: false,
         log: []
@@ -628,9 +739,34 @@
       state = freshState();
       elements.startOverlay.hidden = true;
       elements.resultOverlay.hidden = true;
-      addLog("Combat begins. Turn 1 starts with 3 energy.");
+      elements.rewardOverlay.hidden = true;
+      beginEncounter(0, MAX_PLAYER_HP, "Run begins.");
+    }
+
+    function beginEncounter(index, playerHp, intro) {
+      const encounter = ENCOUNTERS[index];
+      state.encounterIndex = index;
+      state.playerHp = playerHp;
+      state.enemyHp = encounter.hp;
+      state.block = 0;
+      state.focus = 0;
+      state.fractured = false;
+      state.energy = MAX_ENERGY;
+      state.drawPile = cloneCards(state.runDeck);
+      state.hand = [];
+      state.discardPile = [];
+      state.turn = 1;
+      state.enemyIntentIndex = 0;
+      state.playerTurn = true;
+      state.gameOver = false;
+      state.log = [];
+      addLog(`${intro} Encounter ${index + 1}: ${encounter.name}. Turn 1 starts with 3 energy.`);
       drawCards(HAND_SIZE);
       render();
+    }
+
+    function cloneCards(cards) {
+      return cards.map(card => ({ ...card }));
     }
 
     function addLog(message) {
@@ -666,14 +802,7 @@
       state.hand.splice(index, 1);
       state.discardPile.push(card);
 
-      if (card.type === "attack") {
-        const previousHp = state.enemyHp;
-        state.enemyHp = Math.max(0, state.enemyHp - card.amount);
-        addLog(`${card.name}: spent ${card.cost} energy and dealt ${previousHp - state.enemyHp} damage.`);
-      } else {
-        state.block += card.amount;
-        addLog(`${card.name}: spent ${card.cost} energy and gained ${card.amount} guard.`);
-      }
+      resolveCard(card);
 
       if (state.enemyHp <= 0) {
         endCombat(true);
@@ -698,15 +827,57 @@
       }, 520);
     }
 
+    function resolveCard(card) {
+      const parts = [];
+      if (card.damage) {
+        const baseDamage = card.damage + state.focus;
+        const fracturePenalty = state.fractured ? 2 : 0;
+        const finalDamage = Math.max(0, baseDamage - fracturePenalty);
+        const previousHp = state.enemyHp;
+        state.enemyHp = Math.max(0, state.enemyHp - finalDamage);
+        if (state.fractured) state.fractured = false;
+        parts.push(`dealt ${previousHp - state.enemyHp} damage`);
+        if (state.focus > 0) parts.push(`Focus added ${state.focus}`);
+        if (fracturePenalty > 0) parts.push("Fractured reduced damage by 2");
+      }
+      if (card.block) {
+        state.block += card.block;
+        parts.push(`gained ${card.block} guard`);
+      }
+      if (card.focus) {
+        state.focus += card.focus;
+        parts.push(`gained ${card.focus} Focus`);
+      }
+      if (card.draw) {
+        drawCards(card.draw);
+        parts.push(`drew ${card.draw} cards`);
+      }
+      addLog(`${card.name}: spent ${card.cost} energy and ${parts.join(", ")}.`);
+    }
+
+    function currentIntent() {
+      return ENCOUNTERS[state.encounterIndex].intents[state.enemyIntentIndex];
+    }
+
+    function currentEncounter() {
+      return ENCOUNTERS[state.encounterIndex];
+    }
+
     function enemyAction() {
-      const blocked = Math.min(state.block, ENEMY_ATTACK);
-      const damage = ENEMY_ATTACK - blocked;
+      const intent = currentIntent();
+      const blocked = Math.min(state.block, intent.attack);
+      const damage = intent.attack - blocked;
       state.playerHp = Math.max(0, state.playerHp - damage);
-      addLog(`Enemy attacked for ${ENEMY_ATTACK}. Guard blocked ${blocked}; player took ${damage}.`);
+      addLog(`${intent.name}: enemy attacked for ${intent.attack}. Guard blocked ${blocked}; player took ${damage}.`);
       state.block = 0;
+      if (intent.fractured) {
+        state.fractured = true;
+        addLog(`${intent.name} applied Fractured: your next attack or mixed card deals 2 less damage.`);
+      }
       if (state.playerHp <= 0) {
         endCombat(false);
       }
+      state.enemyIntentIndex = (state.enemyIntentIndex + 1) % currentEncounter().intents.length;
     }
 
     function beginPlayerTurn() {
@@ -720,37 +891,81 @@
     function endCombat(won) {
       state.gameOver = true;
       state.playerTurn = false;
-      elements.resultTitle.textContent = won ? "Victory" : "Defeat";
-      elements.resultTitle.className = `result-title ${won ? "win" : "loss"}`;
-      elements.resultText.textContent = won
-        ? "The Glass Warden reached 0 HP. Basic combat is complete."
-        : "Your HP reached 0. Restart to try the deterministic fight again.";
-      addLog(won ? "Victory: enemy HP reached 0." : "Defeat: player HP reached 0.");
+      addLog(won ? `Victory: ${currentEncounter().name} reached 0 HP.` : "Defeat: player HP reached 0.");
       window.setTimeout(() => {
+        if (won && state.encounterIndex === 0) {
+          showRewardChoice();
+          return;
+        }
+        elements.resultTitle.textContent = won ? "Final Victory" : "Defeat";
+        elements.resultTitle.className = `result-title ${won ? "win" : "loss"}`;
+        elements.resultText.textContent = won
+          ? "The Mirror Sentinel reached 0 HP. Both encounters are complete."
+          : "Your HP reached 0. Restart to try the deterministic run again.";
         elements.resultOverlay.hidden = false;
         elements.restartButton.focus();
       }, 250);
     }
 
+    function showRewardChoice() {
+      elements.rewardChoices.textContent = "";
+      elements.rewardText.textContent = `Encounter 1 cleared with ${state.playerHp} HP. Choose one card to add to your deck before encounter 2.`;
+      REWARD_CARDS.forEach(card => {
+        const button = document.createElement("button");
+        button.className = `card ${card.type}`;
+        button.type = "button";
+        button.setAttribute("aria-label", `Choose ${card.name}, cost ${card.cost}, ${card.text}`);
+        button.innerHTML = `
+          <div class="card-title">
+            <span>${card.name}</span>
+            <span class="cost">${card.cost}</span>
+          </div>
+          <p>${card.text}</p>
+          <footer>${cardFooter(card)}</footer>
+        `;
+        button.addEventListener("click", () => chooseReward(card));
+        elements.rewardChoices.append(button);
+      });
+      render();
+      elements.rewardOverlay.hidden = false;
+      const firstReward = elements.rewardChoices.querySelector("button");
+      if (firstReward) firstReward.focus();
+    }
+
+    function chooseReward(card) {
+      const rewardCard = { ...card, id: `${card.id}-chosen` };
+      state.runDeck.push(rewardCard);
+      state.selectedReward = card.name;
+      elements.rewardOverlay.hidden = true;
+      beginEncounter(1, state.playerHp, `${card.name} added to the deck.`);
+    }
+
     function render() {
       elements.playerHp.textContent = `${state.playerHp} / ${MAX_PLAYER_HP}`;
       elements.playerBlock.textContent = String(state.block);
-      elements.enemyHp.textContent = `${state.enemyHp} / ${MAX_ENEMY_HP}`;
-      elements.enemyAttack.textContent = String(ENEMY_ATTACK);
+      elements.enemyName.textContent = currentEncounter().name;
+      elements.enemyHp.textContent = `${state.enemyHp} / ${currentEncounter().hp}`;
+      const intent = currentIntent();
+      elements.enemyAttack.textContent = String(intent.attack);
+      elements.playerFocus.textContent = String(state.focus);
+      elements.playerFractured.textContent = state.fractured ? "Yes" : "No";
+      elements.intentName.textContent = intent.name;
+      elements.intentText.textContent = intent.text;
       elements.energy.textContent = `${state.energy} / ${MAX_ENERGY}`;
       elements.drawCount.textContent = String(state.drawPile.length);
       elements.handCount.textContent = String(state.hand.length);
       elements.discardCount.textContent = String(state.discardPile.length);
       elements.endTurnButton.disabled = !state.playerTurn || state.gameOver;
+      elements.runLine.textContent = `Encounter ${state.encounterIndex + 1} of ${ENCOUNTERS.length}. Deck: ${state.runDeck.length} cards${state.selectedReward ? `, reward: ${state.selectedReward}` : ""}.`;
       elements.playerLine.textContent = state.playerTurn ? `Turn ${state.turn}: choose cards or end turn.` : "Enemy is resolving its attack.";
-      elements.enemyLine.textContent = `Enemy will strike for ${ENEMY_ATTACK} after you end turn.`;
+      elements.enemyLine.textContent = `Next intent: ${intent.name}. ${intent.text}`;
       elements.handHint.textContent = state.playerTurn ? "Click a card to play it." : "Waiting for the enemy attack.";
       elements.reshuffleLine.textContent = state.drawPile.length === 0 && state.discardPile.length > 0
         ? "Next draw will refill from the discard pile in fixed order."
         : "When the draw pile is empty, the discard pile refills it in fixed order.";
       elements.turnBanner.innerHTML = state.playerTurn
-        ? `<strong>Your turn ${state.turn}.</strong> Energy resets to 3. Attack cards damage the enemy; guard cards absorb the next enemy attack.`
-        : `<strong>Enemy turn.</strong> The Glass Warden attacks once, then your next turn begins.`;
+        ? `<strong>Your turn ${state.turn}.</strong> Energy resets to 3. Use the visible intent to choose damage, guard, draw, or Focus.`
+        : `<strong>Enemy turn.</strong> ${currentEncounter().name} resolves ${intent.name}, then the next player turn begins.`;
 
       renderHand();
       renderLog();
@@ -778,7 +993,7 @@
             <span class="cost">${card.cost}</span>
           </div>
           <p>${card.text}</p>
-          <footer>${card.type === "attack" ? "Attack" : "Guard"} ${card.amount}</footer>
+          <footer>${cardFooter(card)}</footer>
         `;
         button.addEventListener("click", () => playCard(index));
         elements.hand.append(button);
@@ -792,6 +1007,15 @@
         item.textContent = entry;
         elements.combatLog.append(item);
       });
+    }
+
+    function cardFooter(card) {
+      if (card.type === "attack") return `Attack ${card.damage}`;
+      if (card.type === "guard") return `Guard ${card.block}`;
+      if (card.type === "draw") return `Draw ${card.draw}`;
+      if (card.type === "mixed") return `Attack ${card.damage} / Guard ${card.block}`;
+      if (card.type === "buff") return `Focus +${card.focus}`;
+      return "Card";
     }
 
     elements.startButton.addEventListener("click", startCombat);
