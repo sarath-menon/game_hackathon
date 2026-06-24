@@ -2102,3 +2102,35 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - Scope remains settings/options/help/pause/restart/give-up/volume/fullscreen controls if visible, legal/illegal action clarity, card-state readability, usability/accessibility/readability, performance/load, and provider/environment classification.
 - Browser maintenance closed the stale itch wrapper tab before the direct-build handoff and reported 0 remaining page targets.
 - Dashboard must show the itch wrapper pass as `BLOCKED_ENVIRONMENT / needs direct-build retry`, not a failed game QA result.
+
+## Dungeons Direct Official Build Retry 1 PASS_WITH_FINDINGS - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Dungeons Direct Official Build Retry 1.
+- Evidence folder: `evidence/external/dungeons-degenerate-gamblers-direct-build-retry-1/`.
+- Required outputs exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS_WITH_FINDINGS`.
+- Provider/environment classification:
+  - not `BLOCKED_PROVIDER`: direct official itch-hosted build URL `https://html-classic.itch.zone/html/15020933/index.html` loaded successfully;
+  - not `BLOCKED_ENVIRONMENT`: shared-window browser-harness exercised menu, deck selection, tavern/node entry, first table, settings, pause/menu, and restart-boundary attempts;
+  - prior wrapper clipping blocker is resolved by this direct official build path.
+- Verified:
+  - full menu visible without itch wrapper clipping;
+  - `New Run` path reachable through visible Tavern/New Run target area;
+  - unlocked Hearts deck selectable and confirmable;
+  - tavern/node entry screen readable;
+  - first table/combat state shows player HP, opponent HP, score cards, chips, HIT/STAND controls, and tutorial/dialog text;
+  - HIT/STAND interactions change visible table state;
+  - settings are reachable and show music volume, sound volume, fullscreen, display scaling, language, animation speed, visual effects, hover ticks, prompts, reset, and back controls;
+  - pause/menu exposes Resume, Restart Run, Collection, Settings, Save and Quit, and Buy Full Game;
+  - restart boundary was explored without confirming destructive action.
+- Nonblocking findings:
+  - illegal/unavailable action feedback was not clearly proven because HIT remained available after attempted STAND/out-of-state checks;
+  - restart/give-up confirmation depth remains partially verified rather than fully mapped.
+- Methodology carry-forward:
+  - for external embedded games, route official direct iframe/build URLs when wrapper viewport clipping blocks play;
+  - account for device-pixel screenshot scaling when translating screenshots into browser-harness click coordinates;
+  - for card/deckbuilder QA, capture entry path, deck selection, pre-action table, post-legal action, attempted invalid action, settings/menu, and destructive-control boundary.
+- Dashboard must now show Dungeons direct-build retry as `PASS_WITH_FINDINGS`, preserve the blocked wrapper pass separately, and mark the next suggested Dungeons follow-up as turn-phase legality plus restart/give-up confirmation copy.
