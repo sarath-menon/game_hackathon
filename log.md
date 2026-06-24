@@ -1700,3 +1700,329 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - before each major segment, tester should verify the active page URL is the Platformer game URL and capture a focus screenshot;
   - if target drifts to dashboard/evidence/manual/another game, stop and classify `BLOCKED_ENVIRONMENT` from clean evidence only;
   - if variant dropdowns or controls still cannot be changed while the active URL is verified as the Platformer game, classify as `FAIL` with repro and severity.
+
+## Platformer Settings Polish 2 Retest 1 BLOCKED_ENVIRONMENT - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Platformer Settings Polish 2 Retest 1.
+- Evidence folder: `evidence/platformer/settings-polish-2-retest-1/`.
+- Required outputs exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `BLOCKED_ENVIRONMENT`.
+- This is not a Platformer game `FAIL`.
+- Clean evidence verified:
+  - hosted game loads;
+  - Settings opens from title;
+  - Reset Defaults restores documented defaults;
+  - audio off/Volume `0%` is visible after Reset Defaults;
+  - several settings variant attempts were captured before the blocker.
+- Blocker:
+  - anti-contamination URL check caught active page URL as `http://127.0.0.1:8765/dashboard.html` before gameplay;
+  - no post-drift screenshots were captured or used for verdict support.
+- Inconclusive possible issue:
+  - variant controls appeared to remain at defaults before the environment blocker, but the tester did not classify game `FAIL` because the final confirmation path was interrupted by target drift.
+- Orchestration correction:
+  - dashboard browser-harness verification overlapped active canonical QA and likely contributed to target drift;
+  - AGENTS.md now requires dashboard updates to be static-only while the canonical tester is active or about to start a retry.
+- Next action:
+  - strict browser cleanup should leave only the Platformer game tab in Chrome before Retest 2;
+  - then rerun the same Platformer Settings Polish 2 handoff in `evidence/platformer/settings-polish-2-retest-2/`.
+
+## Strict Browser Cleanup Before Platformer Settings Polish 2 Retest 2 - 2026-06-25
+
+- Browser maintenance thread `019ef9ba-1477-7662-b7a3-c5da570cdb77` completed strict cleanup.
+- Inspected:
+  - 3 relevant processes: Chrome, `browser_harness.daemon`, and local HTTP server;
+  - 5 Chrome page targets.
+- Closed 4 page targets:
+  - dashboard;
+  - Deckbuilder;
+  - duplicate Platformer;
+  - duplicate dashboard.
+- Preserved exactly one target:
+  - `Skyline Stepper` at `http://127.0.0.1:8765/games/platformer/index.html`.
+- Health result:
+  - shared Chrome/browser-harness surface is stable enough for Platformer Retest 2;
+  - local HTTP server untouched.
+
+## Platformer Settings Polish 2 Retest 2 Handoff Active - 2026-06-25
+
+- Orchestrator handed Side-Scrolling Platformer / Skyline Stepper Settings Polish 2 Retest 2 to canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Evidence target: `evidence/platformer/settings-polish-2-retest-2/`.
+- Inputs:
+  - game URL: `http://127.0.0.1:8765/games/platformer/index.html`;
+  - manual URL/path: `http://127.0.0.1:8765/games/platformer/README.md` and `games/platformer/README.md`.
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Retest conditions:
+  - Chrome target pool was reduced to one Platformer game tab before handoff;
+  - dashboard updates are static-only during active canonical QA;
+  - if variant controls still cannot be changed while active URL is verified as Platformer, tester should classify as game `FAIL`;
+  - if target drift recurs, tester should classify `BLOCKED_ENVIRONMENT` and stop from clean evidence only.
+
+## Platformer Settings Polish 2 Retest 2 FAIL / Builder Fix Active - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Platformer Settings Polish 2 Retest 2.
+- Evidence folder: `evidence/platformer/settings-polish-2-retest-2/`.
+- Required outputs exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `FAIL`.
+- This is a Platformer game failure, not `BLOCKED_ENVIRONMENT`:
+  - active page URL was verified as `http://127.0.0.1:8765/games/platformer/index.html`;
+  - screenshots are clean Platformer evidence;
+  - no target drift or harness contamination was used to support the verdict.
+- Blocking finding:
+  - documented settings variant controls do not change through normal player input;
+  - Air Control remains `Steady` after normal click/key selection attempts;
+  - Damage Profile remains `Standard` after normal click/key selection attempts.
+- Impact:
+  - QA cannot validate Air Control variants, Damage Profile variants, Practice/Gentle damage behavior, persistence of changed variants, Reset Defaults for changed variants, or later gameplay regression scope.
+- Secondary finding:
+  - Settings initially opens with the top controls partly out of view until moved to the top.
+- Action taken:
+  - sent a narrow builder fix request to Platformer builder `019ef96e-1dd7-7f13-91d4-855909736edc`;
+  - sent a static-only dashboard update request to dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d`.
+
+## Platformer Settings Polish 2 Builder Fix Complete / Retest 3 Active - 2026-06-25
+
+- Platformer builder `019ef96e-1dd7-7f13-91d4-855909736edc` completed the narrow fix after Retest 2.
+- Changed files:
+  - `games/platformer/index.html`;
+  - `games/platformer/README.md`.
+- Builder-reported fixes:
+  - added visible segmented option buttons for Air Control: `Steady`, `Snappy`, `Floaty`;
+  - added visible segmented option buttons for Damage Profile: `Standard`, `Gentle`, `Practice`;
+  - buttons write through the same persisted settings state as the dropdowns and update `aria-pressed`;
+  - Settings panel now opens at the top and focuses the first control instead of the bottom Close button;
+  - README clarifies that Air Control and Damage Profile can be changed by dropdowns or visible option buttons;
+  - audio remains off/muted by default and after Reset Defaults.
+- Builder self-checks:
+  - embedded script parses;
+  - static checks confirm direct option-button bindings, persisted state hooks, top-open behavior, and muted audio defaults;
+  - game URL returns `200 OK`;
+  - manual URL returns `200 OK`.
+- Orchestrator handed Retest 3 to canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Evidence target: `evidence/platformer/settings-polish-2-retest-3/`.
+- Retest 3 must verify:
+  - Air Control and Damage Profile changes through normal visible controls;
+  - persistence/reload and Reset Defaults for changed variants;
+  - audio off/default/reset behavior;
+  - remaining settings coverage, in-run/failure/completion settings access, gameplay regression smoke, readability/state clarity, and narrow viewport usability.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` has a static-only update request to show Retest 2 `FAIL`, builder fix complete, and Retest 3 active.
+
+## Platformer Settings Polish 2 Retest 3 FAIL / Follow-Up Fix Active - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Platformer Settings Polish 2 Retest 3.
+- Evidence folder: `evidence/platformer/settings-polish-2-retest-3/`.
+- Required outputs exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `FAIL`.
+- This is a Platformer game failure, not `BLOCKED_ENVIRONMENT`:
+  - active page URL was verified as `http://127.0.0.1:8765/games/platformer/index.html`;
+  - screenshots are clean Platformer evidence;
+  - no target drift or harness contamination was used to support the verdict.
+- Fixed from Retest 2:
+  - Settings now opens at the top with title and top controls immediately visible.
+- Still blocking:
+  - Air Control remains `Steady` after normal dropdown click/key interaction;
+  - Damage Profile remains `Standard` after normal dropdown click/key interaction;
+  - documented visible option buttons are not visible in the rendered Settings panel;
+  - manual and UI now mismatch because the manual documents visible option buttons that the tester cannot see.
+- Impact:
+  - QA still cannot approve the core advanced settings fix or continue to persistence/reset/default, Practice/Gentle behavior, broader settings coverage, and gameplay regression scope.
+- Action taken:
+  - sent a stricter follow-up fix request to Platformer builder `019ef96e-1dd7-7f13-91d4-855909736edc`;
+  - requested that the builder verify rendered visibility/nonzero boxes for `Steady`, `Snappy`, `Floaty`, `Standard`, `Gentle`, and `Practice`;
+  - sent a static-only dashboard update request to dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d`.
+
+## Platformer Settings Polish 2 Follow-Up Fix Complete / Retest 4 Active - 2026-06-25
+
+- Platformer builder `019ef96e-1dd7-7f13-91d4-855909736edc` completed the stricter follow-up fix after Retest 3.
+- Changed files:
+  - `games/platformer/index.html`;
+  - `games/platformer/README.md`.
+- Builder-reported fixes:
+  - added a full-width `Player Variant Controls` block near the top of Settings;
+  - Air Control now has visible buttons: `Steady`, `Snappy`, `Floaty`;
+  - Damage Profile now has visible buttons: `Standard`, `Gentle`, `Practice`;
+  - buttons update the same persisted settings state as the dropdowns;
+  - buttons visibly show selected state with `aria-pressed`;
+  - Settings still opens at the top;
+  - audio remains off/muted by default and after Reset Defaults;
+  - README says these controls are near the top of Settings.
+- Builder verification:
+  - embedded script parses;
+  - game URL returns `200 OK`;
+  - manual URL returns `200 OK`;
+  - rendered DOM/layout check at `1519 x 981` confirmed all six button labels are visible with nonzero in-viewport boxes;
+  - rendered click check confirmed `Snappy` and `Practice` update selected button state, dropdown values, and persisted `localStorage` settings.
+- Browser maintenance pre-Retest-4 cleanup:
+  - inspected 3 relevant processes and 1 Chrome page target;
+  - closed 0 targets;
+  - preserved exactly one target: `Skyline Stepper` at `http://127.0.0.1:8765/games/platformer/index.html`;
+  - local HTTP server untouched.
+- Orchestrator handed Retest 4 to canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Evidence target: `evidence/platformer/settings-polish-2-retest-4/`.
+- Retest 4 must verify:
+  - top-level variant buttons are visible/readable/usable;
+  - Air Control and Damage Profile changes update visible state and settings state;
+  - persistence/reload, Reset Defaults, and audio off/default/reset behavior;
+  - remaining settings coverage, in-run/failure/completion settings access, gameplay regression smoke, readability/state clarity, and narrow viewport usability.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` has a static-only update request to show Retest 3 `FAIL`, follow-up fix complete, and Retest 4 active.
+
+## Platformer Settings Polish 2 Retest 4 Stale-Content Retry Decision / Retest 5 Active - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` ran Platformer Settings Polish 2 Retest 4.
+- Evidence folder: `evidence/platformer/settings-polish-2-retest-4/`.
+- Tester report verdict: `FAIL`.
+- Retest 4 clean evidence indicates:
+  - active URL stayed on Platformer;
+  - Settings evidence showed the older dropdown-only layout;
+  - `Player Variant Controls` and the six visible variant buttons were not present in the tested UI;
+  - Settings reopened near the lower section after reload/title flow.
+- Orchestrator decision:
+  - do not route Retest 4 directly back to builder yet;
+  - current source/manual contain `Player Variant Controls`, `Snappy`, `Floaty`, and `Practice`;
+  - the mismatch between source/manual and browser evidence points to possible stale browser content/cache or reload state.
+- Action taken:
+  - handed Retest 5 to canonical tester using cache-busted URL `http://127.0.0.1:8765/games/platformer/index.html?settingsPolishRetest=5`;
+  - fresh evidence target: `evidence/platformer/settings-polish-2-retest-5/`;
+  - tester instructions classify current UI with broken buttons as `FAIL`, but old UI/stale content as `BLOCKED_ENVIRONMENT`;
+  - sent a static-only dashboard update request to show Retest 4 as tester-verdict `FAIL` but orchestration status `needs cache-busted retry`.
+
+## Platformer Settings Polish 2 Retest 5 FAIL / In-Run Pause Fix Active - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Platformer Settings Polish 2 Retest 5.
+- Evidence folder: `evidence/platformer/settings-polish-2-retest-5/`.
+- Required outputs exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `FAIL`.
+- Retest 5 resolved the stale-content question:
+  - exact cache-busted URL `http://127.0.0.1:8765/games/platformer/index.html?settingsPolishRetest=5` loaded and preserved the query string;
+  - current Settings UI was visible;
+  - `Player Variant Controls` block appeared near the top;
+  - Air Control buttons `Steady`, `Snappy`, `Floaty` were visible/readable;
+  - Damage Profile buttons `Standard`, `Gentle`, `Practice` were visible/readable.
+- Verified fixed:
+  - `Snappy` updated selected state and synchronized the Air Control dropdown;
+  - `Practice` updated selected state and synchronized the Damage Profile dropdown;
+  - `Snappy` / `Practice` persisted across reload;
+  - Reset Defaults returned Air Control to `Steady`, Damage Profile to `Standard`, generated sounds off, and volume `0%`;
+  - audio defaults are approved for this pass.
+- Remaining blocker:
+  - closing Settings during a run leaves the game stuck in the paused state with no settings panel visible;
+  - HUD still reads `Settings paused` after close;
+  - movement/jump input does not visibly resume normal gameplay.
+- Action taken:
+  - sent a narrow builder fix request to Platformer builder `019ef96e-1dd7-7f13-91d4-855909736edc` for only the in-run Settings close/resume path;
+  - requested preservation of verified variant controls, persistence, Reset Defaults, and audio behavior;
+  - sent a static-only dashboard update request to dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d`.
+
+## Platformer Settings Polish 2 In-Run Resume Fix Complete / Retest 6 Active - 2026-06-25
+
+- Platformer builder `019ef96e-1dd7-7f13-91d4-855909736edc` completed the narrow in-run Settings close/resume fix after Retest 5.
+- Changed file:
+  - `games/platformer/index.html`.
+- README did not need a behavior update.
+- Builder-reported fix:
+  - `openSettings()` is idempotent, preventing duplicate opens/toggles from overwriting the saved gameplay status with `Settings paused`;
+  - `closeSettings()` clears input state;
+  - `closeSettings()` restores a non-paused HUD status during active runs;
+  - `closeSettings()` clears the saved pause snapshot;
+  - `closeSettings()` resets the frame timer before resuming.
+- Builder verification:
+  - local game and manual returned `200 OK`;
+  - embedded script extraction parsed successfully;
+  - headless runtime check: start run -> open Settings -> Close Settings -> HUD no longer reads `Settings paused` -> ArrowRight movement reduced distance `301 m` to `270 m`;
+  - Escape/toggle runtime check: Escape open -> Escape close -> HUD no longer paused -> ArrowRight movement reduced distance `269 m` to `253 m`;
+  - title-state guard check: opening/closing Settings from title leaves title visible and does not start a run.
+- Browser maintenance pre-Retest-6 cleanup:
+  - inspected 3 relevant processes and 1 Chrome page target;
+  - closed 0 targets;
+  - preserved exactly one target: `Skyline Stepper` at `http://127.0.0.1:8765/games/platformer/index.html?settingsPolishRetest=5`;
+  - local HTTP server untouched.
+- Orchestrator handed Retest 6 to canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Evidence target: `evidence/platformer/settings-polish-2-retest-6/`.
+- Retest 6 uses cache-busted URL `http://127.0.0.1:8765/games/platformer/index.html?settingsPolishRetest=6`.
+- Retest 6 must prioritize:
+  - variant-controls smoke to ensure no regression;
+  - in-run Settings open/close resume;
+  - movement/jump input after close;
+  - remaining gameplay regression, readability/state clarity, and narrow viewport checks as feasible.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` has a static-only update request to show Retest 5 `FAIL`, in-run resume fix complete, and Retest 6 active.
+
+## Platformer Settings Polish 2 Retest 6 PASS / Closed - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Side-Scrolling Platformer / Skyline Stepper Settings Polish 2 Retest 6.
+- Evidence folder: `evidence/platformer/settings-polish-2-retest-6/`.
+- Required outputs exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS`.
+- Verified fixed:
+  - exact cache-busted URL loaded current UI;
+  - `Player Variant Controls` remained visible and usable;
+  - `Snappy` and `Practice` update selected state/dropdowns;
+  - Reset Defaults returns Air Control to `Steady`, Damage Profile to `Standard`, generated sounds off, and volume `0%`;
+  - opening Settings during a run shows `Settings paused`;
+  - closing via `Escape` returns HUD to `Reach the exit beacon`;
+  - closing via visible `Close Settings` also returns HUD to `Reach the exit beacon`;
+  - post-close movement/input did not leave the run stuck paused.
+- Coverage limitations:
+  - narrow viewport capture was blocked by a browser-harness CDP helper and is documented as environment-limited, not a game blocker;
+  - full lower-deck route/checkpoint/exit/failure/restart was smoke-limited because Retest 6 focused on the in-run settings resume regression.
+- Orchestrator closure:
+  - Side-Scrolling Platformer Settings Polish 2 is approved/closed;
+  - dashboard must now move Retest 6 from active to `PASS/CLOSED` and preserve the full evidence trail;
+  - next recommended two-track action is a Track 2 Cookie Clicker external QA follow-up for persistence/reload, narrow/mobile, and deeper Options/settings coverage because pass 1 left those as explicit open coverage gaps.
+
+## Dashboard Updated For Platformer Retest 6 Closure - 2026-06-25
+
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` completed the static-only dashboard update.
+- Changed file: `dashboard.html`.
+- Static verification:
+  - `http://127.0.0.1:8765/dashboard.html` returns `200`;
+  - extracted dashboard script passes `node --check`;
+  - source shows Platformer Settings Polish 2 as `PASS/CLOSED`;
+  - Retest 6 links return `200` for `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`;
+  - full Platformer evidence trail remains visible;
+  - next action points to Cookie Clicker external QA follow-up for persistence/reload, narrow/mobile, and deeper Options/settings coverage.
+- No browser-harness or Chrome rendering was used for this dashboard update.
+
+## Cookie Clicker External QA Follow-Up Pass 2 Active - 2026-06-25
+
+- Browser maintenance thread `019ef9ba-1477-7662-b7a3-c5da570cdb77` completed pre-handoff cleanup:
+  - inspected 3 relevant processes and 1 Chrome page target;
+  - closed stale Platformer Retest 6 tab `http://127.0.0.1:8765/games/platformer/index.html?settingsPolishRetest=6`;
+  - preserved 0 targets;
+  - remaining page targets: 0;
+  - local HTTP server untouched.
+- Orchestrator handed Cookie Clicker Follow-up Pass 2 to canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Game URL: `https://orteil.dashnet.org/cookieclicker/`.
+- Manual: `external-qa/cookie-clicker/README.md`.
+- Evidence target: `evidence/external/cookie-clicker-followup-pass-2/`.
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Scope:
+  - direct playable provider load;
+  - small distinctive non-destructive game state;
+  - persistence/reload verification;
+  - deeper Options/settings coverage;
+  - import/reset safety up to visible warnings/modals without destructive action;
+  - narrow/mobile layout if browser-harness can reliably capture it;
+  - usability/accessibility/readability and performance/load checks.
+- External QA classification preserved:
+  - `PASS_WITH_FINDINGS`, `FAIL`, `BLOCKED_PROVIDER`, or `BLOCKED_ENVIRONMENT`;
+  - provider/setup/harness blockers must not be treated as final game failures.

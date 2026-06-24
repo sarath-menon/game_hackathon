@@ -236,6 +236,29 @@
       background: rgba(255, 255, 255, 0.05);
     }
 
+    .settings-spotlight {
+      margin: 16px 0;
+      border: 1px solid rgba(96, 211, 148, 0.42);
+      border-radius: 8px;
+      padding: 14px;
+      background: rgba(96, 211, 148, 0.08);
+    }
+
+    .settings-spotlight h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .variant-block {
+      margin-top: 12px;
+    }
+
+    .variant-block strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
     .setting label {
       display: grid;
       gap: 7px;
@@ -266,6 +289,28 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+    }
+
+    .option-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .option-button {
+      min-height: 34px;
+      padding: 0 8px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .option-button[aria-pressed="true"] {
+      border-color: var(--accent);
+      background: rgba(96, 211, 148, 0.22);
+      color: #eafff2;
     }
 
     .settings-actions {
@@ -329,6 +374,25 @@
       <div class="settings-panel">
         <h2>Settings</h2>
         <p>Changes save on this device. Opening settings during a run pauses the game until the panel closes.</p>
+        <div class="settings-spotlight" aria-label="Player Variant Controls">
+          <h3>Player Variant Controls</h3>
+          <div class="variant-block">
+            <strong>Air Control</strong>
+            <div class="option-row" aria-label="Air Control visible buttons">
+              <button class="option-button" data-setting="airControl" data-value="steady" type="button">Steady</button>
+              <button class="option-button" data-setting="airControl" data-value="snappy" type="button">Snappy</button>
+              <button class="option-button" data-setting="airControl" data-value="floaty" type="button">Floaty</button>
+            </div>
+          </div>
+          <div class="variant-block">
+            <strong>Damage Profile</strong>
+            <div class="option-row" aria-label="Damage Profile visible buttons">
+              <button class="option-button" data-setting="damageProfile" data-value="standard" type="button">Standard</button>
+              <button class="option-button" data-setting="damageProfile" data-value="gentle" type="button">Gentle</button>
+              <button class="option-button" data-setting="damageProfile" data-value="practice" type="button">Practice</button>
+            </div>
+          </div>
+        </div>
         <div class="settings-grid">
           <div class="setting">
             <label for="jumpAssistSelect">Jump Assist
@@ -348,6 +412,11 @@
                 <option value="floaty">Floaty</option>
               </select>
             </label>
+            <div class="option-row" aria-label="Air Control options">
+              <button class="option-button" data-setting="airControl" data-value="steady" type="button">Steady</button>
+              <button class="option-button" data-setting="airControl" data-value="snappy" type="button">Snappy</button>
+              <button class="option-button" data-setting="airControl" data-value="floaty" type="button">Floaty</button>
+            </div>
             <small>Changes how strongly left/right movement responds while airborne.</small>
           </div>
           <div class="setting">
@@ -358,6 +427,11 @@
                 <option value="practice">Practice</option>
               </select>
             </label>
+            <div class="option-row" aria-label="Damage Profile options">
+              <button class="option-button" data-setting="damageProfile" data-value="standard" type="button">Standard</button>
+              <button class="option-button" data-setting="damageProfile" data-value="gentle" type="button">Gentle</button>
+              <button class="option-button" data-setting="damageProfile" data-value="practice" type="button">Practice</button>
+            </div>
             <small>Standard can fail the run, Gentle gives longer recovery, Practice respawns without losing health.</small>
           </div>
           <div class="setting">
@@ -483,6 +557,7 @@
       const titleSettingsButton = document.getElementById("titleSettingsButton");
       const resultSettingsButton = document.getElementById("resultSettingsButton");
       const settingsOverlay = document.getElementById("settingsOverlay");
+      const settingsPanel = document.querySelector(".settings-panel");
       const closeSettingsButton = document.getElementById("closeSettingsButton");
       const resetSettingsButton = document.getElementById("resetSettingsButton");
       const jumpAssistSelect = document.getElementById("jumpAssistSelect");
@@ -506,6 +581,7 @@
       const highContrastHazardsCheck = document.getElementById("highContrastHazardsCheck");
       const objectiveLabelsSelect = document.getElementById("objectiveLabelsSelect");
       const parallaxSelect = document.getElementById("parallaxSelect");
+      const optionButtons = [...document.querySelectorAll(".option-button")];
 
       const keys = new Set();
       const jumpCodes = new Set(["Space", "ArrowUp", "KeyW"]);
@@ -679,6 +755,9 @@
         volumeRange.value = settings.volume;
         volumeValue.textContent = `${settings.volume}%`;
         shell.dataset.hudSize = settings.hudSize;
+        for (const button of optionButtons) {
+          button.setAttribute("aria-pressed", String(settings[button.dataset.setting] === button.dataset.value));
+        }
       }
 
       function updateSetting(key, value) {
@@ -726,19 +805,34 @@
       }
 
       function openSettings() {
+        if (settingsOpen) {
+          requestAnimationFrame(() => {
+            settingsPanel.scrollTop = 0;
+            jumpAssistSelect.focus({ preventScroll: true });
+          });
+          return;
+        }
         settingsOpen = true;
         keys.clear();
-        pausedStatus = status.textContent;
+        pausedStatus = mode === "playing" && status.textContent !== "Settings paused" ? status.textContent : "";
         settingsOverlay.classList.remove("hidden");
         if (mode === "playing") status.textContent = "Settings paused";
         playTone("settings");
-        closeSettingsButton.focus();
+        requestAnimationFrame(() => {
+          settingsPanel.scrollTop = 0;
+          jumpAssistSelect.focus({ preventScroll: true });
+        });
       }
 
       function closeSettings() {
         settingsOpen = false;
         settingsOverlay.classList.add("hidden");
-        if (mode === "playing") status.textContent = pausedStatus || "Reach the exit beacon";
+        keys.clear();
+        if (mode === "playing") {
+          status.textContent = pausedStatus && pausedStatus !== "Settings paused" ? pausedStatus : "Reach the exit beacon";
+        }
+        pausedStatus = "";
+        lastTime = performance.now();
         quickSettings.focus();
       }
 
@@ -1328,6 +1422,11 @@
       jumpAssistSelect.addEventListener("change", () => updateSetting("jumpAssist", jumpAssistSelect.value));
       airControlSelect.addEventListener("change", () => updateSetting("airControl", airControlSelect.value));
       damageProfileSelect.addEventListener("change", () => updateSetting("damageProfile", damageProfileSelect.value));
+      optionButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          updateSetting(button.dataset.setting, button.dataset.value);
+        });
+      });
       checkpointAssistCheck.addEventListener("change", () => {
         updateSetting("checkpointAssist", checkpointAssistCheck.checked);
         if (settings.checkpointAssist && mode === "playing") {

@@ -41,6 +41,8 @@ Available settings:
 - Generated UI Sounds and Volume: sounds are off with volume `0%` by default. Enable this setting to opt in to simple generated tones for actions and results.
 - Reset Defaults: restores the original settings, saves them, and returns generated sounds to off with volume `0%`.
 
+Air Control and Damage Profile can be changed with the visible option buttons near the top of Settings or with their dropdowns.
+
 ## Win Behavior
 
 The level is complete when the player touches the green exit beacon. A `Level Complete` message appears and shows how many glow cores were collected plus how much health remained.
