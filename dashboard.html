@@ -713,19 +713,19 @@
     <section class="attention-panel compact" id="attention-panel" data-state="clear">
       <div>
         <h2>Current Live Status</h2>
-        <p><strong>Continuous improvement loop is active.</strong> Current cycle: Settings Panels + Settings QA. Browser policy: one shared Chrome window; isolated-profile evidence is not approvable.</p>
+        <p><strong>Continuous improvement loop is active.</strong> Current cycle: Settings Panels + Settings QA. Browser policy: shared-window harness enabled; one Chrome window only, no isolated profiles or remote sessions.</p>
         <div class="loop-grid" aria-label="Active upgrade status">
           <div class="loop-cell"><strong>Umbrella Goal</strong>Open-ended benchmark, build, black-box QA, fix, retest loop</div>
           <div class="loop-cell"><strong>Current Cycle</strong>Settings Panels + Settings QA for all three games</div>
           <div class="loop-cell"><strong>Builders</strong>All settings builders complete</div>
           <div class="loop-cell"><strong>Settings QA</strong>Kart active, Platformer PASS / closed, Deckbuilder PASS / closed</div>
-          <div class="loop-cell"><strong>Audio Hotfix</strong>Kart and Deckbuilder blocked/pending shared-window retest; Platformer PASS</div>
+          <div class="loop-cell"><strong>Audio Hotfix</strong>Kart and Deckbuilder shared-window retests active; Platformer PASS</div>
           <div class="loop-cell"><strong>Next Action</strong>Run shared-window retests for blocked audio/default lanes</div>
         </div>
         <div class="qa-links" aria-label="QA upgrade research links">
           <span>Gate: <strong>dashboard fresh/verified before transition complete</strong></span>
           <span>Settings QA: Kart verdict pending; Platformer PASS at <code>evidence/platformer/settings-phase-1/</code>; Deckbuilder PASS at <code>evidence/deckbuilder/settings-phase-1/</code>; Deckbuilder polish PASS at <code>evidence/deckbuilder/settings-polish-1-scroll/</code></span>
-          <span>Audio default hotfix: audio/sounds must default off or muted until opt-in. Kart <strong>BLOCKED/PENDING</strong> shared-window retest at <code>evidence/kart-racer/audio-default-hotfix/</code>; Platformer <strong>PASS</strong> at <code>evidence/platformer/audio-default-hotfix/</code>; Deckbuilder <strong>BLOCKED/PENDING</strong> shared-window retest at <code>evidence/deckbuilder/audio-default-hotfix/</code></span>
+          <span>Audio default hotfix: audio/sounds must default off or muted until opt-in. Kart <strong>RETEST ACTIVE</strong> shared-window attempt at <code>evidence/kart-racer/audio-default-hotfix-shared-window-retest-1/</code>; Platformer <strong>PASS</strong> at <code>evidence/platformer/audio-default-hotfix/</code>; Deckbuilder <strong>RETEST ACTIVE</strong> shared-window attempt at <code>evidence/deckbuilder/audio-default-hotfix-shared-window-retest-1/</code></span>
           <span>External browser-game QA: provider/setup blockers are not game QA failures. PolyTrack <strong>BLOCKED_PROVIDER</strong> (<a href="evidence/external/polytrack/TEST_REPORT.md">old report</a>) -> Retry stopped/incomplete by browser policy at <code>evidence/external/polytrack-poki/</code>; OvO <strong>BLOCKED_PROVIDER</strong> (<a href="evidence/external/ovo/TEST_REPORT.md">old report</a>) -> Retry stopped/incomplete by browser policy at <code>evidence/external/ovo-coolmath/</code>; Cookie Clicker PASS with limitations (<code>evidence/external/cookie-clicker/</code>), Dungeons &amp; Degenerate Gamblers PASS with nonblocking findings (<code>evidence/external/dungeons-degenerate-gamblers/</code>), Townscaper PASS WITH FINDINGS (<code>evidence/external/townscaper/</code>); <code>019efaae-20f8-7473-8e01-69d4ae206994</code></span>
           <span>Latest closed: <code>evidence/deckbuilder/upgrade-phase-1-combat-feedback/</code></span>
           <a href="qa-upgrade/QA_STANDARDS_PROPOSAL.md">QA_STANDARDS_PROPOSAL.md</a>
@@ -812,7 +812,7 @@
           { label: "Orientation Closure Retest", status: "pass", statusLabel: "PASS", note: "Natural orientation sanity check closed.", openKey: "kart-racer:3" },
           { label: "Drift/Boost Upgrade A", status: "pass", statusLabel: "FAIL -> PASS", note: "Original QA failed; Retest 1 fixed drift stages and release boost.", openKey: "kart-racer:upgrade-a" },
           { label: "Settings Panel Phase 1", status: "attention", statusLabel: "TESTER ACTIVE", note: "Tester 019ef96d-ef59-7d20-9dbe-b5d06edc720f; pre-hotfix run superseded; evidence target evidence/kart-racer/settings-phase-1/." },
-          { label: "Audio Default Hotfix", status: "attention", statusLabel: "BLOCKED/PENDING", note: "Preliminary favorable run used disallowed isolated profile; shared-window retest required; report at evidence/kart-racer/audio-default-hotfix/TEST_REPORT.md.", openKey: "kart-racer:audio-default" }
+          { label: "Audio Default Hotfix", status: "attention", statusLabel: "RETEST ACTIVE", note: "Clean shared-window retest 1 active at evidence/kart-racer/audio-default-hotfix-shared-window-retest-1/; old isolated-profile evidence is not approvable.", openKey: "kart-racer:audio-default" }
         ],
         evidenceSeries: [
           { label: "Phase 1: Basic Drivable Track", status: "PASS", evidenceDir: "evidence/kart-racer/phase-1" },
@@ -821,7 +821,7 @@
           { label: "Orientation Closure Retest", status: "PASS", evidenceDir: "evidence/kart-racer/orientation-retest", extraLinks: [{ label: "first-playable-frame.png", href: "evidence/kart-racer/orientation-retest/first-playable-frame.png" }] },
           { label: "Upgrade Phase A: Drift And Boost Feel", status: "FAIL - ORIGINAL QA", evidenceDir: "evidence/kart-racer/upgrade-phase-a-drift-boost", extraLinks: [{ label: "first-playable-frame.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/first-playable-frame.png" }, { label: "hosted-load.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/hosted-load.png" }] },
           { label: "Retest 1: Drift And Boost Fix", status: "PASS - RETEST 1", hydrateStatus: true, evidenceDir: "evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1", extraLinks: [{ label: "first-playable-frame.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/first-playable-frame.png" }, { label: "hosted-load.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/hosted-load.png" }] },
-          { label: "Audio Default Hotfix", status: "BLOCKED/PENDING - SHARED WINDOW RETEST", hydrateStatus: true, evidenceDir: "evidence/kart-racer/audio-default-hotfix" }
+          { label: "Audio Default Hotfix: Shared-Window Retest 1", status: "RETEST ACTIVE - PENDING EVIDENCE", evidenceDir: "evidence/kart-racer/audio-default-hotfix-shared-window-retest-1", extraLinks: [{ label: "old isolated-profile report", href: "evidence/kart-racer/audio-default-hotfix/TEST_REPORT.md" }] }
         ]
       },
       {
@@ -874,7 +874,7 @@
           { label: "Upgrade Phase 1: Combat Feedback And Math Preview", status: "pass", statusLabel: "PASS", note: "Math previews, feedback chips, combat log, rewards, and state/action clarity approved.", openKey: "deckbuilder:upgrade-a" },
           { label: "Settings Panel Phase 1", status: "pass", statusLabel: "PASS", note: "Settings QA approved with one non-blocking LOW initial-scroll finding.", openKey: "deckbuilder:settings-1" },
           { label: "Settings Panel Polish 1", status: "pass", statusLabel: "PASS", note: "LOW initial-scroll/top-control clipping finding -> builder fix -> retest PASS / closed.", openKey: "deckbuilder:settings-polish-1" },
-          { label: "Audio Default Hotfix", status: "attention", statusLabel: "BLOCKED/PENDING", note: "Partial screenshots only from disallowed isolated profile; shared-window retest required; evidence target evidence/deckbuilder/audio-default-hotfix/." }
+          { label: "Audio Default Hotfix", status: "attention", statusLabel: "RETEST ACTIVE", note: "Clean shared-window retest 1 active at evidence/deckbuilder/audio-default-hotfix-shared-window-retest-1/; old partial isolated-profile evidence is not approvable." }
         ],
         evidenceSeries: [
           { label: "Phase 1: Basic Card Combat", status: "PASS", evidenceDir: "evidence/deckbuilder/phase-1" },
@@ -953,8 +953,8 @@
       ],
       "kart-racer:audio-default": [
         ["Audio default hotfix", "Builder completed first-load/reset sounds off, volume 0%, and stale saved sound cannot re-enable without opt-in."],
-        ["Blocked / pending", "The favorable run used a disallowed isolated Chrome profile. It is not approvable until shared-window retest evidence is produced."],
-        ["Evidence state", "Current folder has TEST_REPORT.md and gameplay-recording.mp4 but no expected-flow.md; approval remains pending."]
+        ["Old evidence invalid", "The previous favorable run used a disallowed isolated Chrome profile and is not approvable."],
+        ["Retest active", "Clean shared-window retest 1 is active with evidence target evidence/kart-racer/audio-default-hotfix-shared-window-retest-1/."]
       ]
     };
 
@@ -1214,7 +1214,14 @@
         : phaseNumber === "settings-polish-1"
           ? { number: "Settings Polish 1", title: "Settings Panel Polish 1", current: "pass", evidenceDir: `evidence/${gameId}/settings-polish-1-scroll` }
         : phaseNumber === "audio-default"
-          ? { number: "Audio Default", title: "Audio Default Hotfix", current: gameId === "platformer" ? "pass" : "attention", evidenceDir: `evidence/${gameId}/audio-default-hotfix` }
+          ? {
+              number: "Audio Default",
+              title: "Audio Default Hotfix",
+              current: gameId === "platformer" ? "pass" : "attention",
+              evidenceDir: gameId === "kart-racer"
+                ? "evidence/kart-racer/audio-default-hotfix-shared-window-retest-1"
+                : `evidence/${gameId}/audio-default-hotfix`
+            }
           : game?.phases.find((item) => String(item.number) === phaseNumber);
       return { game, phase, key };
     }

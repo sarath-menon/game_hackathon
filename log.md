@@ -1046,4 +1046,9 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - Turn-Based Deckbuilder audio-default hotfix is `PENDING/BLOCKED` with partial screenshots only and no complete report/expected-flow/video.
   - PolyTrack Poki retry and OvO Coolmath retry were stopped/incomplete because they used disallowed remote/isolated browser surfaces.
 - Dashboard was updated and verified to show the browser policy gate, Platformer audio hotfix `PASS`, Kart/Deckbuilder audio hotfix `BLOCKED/PENDING`, and external retries as stopped/incomplete by browser policy rather than final game QA failures.
-- Follow-up shared-window harness probe still fails at Chrome remote-debugging approval: Chrome is on `chrome://inspect/#remote-debugging`, but DevTools is not live on `127.0.0.1:9222`. Computer Use is also pending macOS Accessibility/Screen Recording permission, so the orchestrator cannot click the Chrome permission prompt. Pending retests should not restart until the user approves remote debugging in the shared Chrome window or enables Computer Use and explicitly authorizes that click.
+- Follow-up shared-window harness probe initially failed at Chrome remote-debugging approval: Chrome was on `chrome://inspect/#remote-debugging`, but DevTools was not live on `127.0.0.1:9222`.
+- User clarified that only browser-harness is allowed for browser work; Codex Computer Use and Codex native browser use are not allowed for this project.
+- The orchestrator retried with `BH_ALLOW_LOCAL_LIVE_OPEN=1` so browser-harness could open the Chrome remote-debugging settings page. After the user enabled the permission, browser-harness successfully attached to the shared Chrome window and returned page info.
+- Arcade Kart Racer and Turn-Based Deckbuilder audio-default hotfix retests were restarted as clean shared-window attempts:
+  - Kart evidence target: `evidence/kart-racer/audio-default-hotfix-shared-window-retest-1/`.
+  - Deckbuilder evidence target: `evidence/deckbuilder/audio-default-hotfix-shared-window-retest-1/`.

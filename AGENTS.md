@@ -139,7 +139,7 @@ For browser automation or browser-harness work, the tester must first read and f
 
 `/Users/sarathmenon/Documents/startup/image_generation/browser-use-trial/browser-harness/SKILL.md`
 
-The tester must not use Codex native browser use. If browser support is blocked, the tester should modify or repair the browser harness instead.
+The tester must not use Codex native browser use or Codex Computer Use. If browser support is blocked, the tester should modify or repair the browser harness instead.
 
 Hard browser rule: all project browser-harness testing must use one shared Chrome window with controlled tabs; testers must not launch separate Chrome windows/profiles or remote sessions, and must report `BLOCKED_ENVIRONMENT` if shared-window testing is unavailable.
 
