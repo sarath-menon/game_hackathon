@@ -46,8 +46,9 @@ For browser automation or browser-harness work, the tester must first read and f
 `/Users/sarathmenon/Documents/startup/image_generation/browser-use-trial/browser-harness/SKILL.md`
 
 The tester must not use Codex native browser use; if browser support is blocked, modify or repair the browser harness instead.
-As proof that the game works, each approved milestone must include an evidence folder containing a continuous gameplay screen recording and a markdown description of what is expected to happen during that tested flow.
-The gameplay recording must show smooth continuous play, not sparse checkpoint frames; capture at a fixed cadence during movement, preferably at least 10 FPS, and verify the final video shows the full tested flow from start through the required end state.
+As proof that the game works, each approved milestone must include an evidence folder containing a continuous MP4 gameplay screen recording and a markdown description of what is expected to happen during that tested flow.
+The gameplay recording must be saved as `gameplay-recording.mp4`, show smooth continuous play rather than sparse checkpoint frames, capture at a fixed cadence during movement, preferably at least 10 FPS, and verify the final video shows the full tested flow from start through the required end state.
+If the browser-native recording API produces WebM, the tester must transcode it to MP4 before marking the milestone evidence complete.
 
 ## Communication Rules
 
@@ -106,7 +107,7 @@ Each milestone report, for example `evidence/milestone-1/TEST_REPORT.md`, must i
 - Verdict: `PENDING`, `PASS`, or `FAIL`
 - Test inputs: URL, README/manual reference, browser, and viewport sizes
 - Evidence folder path containing:
-  - Continuous gameplay screen recording for the tested flow
+  - Continuous MP4 gameplay screen recording for the tested flow, saved as `gameplay-recording.mp4`
   - Markdown description of what is supposed to happen in that recording
   - Recording method, including capture cadence or FPS
 - Summary
@@ -116,7 +117,7 @@ Each milestone report, for example `evidence/milestone-1/TEST_REPORT.md`, must i
 
 ## Approval Standard
 
-A milestone is approved only when that milestone's evidence-folder report says `PASS`, includes an evidence folder path, that folder contains both a continuous gameplay screen recording and an expected-flow markdown description, the recording shows smooth play rather than sparse checkpoint jumps, no unresolved critical or high-priority findings remain, and the game behavior matches `README.md`. Ambiguous behavior should be reported as a documentation or design issue.
+A milestone is approved only when that milestone's evidence-folder report says `PASS`, includes an evidence folder path, that folder contains both a continuous MP4 gameplay screen recording named `gameplay-recording.mp4` and an expected-flow markdown description, the recording shows smooth play rather than sparse checkpoint jumps, no unresolved critical or high-priority findings remain, and the game behavior matches `README.md`. Ambiguous behavior should be reported as a documentation or design issue.
 
 ## Current Resume Procedure
 
