@@ -127,6 +127,12 @@
       box-shadow: var(--shadow);
     }
 
+    .attention-panel[data-state="clear"] {
+      border-color: rgba(15, 118, 110, 0.3);
+      border-left-color: var(--pass);
+      background: #f2fbf8;
+    }
+
     .attention-panel h2 {
       font-size: 1rem;
       margin-bottom: 4px;
@@ -292,6 +298,15 @@
       padding: 12px 14px;
     }
 
+    .empty-state {
+      padding: 14px;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      background: #fbfcfc;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
     .issue-row {
       display: grid;
       grid-template-columns: 160px minmax(0, 1fr) auto;
@@ -364,7 +379,7 @@
 
     .drawer-grid {
       display: grid;
-      grid-template-columns: minmax(280px, 42%) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr);
       gap: 14px;
     }
 
@@ -377,6 +392,42 @@
       border: 1px solid var(--line);
       border-radius: 8px;
       background: #172326;
+    }
+
+    .series-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .series-card {
+      display: grid;
+      grid-template-columns: minmax(220px, 32%) minmax(0, 1fr);
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .series-card .video-frame {
+      min-height: 140px;
+    }
+
+    .series-meta {
+      display: grid;
+      align-content: start;
+      gap: 7px;
+      font-size: 0.84rem;
+    }
+
+    .series-meta h3 {
+      font-size: 0.95rem;
+    }
+
+    .series-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
     }
 
     video {
@@ -472,7 +523,8 @@
     @media (max-width: 980px) {
       .topbar,
       .games,
-      .drawer-grid {
+      .drawer-grid,
+      .series-card {
         grid-template-columns: 1fr;
       }
 
@@ -507,12 +559,12 @@
       <section class="status-strip" id="status-strip" aria-label="Game status summary"></section>
     </header>
 
-    <section class="attention-panel" id="attention-panel">
+    <section class="attention-panel" id="attention-panel" data-state="clear">
       <div>
         <h2>Current Attention</h2>
-        <p><strong>Arcade Kart Racer is reopened</strong> for an orientation/readability fix and retest after user review. Existing Phase 3 evidence still reports PASS, so the card distinguishes current status from latest report verdict.</p>
+        <p><strong>No active open issues.</strong> Kart orientation/readability retest is closed with PASS evidence and Natural Orientation Sanity Check PASS.</p>
       </div>
-      <button class="action-btn" data-open-phase="kart-racer:3">View Kart Evidence</button>
+      <button class="action-btn" data-open-phase="kart-racer:3">View Closure Evidence</button>
     </section>
 
     <nav class="filters" aria-label="Dashboard filters">
@@ -526,11 +578,7 @@
     <section class="open-issues" aria-label="Open issues">
       <header><h2>Open Issues</h2></header>
       <div class="issue-list">
-        <div class="issue-row">
-          <span class="badge" data-status="attention">Reopened</span>
-          <span>Kart Racer orientation/readability review is active. Awaiting fix and retest before final suite closure.</span>
-          <button class="action-btn" data-open-phase="kart-racer:3">Evidence</button>
-        </div>
+        <div class="empty-state">No active open issues. All three game lanes are PASS; Kart closure evidence is available from the Kart card.</div>
       </div>
     </section>
   </main>
@@ -546,22 +594,16 @@
       </header>
       <div class="drawer-body">
         <div class="drawer-grid">
-          <div>
-            <section class="drawer-section">
-              <h3>Gameplay Video</h3>
-              <div class="video-frame" id="drawer-video-frame"></div>
-            </section>
-            <section class="drawer-section">
-              <h3>Evidence Paths</h3>
-              <div id="drawer-paths" class="card-meta"></div>
-            </section>
-            <section class="drawer-section">
-              <h3>Feedback / Fix History</h3>
-              <div class="history-list" id="drawer-history"></div>
-            </section>
-          </div>
           <section class="drawer-section">
-            <h3>TEST_REPORT.md</h3>
+            <h3>Evidence Series</h3>
+            <div class="series-list" id="drawer-series"></div>
+          </section>
+          <section class="drawer-section">
+            <h3>Feedback / Fix History</h3>
+            <div class="history-list" id="drawer-history"></div>
+          </section>
+          <section class="drawer-section">
+            <h3>Selected TEST_REPORT.md</h3>
             <div class="markdown" id="drawer-report"><p class="missing">Select a phase to load evidence.</p></div>
           </section>
         </div>
@@ -590,16 +632,22 @@
       {
         id: "kart-racer",
         name: "Arcade Kart Racer",
-        status: "attention",
-        statusLabel: "REOPENED",
-        summary: "Needs orientation/readability fix and retest despite existing PASS reports.",
+        status: "pass",
+        statusLabel: "PASS",
+        summary: "Complete after orientation/readability retest PASS and Natural Orientation Sanity Check PASS.",
         gameUrl: "games/kart-racer/index.html",
         readmeUrl: "games/kart-racer/README.md",
         primaryPhase: 3,
         phases: [
           { number: 1, title: "Basic Drivable Track", current: "pass", evidenceDir: "evidence/kart-racer/phase-1" },
           { number: 2, title: "Race Rules", current: "pass", evidenceDir: "evidence/kart-racer/phase-2" },
-          { number: 3, title: "Game Feel", current: "attention", evidenceDir: "evidence/kart-racer/phase-3" }
+          { number: 3, title: "Game Feel / Orientation Closure", current: "pass", evidenceDir: "evidence/kart-racer/orientation-retest", extraEvidenceDir: "evidence/kart-racer/phase-3" }
+        ],
+        evidenceSeries: [
+          { label: "Phase 1: Basic Drivable Track", status: "PASS", evidenceDir: "evidence/kart-racer/phase-1" },
+          { label: "Phase 2: Race Rules", status: "PASS", evidenceDir: "evidence/kart-racer/phase-2" },
+          { label: "Original Phase 3: Game Feel", status: "PASS", evidenceDir: "evidence/kart-racer/phase-3" },
+          { label: "Orientation Closure Retest", status: "PASS", evidenceDir: "evidence/kart-racer/orientation-retest", extraLinks: [{ label: "first-playable-frame.png", href: "evidence/kart-racer/orientation-retest/first-playable-frame.png" }] }
         ]
       },
       {
@@ -615,6 +663,11 @@
           { number: 1, title: "Core Movement", current: "pass", evidenceDir: "evidence/platformer/phase-1" },
           { number: 2, title: "Hazards And Collectibles", current: "pass", evidenceDir: "evidence/platformer/phase-2" },
           { number: 3, title: "Level Polish", current: "pass", evidenceDir: "evidence/platformer/phase-3" }
+        ],
+        evidenceSeries: [
+          { label: "Phase 1: Core Movement", status: "PASS", evidenceDir: "evidence/platformer/phase-1" },
+          { label: "Phase 2: Hazards And Collectibles", status: "PASS", evidenceDir: "evidence/platformer/phase-2" },
+          { label: "Phase 3: Level Polish", status: "PASS", evidenceDir: "evidence/platformer/phase-3" }
         ]
       },
       {
@@ -630,6 +683,11 @@
           { number: 1, title: "Basic Card Combat", current: "pass", evidenceDir: "evidence/deckbuilder/phase-1" },
           { number: 2, title: "Tactical Variety", current: "pass", evidenceDir: "evidence/deckbuilder/phase-2" },
           { number: 3, title: "Run Structure", current: "pass", evidenceDir: "evidence/deckbuilder/phase-3" }
+        ],
+        evidenceSeries: [
+          { label: "Phase 1: Basic Card Combat", status: "PASS", evidenceDir: "evidence/deckbuilder/phase-1" },
+          { label: "Phase 2: Tactical Variety", status: "PASS", evidenceDir: "evidence/deckbuilder/phase-2" },
+          { label: "Phase 3: Run Structure", status: "PASS", evidenceDir: "evidence/deckbuilder/phase-3" }
         ]
       }
     ];
@@ -642,9 +700,9 @@
         ["Final-gate fix", "Moved finish closer to CP3 and expanded post-checkpoint scoring; report now PASS."]
       ],
       "kart-racer:3": [
-        ["Report state", "Phase 3 TEST_REPORT.md says PASS with route clarity PASS and complete boost/obstacle/restart evidence."],
-        ["Current review", "Reopened after user review for orientation/readability. Treat current workflow as Needs Attention until fix and retest pass."],
-        ["Next step", "Builder fix and retest should produce fresh evidence before Kart is final again."]
+        ["Original Phase 3 report", "Phase 3 TEST_REPORT.md says PASS with route clarity PASS and complete boost/obstacle/restart evidence."],
+        ["Reopen closure", "Orientation/readability reopen retest is PASS with Natural Orientation Sanity Check PASS."],
+        ["Closure evidence", "Inspect evidence/kart-racer/orientation-retest/TEST_REPORT.md, expected-flow.md, gameplay-recording.mp4, and first-playable-frame.png."]
       ],
       "platformer:2": [
         ["Blocker", "Exit was unreachable on the hazard route and runs ended before Level Complete."],
@@ -667,8 +725,7 @@
     const drawer = document.querySelector("#evidence-drawer");
     const drawerTitle = document.querySelector("#drawer-title");
     const drawerSubtitle = document.querySelector("#drawer-subtitle");
-    const drawerVideoFrame = document.querySelector("#drawer-video-frame");
-    const drawerPaths = document.querySelector("#drawer-paths");
+    const drawerSeries = document.querySelector("#drawer-series");
     const drawerHistory = document.querySelector("#drawer-history");
     const drawerReport = document.querySelector("#drawer-report");
     const markdownViewer = document.querySelector("#markdown-viewer");
@@ -776,6 +833,16 @@
       };
     }
 
+    async function videoMarkup(path) {
+      try {
+        const response = await fetch(path, { method: "HEAD", cache: "no-store" });
+        if (!response.ok) throw new Error(`${response.status}`);
+        return `<video controls preload="metadata" src="${path}"></video>`;
+      } catch {
+        return `<p class="missing">No gameplay MP4 found at ${escapeHtml(path)}.</p>`;
+      }
+    }
+
     function findVerdict(markdown) {
       return markdown.match(/Verdict:\s*`?(PASS|FAIL|PENDING)`?/i)?.[1]?.toUpperCase()
         || markdown.match(/(?:^|\n)\s*(PASS|FAIL|PENDING)\s*(?:\n|$)/i)?.[1]?.toUpperCase()
@@ -797,6 +864,11 @@
         if (filter === "pass") return game.status === "pass";
         return true;
       });
+
+      if (!visibleGames.length) {
+        gameContainer.innerHTML = `<div class="empty-state">No games match this filter. There are no active Needs Attention lanes.</div>`;
+        return;
+      }
 
       gameContainer.innerHTML = visibleGames.map((game) => `
         <article class="game-card" data-status="${game.status}">
@@ -854,24 +926,37 @@
       drawer.hidden = false;
       drawerTitle.textContent = `${game.name} - Phase ${phase.number}`;
       drawerSubtitle.textContent = `${phase.title} | Current: ${phase.current === "attention" ? "REOPENED" : "PASS"}`;
-      drawerVideoFrame.innerHTML = `<p class="missing">Checking video...</p>`;
+      drawerSeries.innerHTML = `<p class="missing">Loading evidence series...</p>`;
       drawerReport.innerHTML = `<p class="missing">Loading report...</p>`;
-      drawerPaths.innerHTML = `
-        <span>Report: <a href="${paths.report}">${paths.report}</a></span>
-        <span>Expected flow: <a href="${paths.expected}">${paths.expected}</a></span>
-        <span>Video: <a href="${paths.video}">${paths.video}</a></span>
-      `;
       drawerHistory.innerHTML = (histories[key] || [["No active blocker history", "No phase-specific fix loop is currently tracked."]])
         .map(([title, text]) => `<div class="history-item"><strong>${escapeHtml(title)}</strong>${escapeHtml(text)}</div>`)
         .join("");
 
-      try {
-        const videoHead = await fetch(paths.video, { method: "HEAD", cache: "no-store" });
-        if (!videoHead.ok) throw new Error(`${videoHead.status}`);
-        drawerVideoFrame.innerHTML = `<video controls preload="metadata" src="${paths.video}"></video>`;
-      } catch {
-        drawerVideoFrame.innerHTML = `<p class="missing">No gameplay MP4 found at ${escapeHtml(paths.video)}.</p>`;
-      }
+      const series = game.evidenceSeries || game.phases.map((item) => ({
+        label: `Phase ${item.number}: ${item.title}`,
+        status: item.current === "attention" ? "REOPENED" : "PASS",
+        evidenceDir: item.evidenceDir
+      }));
+      const rows = await Promise.all(series.map(async (item) => {
+        const itemPaths = phasePaths(item);
+        const extraLinks = (item.extraLinks || []).map((link) => `<a href="${link.href}">${escapeHtml(link.label)}</a>`).join("");
+        return `
+          <article class="series-card">
+            <div class="video-frame">${await videoMarkup(itemPaths.video)}</div>
+            <div class="series-meta">
+              <h3>${escapeHtml(item.label)}</h3>
+              <span class="badge" data-status="pass">${escapeHtml(item.status)}</span>
+              <div class="series-links">
+                <a href="${itemPaths.report}">TEST_REPORT.md</a>
+                <a href="${itemPaths.expected}">expected-flow.md</a>
+                <a href="${itemPaths.video}">gameplay-recording.mp4</a>
+                ${extraLinks}
+              </div>
+            </div>
+          </article>
+        `;
+      }));
+      drawerSeries.innerHTML = rows.join("");
 
       try {
         const reportResponse = await fetch(paths.report, { cache: "no-store" });

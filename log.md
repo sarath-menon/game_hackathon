@@ -572,6 +572,27 @@ python3 -m http.server 8765 --bind 127.0.0.1
 - Kart builder was sent a narrow fix request to reorient the start pose, camera, track presentation, minimap, checkpoint labels, and route cues while preserving all passed mechanics.
 - Arcade Kart Racer should be considered reopened for orientation retest until the builder fix is complete and the kart tester explicitly passes the new orientation gate.
 
+## Kart Orientation Retest Handoff - 2026-06-24
+
+- Kart builder completed the orientation/readability fix pass and reported:
+  - first playable frame now has kart bottom-center, road extending forward/up, CP1 ahead/up, HUD `NEXT CP1`, heading-up minimap, and reduced non-current label clutter
+  - normal route completed in hosted browser using hold accelerate plus gentle right-steer taps: CP1 -> CP2 -> CP3 -> finish, `LAP 1/1`, final time
+  - boosts were moved/reduced so they do not destabilize the primary route
+- Builder self-check is not sufficient for approval.
+- Orchestrator sent the kart tester a black-box orientation retest handoff with separate evidence path `evidence/kart-racer/orientation-retest/`.
+- Kart remains open until that retest produces `PASS` with a dedicated `Natural Orientation Sanity Check`.
+
+## Kart Orientation Closed - 2026-06-24
+
+- Kart tester completed the orientation/readability reopen retest.
+- Verdict: `PASS`.
+- Evidence path: `evidence/kart-racer/orientation-retest/`.
+- Required artifacts exist: `TEST_REPORT.md`, `expected-flow.md`, `gameplay-recording.mp4`, and `first-playable-frame.png`.
+- The report includes a dedicated `Natural Orientation Sanity Check` marked `PASS`.
+- Tester confirmed the first playable frame reads naturally: kart bottom-center, road extends upward/forward, CP1 is ahead in the upper-middle route, HUD says `NEXT CP1`, and the minimap agrees without mental rotation/inversion.
+- Tester also confirmed normal documented controls complete CP1 -> CP2 -> CP3 -> finish, show `LAP 1/1` / Race Complete / final time, and restart works.
+- Arcade Kart Racer orientation/readability reopen is closed.
+
 ## Protocol Update - 2026-06-24 12:55
 
 - Strengthened `AGENTS.md` testing criteria so readability/orientation and state/action clarity are hard approval gates, not optional notes.
