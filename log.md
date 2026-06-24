@@ -2059,3 +2059,24 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - dashboard updated to show Pass 2 `PASS_WITH_FINDINGS` with evidence links and low mobile-emulation limitation;
   - canonical tester reported complete and idle after artifact verification;
   - next action is to select the highest-impact local-game polish or external QA-methodology follow-up, then hand it to the canonical tester only after dashboard/log are current.
+
+## Dungeons External QA Follow-Up Pass 2 Active - 2026-06-25
+
+- Selected next Track 2 follow-up: Dungeons & Degenerate Gamblers Demo settings/options and legal/illegal action clarity.
+- Reason: the previous Dungeons shared-window pass reached playable card-combat flow and closed basic playability as `PASS_WITH_FINDINGS`, but left nonblocking methodology gaps around settings/options/audio/fullscreen/restart/give-up coverage and unavailable/illegal action clarity.
+- Browser maintenance completed pre-handoff cleanup:
+  - inspected 1 page target;
+  - closed stale Cookie Clicker target `https://orteil.dashnet.org/cookieclicker/`;
+  - final remaining page targets: 0;
+  - no errors and local HTTP server untouched.
+- Orchestrator handed the follow-up to canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Allowed tester inputs:
+  - URL: `https://purplemosscollectors.itch.io/dndg`
+  - manual: `external-qa/dungeons-degenerate-gamblers/README.md`
+  - evidence target: `evidence/external/dungeons-degenerate-gamblers-settings-illegal-pass-1/`
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- External QA classification remains `PASS_WITH_FINDINGS`, `FAIL`, `BLOCKED_PROVIDER`, or `BLOCKED_ENVIRONMENT`; provider/setup/harness blockers are not final game failures.
+- Dashboard must show this pass as active/pending evidence while preserving previous Dungeons retry 1 as historical `PASS_WITH_FINDINGS`.
