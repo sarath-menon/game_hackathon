@@ -227,11 +227,14 @@
       const resultButton = document.getElementById("resultButton");
 
       const keys = new Set();
+      const jumpCodes = new Set(["Space", "ArrowUp", "KeyW"]);
       const world = {
         width: 3400,
         height: 540,
         gravity: 2600
       };
+      const coyoteTime = 0.12;
+      const jumpBufferTime = 0.13;
 
       const platforms = [
         { x: -80, y: 520, w: 3560, h: 80 },
@@ -277,7 +280,11 @@
         grounded: false,
         facing: 1,
         health: 3,
-        invulnerable: 0
+        invulnerable: 0,
+        coyoteTimer: 0,
+        jumpBufferTimer: 0,
+        landingTimer: 0,
+        wasGrounded: false
       };
       const checkpoint = { x: 1692, y: 452, w: 46, h: 68, active: false };
       const startRespawn = { x: 110, y: 388 };
@@ -296,6 +303,10 @@
         player.grounded = false;
         player.facing = 1;
         player.invulnerable = invulnerabilitySeconds;
+        player.coyoteTimer = 0;
+        player.jumpBufferTimer = 0;
+        player.landingTimer = 0;
+        player.wasGrounded = false;
         cameraX = 0;
       }
 
@@ -378,6 +389,14 @@
         resetPlayer(respawnInvulnerability);
       }
 
+      function performJump() {
+        player.vy = -880;
+        player.grounded = false;
+        player.coyoteTimer = 0;
+        player.jumpBufferTimer = 0;
+        player.landingTimer = 0;
+      }
+
       function updatePatrols(dt) {
         for (const patrol of patrols) {
           patrol.x += patrol.dir * patrol.speed * dt;
@@ -393,6 +412,14 @@
 
       function moveAndCollide(dt) {
         player.invulnerable = Math.max(0, player.invulnerable - dt);
+        player.landingTimer = Math.max(0, player.landingTimer - dt);
+        player.jumpBufferTimer = Math.max(0, player.jumpBufferTimer - dt);
+        if (player.grounded) {
+          player.coyoteTimer = coyoteTime;
+        } else {
+          player.coyoteTimer = Math.max(0, player.coyoteTimer - dt);
+        }
+        player.wasGrounded = player.grounded;
         updatePatrols(dt);
         const speed = 360;
         const accel = player.grounded ? 3400 : 2500;
@@ -416,12 +443,15 @@
           player.vx -= Math.sign(player.vx) * drag;
         }
 
-        if (jump && player.grounded) {
-          player.vy = -820;
-          player.grounded = false;
+        if (player.jumpBufferTimer > 0 && player.coyoteTimer > 0) {
+          performJump();
         }
 
-        player.vy = Math.min(maxFall, player.vy + world.gravity * dt);
+        const nearApex = Math.abs(player.vy) < 105;
+        let gravityScale = 1;
+        if (player.vy < 0 && !jump) gravityScale = 1.8;
+        if (player.vy < 0 && jump && nearApex) gravityScale = 0.38;
+        player.vy = Math.min(maxFall, player.vy + world.gravity * gravityScale * dt);
 
         player.x += player.vx * dt;
         for (const platform of platforms) {
@@ -438,10 +468,16 @@
           if (player.vy > 0) {
             player.y = platform.y - player.h;
             player.grounded = true;
+            if (!player.wasGrounded) player.landingTimer = 0.16;
           } else if (player.vy < 0) {
             player.y = platform.y + platform.h;
           }
           player.vy = 0;
+        }
+
+        if (player.grounded) {
+          player.coyoteTimer = coyoteTime;
+          if (player.jumpBufferTimer > 0) performJump();
         }
 
         if (player.x < 0) {
@@ -671,15 +707,53 @@
         const x = Math.round(player.x - cameraX);
         const y = Math.round(player.y);
         if (player.invulnerable > 0 && Math.floor(performance.now() / 90) % 2 === 0) return;
+        const running = player.grounded && Math.abs(player.vx) > 45;
+        const rising = !player.grounded && player.vy < -80;
+        const falling = !player.grounded && player.vy > 80;
+        const landing = player.landingTimer > 0;
+        const bodySquash = landing ? 6 : 0;
+        const bodyStretch = rising ? 4 : falling ? 3 : 0;
+        const bodyX = x + 5;
+        const bodyY = y + 12 + bodySquash;
+        const bodyW = player.w - 10;
+        const bodyH = player.h - 12 - bodySquash + bodyStretch;
+
         ctx.fillStyle = "rgba(0, 0, 0, 0.28)";
         ctx.beginPath();
         ctx.ellipse(x + player.w / 2, y + player.h + 5, 23, 6, 0, 0, Math.PI * 2);
         ctx.fill();
 
+        if (landing) {
+          const pulse = 1 - player.landingTimer / 0.16;
+          ctx.strokeStyle = `rgba(255, 209, 102, ${0.45 * (1 - pulse)})`;
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.ellipse(x + player.w / 2, y + player.h + 3, 22 + pulse * 16, 5 + pulse * 3, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        if (player.invulnerable > 0) {
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.72)";
+          ctx.lineWidth = 3;
+          ctx.strokeRect(x + 2, y + 2, player.w - 4, player.h - 2);
+        }
+
         ctx.fillStyle = "#ffd166";
-        ctx.fillRect(x + 5, y + 12, player.w - 10, player.h - 12);
+        ctx.fillRect(bodyX, bodyY, bodyW, bodyH);
         ctx.fillStyle = "#f15bb5";
-        ctx.fillRect(x + 9, y + 4, player.w - 18, 18);
+        ctx.fillRect(x + 9, y + 4 + bodySquash / 2, player.w - 18, 18);
+        ctx.fillStyle = "#ffd166";
+        if (rising) {
+          ctx.fillRect(x + 2, y + 18, 7, 20);
+          ctx.fillRect(x + player.w - 9, y + 18, 7, 20);
+        } else if (falling) {
+          ctx.fillRect(x + 4, y + 30, 7, 18);
+          ctx.fillRect(x + player.w - 11, y + 30, 7, 18);
+        } else {
+          const stride = running ? Math.sin(performance.now() / 75) * 5 : 0;
+          ctx.fillRect(x + 8 + stride, y + player.h - 7, 9, 7);
+          ctx.fillRect(x + 20 - stride, y + player.h - 7, 9, 7);
+        }
         ctx.fillStyle = "#222831";
         ctx.fillRect(x + (player.facing > 0 ? 22 : 7), y + 18, 7, 7);
         ctx.fillStyle = "#ffffff";
@@ -720,13 +794,20 @@
 
       window.addEventListener("keydown", (event) => {
         if (["ArrowLeft", "ArrowRight", "ArrowUp", "Space"].includes(event.code)) event.preventDefault();
+        const wasDown = keys.has(event.code);
         keys.add(event.code);
+        if (jumpCodes.has(event.code) && !wasDown && mode === "playing") {
+          player.jumpBufferTimer = jumpBufferTime;
+        }
         if (mode === "title" && event.code === "Enter") startGame();
         if (mode === "complete" && event.code === "Enter") startGame();
       });
 
       window.addEventListener("keyup", (event) => {
         keys.delete(event.code);
+        if (jumpCodes.has(event.code) && mode === "playing" && !isDown("Space", "ArrowUp", "KeyW") && player.vy < -170) {
+          player.vy *= 0.18;
+        }
       });
 
       startButton.addEventListener("click", startGame);

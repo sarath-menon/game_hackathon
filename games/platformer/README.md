@@ -13,6 +13,10 @@ Start the run, move right through the side-scrolling level, collect glow cores, 
 - Move: `A` / `D` or `Left Arrow` / `Right Arrow`
 - Jump: `W`, `Up Arrow`, or `Space`
 
+## Jump Feel
+
+Jump input has a small forgiveness window: pressing jump just after leaving a ledge can still jump, and pressing jump just before landing can trigger on landing. Tap jump for a shorter hop or hold jump for a higher, floatier jump.
+
 ## Win Behavior
 
 The level is complete when the player touches the green exit beacon. A `Level Complete` message appears and shows how many glow cores were collected plus how much health remained.

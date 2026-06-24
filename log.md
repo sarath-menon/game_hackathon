@@ -10,6 +10,8 @@ Dashboard requirement added: the dashboard must track the continuous QA goal as 
 
 Dashboard live-update requirement tightened: the dashboard must update during each loop transition, including active FAIL reports, builder-fix-active status, retest-pending status, retest-active status, PASS closure, and evidence paths. It should not wait for a final passing report before reflecting the current goal.
 
+Dashboard freshness promoted to a hard orchestration gate: a builder handoff, builder completion, tester handoff, FAIL, fix request, retest, PASS closure, or new upgrade selection is not considered operationally complete until the dashboard thread has received the new state and either verified the UI or is actively working on the update. If the dashboard lags the true state, refreshing the dashboard takes priority before selecting additional polish work.
+
 Guardrail: use genre references for quality-bar signals only. Do not copy protected names, characters, art, music, logos, maps, card names/effects verbatim, UI skins, branding, or other protected assets. The target is original games with comparable clarity, feel, polish, and test rigor.
 
 Completed research/audit artifacts:
@@ -19,7 +21,14 @@ Completed research/audit artifacts:
 - `qa-upgrade/PLATFORMER_BENCHMARK_AUDIT.md`
 - `qa-upgrade/DECKBUILDER_BENCHMARK_AUDIT.md`
 
-Current active upgrade lane:
+Current live state:
+
+- Kart Upgrade Phase A is closed `PASS` after Retest 1.
+- Platformer Upgrade Phase A is closed `PASS`.
+- Dashboard has been verified as current through the Platformer closure.
+- Next action: select the next continuous QA upgrade, then update the dashboard as selected/builder-active before continuing.
+
+Continuous QA loop history, first upgrade lane:
 
 - Game: Arcade Kart Racer
 - Upgrade Phase A: Drift And Boost Feel
@@ -49,6 +58,22 @@ Current active upgrade lane:
 - Platformer builder handoff sent to thread `019ef96e-1dd7-7f13-91d4-855909736edc`.
 - Builder scope: add coyote time, jump buffering, variable jump height, jump-cut, slight apex hang, landing feedback, and visible player-state changes while preserving the already-passed movement, completion, hazards, collectibles, checkpoint, restart, failure, and no-softlock behavior.
 - Dashboard should now show Platformer Upgrade Phase A as builder-active/current, while preserving Kart Upgrade Phase A as closed PASS with both original FAIL and Retest 1 PASS evidence rows.
+- Platformer builder completed Upgrade Phase A.
+- Builder summary: added 120 ms coyote time, 130 ms jump buffering, variable jump height, early-release jump cut, held-jump apex hang, subtle landing pulse, and visible player pose changes for run/jump/fall/landing/invulnerable states.
+- Builder verification reported: game/manual `200 OK`, embedded script parses, coyote jump passes, buffered pre-landing jump passes, short-tap vs held jump height is visibly different, lower-deck completion route still reaches checkpoint/exit, and health-zero failure/restart state still passes.
+- Orchestrator sent black-box QA handoff to Platformer tester thread `019ef96e-42e6-7121-b9ea-bf266ce55a2e`.
+- Active evidence folder: `evidence/platformer/upgrade-phase-a-movement-feel/`
+- Dashboard should now show Platformer Movement Feel as tester-active/evidence-pending, while preserving prior phase PASS evidence and Kart Upgrade Phase A closure history.
+- Platformer tester completed Upgrade Phase A as `PASS`.
+- Evidence completed:
+  - `evidence/platformer/upgrade-phase-a-movement-feel/TEST_REPORT.md`
+  - `evidence/platformer/upgrade-phase-a-movement-feel/expected-flow.md`
+  - `evidence/platformer/upgrade-phase-a-movement-feel/gameplay-recording.mp4`
+- Tester verified hosted load/manual consistency, short-tap versus held-jump readability, jump forgiveness and jump-cut feel, landing/player-state feedback, lower-deck completion, collectibles/summary, hazards/failure/restart, checkpoint recovery, patrol/route marker visibility, and no softlocks or blocking runtime errors.
+- The required readability/usability gate is `PASS`; there are no unresolved findings.
+- Orchestrator sent a dashboard closure request so Platformer Upgrade Phase A is shown as `PASS` before the next continuous QA upgrade is selected.
+- Dashboard live-state requirement tightened again after user feedback: the dashboard is the project control surface, not a historical archive. It must reflect the current continuous QA goal, selected upgrade, builder/tester state, evidence status, fixed feedback, and next action as work moves. Any goal/lane transition must include a dashboard-thread update and verification request before the transition is considered complete.
+- Dashboard thread verified the Platformer Upgrade Phase A closure UI at `http://127.0.0.1:8765/dashboard.html`: first viewport shows closed `PASS`, dashboard freshness gate wording, evidence path, and next action; Platformer drawer shows Phase 1/2/3 plus Upgrade A with report/expected-flow/video; Kart drawer preserves original Upgrade A `FAIL` and Retest 1 `PASS`; Markdown reports open in-page.
 
 ## 2026-06-24: Project Goal Replaced
 

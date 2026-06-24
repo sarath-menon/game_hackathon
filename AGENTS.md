@@ -4,7 +4,7 @@ This file is the canonical handoff document for the active project in `/Users/sa
 
 ## Active Project Goal
 
-Build and test a three-game suite of diverse, single-file HTML games inspired by popular game genres while avoiding copyrighted names, characters, art, music, maps, branding, and other protected assets.
+Continuously improve and retest the three-game suite toward genre-leading browser game quality while avoiding copyrighted names, characters, art, music, maps, branding, and other protected assets. The initial three-game build/test phases are complete; the active work is an open-ended QA and polish loop.
 
 The suite contains:
 
@@ -16,7 +16,7 @@ The previous Signal Runner work is historical only. Do not continue Signal Runne
 
 ## Continuous QA Upgrade Goal
 
-The initial three-game suite phases are complete. The active project is now an ongoing quality loop: continuously improve one game at a time toward genre-leading browser game quality without copying protected IP.
+The active project is an ongoing quality loop: continuously improve one game at a time toward genre-leading browser game quality without copying protected IP.
 
 Each cycle:
 
@@ -26,8 +26,9 @@ Each cycle:
 - after the builder reports completion, send the updated URL/manual/evidence paths to that game's tester
 - require industry-style black-box QA with test cases, severity, regression checks, readability/usability gates, browser checks, and continuous gameplay evidence
 - route failures back to the builder, then retest
-- update dashboard/log as work moves, not only at the end: active goal, current builder/tester status, pending evidence, completed evidence, fixed feedback, and next action should stay visible in the UI
-- treat dashboard freshness as part of every orchestration transition: after a builder handoff, tester handoff, FAIL, fix request, retest, PASS closure, or new upgrade selection, the dashboard thread must be told the new state and asked to verify the UI
+- update dashboard/log as work moves, not only at the end: active goal, selected upgrade, current builder/tester status, pending evidence, completed evidence, fixed feedback, and next action must stay visible in the UI
+- treat dashboard freshness as a hard orchestration gate: after a builder handoff, builder completion, tester handoff, FAIL, fix request, retest, PASS closure, or new upgrade selection, the transition is not complete until the dashboard thread has been given the new state and either verified the UI or is actively working on that update
+- if the dashboard lags the true project state, prioritize a dashboard-thread refresh before selecting more polish work, so the UI remains the user's source of truth
 - commit often after coherent, verified progress
 
 There is no terminal success condition for this loop. Keep iterating through higher-quality upgrades unless the user pauses or redirects.
@@ -42,9 +43,11 @@ There is no terminal success condition for this loop. Keep iterating through hig
   - The Arcade Kart Racer orientation/readability reopen was fixed and black-box retested as `PASS`.
   - Arcade Kart Racer, Upgrade Phase A: Drift And Boost Feel is closed as `PASS` after Retest 1.
   - The original Phase A report remains preserved as `FAIL` evidence; Retest 1 verifies Early/Ready/Strong stage visibility, visible release boosts, wall-scrub feedback, normal route completion, and readability/usability gate `PASS`.
-  - Current active continuous-upgrade lane: Side-Scrolling Platformer, Upgrade Phase A: Movement Feel Pass.
-  - Platformer builder handoff has been sent to thread `019ef96e-1dd7-7f13-91d4-855909736edc`; builder is active on coyote time, jump buffering, variable jump height, jump-cut, apex hang, landing feedback, and visible player-state feedback while preserving all previously passed Phase 1/2/3 behavior.
-  - The dashboard must reflect this live fix loop as it changes, including selected-upgrade, builder-active, builder-complete, tester-handoff, tester-active, FAIL, fix-active, retest-pending, retest-active, and PASS states.
+  - Side-Scrolling Platformer, Upgrade Phase A: Movement Feel Pass is closed as `PASS`.
+  - The Platformer upgrade report verifies short-tap versus held-jump readability, jump forgiveness, lower-deck completion, hazard/failure/restart behavior, checkpoint recovery, route readability, and no blocking runtime errors.
+  - Required evidence exists at `evidence/platformer/upgrade-phase-a-movement-feel/`: `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`.
+  - Current orchestration transition: dashboard closure update was verified so the UI reflects Platformer Upgrade Phase A as `PASS` before the next upgrade is selected.
+  - The dashboard must reflect the live loop as it changes, including selected-upgrade, builder-active, builder-complete, tester-handoff, tester-active, FAIL, fix-active, retest-pending, retest-active, PASS closure, and next-upgrade selection states.
 - QA upgrade artifacts:
   - `qa-upgrade/QA_STANDARDS_PROPOSAL.md`
   - `qa-upgrade/KART_BENCHMARK_AUDIT.md`
@@ -105,11 +108,13 @@ Cleanup policy:
 - If browser-harness work is needed, first read and follow `/Users/sarathmenon/Documents/startup/image_generation/browser-use-trial/browser-harness/SKILL.md`.
 - Do not kill the local HTTP server unless explicitly instructed.
 
-The main heartbeat automation includes this maintenance lane and should wake every 10 minutes. On each maintenance pass, the orchestrator should check whether the maintenance thread is idle; if it is idle, send a cleanup prompt, and if it is active, avoid starting an overlapping cleanup.
+When browser cleanup is needed, the orchestrator should use the browser maintenance thread and avoid overlapping cleanup passes. On each maintenance pass, the orchestrator should check whether the maintenance thread is idle; if it is idle, send a cleanup prompt, and if it is active, avoid starting another cleanup.
 
 ### Dashboard Thread
 
 The dashboard thread owns dashboard UI updates and reports only to the main orchestrator. It must not communicate with builders or testers and must not modify game files or tester evidence.
+
+The dashboard is the live project control surface, not a historical archive. Whenever the main goal changes, a new upgrade is selected, a builder starts or finishes, a tester handoff is sent, a tester reports `FAIL`, a fix request is routed, a retest starts, a phase closes `PASS`, or the next action changes, the orchestrator must send the dashboard thread a same-turn update. That update must ask the dashboard thread to verify the visible first viewport and the relevant evidence drawer. The next orchestration transition should wait until the dashboard is verified or visibly marked as updating.
 
 The dashboard should make the lockstep process auditable. In addition to phase status, evidence videos, and inline `TEST_REPORT.md` rendering, it should show a feedback/fix tracker that links tester feedback to the builder's next fix iteration and the later retest status. Each tracked item should identify:
 
