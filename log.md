@@ -1299,3 +1299,37 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - `FAIL` only if playable enough to evaluate but failing QA criteria;
   - `BLOCKED_PROVIDER` for provider/shell/iframe/startup/ad/consent path blockers;
   - `BLOCKED_ENVIRONMENT` for local browser-harness/input/storage environment blockers.
+
+## Dungeons External QA Shared-Window Retry 1 PASS_WITH_FINDINGS - 2026-06-25
+
+- Canonical cross-game tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Dungeons & Degenerate Gamblers Demo shared-window retry 1.
+- Evidence folder: `evidence/external/dungeons-degenerate-gamblers-shared-window-retry-1/`.
+- Required evidence now exists:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS_WITH_FINDINGS`.
+- Provider/environment classification:
+  - not `BLOCKED_PROVIDER`: the itch.io page loaded, the embed launched, menu input worked, and gameplay reached deck selection, tavern/node entry, and first table/combat;
+  - not `BLOCKED_ENVIRONMENT`: the canonical tester used browser-harness in the single shared Chrome window and recovered from one tab-target drift without opening another browser surface.
+- Verified:
+  - itch embed launch;
+  - main menu and input response;
+  - deck selection and locked/unlocked deck readability;
+  - tavern/node entry;
+  - first table/combat state;
+  - player/enemy/card-state readability;
+  - `HIT` and `STAND` action feedback;
+  - short-run performance/load behavior.
+- Nonblocking findings:
+  - `New Run` label/hit target is ambiguous; the larger Tavern logo/upper region was the reliable start-run target;
+  - settings/options coverage is partial, especially audio/volume, restart, and give-up behavior;
+  - legal actions were smoke-tested, but clearly illegal/unavailable action messaging was not reached;
+  - one dashboard-contaminated screenshot from browser-harness tab drift was excluded from verdict evidence.
+- Methodology carry-forward:
+  - for external card/deckbuilder QA, capture state before the first action and after each legal action to prove card totals, HP, and consequences;
+  - distinguish visible label hit targets from surrounding graphic affordances before calling input blocked;
+  - if browser-harness attachment drifts inside the shared Chrome window, reattach to the assigned URL tab and mark contaminated screenshots invalid;
+  - future card-game passes should deliberately seek unavailable-action states after core reachability is proven;
+  - future settings passes should explicitly cover audio/volume, fullscreen, restart, and give-up behavior.
+- No provider reroute is required for basic Dungeons playability. The next external QA action should be a deeper settings/options pass for another completed target such as Cookie Clicker or Townscaper, or a methodology pass selected by the orchestrator.

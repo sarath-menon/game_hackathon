@@ -4,6 +4,7 @@
 *.mov
 *.webm
 evidence/**/capture-metadata.txt
+evidence/**/ffmpeg-input.txt
 evidence/**/frames/
 evidence/**/recording-frames/
 evidence/**/probes/
