@@ -1431,3 +1431,16 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - `FAIL` only if playable enough to evaluate but failing functional, usability, accessibility, settings/options, performance, or QA acceptance criteria;
   - `BLOCKED_PROVIDER` for provider/shell/iframe/startup/ad/consent path blockers;
   - `BLOCKED_ENVIRONMENT` for local browser-harness/input/storage/viewport environment blockers.
+
+## Arcade Kart Racer Settings-Depth Builder Handoff Active - 2026-06-25
+
+- Orchestrator started a Track 1 local builder pass through Kart builder `019ef96d-c407-7be3-9934-6595866643ee`.
+- Scope:
+  - improve the Kart settings panel toward industry-standard coverage;
+  - keep edits limited to `games/kart-racer/index.html` and `games/kart-racer/README.md`;
+  - preserve approved gameplay, orientation, drift/boost, restart, and audio-default behavior;
+  - keep audio off/volume 0 on first load and after Reset Defaults;
+  - add clearer grouped settings and at least three meaningful player-facing controls if compatible with the current codebase;
+  - improve safe persistence/defaults and keyboard/focus accessibility.
+- This is build-only while the canonical tester is busy with the active Cookie Clicker external QA pass.
+- Future approval requires a serialized canonical tester handoff with URL/manual/evidence paths after the builder reports complete.

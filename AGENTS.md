@@ -98,6 +98,7 @@ A popular external browser game must not receive final `FAIL` solely because one
   - Required evidence exists at `evidence/deckbuilder/upgrade-phase-1-combat-feedback/`: `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`.
   - Current active suite lanes: local settings-panel quality and external browser-game QA methodology.
   - Arcade Kart Racer Settings Panel Phase 1 was superseded by the audio-default hotfix and must be retested through the canonical tester before approval.
+  - Current active local builder handoff: Arcade Kart Racer settings-depth upgrade through the Kart builder, targeting grouped settings, additional player-facing controls, safe persistence/defaults, keyboard/focus accessibility, and README accuracy before a future canonical tester retest.
   - Side-Scrolling Platformer Settings Panel Phase 1 is closed as `PASS`.
   - Turn-Based Deckbuilder Settings Panel Phase 1 is closed as `PASS`; Deckbuilder Settings Panel Polish 1 is also closed as `PASS`.
   - Cross-game audio-default hotfix:
