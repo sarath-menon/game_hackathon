@@ -14,9 +14,7 @@
       --ink: #182225;
       --muted: #607077;
       --pass: #0f766e;
-      --active: #1d4ed8;
-      --testing: #9a5b00;
-      --queued: #667085;
+      --attention: #9a5b00;
       --fail: #b42318;
       --shadow: 0 8px 24px rgba(22, 34, 38, 0.08);
     }
@@ -40,8 +38,12 @@
       text-underline-offset: 2px;
     }
 
+    button {
+      font: inherit;
+    }
+
     .shell {
-      width: min(1680px, 100%);
+      width: min(1260px, 100%);
       margin: 0 auto;
       padding: 18px;
     }
@@ -49,310 +51,167 @@
     .topbar {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
-      gap: 16px;
+      gap: 14px;
       align-items: end;
       padding-bottom: 14px;
       border-bottom: 1px solid var(--line);
     }
 
-    h1 {
-      margin: 0 0 4px;
-      font-size: clamp(1.35rem, 2vw, 2rem);
-      line-height: 1.1;
+    h1,
+    h2,
+    h3 {
+      margin: 0;
       letter-spacing: 0;
+      line-height: 1.18;
+    }
+
+    h1 {
+      font-size: clamp(1.35rem, 2vw, 2rem);
     }
 
     .subtitle {
-      margin: 0;
-      max-width: 92ch;
+      margin: 4px 0 0;
+      max-width: 78ch;
       color: var(--muted);
-      font-size: 0.94rem;
+      font-size: 0.93rem;
     }
 
-    .metrics {
+    .status-strip {
       display: grid;
-      grid-template-columns: repeat(5, minmax(78px, 1fr));
+      grid-template-columns: repeat(3, minmax(150px, 1fr));
       gap: 8px;
-      min-width: min(470px, 100%);
+      min-width: min(620px, 100%);
     }
 
-    .metric {
-      padding: 9px 11px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-    }
-
-    .metric strong {
-      display: block;
-      font-size: 1.25rem;
-      line-height: 1;
-    }
-
-    .metric span {
-      color: var(--muted);
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .lanes {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      padding-top: 14px;
-    }
-
-    .gate {
-      margin-top: 14px;
-      padding: 10px 12px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-      color: var(--muted);
-      font-size: 0.86rem;
-      box-shadow: var(--shadow);
-    }
-
-    .gate strong {
-      color: var(--ink);
-    }
-
-    .tracker {
-      margin-top: 14px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .tracker-header {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 12px;
-      align-items: baseline;
-      justify-content: space-between;
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--line);
-      background: #fbfcfc;
-    }
-
-    .tracker-header h2 {
-      margin: 0;
-      font-size: 1rem;
-    }
-
-    .tracker-header p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.84rem;
-    }
-
-    .tracker-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      padding: 12px 14px 14px;
-    }
-
-    .fix-item {
-      display: grid;
-      gap: 9px;
-      padding: 10px;
+    .status-tile {
+      padding: 10px 11px;
       border: 1px solid var(--line);
       border-left-width: 5px;
       border-radius: 8px;
-      background: #fff;
+      background: var(--panel);
+      box-shadow: var(--shadow);
     }
 
-    .fix-item[data-status="fixed"] {
+    .status-tile[data-status="pass"] {
       border-left-color: var(--pass);
     }
 
-    .fix-item[data-status="retesting"] {
-      border-left-color: var(--testing);
+    .status-tile[data-status="attention"] {
+      border-left-color: var(--attention);
     }
 
-    .fix-item[data-status="open"] {
-      border-left-color: var(--fail);
-    }
-
-    .fix-item[data-status="superseded"] {
-      border-left-color: var(--queued);
-    }
-
-    .fix-head {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .fix-title {
-      margin: 0;
-      font-size: 0.92rem;
-      line-height: 1.25;
-    }
-
-    .fix-row {
-      display: grid;
-      grid-template-columns: 118px minmax(0, 1fr);
-      gap: 8px;
-      font-size: 0.82rem;
-    }
-
-    .fix-label {
-      color: var(--muted);
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      font-size: 0.68rem;
-    }
-
-    .fix-text {
-      color: var(--ink);
-    }
-
-    .fix-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      font-size: 0.78rem;
-    }
-
-    .fix-links a,
-    .fix-links span {
-      display: inline-flex;
-      align-items: center;
-      min-height: 26px;
-      padding: 3px 7px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: var(--soft);
-      color: var(--muted);
-      overflow-wrap: anywhere;
-    }
-
-    .lane {
-      display: flex;
-      min-width: 0;
-      flex-direction: column;
-      gap: 10px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .lane-header {
-      padding: 14px;
-      border-bottom: 1px solid var(--line);
-      background: #fbfcfc;
-    }
-
-    .lane-title {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    h2 {
-      margin: 0;
-      font-size: 1.05rem;
-      line-height: 1.2;
-      letter-spacing: 0;
-    }
-
-    .lane-summary {
-      margin: 0 0 10px;
-      color: var(--muted);
+    .status-tile strong {
+      display: block;
       font-size: 0.9rem;
     }
 
-    .links {
-      display: flex;
+    .status-tile span {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .attention-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      margin-top: 14px;
+      padding: 13px 14px;
+      border: 1px solid rgba(154, 91, 0, 0.3);
+      border-left: 5px solid var(--attention);
+      border-radius: 8px;
+      background: #fffaf0;
+      box-shadow: var(--shadow);
+    }
+
+    .attention-panel h2 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .attention-panel p {
+      margin: 0;
+      color: #594100;
+      font-size: 0.9rem;
+    }
+
+    .filters {
+      display: inline-flex;
       flex-wrap: wrap;
       gap: 8px;
-      font-size: 0.84rem;
+      margin-top: 14px;
     }
 
-    .links a,
-    .path-pill {
-      display: inline-flex;
-      align-items: center;
-      min-height: 28px;
-      padding: 4px 8px;
+    .filter-btn,
+    .action-btn,
+    .drawer-close,
+    .viewer-actions button,
+    .viewer-actions a {
+      min-height: 32px;
+      padding: 5px 10px;
       border: 1px solid var(--line);
       border-radius: 6px;
-      background: var(--soft);
-      overflow-wrap: anywhere;
+      background: var(--panel);
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 0.84rem;
+      font-weight: 800;
     }
 
-    .phase-list {
-      display: grid;
-      gap: 10px;
-      padding: 0 14px 14px;
+    .filter-btn[aria-pressed="true"] {
+      border-color: rgba(29, 78, 216, 0.35);
+      background: #eaf0ff;
+      color: #1d4ed8;
     }
 
-    .phase {
+    .games {
       display: grid;
-      gap: 10px;
-      padding: 12px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .game-card {
+      display: grid;
+      gap: 12px;
+      padding: 14px;
       border: 1px solid var(--line);
       border-left-width: 5px;
       border-radius: 8px;
-      background: #fff;
+      background: var(--panel);
+      box-shadow: var(--shadow);
     }
 
-    .phase[data-status="pass"] {
+    .game-card[data-status="pass"] {
       border-left-color: var(--pass);
     }
 
-    .phase[data-status="active"] {
-      border-left-color: var(--active);
+    .game-card[data-status="attention"] {
+      border-left-color: var(--attention);
     }
 
-    .phase[data-status="testing"] {
-      border-left-color: var(--testing);
-    }
-
-    .phase[data-status="queued"] {
-      border-left-color: var(--queued);
-    }
-
-    .phase[data-status="fail"] {
-      border-left-color: var(--fail);
-    }
-
-    .phase-head {
+    .game-head {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
       justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
     }
 
-    h3 {
+    .game-card h2 {
+      font-size: 1.08rem;
+    }
+
+    .game-card p {
       margin: 0;
-      font-size: 0.98rem;
-      line-height: 1.2;
-      letter-spacing: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
     }
 
-    .badges {
-      display: inline-flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      align-items: center;
-    }
-
-    .badge {
+    .badge,
+    .chip {
       display: inline-flex;
       align-items: center;
       min-height: 24px;
@@ -362,80 +221,156 @@
       background: var(--soft);
       color: var(--muted);
       font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
+      font-weight: 900;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
       white-space: nowrap;
     }
 
-    .badge[data-kind="pass"] {
+    .badge[data-status="pass"],
+    .chip[data-status="pass"] {
       border-color: rgba(15, 118, 110, 0.3);
       background: rgba(15, 118, 110, 0.1);
       color: var(--pass);
     }
 
-    .badge[data-kind="active"] {
-      border-color: rgba(29, 78, 216, 0.3);
-      background: rgba(29, 78, 216, 0.1);
-      color: var(--active);
-    }
-
-    .badge[data-kind="testing"] {
+    .badge[data-status="attention"],
+    .chip[data-status="attention"] {
       border-color: rgba(154, 91, 0, 0.3);
       background: rgba(154, 91, 0, 0.1);
-      color: var(--testing);
+      color: var(--attention);
     }
 
-    .badge[data-kind="fail"] {
-      border-color: rgba(180, 35, 24, 0.3);
-      background: rgba(180, 35, 24, 0.1);
-      color: var(--fail);
+    .phase-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
     }
 
-    .badge[data-kind="fixed"] {
-      border-color: rgba(15, 118, 110, 0.3);
-      background: rgba(15, 118, 110, 0.1);
-      color: var(--pass);
+    .phase-chip {
+      border: 0;
+      padding: 0;
+      background: transparent;
+      cursor: pointer;
     }
 
-    .badge[data-kind="retesting"] {
-      border-color: rgba(154, 91, 0, 0.3);
-      background: rgba(154, 91, 0, 0.1);
-      color: var(--testing);
-    }
-
-    .badge[data-kind="open"] {
-      border-color: rgba(180, 35, 24, 0.3);
-      background: rgba(180, 35, 24, 0.1);
-      color: var(--fail);
-    }
-
-    .badge[data-kind="superseded"] {
-      border-color: rgba(102, 112, 133, 0.3);
-      background: rgba(102, 112, 133, 0.1);
-      color: var(--queued);
-    }
-
-    .description {
-      margin: 0;
-      color: var(--ink);
-      font-size: 0.9rem;
-    }
-
-    .note {
-      margin: 0;
+    .card-meta {
+      display: grid;
+      gap: 5px;
       color: var(--muted);
       font-size: 0.82rem;
     }
 
-    .evidence {
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .open-issues {
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .open-issues header {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfc;
+    }
+
+    .open-issues h2 {
+      font-size: 1rem;
+    }
+
+    .issue-list {
       display: grid;
       gap: 8px;
+      padding: 12px 14px;
+    }
+
+    .issue-row {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      font-size: 0.86rem;
+    }
+
+    .drawer-backdrop,
+    .viewer-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.42);
+    }
+
+    .drawer-backdrop[hidden],
+    .viewer-backdrop[hidden] {
+      display: none;
+    }
+
+    .drawer,
+    .viewer {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      width: min(1060px, 100%);
+      max-height: min(88vh, 940px);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.28);
+      overflow: hidden;
+    }
+
+    .drawer-head,
+    .viewer-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfc;
+    }
+
+    .drawer-head h2,
+    .viewer-title strong {
+      display: block;
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+
+    .drawer-subtitle,
+    .viewer-title code {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      overflow-wrap: anywhere;
+    }
+
+    .drawer-body,
+    .viewer-body {
+      overflow: auto;
+      padding: 14px;
+    }
+
+    .drawer-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, 42%) minmax(0, 1fr);
+      gap: 14px;
     }
 
     .video-frame {
       display: grid;
-      min-height: 172px;
+      min-height: 220px;
       aspect-ratio: 16 / 9;
       place-items: center;
       overflow: hidden;
@@ -445,69 +380,47 @@
     }
 
     video {
-      display: block;
       width: 100%;
       height: 100%;
       background: #172326;
     }
 
-    .pending-media {
-      width: 100%;
-      height: 100%;
-      display: grid;
-      place-items: center;
-      padding: 16px;
-      color: #d7e0e2;
-      text-align: center;
-      font-size: 0.86rem;
-    }
-
-    .meta {
-      display: grid;
-      gap: 5px;
-      margin: 0;
+    .missing {
       color: var(--muted);
-      font-size: 0.78rem;
+      font-style: italic;
     }
 
-    .meta code {
-      color: var(--ink);
-      overflow-wrap: anywhere;
-    }
-
-    details.report {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fbfcfc;
-      overflow: hidden;
-    }
-
-    details.report summary {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .drawer-section {
+      display: grid;
       gap: 8px;
-      min-height: 38px;
-      padding: 8px 10px;
-      cursor: pointer;
-      color: var(--ink);
-      font-size: 0.84rem;
-      font-weight: 800;
+      margin-bottom: 14px;
     }
 
-    .report-state {
-      color: var(--muted);
-      font-size: 0.74rem;
-      font-weight: 700;
+    .drawer-section h3 {
+      font-size: 0.95rem;
+    }
+
+    .history-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .history-item {
+      padding: 9px;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--pass);
+      border-radius: 8px;
+      background: #fff;
+      font-size: 0.84rem;
+    }
+
+    .history-item strong {
+      display: block;
+      margin-bottom: 3px;
     }
 
     .markdown {
-      max-height: 460px;
-      overflow: auto;
-      padding: 10px 12px 14px;
-      border-top: 1px solid var(--line);
-      background: #fff;
-      font-size: 0.82rem;
+      font-size: 0.84rem;
     }
 
     .markdown h1,
@@ -518,17 +431,17 @@
     }
 
     .markdown h1 {
-      font-size: 1.08rem;
+      font-size: 1.15rem;
     }
 
     .markdown h2 {
-      font-size: 0.98rem;
+      font-size: 1.02rem;
       padding-top: 0.4em;
       border-top: 1px solid #e5ecee;
     }
 
     .markdown h3 {
-      font-size: 0.9rem;
+      font-size: 0.94rem;
     }
 
     .markdown p,
@@ -550,121 +463,26 @@
       font-size: 0.78rem;
     }
 
-    .markdown pre {
-      overflow: auto;
-      padding: 10px;
-      border-radius: 6px;
-      background: #111827;
-      color: #f9fafb;
-    }
-
-    .markdown pre code {
-      padding: 0;
-      background: transparent;
-      color: inherit;
-    }
-
-    .markdown blockquote {
-      margin: 0.5em 0;
-      padding-left: 0.8rem;
-      border-left: 3px solid var(--line);
-      color: var(--muted);
-    }
-
-    .missing {
-      color: var(--muted);
-      font-style: italic;
-    }
-
-    .viewer-backdrop {
-      position: fixed;
-      inset: 0;
-      z-index: 40;
-      display: grid;
-      place-items: center;
-      padding: 20px;
-      background: rgba(15, 23, 42, 0.42);
-    }
-
-    .viewer-backdrop[hidden] {
-      display: none;
-    }
-
-    .viewer {
-      display: grid;
-      grid-template-rows: auto minmax(0, 1fr);
-      width: min(980px, 100%);
-      max-height: min(86vh, 900px);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.28);
-      overflow: hidden;
-    }
-
-    .viewer-head {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
-      align-items: center;
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--line);
-      background: #fbfcfc;
-    }
-
-    .viewer-title {
-      min-width: 0;
-    }
-
-    .viewer-title strong {
-      display: block;
-      font-size: 0.96rem;
-      line-height: 1.2;
-    }
-
-    .viewer-title code {
-      display: block;
-      margin-top: 3px;
-      color: var(--muted);
-      font-size: 0.76rem;
-      overflow-wrap: anywhere;
-    }
-
     .viewer-actions {
       display: inline-flex;
-      flex-wrap: wrap;
       gap: 7px;
       justify-content: flex-end;
     }
 
-    .viewer-actions a,
-    .viewer-actions button {
-      min-height: 30px;
-      padding: 4px 9px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: var(--soft);
-      color: var(--ink);
-      font: inherit;
-      font-size: 0.82rem;
-      cursor: pointer;
-    }
-
-    .viewer-body {
-      min-height: 220px;
-      overflow: auto;
-      padding: 12px 14px 16px;
-    }
-
-    @media (max-width: 1220px) {
+    @media (max-width: 980px) {
       .topbar,
-      .tracker-grid,
-      .lanes {
+      .games,
+      .drawer-grid {
         grid-template-columns: 1fr;
       }
 
-      .metrics {
+      .status-strip {
         min-width: 0;
+      }
+
+      .attention-panel,
+      .issue-row {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -673,22 +491,8 @@
         padding: 12px;
       }
 
-      .metrics {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .lane-header,
-      .tracker-grid,
-      .phase-list {
-        padding: 12px;
-      }
-
-      .fix-row {
+      .status-strip {
         grid-template-columns: 1fr;
-      }
-
-      .video-frame {
-        min-height: 145px;
       }
     }
   </style>
@@ -698,33 +502,72 @@
     <header class="topbar">
       <div>
         <h1>Three-Game Lockstep Dashboard</h1>
-        <p class="subtitle">Operational status for each build/test phase. Every phase panel renders its Markdown test report when available, shows the evidence video, and separates current workflow state from the latest written verdict.</p>
+        <p class="subtitle">Compact suite status with evidence available on demand. Report verdicts hydrate from local TEST_REPORT.md files; current workflow can differ from older PASS evidence.</p>
       </div>
-      <section class="metrics" aria-label="Phase workflow totals">
-        <div class="metric"><strong id="pass-count">0</strong><span>Pass</span></div>
-        <div class="metric"><strong id="fail-count">0</strong><span>Fail</span></div>
-        <div class="metric"><strong id="testing-count">0</strong><span>Testing</span></div>
-        <div class="metric"><strong id="active-count">0</strong><span>Building</span></div>
-        <div class="metric"><strong id="queued-count">0</strong><span>Queued</span></div>
-      </section>
+      <section class="status-strip" id="status-strip" aria-label="Game status summary"></section>
     </header>
 
-    <section class="gate" aria-label="Current testing clarity gate">
-      <strong>Testing gate:</strong> spatial game reports must explicitly check readability, orientation, and route clarity; UI/card game reports must check visible state, intent, action clarity, and next-step clarity.
-      <br><strong>Dashboard tool:</strong> Markdown viewer complete; dashboard `.md` links open in-page by default.
-      <br><strong>Suite state:</strong> all nine phases are approved with reports, expected-flow files, and gameplay MP4 evidence.
+    <section class="attention-panel" id="attention-panel">
+      <div>
+        <h2>Current Attention</h2>
+        <p><strong>Arcade Kart Racer is reopened</strong> for an orientation/readability fix and retest after user review. Existing Phase 3 evidence still reports PASS, so the card distinguishes current status from latest report verdict.</p>
+      </div>
+      <button class="action-btn" data-open-phase="kart-racer:3">View Kart Evidence</button>
     </section>
 
-    <section class="tracker" aria-label="Feedback fix tracker">
-      <header class="tracker-header">
-        <h2>Feedback Fix Tracker</h2>
-        <p>Tester blocker -> builder fix -> current retest status, with report and evidence paths.</p>
-      </header>
-      <div class="tracker-grid" id="fix-tracker-list"></div>
-    </section>
+    <nav class="filters" aria-label="Dashboard filters">
+      <button class="filter-btn" data-filter="all" aria-pressed="true">All</button>
+      <button class="filter-btn" data-filter="attention" aria-pressed="false">Needs Attention</button>
+      <button class="filter-btn" data-filter="pass" aria-pressed="false">Passed</button>
+    </nav>
 
-    <section class="lanes" id="lanes" aria-label="Game lanes"></section>
+    <section class="games" id="games" aria-label="Game cards"></section>
+
+    <section class="open-issues" aria-label="Open issues">
+      <header><h2>Open Issues</h2></header>
+      <div class="issue-list">
+        <div class="issue-row">
+          <span class="badge" data-status="attention">Reopened</span>
+          <span>Kart Racer orientation/readability review is active. Awaiting fix and retest before final suite closure.</span>
+          <button class="action-btn" data-open-phase="kart-racer:3">Evidence</button>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <div class="drawer-backdrop" id="evidence-drawer" hidden>
+    <section class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+      <header class="drawer-head">
+        <div>
+          <h2 id="drawer-title">Evidence</h2>
+          <span class="drawer-subtitle" id="drawer-subtitle"></span>
+        </div>
+        <button class="drawer-close" id="drawer-close">Close</button>
+      </header>
+      <div class="drawer-body">
+        <div class="drawer-grid">
+          <div>
+            <section class="drawer-section">
+              <h3>Gameplay Video</h3>
+              <div class="video-frame" id="drawer-video-frame"></div>
+            </section>
+            <section class="drawer-section">
+              <h3>Evidence Paths</h3>
+              <div id="drawer-paths" class="card-meta"></div>
+            </section>
+            <section class="drawer-section">
+              <h3>Feedback / Fix History</h3>
+              <div class="history-list" id="drawer-history"></div>
+            </section>
+          </div>
+          <section class="drawer-section">
+            <h3>TEST_REPORT.md</h3>
+            <div class="markdown" id="drawer-report"><p class="missing">Select a phase to load evidence.</p></div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <div class="viewer-backdrop" id="markdown-viewer" hidden>
     <section class="viewer" role="dialog" aria-modal="true" aria-labelledby="markdown-viewer-title">
@@ -735,7 +578,7 @@
         </div>
         <div class="viewer-actions">
           <a id="markdown-viewer-raw" href="#" target="_blank" rel="noopener" data-raw-markdown-link>Open raw</a>
-          <button type="button" id="markdown-viewer-close">Close</button>
+          <button type="button" class="drawer-close" id="markdown-viewer-close">Close</button>
         </div>
       </header>
       <div class="viewer-body markdown" id="markdown-viewer-body"></div>
@@ -745,215 +588,97 @@
   <script>
     const games = [
       {
+        id: "kart-racer",
         name: "Arcade Kart Racer",
-        summary: "3D loop track driving with vehicle control, laps/checkpoints, collisions, boost pads, and race completion.",
+        status: "attention",
+        statusLabel: "REOPENED",
+        summary: "Needs orientation/readability fix and retest despite existing PASS reports.",
         gameUrl: "games/kart-racer/index.html",
         readmeUrl: "games/kart-racer/README.md",
+        primaryPhase: 3,
         phases: [
-          {
-            label: "Phase 1: Basic Drivable Track",
-            status: "pass",
-            statusLabel: "PASS",
-            description: "Single kart on a simple 3D loop track with start screen, steering, acceleration/brake, track boundaries, and finish line.",
-            evidenceDir: "evidence/kart-racer/phase-1",
-            note: "Approved after retest."
-          },
-          {
-            label: "Phase 2: Race Rules",
-            status: "pass",
-            statusLabel: "PASS",
-            description: "Checkpoints, lap counting, wrong-way/checkpoint validation, race timer, route readability, and completion screen.",
-            evidenceDir: "evidence/kart-racer/phase-2",
-            note: "Final-gate retest passed with complete evidence."
-          },
-          {
-            label: "Phase 3: Game Feel",
-            status: "pass",
-            statusLabel: "PASS",
-            description: "Boost pads, obstacle cones/barriers, speed feedback, restart flow, and polish.",
-            evidenceDir: "evidence/kart-racer/phase-3",
-            note: "Approved with route clarity PASS, boost/obstacle/restart coverage, and complete evidence."
-          }
+          { number: 1, title: "Basic Drivable Track", current: "pass", evidenceDir: "evidence/kart-racer/phase-1" },
+          { number: 2, title: "Race Rules", current: "pass", evidenceDir: "evidence/kart-racer/phase-2" },
+          { number: 3, title: "Game Feel", current: "attention", evidenceDir: "evidence/kart-racer/phase-3" }
         ]
       },
       {
+        id: "platformer",
         name: "Side-Scrolling Platformer",
-        summary: "Running, jumping, gravity, platforms, hazards/enemies, collectibles, and a level exit.",
+        status: "pass",
+        statusLabel: "PASS",
+        summary: "Complete through Phase 3 after restart-from-failure fix.",
         gameUrl: "games/platformer/index.html",
         readmeUrl: "games/platformer/README.md",
+        primaryPhase: 3,
         phases: [
-          {
-            label: "Phase 1: Core Movement",
-            status: "pass",
-            statusLabel: "PASS",
-            description: "Side-scrolling level with player movement, jump, gravity, platforms, camera follow, start screen, and level exit.",
-            evidenceDir: "evidence/platformer/phase-1"
-          },
-          {
-            label: "Phase 2: Hazards And Collectibles",
-            status: "pass",
-            statusLabel: "PASS",
-            description: "Hazards/enemies, collectibles, health/lives or fail state, respawn, reliable lower-deck route, and completion summary.",
-            evidenceDir: "evidence/platformer/phase-2",
-            note: "Approved after the second builder fix."
-          },
-          {
-            label: "Phase 3: Level Polish",
-            status: "pass",
-            statusLabel: "PASS",
-            description: "Moving platforms or simple enemy patrols, checkpoints, clearer level readability, and restart flow.",
-            evidenceDir: "evidence/platformer/phase-3",
-            note: "Approved after restart-from-failure reset fix; route clarity and restart behavior both PASS."
-          }
+          { number: 1, title: "Core Movement", current: "pass", evidenceDir: "evidence/platformer/phase-1" },
+          { number: 2, title: "Hazards And Collectibles", current: "pass", evidenceDir: "evidence/platformer/phase-2" },
+          { number: 3, title: "Level Polish", current: "pass", evidenceDir: "evidence/platformer/phase-3" }
         ]
       },
       {
+        id: "deckbuilder",
         name: "Turn-Based Deckbuilder",
-        summary: "Card combat with draw pile, hand, energy, attacks, block, enemy intent, discard, turn transitions, and win/loss.",
+        status: "pass",
+        statusLabel: "PASS",
+        summary: "Complete through Phase 3 with state/action clarity verified.",
         gameUrl: "games/deckbuilder/index.html",
         readmeUrl: "games/deckbuilder/README.md",
+        primaryPhase: 3,
         phases: [
-          {
-            label: "Phase 1: Basic Card Combat",
-            status: "pass",
-            statusLabel: "PASS",
-            description: "Combat screen with player HP, enemy HP, draw pile, hand, energy, attack/block cards, end turn, enemy attack, and victory/defeat.",
-            evidenceDir: "evidence/deckbuilder/phase-1"
-          },
-          {
-            label: "Phase 2: Tactical Variety",
-            status: "pass",
-            statusLabel: "PASS",
-            description: "Enemy intent, multiple card types, status effects or buffs, and at least two enemy turns.",
-            evidenceDir: "evidence/deckbuilder/phase-2"
-          },
-          {
-            label: "Phase 3: Run Structure",
-            status: "pass",
-            statusLabel: "PASS",
-            description: "Reward choice after combat, deck updates, second encounter, and final victory screen.",
-            evidenceDir: "evidence/deckbuilder/phase-3",
-            note: "All planned deckbuilder phases are approved."
-          }
+          { number: 1, title: "Basic Card Combat", current: "pass", evidenceDir: "evidence/deckbuilder/phase-1" },
+          { number: 2, title: "Tactical Variety", current: "pass", evidenceDir: "evidence/deckbuilder/phase-2" },
+          { number: 3, title: "Run Structure", current: "pass", evidenceDir: "evidence/deckbuilder/phase-3" }
         ]
       }
     ];
 
-    const feedbackFixes = [
-      {
-        game: "Arcade Kart Racer",
-        phase: "Phase 2",
-        title: "Initial checkpoint and lap HUD blockers",
-        status: "fixed",
-        statusLabel: "Fixed",
-        feedback: "Tester reported ordered checkpoint progression could not advance past CP1, lap HUD started at 1/1, and final-time completion was unreachable.",
-        fix: "Builder moved CP1/CP2/CP3 into a reachable sequence, widened checkpoint and finish trigger zones, made gates span the road with visible labels, suppressed stale wrong-order warnings, and changed lap progress to start at 0/1.",
-        reportPath: "evidence/kart-racer/phase-2/TEST_REPORT.md",
-        videoPath: "evidence/kart-racer/phase-2/gameplay-recording.mp4"
-      },
-      {
-        game: "Arcade Kart Racer",
-        phase: "Phase 2",
-        title: "CP2 readability/orientation blocker",
-        status: "fixed",
-        statusLabel: "Fixed",
-        feedback: "Retest confirmed CP1 cleared but CP2 was difficult or impossible to reach from the post-CP1 state; route orientation/readability was treated as the root cause.",
-        fix: "Builder simplified the route into an opening left-hand bend, placed CP1, CP2, CP3, and finish as a close sequential on-road route, preserved generous triggers, and updated the README route description.",
-        reportPath: "evidence/kart-racer/phase-2/TEST_REPORT.md",
-        videoPath: "evidence/kart-racer/phase-2/gameplay-recording.mp4"
-      },
-      {
-        game: "Arcade Kart Racer",
-        phase: "Phase 2",
-        title: "Final-gate scoring after checkpoints",
-        status: "fixed",
-        statusLabel: "Fixed",
-        feedback: "Second retest reached NEXT Finish after CP1 -> CP2 -> CP3, but normal controls could not trigger lap 1/1, final time, or race-complete at the yellow gate.",
-        fix: "Builder moved the yellow finish gate closer to CP3, added a visible FINISH label, and made the post-checkpoint scoring zone generous while keeping early finish contact locked.",
-        reportPath: "evidence/kart-racer/phase-2/TEST_REPORT.md",
-        videoPath: "evidence/kart-racer/phase-2/gameplay-recording.mp4"
-      },
-      {
-        game: "Side-Scrolling Platformer",
-        phase: "Phase 2",
-        title: "Exit unreachable on hazard route",
-        status: "fixed",
-        statusLabel: "Fixed",
-        feedback: "Tester repeatedly reached Run Ended before the exit; Level Complete and exit summary could not be demonstrated on the documented route.",
-        fix: "After the second fix, the lower deck became the reliable safe path: elevated collision no longer blocked it, hazards sit above that lane, the exit hitbox reaches the lower deck, and respawn invulnerability is longer.",
-        reportPath: "evidence/platformer/phase-2/TEST_REPORT.md",
-        videoPath: "evidence/platformer/phase-2/gameplay-recording.mp4"
-      },
-      {
-        game: "Side-Scrolling Platformer",
-        phase: "Phase 3",
-        title: "Health-zero failure-state blocker",
-        status: "fixed",
-        statusLabel: "Fixed",
-        feedback: "Tester found completion, checkpoint recovery, patrol visibility, route markers, and restart working, but health-zero Run Ended was not reproducible in normal black-box play.",
-        fix: "Builder added an optional red vent at the left boundary near the start and shortened post-damage invulnerability so holding left into the visible start-side vent reliably reaches health-zero Run Ended.",
-        reportPath: "evidence/platformer/phase-3/TEST_REPORT.md",
-        videoPath: "evidence/platformer/phase-3/gameplay-recording.mp4"
-      },
-      {
-        game: "Side-Scrolling Platformer",
-        phase: "Phase 3",
-        title: "Restart from failure leaves health at 0",
-        status: "fixed",
-        statusLabel: "Fixed",
-        feedback: "Latest retest shows Enter after Run Ended changes objective text back to Reach the exit beacon, but HUD remains at Health: 0 instead of resetting to a playable 3-health state.",
-        fix: "Builder fixed restart from failure so health, checkpoint, cores, and distance reset; tester retest is PASS and approves Phase 3.",
-        reportPath: "evidence/platformer/phase-3/TEST_REPORT.md",
-        videoPath: "evidence/platformer/phase-3/gameplay-recording.mp4"
-      },
-      {
-        game: "Arcade Kart Racer",
-        phase: "Phase 3",
-        title: "Game feel systems approved",
-        status: "fixed",
-        statusLabel: "Complete",
-        feedback: "Tester verified boost pads, obstacle feedback/recovery, speed feedback, restart from completion, stable performance, and route clarity all PASS.",
-        fix: "No further builder loop is open. Phase 3 is approved with TEST_REPORT.md, expected-flow.md, and gameplay-recording.mp4 present.",
-        reportPath: "evidence/kart-racer/phase-3/TEST_REPORT.md",
-        videoPath: "evidence/kart-racer/phase-3/gameplay-recording.mp4"
-      },
-      {
-        game: "Turn-Based Deckbuilder",
-        phase: "Phases 1-3",
-        title: "Suite complete without active blockers",
-        status: "fixed",
-        statusLabel: "Complete",
-        feedback: "Tester reports for Basic Card Combat, Tactical Variety, and Run Structure are PASS with complete evidence; no active blocker loop remains.",
-        fix: "No follow-up builder fix is pending. The lane is complete through Phase 3 with visible state/action clarity verified by the reports.",
-        reportPath: "evidence/deckbuilder/phase-3/TEST_REPORT.md",
-        videoPath: "evidence/deckbuilder/phase-3/gameplay-recording.mp4"
-      },
-      {
-        game: "Three-Game Suite",
-        phase: "All phases",
-        title: "All nine phases approved",
-        status: "fixed",
-        statusLabel: "Complete",
-        feedback: "The lockstep lanes have no remaining active blockers: Kart Phase 3 PASS, Platformer Phase 3 PASS, and Deckbuilder already complete through Phase 3.",
-        fix: "Dashboard now points to complete reports, expected-flow files, and gameplay MP4 evidence for all nine phases, with Markdown opened in-page for audit.",
-        reportPath: "evidence/platformer/phase-3/TEST_REPORT.md",
-        videoPath: "evidence/platformer/phase-3/gameplay-recording.mp4"
-      }
-    ];
-
-    const statusLabels = {
-      pass: "PASS",
-      fail: "FAIL",
-      active: "Building",
-      testing: "Testing",
-      queued: "Queued"
+    const histories = {
+      "kart-racer:2": [
+        ["Initial blocker", "CP progression could not advance past CP1, lap HUD started at 1/1, and final-time completion was unreachable."],
+        ["Builder fix", "Moved CP1/CP2/CP3 into a reachable sequence, widened triggers, visible road-spanning labels, and HUD starts at 0/1."],
+        ["Readability fix", "Simplified the route into an opening left-hand bend with CP1 -> CP2 -> CP3 -> finish in sequence."],
+        ["Final-gate fix", "Moved finish closer to CP3 and expanded post-checkpoint scoring; report now PASS."]
+      ],
+      "kart-racer:3": [
+        ["Report state", "Phase 3 TEST_REPORT.md says PASS with route clarity PASS and complete boost/obstacle/restart evidence."],
+        ["Current review", "Reopened after user review for orientation/readability. Treat current workflow as Needs Attention until fix and retest pass."],
+        ["Next step", "Builder fix and retest should produce fresh evidence before Kart is final again."]
+      ],
+      "platformer:2": [
+        ["Blocker", "Exit was unreachable on the hazard route and runs ended before Level Complete."],
+        ["Builder fix", "Lower deck became the reliable safe path, hazards moved above that lane, exit hitbox reaches it, and invulnerability is longer."],
+        ["Retest", "Phase 2 PASS with complete evidence."]
+      ],
+      "platformer:3": [
+        ["Health-zero blocker", "Run Ended was not reproducible through documented black-box play."],
+        ["Builder fix", "Added visible start-side red vent and tuned invulnerability so health-zero Run Ended is reproducible."],
+        ["Restart blocker", "Restart from failure initially kept Health: 0."],
+        ["Final fix", "Restart now resets full run state; Phase 3 report is PASS and approves the phase."]
+      ],
+      "deckbuilder:3": [
+        ["Lane complete", "Deckbuilder Phases 1-3 are PASS with complete evidence and no active blocker loop."]
+      ]
     };
 
-    const lanes = document.querySelector("#lanes");
-    const fixTrackerList = document.querySelector("#fix-tracker-list");
+    const gameContainer = document.querySelector("#games");
+    const statusStrip = document.querySelector("#status-strip");
+    const drawer = document.querySelector("#evidence-drawer");
+    const drawerTitle = document.querySelector("#drawer-title");
+    const drawerSubtitle = document.querySelector("#drawer-subtitle");
+    const drawerVideoFrame = document.querySelector("#drawer-video-frame");
+    const drawerPaths = document.querySelector("#drawer-paths");
+    const drawerHistory = document.querySelector("#drawer-history");
+    const drawerReport = document.querySelector("#drawer-report");
+    const markdownViewer = document.querySelector("#markdown-viewer");
+    const markdownViewerTitle = document.querySelector("#markdown-viewer-title");
+    const markdownViewerPath = document.querySelector("#markdown-viewer-path");
+    const markdownViewerBody = document.querySelector("#markdown-viewer-body");
+    const markdownViewerRaw = document.querySelector("#markdown-viewer-raw");
 
     function escapeHtml(value) {
-      return value
+      return String(value)
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
@@ -994,32 +719,27 @@
       for (const line of lines) {
         if (line.startsWith("```")) {
           closeList();
-          if (inCode) {
-            flushCode();
-          } else {
+          if (inCode) flushCode();
+          else {
             inCode = true;
             codeLines = [];
           }
           continue;
         }
-
         if (inCode) {
           codeLines.push(line);
           continue;
         }
-
         if (!line.trim()) {
           closeList();
           continue;
         }
-
         const heading = line.match(/^(#{1,3})\s+(.+)$/);
         if (heading) {
           closeList();
           out.push(`<h${heading[1].length}>${inlineMarkdown(heading[2])}</h${heading[1].length}>`);
           continue;
         }
-
         const bullet = line.match(/^\s*[-*]\s+(.+)$/);
         if (bullet) {
           if (listType !== "ul") {
@@ -1030,7 +750,6 @@
           out.push(`<li>${inlineMarkdown(bullet[1])}</li>`);
           continue;
         }
-
         const ordered = line.match(/^\s*\d+\.\s+(.+)$/);
         if (ordered) {
           if (listType !== "ol") {
@@ -1041,18 +760,9 @@
           out.push(`<li>${inlineMarkdown(ordered[1])}</li>`);
           continue;
         }
-
-        const quote = line.match(/^>\s?(.+)$/);
-        if (quote) {
-          closeList();
-          out.push(`<blockquote>${inlineMarkdown(quote[1])}</blockquote>`);
-          continue;
-        }
-
         closeList();
         out.push(`<p>${inlineMarkdown(line)}</p>`);
       }
-
       closeList();
       flushCode();
       return out.join("");
@@ -1066,132 +776,119 @@
       };
     }
 
-    function renderEvidence(phase) {
-      const paths = phasePaths(phase);
-      return `
-        <div class="video-frame" data-video-frame>
-          <video controls preload="metadata" src="${paths.video}" data-video></video>
-          <div class="pending-media" data-video-missing hidden>No gameplay MP4 found yet.</div>
-        </div>
-      `;
-    }
-
-    function renderPhase(phase) {
-      const paths = phasePaths(phase);
-      const note = phase.note ? `<p class="note">${escapeHtml(phase.note)}</p>` : "";
-      return `
-        <article class="phase" data-status="${phase.status}" data-report-path="${paths.report}" data-video-path="${paths.video}">
-          <div class="phase-head">
-            <h3>${escapeHtml(phase.label)}</h3>
-            <span class="badges">
-              <span class="badge" data-kind="${phase.status}">Workflow: ${phase.statusLabel}</span>
-              <span class="badge" data-kind="queued" data-report-verdict>Report: checking</span>
-            </span>
-          </div>
-          <p class="description">${escapeHtml(phase.description)}</p>
-          ${note}
-          <div class="evidence">${renderEvidence(phase)}</div>
-          <dl class="meta">
-            <div>Evidence folder: <code>${phase.evidenceDir}/</code></div>
-            <div>Video: <code>${paths.video}</code></div>
-            <div>Report: <a href="${paths.report}"><code>${paths.report}</code></a></div>
-            <div>Expected flow: <a href="${paths.expected}"><code>${paths.expected}</code></a></div>
-          </dl>
-          <details class="report" open>
-            <summary>
-              <span>TEST_REPORT.md</span>
-              <span class="report-state" data-report-state>Loading</span>
-            </summary>
-            <div class="markdown" data-report-markdown><p class="missing">Loading report markdown...</p></div>
-          </details>
-        </article>
-      `;
-    }
-
-    function renderFixItem(item) {
-      const card = document.createElement("article");
-      card.className = "fix-item";
-      card.dataset.status = item.status;
-      card.dataset.videoPath = item.videoPath;
-      card.innerHTML = `
-        <div class="fix-head">
-          <h3 class="fix-title">${escapeHtml(item.game)} ${escapeHtml(item.phase)}: ${escapeHtml(item.title)}</h3>
-          <span class="badge" data-kind="${escapeHtml(item.status)}">${escapeHtml(item.statusLabel)}</span>
-        </div>
-        <div class="fix-row">
-          <div class="fix-label">Tester feedback</div>
-          <div class="fix-text">${escapeHtml(item.feedback)}</div>
-        </div>
-        <div class="fix-row">
-          <div class="fix-label">Builder fix</div>
-          <div class="fix-text">${escapeHtml(item.fix)}</div>
-        </div>
-        <div class="fix-links">
-          <a href="${escapeHtml(item.reportPath)}">TEST_REPORT.md</a>
-          <a href="${escapeHtml(item.videoPath)}">gameplay-recording.mp4</a>
-          <span data-fix-video-state>Video: checking</span>
-        </div>
-      `;
-      return card;
-    }
-
-    async function refreshFixEvidence(card) {
-      const videoPath = card.dataset.videoPath;
-      const state = card.querySelector("[data-fix-video-state]");
-      try {
-        const response = await fetch(videoPath, { method: "HEAD", cache: "no-store" });
-        if (!response.ok) throw new Error(`${response.status}`);
-        state.textContent = "Video: present";
-      } catch {
-        state.textContent = "Video: missing";
-      }
-    }
-
-    function renderGame(game) {
-      const lane = document.createElement("section");
-      lane.className = "lane";
-      lane.innerHTML = `
-        <header class="lane-header">
-          <div class="lane-title">
-            <h2>${escapeHtml(game.name)}</h2>
-          </div>
-          <p class="lane-summary">${escapeHtml(game.summary)}</p>
-          <div class="links">
-            <a href="${game.gameUrl}">Game</a>
-            <a href="${game.readmeUrl}">README</a>
-            <span class="path-pill">${game.gameUrl}</span>
-          </div>
-        </header>
-        <div class="phase-list">
-          ${game.phases.map(renderPhase).join("")}
-        </div>
-      `;
-      return lane;
-    }
-
-    function updateCounts() {
-      const counts = { pass: 0, fail: 0, testing: 0, active: 0, queued: 0 };
-      document.querySelectorAll(".phase").forEach((phase) => {
-        const status = phase.dataset.status;
-        if (counts[status] !== undefined) counts[status] += 1;
-      });
-      document.querySelector("#pass-count").textContent = counts.pass;
-      document.querySelector("#fail-count").textContent = counts.fail;
-      document.querySelector("#testing-count").textContent = counts.testing;
-      document.querySelector("#active-count").textContent = counts.active;
-      document.querySelector("#queued-count").textContent = counts.queued;
-    }
-
     function findVerdict(markdown) {
       return markdown.match(/Verdict:\s*`?(PASS|FAIL|PENDING)`?/i)?.[1]?.toUpperCase()
         || markdown.match(/(?:^|\n)\s*(PASS|FAIL|PENDING)\s*(?:\n|$)/i)?.[1]?.toUpperCase()
         || "Unknown";
     }
 
+    function renderSummary() {
+      statusStrip.innerHTML = games.map((game) => `
+        <div class="status-tile" data-status="${game.status}">
+          <strong>${escapeHtml(game.name)}</strong>
+          <span>${escapeHtml(game.statusLabel)}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderCards(filter = "all") {
+      const visibleGames = games.filter((game) => {
+        if (filter === "attention") return game.status === "attention";
+        if (filter === "pass") return game.status === "pass";
+        return true;
+      });
+
+      gameContainer.innerHTML = visibleGames.map((game) => `
+        <article class="game-card" data-status="${game.status}">
+          <div class="game-head">
+            <h2>${escapeHtml(game.name)}</h2>
+            <span class="badge" data-status="${game.status}">${escapeHtml(game.statusLabel)}</span>
+          </div>
+          <p>${escapeHtml(game.summary)}</p>
+          <div class="phase-chips">
+            ${game.phases.map((phase) => `
+              <button class="phase-chip" data-open-phase="${game.id}:${phase.number}" title="Open ${escapeHtml(phase.title)} evidence">
+                <span class="chip" data-status="${phase.current}">P${phase.number} ${phase.current === "attention" ? "Reopened" : "PASS"}</span>
+              </button>
+            `).join("")}
+          </div>
+          <div class="card-meta">
+            <span data-latest-report="${game.id}">Latest report: checking</span>
+            <span>Manual: <a href="${game.readmeUrl}">README.md</a></span>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn" data-open-phase="${game.id}:${game.primaryPhase}">View Evidence</button>
+            <a class="action-btn" href="${game.gameUrl}">Open Game</a>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    async function hydrateLatestReports() {
+      await Promise.all(games.map(async (game) => {
+        const phase = game.phases.at(-1);
+        const target = document.querySelector(`[data-latest-report="${game.id}"]`);
+        try {
+          const response = await fetch(phasePaths(phase).report, { cache: "no-store" });
+          if (!response.ok) throw new Error(`${response.status}`);
+          const verdict = findVerdict(await response.text());
+          target.textContent = `Latest report: ${verdict}`;
+        } catch {
+          target.textContent = "Latest report: missing";
+        }
+      }));
+    }
+
+    function findPhase(key) {
+      const [gameId, phaseNumber] = key.split(":");
+      const game = games.find((item) => item.id === gameId);
+      const phase = game?.phases.find((item) => String(item.number) === phaseNumber);
+      return { game, phase, key };
+    }
+
+    async function openEvidence(key) {
+      const { game, phase } = findPhase(key);
+      if (!game || !phase) return;
+
+      const paths = phasePaths(phase);
+      drawer.hidden = false;
+      drawerTitle.textContent = `${game.name} - Phase ${phase.number}`;
+      drawerSubtitle.textContent = `${phase.title} | Current: ${phase.current === "attention" ? "REOPENED" : "PASS"}`;
+      drawerVideoFrame.innerHTML = `<p class="missing">Checking video...</p>`;
+      drawerReport.innerHTML = `<p class="missing">Loading report...</p>`;
+      drawerPaths.innerHTML = `
+        <span>Report: <a href="${paths.report}">${paths.report}</a></span>
+        <span>Expected flow: <a href="${paths.expected}">${paths.expected}</a></span>
+        <span>Video: <a href="${paths.video}">${paths.video}</a></span>
+      `;
+      drawerHistory.innerHTML = (histories[key] || [["No active blocker history", "No phase-specific fix loop is currently tracked."]])
+        .map(([title, text]) => `<div class="history-item"><strong>${escapeHtml(title)}</strong>${escapeHtml(text)}</div>`)
+        .join("");
+
+      try {
+        const videoHead = await fetch(paths.video, { method: "HEAD", cache: "no-store" });
+        if (!videoHead.ok) throw new Error(`${videoHead.status}`);
+        drawerVideoFrame.innerHTML = `<video controls preload="metadata" src="${paths.video}"></video>`;
+      } catch {
+        drawerVideoFrame.innerHTML = `<p class="missing">No gameplay MP4 found at ${escapeHtml(paths.video)}.</p>`;
+      }
+
+      try {
+        const reportResponse = await fetch(paths.report, { cache: "no-store" });
+        if (!reportResponse.ok) throw new Error(`${reportResponse.status} ${reportResponse.statusText}`);
+        drawerReport.innerHTML = markdownToHtml(await reportResponse.text());
+      } catch (error) {
+        drawerReport.innerHTML = `<p class="missing">Could not load TEST_REPORT.md: ${escapeHtml(error.message)}</p>`;
+      }
+    }
+
+    function closeEvidence() {
+      drawer.hidden = true;
+    }
+
     function isMarkdownHref(href) {
       try {
-        const url = new URL(href, window.location.href);
-        return url.pathname.toLowerCase().endsWith(".md");
+        return new URL(href, window.location.href).pathname.toLowerCase().endsWith(".md");
       } catch {
         return false;
       }
@@ -1202,13 +899,6 @@
       return `${url.pathname.replace(/^\//, "")}${url.search}${url.hash}`;
     }
 
-    const markdownViewer = document.querySelector("#markdown-viewer");
-    const markdownViewerTitle = document.querySelector("#markdown-viewer-title");
-    const markdownViewerPath = document.querySelector("#markdown-viewer-path");
-    const markdownViewerBody = document.querySelector("#markdown-viewer-body");
-    const markdownViewerRaw = document.querySelector("#markdown-viewer-raw");
-    const markdownViewerClose = document.querySelector("#markdown-viewer-close");
-
     async function openMarkdownViewer(href) {
       const path = viewerPathFromHref(href);
       markdownViewer.hidden = false;
@@ -1216,12 +906,10 @@
       markdownViewerPath.textContent = path;
       markdownViewerRaw.href = href;
       markdownViewerBody.innerHTML = `<p class="missing">Loading <code>${escapeHtml(path)}</code>...</p>`;
-
       try {
         const response = await fetch(href, { cache: "no-store" });
         if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
-        const markdown = await response.text();
-        markdownViewerBody.innerHTML = markdownToHtml(markdown);
+        markdownViewerBody.innerHTML = markdownToHtml(await response.text());
       } catch (error) {
         markdownViewerBody.innerHTML = `<p class="missing">Could not load Markdown at <code>${escapeHtml(path)}</code>: ${escapeHtml(error.message)}</p>`;
       }
@@ -1232,74 +920,46 @@
       markdownViewerBody.innerHTML = "";
     }
 
-    async function refreshReport(card) {
-      const reportPath = card.dataset.reportPath;
-      const reportState = card.querySelector("[data-report-state]");
-      const reportMarkdown = card.querySelector("[data-report-markdown]");
-      const verdictBadge = card.querySelector("[data-report-verdict]");
+    renderSummary();
+    renderCards();
+    hydrateLatestReports();
 
-      try {
-        const response = await fetch(reportPath, { cache: "no-store" });
-        if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
-        const markdown = await response.text();
-        const verdict = findVerdict(markdown);
-        const kind = verdict === "PASS" ? "pass" : verdict === "FAIL" ? "fail" : "queued";
-        verdictBadge.dataset.kind = kind;
-        verdictBadge.textContent = `Report: ${verdict}`;
-        reportState.textContent = reportPath;
-        reportMarkdown.innerHTML = markdownToHtml(markdown);
-      } catch {
-        verdictBadge.dataset.kind = "queued";
-        verdictBadge.textContent = "Report: missing";
-        reportState.textContent = "Missing";
-        reportMarkdown.innerHTML = `<p class="missing">No TEST_REPORT.md is available yet at <code>${escapeHtml(reportPath)}</code>.</p>`;
-      }
-    }
-
-    async function refreshVideo(card) {
-      const videoPath = card.dataset.videoPath;
-      const video = card.querySelector("[data-video]");
-      const missing = card.querySelector("[data-video-missing]");
-
-      try {
-        const response = await fetch(videoPath, { method: "HEAD", cache: "no-store" });
-        if (!response.ok) throw new Error(`${response.status}`);
-        video.hidden = false;
-        missing.hidden = true;
-      } catch {
-        video.hidden = true;
-        missing.hidden = false;
-      }
-    }
-
-    async function hydratePhase(card) {
-      await Promise.all([refreshReport(card), refreshVideo(card)]);
-    }
-
-    feedbackFixes.forEach((item) => {
-      const card = renderFixItem(item);
-      fixTrackerList.append(card);
-      refreshFixEvidence(card);
+    document.querySelector(".filters").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-filter]");
+      if (!button) return;
+      document.querySelectorAll("[data-filter]").forEach((item) => {
+        item.setAttribute("aria-pressed", String(item === button));
+      });
+      renderCards(button.dataset.filter);
+      hydrateLatestReports();
     });
 
-    games.forEach((game) => lanes.append(renderGame(game)));
-    updateCounts();
-    Promise.all([...document.querySelectorAll(".phase")].map(hydratePhase));
-
     document.addEventListener("click", (event) => {
+      const phaseButton = event.target.closest("[data-open-phase]");
+      if (phaseButton) {
+        event.preventDefault();
+        openEvidence(phaseButton.dataset.openPhase);
+        return;
+      }
       const link = event.target.closest("a[href]");
-      if (!link || !isMarkdownHref(link.href)) return;
-      if (link.hasAttribute("data-raw-markdown-link")) return;
+      if (!link || !isMarkdownHref(link.href) || link.hasAttribute("data-raw-markdown-link")) return;
       event.preventDefault();
       openMarkdownViewer(link.href);
     });
 
-    markdownViewerClose.addEventListener("click", closeMarkdownViewer);
+    document.querySelector("#drawer-close").addEventListener("click", closeEvidence);
+    drawer.addEventListener("click", (event) => {
+      if (event.target === drawer) closeEvidence();
+    });
+    document.querySelector("#markdown-viewer-close").addEventListener("click", closeMarkdownViewer);
     markdownViewer.addEventListener("click", (event) => {
       if (event.target === markdownViewer) closeMarkdownViewer();
     });
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && !markdownViewer.hidden) closeMarkdownViewer();
+      if (event.key === "Escape") {
+        if (!markdownViewer.hidden) closeMarkdownViewer();
+        else if (!drawer.hidden) closeEvidence();
+      }
     });
   </script>
 </body>

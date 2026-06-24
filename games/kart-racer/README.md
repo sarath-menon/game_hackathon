@@ -5,7 +5,7 @@ Phase 3 is a single-kart race on a simple 3D loop track with ordered checkpoints
 ## Objective
 
 Start the race, clear the checkpoint gates in order, use boost pads when helpful, avoid obstacles, and cross the yellow finish gate to complete the scored lap.
-The required gates appear in sequence along the opening left-hand bend: `CP1`, then `CP2`, then `CP3`, then the yellow finish gate.
+The required gates appear in sequence on the forward route from the start: `CP1`, then `CP2`, then `CP3`, then the yellow finish gate.
 
 ## Controls
 

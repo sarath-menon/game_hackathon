@@ -564,6 +564,14 @@ python3 -m http.server 8765 --bind 127.0.0.1
 - Browser maintenance thread completed the scheduled cleanup pass: inspected 34 page targets, closed 29 stale project targets, skipped 5 ambiguous or unrelated targets, and reported no blockers.
 - Because the build/test lockstep is complete, the recurring heartbeat should be narrowed to browser maintenance only rather than continuing to poll completed phase gates.
 
+## Kart Orientation Reopen - 2026-06-24
+
+- User reviewed Arcade Kart Racer after the reported PASS and said the arena still appears inverted/confusing.
+- Orchestrator determined the existing tester criteria were too easy to satisfy via mechanical completion and broad route-clarity language; they did not force an explicit human natural-orientation judgment.
+- `AGENTS.md` was tightened with a spatial-game natural orientation sanity check: screen-space forward, camera heading, minimap orientation, world labels, and HUD objective order must agree without mental rotation/inversion.
+- Kart builder was sent a narrow fix request to reorient the start pose, camera, track presentation, minimap, checkpoint labels, and route cues while preserving all passed mechanics.
+- Arcade Kart Racer should be considered reopened for orientation retest until the builder fix is complete and the kart tester explicitly passes the new orientation gate.
+
 ## Protocol Update - 2026-06-24 12:55
 
 - Strengthened `AGENTS.md` testing criteria so readability/orientation and state/action clarity are hard approval gates, not optional notes.

@@ -323,18 +323,18 @@
         radiusX: 260,
         radiusZ: 170,
         halfWidth: 34,
-        finishAngle: 2.34
+        finishAngle: 2.0
       };
 
       const checkpoints = [
-        { angle: 1.78, label: "CP1", color: "#5ac8fa" },
-        { angle: 1.99, label: "CP2", color: "#ff6b7a" },
-        { angle: 2.2, label: "CP3", color: "#6ee787" }
+        { angle: 1.52, label: "CP1", color: "#5ac8fa" },
+        { angle: 1.68, label: "CP2", color: "#ff6b7a" },
+        { angle: 1.84, label: "CP3", color: "#6ee787" }
       ];
 
       const boostPads = [
-        { angle: 1.88, offset: 0, label: "BOOST" },
-        { angle: 2.13, offset: -5, label: "BOOST" }
+        { angle: 1.9, offset: -22, label: "BOOST" },
+        { angle: 2.18, offset: -22, label: "BOOST" }
       ];
 
       const obstacles = [
@@ -342,10 +342,21 @@
         { angle: 2.52, offset: -31, radius: 12, label: "CONE" }
       ];
 
+      const startAngle = 0.92;
+      const startCenter = {
+        x: Math.cos(startAngle) * track.radiusX,
+        z: Math.sin(startAngle) * track.radiusZ
+      };
+      const startTangent = {
+        x: -Math.sin(startAngle) * track.radiusX,
+        z: Math.cos(startAngle) * track.radiusZ
+      };
+      const startYaw = Math.atan2(startTangent.x, startTangent.z);
+
       const kart = {
-        x: 0,
-        z: track.radiusZ,
-        yaw: -Math.PI / 2,
+        x: startCenter.x,
+        z: startCenter.z,
+        yaw: startYaw,
         speed: 0,
         distanceFromStart: 0
       };
@@ -442,14 +453,14 @@
         const f = forwardVector();
         const shake = shakeTimer > 0 ? (Math.random() - 0.5) * 5 : 0;
         const cam = {
-          x: kart.x - f.x * 88 + shake,
-          y: 44,
-          z: kart.z - f.z * 88 - shake
+          x: kart.x - f.x * 145 + shake,
+          y: 68,
+          z: kart.z - f.z * 145 - shake
         };
         const target = {
-          x: kart.x + f.x * 52,
-          y: 10,
-          z: kart.z + f.z * 52
+          x: kart.x + f.x * 130,
+          y: 7,
+          z: kart.z + f.z * 130
         };
         const fx = target.x - cam.x;
         const fy = target.y - cam.y;
@@ -474,10 +485,10 @@
         const y = rx * camera.up.x + ry * camera.up.y + rz * camera.up.z;
         const z = rx * camera.forward.x + ry * camera.forward.y + rz * camera.forward.z;
         if (z < 3) return null;
-        const scale = Math.min(width, height) * 0.94;
+        const scale = Math.min(width, height) * 0.82;
         return {
           x: width / 2 + x * scale / z,
-          y: height * 0.55 - y * scale / z,
+          y: height * 0.53 - y * scale / z,
           z
         };
       }
@@ -513,7 +524,6 @@
       }
 
       function drawWorld() {
-        const camera = makeCamera();
         const sky = ctx.createLinearGradient(0, 0, 0, height * 0.62);
         sky.addColorStop(0, "#789ec6");
         sky.addColorStop(0.58, "#c6d7e7");
@@ -527,13 +537,221 @@
         ctx.fillStyle = ground;
         ctx.fillRect(0, height * 0.48, width, height * 0.52);
 
+        drawReadableWorld();
+        drawSpeedEffects();
+        drawMiniMap();
+      }
+
+      function drawReadableWorld() {
+        const scale = Math.min(width, height) / 430;
+        const kartScreen = { x: width / 2, y: height * 0.8 };
+        const heading = forwardVector();
+        const right = { x: heading.z, z: -heading.x };
+        const currentAngle = normalizeAngle(nearestTrackInfo(kart.x, kart.z).angle);
+        const toScreen = (point) => {
+          const dx = point.x - kart.x;
+          const dz = point.z - kart.z;
+          return {
+            x: kartScreen.x + (dx * right.x + dz * right.z) * scale,
+            y: kartScreen.y - (dx * heading.x + dz * heading.z) * scale
+          };
+        };
+
+        ctx.save();
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+
+        const backPath = [];
+        for (let i = 0; i <= 160; i += 1) {
+          const a = currentAngle - 0.55 + i / 160 * Math.PI * 2;
+          backPath.push(toScreen(centerPoint(a)));
+        }
+        ctx.beginPath();
+        backPath.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+        ctx.strokeStyle = "rgba(24, 30, 31, 0.38)";
+        ctx.lineWidth = track.halfWidth * 1.8 * scale;
+        ctx.stroke();
+
+        const visiblePath = [];
+        for (let i = 0; i <= 72; i += 1) {
+          const a = currentAngle - 0.12 + i / 72 * 1.75;
+          visiblePath.push(toScreen(centerPoint(a)));
+        }
+        ctx.beginPath();
+        visiblePath.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+        ctx.strokeStyle = "#303637";
+        ctx.lineWidth = track.halfWidth * 2 * scale;
+        ctx.stroke();
+
+        ctx.beginPath();
+        visiblePath.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+        ctx.strokeStyle = "rgba(248,249,242,0.88)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.setLineDash([18, 20]);
+        ctx.beginPath();
+        visiblePath.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+        ctx.strokeStyle = "rgba(255, 207, 69, 0.55)";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        drawReadableRouteCue(toScreen, currentAngle);
+        drawReadableBoostPads(toScreen, scale);
+        drawReadableObstacles(toScreen, scale);
+        drawReadableRaceMarkers(toScreen, scale);
+        drawReadableKart(kartScreen, scale);
+        ctx.restore();
+      }
+
+      function drawLegacyWorld() {
+        const camera = makeCamera();
         drawTrack(camera);
+        drawRouteCue(camera);
         drawBoostPads(camera);
         drawObstacles(camera);
         drawRaceMarkers(camera);
         drawKart(camera);
-        drawSpeedEffects();
-        drawMiniMap();
+      }
+
+      function drawReadableRouteCue(toScreen, currentAngle) {
+        if (state === "complete") return;
+        const targetAngle = checkpoints[nextCheckpoint]?.angle ?? track.finishAngle;
+        const ahead = forwardAngleDistance(currentAngle, targetAngle);
+        if (ahead <= 0.02 || ahead > 1.4) return;
+        for (let i = 1; i <= 4; i += 1) {
+          const angle = currentAngle + ahead * i / 5;
+          const c = toScreen(centerPoint(angle));
+          const n1 = toScreen(trackPoint(angle - 0.01, -9));
+          const n2 = toScreen(trackPoint(angle - 0.01, 9));
+          ctx.beginPath();
+          ctx.moveTo(n1.x, n1.y);
+          ctx.lineTo(c.x, c.y - 12);
+          ctx.lineTo(n2.x, n2.y);
+          ctx.strokeStyle = "rgba(90, 200, 250, 0.86)";
+          ctx.lineWidth = 4;
+          ctx.stroke();
+        }
+      }
+
+      function drawReadableBoostPads(toScreen) {
+        boostPads.forEach((pad, index) => {
+          const points = padShape(pad, 20, 14).map(toScreen);
+          const active = boostTimer > 0 && lastBoostPad === index;
+          polygon2d(points, active ? "rgba(103, 235, 255, 0.92)" : "rgba(71, 213, 232, 0.56)", "rgba(255,255,255,0.5)", active ? 3 : 2);
+          if (active) {
+            const label = toScreen(trackPoint(pad.angle, pad.offset));
+            drawLabel(label.x, label.y - 20, "BOOST", "#ffffff", 13);
+          }
+        });
+      }
+
+      function drawReadableObstacles(toScreen, scale) {
+        obstacles.forEach((obstacle) => {
+          const p = toScreen(trackPoint(obstacle.angle, obstacle.offset));
+          ctx.fillStyle = collisionTimer > 0 ? "#ffef8f" : "#ff5d56";
+          ctx.strokeStyle = "rgba(255,255,255,0.72)";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, Math.max(9, obstacle.radius * scale), 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          if (collisionTimer > 0) drawLabel(p.x, p.y - 24, obstacle.label, "#ffef8f", 12);
+        });
+      }
+
+      function drawReadableRaceMarkers(toScreen) {
+        drawReadableFinishGate(toScreen, nextCheckpoint >= checkpoints.length);
+        checkpoints.forEach((checkpoint, index) => {
+          drawReadableCheckpointGate(toScreen, checkpoint, index < nextCheckpoint, index === nextCheckpoint && state !== "complete");
+        });
+      }
+
+      function drawReadableFinishGate(toScreen, active) {
+        const left = toScreen(edgePoint(track.finishAngle, -1));
+        const right = toScreen(edgePoint(track.finishAngle, 1));
+        drawGate2d(left, right, active ? "#ffcf45" : "rgba(255, 207, 69, 0.32)", active ? 8 : 4, active);
+        if (active) {
+          const c = toScreen(centerPoint(track.finishAngle));
+          drawLabel(c.x, c.y - 30, "FINISH", "#ffcf45", 18);
+        }
+      }
+
+      function drawReadableCheckpointGate(toScreen, checkpoint, cleared, current) {
+        const left = toScreen(edgePoint(checkpoint.angle, -1));
+        const right = toScreen(edgePoint(checkpoint.angle, 1));
+        const alpha = cleared ? 0.25 : current ? 1 : 0.28;
+        const color = withAlpha(checkpoint.color, alpha);
+        drawGate2d(left, right, color, current ? 8 : 4, current);
+        if (current || cleared) {
+          const c = toScreen(centerPoint(checkpoint.angle));
+          drawLabel(c.x, c.y - (current ? 34 : 24), checkpoint.label, color, current ? 18 : 13);
+        }
+      }
+
+      function drawGate2d(left, right, color, width, posts) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        ctx.beginPath();
+        ctx.moveTo(left.x, left.y);
+        ctx.lineTo(right.x, right.y);
+        ctx.stroke();
+        if (!posts) return;
+        for (const p of [left, right]) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p.x, p.y - 56);
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 5;
+          ctx.stroke();
+        }
+      }
+
+      function drawReadableKart(kartScreen, scale) {
+        ctx.save();
+        ctx.translate(kartScreen.x, kartScreen.y);
+        ctx.fillStyle = "#d84f3f";
+        ctx.strokeStyle = "#fff1dc";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, -28 * scale);
+        ctx.lineTo(18 * scale, 20 * scale);
+        ctx.lineTo(-18 * scale, 20 * scale);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "#f4b24a";
+        ctx.fillRect(-9 * scale, -8 * scale, 18 * scale, 18 * scale);
+        ctx.restore();
+      }
+
+      function polygon2d(points, fill, stroke, lineWidth) {
+        if (!points.every(Boolean)) return;
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i += 1) ctx.lineTo(points[i].x, points[i].y);
+        ctx.closePath();
+        ctx.fillStyle = fill;
+        ctx.fill();
+        if (stroke) {
+          ctx.strokeStyle = stroke;
+          ctx.lineWidth = lineWidth || 1;
+          ctx.stroke();
+        }
+      }
+
+      function drawLabel(x, y, text, color, size) {
+        ctx.save();
+        ctx.font = `800 ${size}px Inter, system-ui, sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = "rgba(0,0,0,0.68)";
+        ctx.fillStyle = color;
+        ctx.strokeText(text, x, y);
+        ctx.fillText(text, x, y);
+        ctx.restore();
       }
 
       function drawTrack(camera) {
@@ -588,9 +806,11 @@
           const points = padShape(pad, 23, 18).map((point) => project(point, camera));
           const active = boostTimer > 0 && lastBoostPad === index;
           polygon(points, active ? "rgba(103, 235, 255, 0.92)" : "rgba(71, 213, 232, 0.68)", "rgba(255,255,255,0.58)", active ? 3 : 2);
-          const label = trackPoint(pad.angle, pad.offset);
-          label.y = 3;
-          text3d(label, camera, "BOOST", active ? "#ffffff" : "#8df5ff", 13);
+          if (active) {
+            const label = trackPoint(pad.angle, pad.offset);
+            label.y = 3;
+            text3d(label, camera, "BOOST", "#ffffff", 13);
+          }
         });
       }
 
@@ -616,8 +836,32 @@
           const b = { x: base.x + n.x * obstacle.radius, y: 4, z: base.z + n.z * obstacle.radius };
           line3d(left, top, camera, collisionTimer > 0 ? "#ffef8f" : "#ff5d56", 8);
           line3d(a, b, camera, "#ff5d56", 7);
-          text3d({ ...base, y: 40 }, camera, obstacle.label, "#ffb2ad", 12);
+          if (collisionTimer > 0) {
+            text3d({ ...base, y: 40 }, camera, obstacle.label, "#ffb2ad", 12);
+          }
         });
+      }
+
+      function drawRouteCue(camera) {
+        if (state === "complete") return;
+        const targetAngle = checkpoints[nextCheckpoint]?.angle ?? track.finishAngle;
+        const currentAngle = normalizeAngle(nearestTrackInfo(kart.x, kart.z).angle);
+        const ahead = forwardAngleDistance(currentAngle, targetAngle);
+        if (ahead <= 0.02 || ahead > 1.4) return;
+        const chevrons = 4;
+        for (let i = 1; i <= chevrons; i += 1) {
+          const t = i / (chevrons + 1);
+          const angle = currentAngle + ahead * t;
+          const center = trackPoint(angle, 0);
+          const tangent = tangentAt(angle);
+          const normal = ellipseNormal(angle);
+          const size = 8 + i * 1.5;
+          const tip = { x: center.x + tangent.x * size, y: 2.2, z: center.z + tangent.z * size };
+          const left = { x: center.x - tangent.x * size * 0.5 - normal.x * size * 0.72, y: 2.2, z: center.z - tangent.z * size * 0.5 - normal.z * size * 0.72 };
+          const right = { x: center.x - tangent.x * size * 0.5 + normal.x * size * 0.72, y: 2.2, z: center.z - tangent.z * size * 0.5 + normal.z * size * 0.72 };
+          line3d(left, tip, camera, "rgba(90, 200, 250, 0.78)", 4);
+          line3d(right, tip, camera, "rgba(90, 200, 250, 0.78)", 4);
+        }
       }
 
       function drawSpeedEffects() {
@@ -643,7 +887,7 @@
       }
 
       function drawRaceMarkers(camera) {
-        drawFinishGate(camera);
+        drawFinishGate(camera, nextCheckpoint >= checkpoints.length);
         checkpoints.forEach((checkpoint, index) => {
           const cleared = index < nextCheckpoint;
           const current = index === nextCheckpoint && state !== "complete";
@@ -651,7 +895,7 @@
         });
       }
 
-      function drawFinishGate(camera) {
+      function drawFinishGate(camera, active) {
         const a = track.finishAngle;
         const left = edgePoint(a, -1);
         const right = edgePoint(a, 1);
@@ -659,21 +903,25 @@
         const topRight = { ...right, y: 38 };
         left.y = 1;
         right.y = 1;
+        const yellow = active ? "#ffcf45" : "rgba(255, 207, 69, 0.36)";
+        const white = active ? "#ffffff" : "rgba(255, 255, 255, 0.32)";
 
-        line3d(left, right, camera, "#ffcf45", 8);
-        line3d(left, topLeft, camera, "#ffffff", 5);
-        line3d(right, topRight, camera, "#ffffff", 5);
-        line3d(topLeft, topRight, camera, "#ffcf45", 5);
+        line3d(left, right, camera, yellow, active ? 8 : 4);
+        line3d(left, topLeft, camera, white, active ? 5 : 2);
+        line3d(right, topRight, camera, white, active ? 5 : 2);
+        line3d(topLeft, topRight, camera, yellow, active ? 5 : 2);
 
-        for (let i = 0; i < 7; i += 1) {
-          const side = i % 2 === 0 ? -1 : 1;
-          const p = edgePoint(a, side);
-          p.y = 9 + i * 4;
-          const q = edgePoint(a, -side);
-          q.y = 9 + i * 4;
-          line3d(p, q, camera, i % 2 === 0 ? "#ffffff" : "#151515", 3);
+        if (active) {
+          for (let i = 0; i < 7; i += 1) {
+            const side = i % 2 === 0 ? -1 : 1;
+            const p = edgePoint(a, side);
+            p.y = 9 + i * 4;
+            const q = edgePoint(a, -side);
+            q.y = 9 + i * 4;
+            line3d(p, q, camera, i % 2 === 0 ? "#ffffff" : "#151515", 3);
+          }
+          text3d({ ...centerPoint(a), y: 48 }, camera, "FINISH", "#ffcf45", 18);
         }
-        text3d({ ...centerPoint(a), y: 48 }, camera, "FINISH", "#ffcf45", 18);
       }
 
       function drawCheckpointGate(camera, checkpoint, cleared, current) {
@@ -689,7 +937,9 @@
         line3d(left, topLeft, camera, color, current ? 5 : 3);
         line3d(right, topRight, camera, color, current ? 5 : 3);
         line3d(topLeft, topRight, camera, color, current ? 5 : 3);
-        text3d({ ...centerPoint(checkpoint.angle), y: current ? 50 : 38 }, camera, checkpoint.label, color, current ? 18 : 14);
+        if (current || cleared) {
+          text3d({ ...centerPoint(checkpoint.angle), y: current ? 50 : 38 }, camera, checkpoint.label, color, current ? 18 : 14);
+        }
       }
 
       function text3d(point, camera, text, color, size) {
@@ -716,21 +966,21 @@
       }
 
       function drawKart(camera) {
-        const f = forwardVector();
-        const r = { x: f.z, z: -f.x };
+        const heading = forwardVector();
+        const r = { x: heading.z, z: -heading.x };
         const base = [
-          { x: kart.x + f.x * 15 + r.x * 10, y: 3, z: kart.z + f.z * 15 + r.z * 10 },
-          { x: kart.x + f.x * 15 - r.x * 10, y: 3, z: kart.z + f.z * 15 - r.z * 10 },
-          { x: kart.x - f.x * 13 - r.x * 11, y: 3, z: kart.z - f.z * 13 - r.z * 11 },
-          { x: kart.x - f.x * 13 + r.x * 11, y: 3, z: kart.z - f.z * 13 + r.z * 11 }
+          { x: kart.x + heading.x * 10 + r.x * 7, y: 3, z: kart.z + heading.z * 10 + r.z * 7 },
+          { x: kart.x + heading.x * 10 - r.x * 7, y: 3, z: kart.z + heading.z * 10 - r.z * 7 },
+          { x: kart.x - heading.x * 9 - r.x * 8, y: 3, z: kart.z - heading.z * 9 - r.z * 8 },
+          { x: kart.x - heading.x * 9 + r.x * 8, y: 3, z: kart.z - heading.z * 9 + r.z * 8 }
         ].map((p) => project(p, camera));
         polygon(base, "#d84f3f", "#fff1dc", 2);
 
         const cabin = [
-          { x: kart.x + f.x * 7 + r.x * 7, y: 12, z: kart.z + f.z * 7 + r.z * 7 },
-          { x: kart.x + f.x * 7 - r.x * 7, y: 12, z: kart.z + f.z * 7 - r.z * 7 },
-          { x: kart.x - f.x * 7 - r.x * 6, y: 12, z: kart.z - f.z * 7 - r.z * 6 },
-          { x: kart.x - f.x * 7 + r.x * 6, y: 12, z: kart.z - f.z * 7 + r.z * 6 }
+          { x: kart.x + heading.x * 5 + r.x * 5, y: 10, z: kart.z + heading.z * 5 + r.z * 5 },
+          { x: kart.x + heading.x * 5 - r.x * 5, y: 10, z: kart.z + heading.z * 5 - r.z * 5 },
+          { x: kart.x - heading.x * 5 - r.x * 4, y: 10, z: kart.z - heading.z * 5 - r.z * 4 },
+          { x: kart.x - heading.x * 5 + r.x * 4, y: 10, z: kart.z - heading.z * 5 + r.z * 4 }
         ].map((p) => project(p, camera));
         polygon(cabin, "#f4b24a", "rgba(255,255,255,0.72)", 1.5);
       }
@@ -748,45 +998,68 @@
         ctx.roundRect(x, y, mapSize, mapSize, 8);
         ctx.fill();
         ctx.stroke();
-        ctx.translate(x + mapSize / 2, y + mapSize / 2);
-        const scale = mapSize / 650;
-        ctx.strokeStyle = "rgba(255,255,255,0.86)";
-        ctx.lineWidth = Math.max(8, track.halfWidth * 2 * scale);
+        ctx.clip();
+        ctx.translate(x + mapSize / 2, y + mapSize * 0.68);
+        const scale = mapSize / 410;
+        const heading = forwardVector();
+        const r = { x: heading.z, z: -heading.x };
+        const mapPoint = (point) => {
+          const dx = point.x - kart.x;
+          const dz = point.z - kart.z;
+          return {
+            x: (dx * r.x + dz * r.z) * scale,
+            y: -(dx * heading.x + dz * heading.z) * scale
+          };
+        };
+        ctx.strokeStyle = "rgba(255,255,255,0.76)";
+        ctx.lineWidth = Math.max(7, track.halfWidth * 1.5 * scale);
         ctx.beginPath();
-        ctx.ellipse(0, 0, track.radiusX * scale, track.radiusZ * scale, 0, 0, Math.PI * 2);
+        for (let i = 0; i <= 96; i += 1) {
+          const p = mapPoint(centerPoint(i / 96 * Math.PI * 2));
+          if (i === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        }
+        ctx.closePath();
         ctx.stroke();
         ctx.strokeStyle = "#ffcf45";
         ctx.lineWidth = 4;
-        const f = centerPoint(track.finishAngle);
+        const finishPoint = centerPoint(track.finishAngle);
         const fn = ellipseNormal(track.finishAngle);
+        const fa = mapPoint({ x: finishPoint.x - fn.x * 18, z: finishPoint.z - fn.z * 18 });
+        const fb = mapPoint({ x: finishPoint.x + fn.x * 18, z: finishPoint.z + fn.z * 18 });
         ctx.beginPath();
-        ctx.moveTo((f.x - fn.x * 18) * scale, (f.z - fn.z * 18) * scale);
-        ctx.lineTo((f.x + fn.x * 18) * scale, (f.z + fn.z * 18) * scale);
+        ctx.moveTo(fa.x, fa.y);
+        ctx.lineTo(fb.x, fb.y);
         ctx.stroke();
         checkpoints.forEach((checkpoint, index) => {
-          const p = centerPoint(checkpoint.angle);
+          const p = mapPoint(centerPoint(checkpoint.angle));
           ctx.fillStyle = index < nextCheckpoint ? "rgba(255,255,255,0.35)" : checkpoint.color;
           ctx.beginPath();
-          ctx.arc(p.x * scale, p.z * scale, index === nextCheckpoint ? 5 : 4, 0, Math.PI * 2);
+          ctx.arc(p.x, p.y, index === nextCheckpoint ? 5 : 4, 0, Math.PI * 2);
           ctx.fill();
         });
         boostPads.forEach((pad) => {
-          const p = trackPoint(pad.angle, pad.offset);
+          const p = mapPoint(trackPoint(pad.angle, pad.offset));
           ctx.fillStyle = "#67ebff";
-          ctx.fillRect(p.x * scale - 3, p.z * scale - 3, 6, 6);
+          ctx.fillRect(p.x - 3, p.y - 3, 6, 6);
         });
         obstacles.forEach((obstacle) => {
-          const p = trackPoint(obstacle.angle, obstacle.offset);
+          const p = mapPoint(trackPoint(obstacle.angle, obstacle.offset));
           ctx.fillStyle = "#ff5d56";
           ctx.beginPath();
-          ctx.arc(p.x * scale, p.z * scale, 4, 0, Math.PI * 2);
+          ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
           ctx.fill();
         });
-        const kx = kart.x * scale;
-        const kz = kart.z * scale;
         ctx.fillStyle = "#d84f3f";
         ctx.beginPath();
-        ctx.arc(kx, kz, 5, 0, Math.PI * 2);
+        ctx.arc(0, 0, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,0.86)";
+        ctx.beginPath();
+        ctx.moveTo(0, -12);
+        ctx.lineTo(-5, -2);
+        ctx.lineTo(5, -2);
+        ctx.closePath();
         ctx.fill();
         ctx.restore();
       }
@@ -817,7 +1090,7 @@
           kart.speed += kart.speed > 0 ? -drag : drag;
         }
 
-        const maxSpeed = boostTimer > 0 ? 172 : 128;
+        const maxSpeed = boostTimer > 0 ? 148 : 128;
         kart.speed = Math.max(-46, Math.min(maxSpeed, kart.speed));
         const steer = (left ? 1 : 0) - (right ? 1 : 0);
         const steerStrength = Math.min(1, Math.abs(kart.speed) / 45);
@@ -854,9 +1127,10 @@
       function checkBoostPads() {
         boostPads.forEach((pad, index) => {
           if (index === lastBoostPad && boostTimer > 0.35) return;
-          if (!reachedGate(pad.angle, kart.x, kart.z, 30, track.halfWidth + 12)) return;
-          kart.speed = Math.max(kart.speed + 44, 148);
-          boostTimer = 1.15;
+          const point = trackPoint(pad.angle, pad.offset);
+          if (Math.hypot(kart.x - point.x, kart.z - point.z) > 24) return;
+          kart.speed = Math.max(kart.speed + 24, 136);
+          boostTimer = 0.85;
           lastBoostPad = index;
           setMessage("Boost pad hit: speed surge.");
         });
@@ -969,6 +1243,14 @@
         return Math.atan2(Math.sin(target - current), Math.cos(target - current));
       }
 
+      function normalizeAngle(angle) {
+        return (angle % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+      }
+
+      function forwardAngleDistance(from, to) {
+        return (normalizeAngle(to) - normalizeAngle(from) + Math.PI * 2) % (Math.PI * 2);
+      }
+
       function clamp(value, min, max) {
         return Math.max(min, Math.min(max, value));
       }
@@ -983,9 +1265,9 @@
 
       function startRace() {
         state = "racing";
-        kart.x = 0;
-        kart.z = track.radiusZ;
-        kart.yaw = -Math.PI / 2;
+        kart.x = startCenter.x;
+        kart.z = startCenter.z;
+        kart.yaw = startYaw;
         kart.speed = 0;
         kart.distanceFromStart = 0;
         keys.clear();
