@@ -2134,3 +2134,22 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - account for device-pixel screenshot scaling when translating screenshots into browser-harness click coordinates;
   - for card/deckbuilder QA, capture entry path, deck selection, pre-action table, post-legal action, attempted invalid action, settings/menu, and destructive-control boundary.
 - Dashboard must now show Dungeons direct-build retry as `PASS_WITH_FINDINGS`, preserve the blocked wrapper pass separately, and mark the next suggested Dungeons follow-up as turn-phase legality plus restart/give-up confirmation copy.
+
+## Dungeons Direct Build Legality/Restart Follow-Up Active - 2026-06-25
+
+- Browser maintenance closed the completed direct-build tab `https://html-classic.itch.zone/html/15020933/index.html` and reported 0 remaining page targets.
+- Orchestrator handed Dungeons Direct Official Build Follow-up 2 to canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Allowed tester inputs:
+  - URL: `https://html-classic.itch.zone/html/15020933/index.html`
+  - manual: `external-qa/dungeons-degenerate-gamblers/README.md`
+  - evidence target: `evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/`
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Focus:
+  - map first-table turn flow enough to distinguish meaningful actions from unavailable/out-of-state actions;
+  - attempt at least one clearly invalid, disabled, unavailable, or out-of-state action using visible controls;
+  - verify HIT/STAND state transitions and visible prompts/tutorial text;
+  - inspect restart/give-up/save-and-quit confirmation/cancel copy without confirming destructive progress loss unless clearly safe;
+  - smoke-check settings/menu reachability and classify provider/environment blockers separately from game QA failures.
