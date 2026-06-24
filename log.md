@@ -2153,3 +2153,29 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - verify HIT/STAND state transitions and visible prompts/tutorial text;
   - inspect restart/give-up/save-and-quit confirmation/cancel copy without confirming destructive progress loss unless clearly safe;
   - smoke-check settings/menu reachability and classify provider/environment blockers separately from game QA failures.
+
+## Dungeons Direct Build Legality/Restart Follow-Up PASS_WITH_FINDINGS - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Dungeons Direct Official Build Follow-up 2.
+- Evidence folder: `evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/`.
+- Required outputs exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS_WITH_FINDINGS`.
+- Provider/environment classification:
+  - not `BLOCKED_PROVIDER`: the direct official itch-hosted build URL loaded;
+  - not `BLOCKED_ENVIRONMENT`: the shared Chrome/browser-harness path reached playable table state and completed the focused pass;
+  - no final game `FAIL`: findings are low-severity coverage limitations, not blocking acceptance failures.
+- Verified:
+  - direct official build loaded into game menu;
+  - Continue reached playable table state through visible controls;
+  - repeated HIT actions changed visible cards/scores;
+  - STAND resolved visible HP/chip/card state;
+  - post-resolution HIT/STAND attempts remained meaningful continued play rather than clearly invalid actions;
+  - pause menu exposed Resume, Restart Run, Collection, Settings, Save and Quit, and Buy Full Game;
+  - one safe Restart Run boundary click highlighted/selected the control without immediate destructive loss.
+- Remaining nonblocking findings:
+  - illegal/unavailable action feedback remains unproven because no clearly invalid/out-of-state action was reached;
+  - restart confirmation/cancel copy did not appear after one safe boundary click, and deeper destructive clicks were avoided.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` also fixed `dashboard.html` verdict hydration so Markdown reports with `PASS_WITH_FINDINGS`, `BLOCKED_PROVIDER`, `BLOCKED_ENVIRONMENT`, and `UNTESTABLE_IN_CURRENT_ENVIRONMENT` render accurately instead of `Unknown`.
