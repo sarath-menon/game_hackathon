@@ -881,3 +881,168 @@ python3 -m http.server 8765 --bind 127.0.0.1
 - Settings QA standard: testers must verify discoverability, README/manual match, defaults, persistence, reset behavior, edge cases, accessibility/readability controls, responsive layout, regression paths, and continuous evidence.
 - Dashboard must be updated through dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` so the new settings goal appears in the same per-game panels/timelines as prior phases and upgrades.
 - Browser-game research thread `019efaae-20f8-7473-8e01-69d4ae206994` should expand its research to settings/options panels and identify enough player-facing instruction material for selecting five diverse direct-URL browser games for later parallel black-box QA.
+
+## Settings QA Handoffs - 2026-06-25
+
+- Arcade Kart Racer Settings Panel Phase 1 builder completed implementation and self-checks in thread `019ef96d-c407-7be3-9934-6595866643ee`.
+  - Game URL: `http://127.0.0.1:8765/games/kart-racer/index.html`
+  - Manual URL: `http://127.0.0.1:8765/games/kart-racer/README.md`
+  - Settings QA handoff sent to tester thread `019ef96d-ef59-7d20-9dbe-b5d06edc720f`.
+  - Active evidence folder: `evidence/kart-racer/settings-phase-1/`.
+- Side-Scrolling Platformer Settings Panel Phase 1 builder completed implementation and self-checks in thread `019ef96e-1dd7-7f13-91d4-855909736edc`.
+  - Game URL: `http://127.0.0.1:8765/games/platformer/index.html`
+  - Manual URL: `http://127.0.0.1:8765/games/platformer/README.md`
+  - Settings QA handoff sent to tester thread `019ef96e-42e6-7121-b9ea-bf266ce55a2e`.
+  - Active evidence folder: `evidence/platformer/settings-phase-1/`.
+- Turn-Based Deckbuilder Settings Panel Phase 1 builder completed implementation and self-checks in thread `019ef96e-7780-7763-b444-12cf7698a97a`.
+  - Game URL: `http://127.0.0.1:8765/games/deckbuilder/index.html`
+  - Manual URL: `http://127.0.0.1:8765/games/deckbuilder/README.md`
+  - Settings QA handoff sent to tester thread `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+  - Active evidence folder: `evidence/deckbuilder/settings-phase-1/`.
+- Current lockstep state: all three settings phases are tester-active / verdict-pending. Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` must update `dashboard.html` to show tester-active rows in the existing per-game timelines and verify the UI.
+
+## Continuous Goal Correction - 2026-06-25
+
+- User clarified that the canonical goal remains the full open-ended continuous-improvement loop, not a narrower settings-only goal.
+- `AGENTS.md` was corrected so the umbrella goal is: benchmark against genre references without copying IP, select the highest-impact quality gap, route scoped builder work, require industry-style black-box QA, retest failures, update dashboard/log, and commit often after coherent verified progress.
+- Settings Panels + Settings QA remains the current cycle within that broader loop.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` was asked to update `dashboard.html` so the first viewport shows the umbrella continuous-improvement goal and presents settings QA as the current cycle, not the whole project objective.
+- Current settings QA state remains unchanged:
+  - Arcade Kart Racer Settings Panel Phase 1: tester active / verdict pending, evidence folder `evidence/kart-racer/settings-phase-1/`.
+  - Side-Scrolling Platformer Settings Panel Phase 1: tester active / verdict pending, evidence folder `evidence/platformer/settings-phase-1/`.
+  - Turn-Based Deckbuilder Settings Panel Phase 1: tester active / verdict pending, evidence folder `evidence/deckbuilder/settings-phase-1/`.
+- External browser-game QA state:
+  - PolyTrack: completed blocked `FAIL`; startup runtime error prevented gameplay.
+  - OvO: completed blocked `FAIL`; hosted game stayed on loading spinner.
+  - Cookie Clicker: completed `PASS with limitations`; verified load, click/purchase loop, Options, manual save/export, and persistence; narrow viewport capture remains a limitation.
+  - Dungeons & Degenerate Gamblers: completed `PASS with nonblocking findings`; verified launch, run start, deck selection, tavern entry, and first table interaction; findings cover hit targets, long loading, missing visible settings, and iframe/page chrome readability.
+  - Townscaper: completed `PASS WITH FINDINGS`; verified WebGL load, placement, URL hash state, camera movement/zoom, and mobile rendering; findings cover removal discoverability, unclear gear/settings behavior, missing in-game help, cramped mobile layout, and short recording limitation.
+
+## Platformer Settings QA Approval - 2026-06-25
+
+- Side-Scrolling Platformer Settings Panel Phase 1 is approved as `PASS`.
+- Evidence folder: `evidence/platformer/settings-phase-1/`.
+- Required artifacts are present:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Tester verified settings discoverability from title, active play, completion, and failure contexts; documented controls for jump assist, camera smoothing/lookahead, route markers, effects, reduced motion, HUD size, generated UI sounds, volume, persistence, and reset defaults.
+- Regression coverage passed: pause/input isolation, lower-deck completion, glow-core collection, checkpoint/respawn, hazards/failure, restart from completion/failure, Level Complete, Run Ended, narrow viewport usability, readability/usability gate, and no blocking runtime errors.
+- Settings cycle status:
+  - Arcade Kart Racer Settings Panel Phase 1: tester active / verdict pending.
+  - Side-Scrolling Platformer Settings Panel Phase 1: `PASS` / closed.
+  - Turn-Based Deckbuilder Settings Panel Phase 1: tester active / verdict pending.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` should update `dashboard.html` to show Platformer settings as closed `PASS` inline while keeping Kart and Deckbuilder settings tester-active.
+
+## Deckbuilder Settings QA Approval - 2026-06-25
+
+- Turn-Based Deckbuilder Settings Panel Phase 1 is approved as `PASS`.
+- Evidence folder: `evidence/deckbuilder/settings-phase-1/`.
+- Required artifacts are present:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Tester verified settings discoverability from title and combat, animation speed, reduced motion, tooltip detail, text size, End Turn and no-guard confirmations, feedback intensity, persistence on/off behavior, reset defaults, desktop and narrow viewport usability, and core combat regressions through reward choice, encounter 2, Final Victory, Defeat, restart, and state/action clarity.
+- Non-blocking remaining finding: settings can open with the top controls clipped until the panel is scrolled.
+- Orchestrator started Deckbuilder Settings Panel Polish 1 in builder thread `019ef96e-7780-7763-b444-12cf7698a97a` to make Settings always reopen with the title and first setting/control visible while preserving viewport-bounded scrolling.
+- Settings cycle status:
+  - Arcade Kart Racer Settings Panel Phase 1: tester active / verdict pending.
+  - Side-Scrolling Platformer Settings Panel Phase 1: `PASS` / closed.
+  - Turn-Based Deckbuilder Settings Panel Phase 1: `PASS` / closed; polish fix active for one low-severity usability finding.
+
+## Deckbuilder Settings Polish 1 Handoff - 2026-06-25
+
+- Deckbuilder builder completed Settings Panel Polish 1 for the low-severity initial-scroll finding.
+- Changed artifact: `games/deckbuilder/index.html`.
+- Builder summary: Settings now resets internal modal scroll on every open and focuses the modal without scroll-jumping, so the title and first setting/control remain visible from title, combat, and narrow viewport contexts.
+- Builder self-checks passed: hosted game/manual `200 OK`, script parse, title/combat settings open at top, narrow viewport controls remain reachable, persistence/reset smoke, and a short combat action after closing settings.
+- Orchestrator sent black-box retest handoff to deckbuilder tester thread `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Retest evidence folder: `evidence/deckbuilder/settings-polish-1-scroll/`.
+- Current state: Deckbuilder Settings Panel Polish 1 retest active / verdict pending.
+
+## Deckbuilder Settings Polish 1 Approval - 2026-06-25
+
+- Deckbuilder Settings Panel Polish 1 retest is approved as `PASS`.
+- Evidence folder: `evidence/deckbuilder/settings-polish-1-scroll/`.
+- Required artifacts are present:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Tester verified the prior low-severity initial-scroll issue is fixed: Settings opens from title/start, combat, reopen-after-scroll, and narrow viewport states with the title and Animation speed control immediately visible.
+- Smoke regressions passed: open/close, defaults, persistence, reset defaults, card play after closing Settings, End Turn after closing Settings, state/action clarity, and no runtime errors.
+- Current settings cycle status:
+  - Arcade Kart Racer Settings Panel Phase 1: tester active / verdict pending.
+  - Side-Scrolling Platformer Settings Panel Phase 1: `PASS` / closed.
+  - Turn-Based Deckbuilder Settings Panel Phase 1: `PASS` / closed.
+  - Deckbuilder Settings Panel Polish 1: `PASS` / closed; no open findings.
+
+## External Browser Game QA Protocol Correction - 2026-06-25
+
+- External browser-game QA verdicts now distinguish playable game failures from provider/environment blockers:
+  - `FAIL`: playable enough to evaluate, but fails QA acceptance criteria.
+  - `BLOCKED_PROVIDER`: provider URL, portal shell, iframe, startup state, storage, ad/consent layer, or hosted path cannot reach playable state.
+  - `BLOCKED_ENVIRONMENT`: local harness/browser/WebGL/audio/input/storage environment cannot exercise the game reliably.
+  - `PASS_WITH_FINDINGS`: playable and acceptable with documented nonblocking issues.
+  - `UNTESTABLE_IN_CURRENT_ENVIRONMENT`: multiple reasonable provider paths were tried and all remained blocked.
+- PolyTrack original report was reclassified from final `FAIL` to `BLOCKED_PROVIDER` / needs retry because the tested Kodub provider path hit a startup runtime error before gameplay.
+- OvO original report was reclassified from final `FAIL` to `BLOCKED_PROVIDER` / needs retry because the tested CrazyGames provider path stayed on a loading screen before gameplay.
+- Retry candidates selected:
+  - PolyTrack primary retry: `https://kodub.itch.io/polytrack`, manual `external-qa/polytrack-itch/README.md`.
+  - PolyTrack fallback retry: `https://poki.com/en/g/polytrack`, manual `external-qa/polytrack-poki/README.md`.
+  - OvO primary retry: `https://www.coolmathgames.com/0-ovo`, manual `external-qa/ovo-coolmath/README.md`.
+  - OvO fallback retry: `https://poki.com/en/g/ovo-classic`, manual `external-qa/ovo-poki/README.md`.
+- The dashboard must show PolyTrack and OvO as blocked/needs-retry instead of failed-game QA, and must distinguish provider/setup failure from game QA failure.
+
+## Cross-Game Audio Default Hotfix - 2026-06-25
+
+- User reported audible game audio from one of the built games. Orchestrator routed an urgent settings hotfix to all three builders.
+- Arcade Kart Racer builder completed audio-default hotfix:
+  - First load and Reset Defaults now use sounds off and volume `0%`.
+  - Stale saved `sound: true` cannot re-enable audio without the new explicit opt-in marker.
+  - Changed `games/kart-racer/index.html` and `games/kart-racer/README.md`.
+- Side-Scrolling Platformer builder completed audio-default hotfix:
+  - First load and Reset Defaults now use generated UI sounds off and volume `0%`.
+  - Stale saved `audioEnabled: true` cannot re-enable audio without explicit consent.
+  - Changed `games/platformer/index.html` and `games/platformer/README.md`.
+- Turn-Based Deckbuilder builder completed audio-default hotfix:
+  - Added explicit `Audio feedback` opt-in setting defaulted off.
+  - First load and Reset Defaults create no audio context and play no sound unless the player enables audio.
+  - Changed `games/deckbuilder/index.html` and `games/deckbuilder/README.md`.
+- Focused black-box audio retests were handed to the three existing game tester threads:
+  - `evidence/kart-racer/audio-default-hotfix/`
+  - `evidence/platformer/audio-default-hotfix/`
+  - `evidence/deckbuilder/audio-default-hotfix/`
+- The previous Arcade Kart Racer settings QA run is superseded and must not be approved against the pre-hotfix build.
+- Side-Scrolling Platformer audio hotfix retest is approved as `PASS`.
+  - Evidence folder: `evidence/platformer/audio-default-hotfix/`.
+  - Tester verified fresh first load has generated sounds off and volume `0%`, pre-opt-in actions are silent, explicit opt-in produces Web Audio activity, Reset Defaults restores off/0, stale saved audio-on state without consent reloads as off/0, and a short movement smoke path still works.
+
+## External Browser Game QA Retry Progress - 2026-06-25
+
+- PolyTrack Retry 1 on official Itch.io path `https://kodub.itch.io/polytrack` completed as `BLOCKED_ENVIRONMENT`.
+  - Evidence folder: `evidence/external/polytrack-itch/`.
+  - The Itch provider page and embedded game iframe loaded, so the provider path itself was not the blocker.
+  - The remote browser-harness environment hit a hardware acceleration warning and the same PolyTrack startup exception before gameplay.
+  - Next retry: `https://poki.com/en/g/polytrack` via `external-qa/polytrack-poki/README.md`, evidence target `evidence/external/polytrack-poki/`.
+  - If Poki also blocks due to WebGL/hardware acceleration, the likely required next path is a hardware-accelerated local browser-harness environment rather than another game-quality failure.
+- OvO Retry 1 on Coolmath `https://www.coolmathgames.com/0-ovo` remains active.
+  - The initial Cloudflare page cleared.
+  - The tester reached the Coolmath game page but the embedded OvO game frame was still on an in-game loader at last check.
+
+## Browser Window Consolidation Correction - 2026-06-25
+
+- User rejected the drift toward one isolated Chrome window/profile per game or retry.
+- New hard rule: all browser-harness testing for this project must stay within a single shared Chrome window using controlled tabs.
+- Testers must not launch separate Chrome windows, isolated Chrome profiles, or remote browser sessions unless the main orchestrator explicitly grants a one-off exception.
+- State isolation should be done by clearing storage/cookies for the relevant origin and using controlled tabs in the shared window. If that is insufficient, the tester must report a blocker instead of launching another browser instance.
+- Orchestrator sent stop/no-new-window instructions to active Kart, Platformer, Deckbuilder, PolyTrack, and OvO tester threads.
+- Browser maintenance thread was asked to inspect and close stale/duplicate isolated project Chrome instances while preserving the user-visible dashboard tab and ambiguous active tabs.
+- Maintenance closed the stale isolated `/tmp/signal-runner-chrome-profile-9333` profile and its tabs, preserving the normal user-visible Chrome process.
+- User then closed Chrome instances and requested a single fresh shared project Chrome window. Maintenance was asked to reuse the one normal Chrome window if available, or start exactly one normal shared Chrome window, with tabs for dashboard plus the three game/manual pages.
+- Maintenance confirmed one normal Chrome process, no isolated profile processes, and no active DevTools target ports. The shared Chrome app was reused and requested tabs for the dashboard plus all three game/manual pages.
+- Browser-harness attachment to the shared normal Chrome is still blocked until Chrome remote-debugging permission is approved; fallback isolated profiles and remote browser sessions remain forbidden.
+- Isolated-browser evidence is not approvable:
+  - Arcade Kart Racer audio-default hotfix is `PENDING/BLOCKED` pending a shared-window retest, despite favorable preliminary observations.
+  - Turn-Based Deckbuilder audio-default hotfix is `PENDING/BLOCKED` with partial screenshots only and no complete report/expected-flow/video.
+  - PolyTrack Poki retry and OvO Coolmath retry were stopped/incomplete because they used disallowed remote/isolated browser surfaces.
+- Dashboard was updated and verified to show the browser policy gate, Platformer audio hotfix `PASS`, Kart/Deckbuilder audio hotfix `BLOCKED/PENDING`, and external retries as stopped/incomplete by browser policy rather than final game QA failures.

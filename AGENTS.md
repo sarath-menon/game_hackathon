@@ -4,7 +4,20 @@ This file is the canonical handoff document for the active project in `/Users/sa
 
 ## Active Project Goal
 
-Expand and retest the three-game suite with detailed player-facing settings panels, while continuing to avoid copyrighted names, characters, art, music, maps, branding, and other protected assets. The initial three-game build/test phases and the first round of gameplay-polish upgrades are complete; the active work is a settings implementation and settings QA loop.
+Continuously improve the Three-Game Lockstep Suite toward genre-leading browser game quality while avoiding copyrighted names, characters, art, music, maps, branding, and other protected assets.
+
+Each cycle:
+
+- benchmark one game against genre references without copying protected IP
+- identify the highest-impact gap in feel, clarity, visuals, UI, performance, accessibility, settings, or polish
+- send a scoped upgrade goal to that game's builder
+- send the updated URL/manual/evidence paths to that game's tester after the builder reports completion
+- require industry-style black-box QA with test cases, severity, regression checks, readability/usability gates, browser checks, and continuous gameplay evidence
+- route failures back to the builder, then retest
+- update dashboard/log with what changed, what was fixed, current evidence, and next action
+- commit often after coherent verified progress
+
+There is no terminal success condition. Keep looping through higher-quality iterations unless the user pauses or redirects.
 
 The suite contains:
 
@@ -14,9 +27,9 @@ The suite contains:
 
 The previous Signal Runner work is historical only. Do not continue Signal Runner milestones unless the user explicitly restores that goal.
 
-## Active Settings QA Goal
+## Current Cycle: Settings Panels And Settings QA
 
-The active project is an ongoing settings-quality loop. Each built game should gain a detailed settings panel that is useful to real players and testable to industry-style QA standards.
+The current cycle inside the broader continuous-improvement loop is settings quality. Each built game should gain a detailed settings panel that is useful to real players and testable to industry-style QA standards.
 
 Each cycle:
 
@@ -43,6 +56,16 @@ Tester settings QA must verify that settings are discoverable, documented in the
 
 A browser-game research lane is active to identify popular games that can be played directly by URL. After the research lane identifies candidates and enough player-facing manual/instruction material, the orchestrator should select five diverse games and create separate tester threads for parallel black-box QA. These testers receive only the game URL, game manual/instructions, and evidence/report paths. They cannot fix hosted games; they only produce industry-style QA reports with findings, severity, reproduction steps, evidence, and limitations.
 
+External game reports must distinguish game quality failures from provider or environment blockers:
+
+- `FAIL`: the game is playable enough to evaluate, but fails functional, usability, accessibility, performance, settings, or QA acceptance criteria.
+- `BLOCKED_PROVIDER`: the selected provider/URL, portal shell, iframe, startup state, storage state, ad/consent layer, or hosting path cannot reach playable state.
+- `BLOCKED_ENVIRONMENT`: the local harness/browser/WebGL/audio/input/storage environment cannot exercise the game reliably.
+- `PASS_WITH_FINDINGS`: the game is playable and acceptable with documented nonblocking issues.
+- `UNTESTABLE_IN_CURRENT_ENVIRONMENT`: multiple reasonable provider paths were tried and all remained blocked, so no playable path was available in the current environment.
+
+A popular external browser game must not receive final `FAIL` solely because one provider URL, portal wrapper, iframe, startup state, storage state, WebGL path, ad/consent layer, or browser-harness setup prevented testing. If a provider or environment blocks testing, the orchestrator must route a retry plan: find at least two alternate reputable/direct playable URLs or provider paths for the same game where legally accessible, prefer official/direct-hosted URLs over portal wrappers, update or create the player-facing manual for the new path, then hand only the new URL/manual/evidence paths to a tester for a fresh black-box QA attempt. Only after multiple reasonable providers have been tried and all are blocked may the final status become `UNTESTABLE_IN_CURRENT_ENVIRONMENT`, and the report must list every attempted URL, exact blocker, screenshots/recording evidence, and why no playable path was available.
+
 ## Current State
 
 - Workspace: `/Users/sarathmenon/Documents/game_hackathon`
@@ -58,8 +81,18 @@ A browser-game research lane is active to identify popular games that can be pla
   - Required evidence exists at `evidence/platformer/upgrade-phase-a-movement-feel/`: `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`.
   - Turn-Based Deckbuilder, Upgrade Phase 1: Combat Feedback And Math Preview is closed as `PASS`.
   - Required evidence exists at `evidence/deckbuilder/upgrade-phase-1-combat-feedback/`: `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`.
-  - Current active suite lane: settings-panel implementation and settings QA for all three games.
+  - Current active suite lane: settings QA for all three games.
+  - Arcade Kart Racer Settings Panel Phase 1: builder complete; tester handoff sent to `019ef96d-ef59-7d20-9dbe-b5d06edc720f`; active evidence folder `evidence/kart-racer/settings-phase-1/`.
+  - Side-Scrolling Platformer Settings Panel Phase 1: builder complete; tester handoff sent to `019ef96e-42e6-7121-b9ea-bf266ce55a2e`; active evidence folder `evidence/platformer/settings-phase-1/`.
+  - Turn-Based Deckbuilder Settings Panel Phase 1: builder complete; tester handoff sent to `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`; active evidence folder `evidence/deckbuilder/settings-phase-1/`.
+  - Settings tester reports are pending. If a settings report says `FAIL`, route only the summarized blocker to that game's builder; if it says `PASS` with `TEST_REPORT.md`, `expected-flow.md`, and `gameplay-recording.mp4`, close that settings phase and select the next highest-impact quality/settings improvement.
   - Browser-game research thread `019efaae-20f8-7473-8e01-69d4ae206994` is used for direct-URL game candidates and settings/options quality references.
+  - External browser-game QA:
+    - PolyTrack is reclassified as `BLOCKED_PROVIDER` / needs retry; the first provider hit a startup runtime error before gameplay.
+    - OvO is reclassified as `BLOCKED_PROVIDER` / needs retry; the first provider stayed on a loading spinner before gameplay.
+    - Cookie Clicker completed as `PASS with limitations`; load, click/purchase loop, Options, save/export, and persistence were verified, with narrow viewport capture limited by the harness.
+    - Dungeons & Degenerate Gamblers completed as `PASS with nonblocking findings`; launch, run start, deck selection, tavern entry, and first table interaction were verified.
+    - Townscaper completed as `PASS WITH FINDINGS`; WebGL load, block placement, URL hash state, camera movement/zoom, and mobile rendering were verified.
   - The dashboard must reflect the live loop as it changes, including selected-upgrade, builder-active, builder-complete, tester-handoff, tester-active, FAIL, fix-active, retest-pending, retest-active, PASS closure, and next-upgrade selection states.
 - QA upgrade artifacts:
   - `qa-upgrade/QA_STANDARDS_PROPOSAL.md`
@@ -108,6 +141,8 @@ For browser automation or browser-harness work, the tester must first read and f
 
 The tester must not use Codex native browser use. If browser support is blocked, the tester should modify or repair the browser harness instead.
 
+Hard browser rule: all project browser-harness testing must use one shared Chrome window with controlled tabs; testers must not launch separate Chrome windows/profiles or remote sessions, and must report `BLOCKED_ENVIRONMENT` if shared-window testing is unavailable.
+
 When testing Google AI Studio hosted games, first open the provided AI Studio app URL with browser-harness and inspect whether the actual playable app is embedded in a preview iframe. If an iframe points to a hosted preview origin such as a `run.app` URL, open that preview URL directly in a new browser-harness tab and test the game there as the black-box surface. Do not assume the lobby, room, create/join, start, or multiplayer flow is reusable across apps; those controls are app-specific and must be discovered from the visible UI and any user-provided manual. Reusable checks are only: confirm the AI Studio page or direct preview loads without an auth wall, identify the real playable surface, focus the game canvas or interactive area, use visible controls/documented keys through browser-harness, and stop for user help if Google login, permissions, or unavailable preview errors block access.
 
 ### Browser Maintenance Thread
@@ -117,6 +152,7 @@ The browser maintenance thread keeps browser-harness and Chrome state from accum
 Cleanup policy:
 
 - Close stale browser-harness/Chrome tabs related to this project, including old dashboard, game, manual, evidence, duplicate, completed probe, or idle test-attempt tabs.
+- Keep project browser usage consolidated in one shared Chrome window with controlled tabs; close duplicate or isolated Chrome windows/profiles when clearly stale or unauthorized.
 - Preserve any tab that may be part of an active current test run or active recording.
 - If uncertain whether a tab is active, leave it open and report it as skipped.
 - Do not use Codex native browser use.

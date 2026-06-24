@@ -8,3 +8,6 @@ evidence/**/frames/
 evidence/**/recording-frames/
 evidence/**/probes/
 evidence/**/*-explore-*.png
+evidence/**/*.png
+evidence/**/*.json
+evidence/**/*.jpg

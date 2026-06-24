@@ -12,10 +12,27 @@ Start the run, move right through the side-scrolling level, collect glow cores, 
 - Restart: `Enter` or click `Run Again` after completion or failure
 - Move: `A` / `D` or `Left Arrow` / `Right Arrow`
 - Jump: `W`, `Up Arrow`, or `Space`
+- Settings: click `Settings` or press `Escape`
 
 ## Jump Feel
 
 Jump input has a small forgiveness window: pressing jump just after leaving a ledge can still jump, and pressing jump just before landing can trigger on landing. Tap jump for a shorter hop or hold jump for a higher, floatier jump.
+
+## Settings
+
+Open settings from the title screen, during play, or after a run. Opening settings during play pauses the run until the panel closes. Settings save on this device and persist across reloads.
+
+Available settings:
+
+- Jump Assist: changes the coyote-time and jump-buffer forgiveness profile.
+- Camera Smoothing: changes how quickly the camera follows the player.
+- Camera Lookahead: changes where the player sits in the camera frame.
+- Route Marker Intensity: changes safe-deck and optional-route marker visibility.
+- Effect Intensity: changes glow, landing, and feedback effect strength.
+- Reduced Motion: minimizes decorative pulsing and blink effects.
+- HUD/Text Size: changes HUD label size.
+- Generated UI Sounds and Volume: sounds are off with volume `0%` by default. Enable this setting to opt in to simple generated tones for actions and results.
+- Reset Defaults: restores the original settings, saves them, and returns generated sounds to off with volume `0%`.
 
 ## Win Behavior
 

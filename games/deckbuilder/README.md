@@ -13,11 +13,27 @@ Ash Circuit is a two-encounter, turn-based deck run. Defeat the first enemy, cho
 ## Controls
 
 - Click **Start Run** to begin.
+- Click **Settings** from the title screen or combat header to adjust readability, feedback, confirmations, and persistence.
 - Click a card in your hand to play it.
 - Read the card preview before clicking; it shows the current damage, guard, draw, and status outcome using active Focus or Fractured modifiers.
 - Click **End Turn** when finished playing cards.
 - Click one reward card after encounter 1 to add it to your deck and start encounter 2.
 - Click **New Run** or **Play Again** to restart the deterministic run.
+
+## Settings
+
+Settings are available before starting and during combat.
+
+- **Animation speed** changes HP bar timing, card trail speed, and floating feedback timing. Options are Relaxed, Standard, and Fast.
+- **Reduced motion** removes card travel trails and removes most transition movement while keeping HP bars, previews, and feedback chips readable.
+- **Tooltip detail** changes card previews. Detailed previews show Focus and Fractured math; Compact previews show final outcomes only.
+- **Text size** changes the game UI between Small, Normal, and Large.
+- **Confirm End Turn** shows a confirmation prompt before ending any player turn.
+- **Confirm no-guard turns** warns before ending a turn with 0 guard while the enemy intends to attack.
+- **Feedback intensity** changes floating damage, guard, draw, and status chip emphasis. Options are Quiet, Standard, and Emphatic.
+- **Audio feedback** is off by default. The game plays no audio on first load and no audio after Reset Defaults. Turn this on in Settings to enable short generated feedback tones after player actions.
+- **Persistence** saves settings to this browser using localStorage. When persistence is off, settings still apply for the current page but are not saved across reloads.
+- **Reset Defaults** restores Standard animation speed, reduced motion off, Detailed previews, Normal text, confirmations off, Standard feedback, audio feedback off, and persistence on.
 
 ## Turn Rules
 

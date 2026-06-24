@@ -43,6 +43,28 @@
       pointer-events: none;
     }
 
+    .hud-actions {
+      position: absolute;
+      right: 18px;
+      bottom: 194px;
+      z-index: 3;
+      display: grid;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    .hud-button {
+      width: auto;
+      min-width: 116px;
+      margin: 0;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: rgba(8, 13, 18, 0.82);
+      color: var(--text);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.26);
+    }
+
     .topbar {
       position: absolute;
       top: 16px;
@@ -140,11 +162,16 @@
     .center {
       position: absolute;
       inset: 0;
+      z-index: 4;
       display: grid;
       place-items: center;
       padding: 24px;
       background: radial-gradient(circle at 50% 38%, rgba(29, 51, 64, 0.58), rgba(5, 9, 14, 0.8));
       pointer-events: auto;
+    }
+
+    #settingsOverlay {
+      z-index: 8;
     }
 
     .card {
@@ -154,6 +181,83 @@
       border-radius: 8px;
       background: rgba(9, 14, 21, 0.9);
       box-shadow: 0 18px 70px rgba(0, 0, 0, 0.48);
+    }
+
+    .settings-card {
+      width: min(780px, calc(100vw - 28px));
+      max-height: min(86vh, 760px);
+      overflow: auto;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .setting-row {
+      display: grid;
+      gap: 7px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .setting-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 760;
+    }
+
+    .setting-copy {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .setting-row input[type="range"],
+    .setting-row select {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .setting-row select {
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(8, 13, 18, 0.86);
+      color: var(--text);
+      font: inherit;
+    }
+
+    .setting-check {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .setting-check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+    }
+
+    .settings-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .settings-actions button {
+      margin-top: 0;
     }
 
     h1 {
@@ -256,6 +360,19 @@
       .controls {
         grid-template-columns: 1fr;
       }
+
+      .settings-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .settings-actions {
+        flex-direction: column;
+      }
+
+      .hud-actions {
+        right: 10px;
+        bottom: 172px;
+      }
     }
   </style>
 </head>
@@ -308,8 +425,10 @@
         <div class="control"><kbd>D</kbd><kbd>→</kbd> Steer right</div>
         <div class="control"><kbd>Space</kbd><kbd>Shift</kbd> Drift while turning</div>
         <div class="control"><kbd>R</kbd> Restart</div>
+        <div class="control"><kbd>O</kbd> Open settings</div>
       </div>
       <button id="startButton" type="button">Start Race</button>
+      <button id="titleSettingsButton" class="secondary" type="button">Settings</button>
     </section>
   </div>
 
@@ -318,7 +437,74 @@
       <h1>Race Complete</h1>
       <p id="completeText">Lap complete.</p>
       <button id="restartButton" class="secondary" type="button">Restart Race</button>
+      <button id="completeSettingsButton" class="secondary" type="button">Settings</button>
     </section>
+  </div>
+
+  <div id="settingsOverlay" class="center hidden">
+    <section class="card settings-card" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <h1 id="settingsTitle">Settings</h1>
+      <p id="settingsContext">Adjust handling, readability, effects, and sound. Changes save automatically on this browser.</p>
+      <div class="settings-grid">
+        <label class="setting-row">
+          <span class="setting-title">Steering sensitivity <span id="steeringValue">100%</span></span>
+          <input id="steeringSetting" type="range" min="70" max="135" step="5">
+          <span class="setting-copy">Changes how sharply the kart turns while driving and drifting.</span>
+        </label>
+        <label class="setting-row">
+          <span class="setting-title">Driving assist</span>
+          <select id="assistSetting">
+            <option value="stable">Stable</option>
+            <option value="standard">Standard</option>
+            <option value="sport">Sport</option>
+          </select>
+          <span class="setting-copy">Stable adds stronger route alignment and gentler edge recovery. Sport gives punchier throttle with less assist.</span>
+        </label>
+        <label class="setting-row">
+          <span class="setting-title">Camera readability <span id="cameraValue">Balanced</span></span>
+          <input id="cameraSetting" type="range" min="85" max="115" step="5">
+          <span class="setting-copy">Zooms the heading-up chase view in or out while keeping CP1 forward from the start.</span>
+        </label>
+        <label class="setting-row">
+          <span class="setting-title">Effect intensity <span id="effectValue">100%</span></span>
+          <input id="effectSetting" type="range" min="0" max="100" step="10">
+          <span class="setting-copy">Scales speed streaks, skid trails, and exhaust particles without changing physics.</span>
+        </label>
+        <div class="setting-row">
+          <label class="setting-check"><input id="routeCueSetting" type="checkbox"> Show route chevrons</label>
+          <span class="setting-copy">Toggles the blue forward-route arrows between the kart and next gate.</span>
+        </div>
+        <div class="setting-row">
+          <label class="setting-check"><input id="markerSetting" type="checkbox"> Show checkpoint labels</label>
+          <span class="setting-copy">Toggles large CP/finish labels and active gate posts while keeping the drivable gate line visible.</span>
+        </div>
+        <div class="setting-row">
+          <label class="setting-check"><input id="minimapSetting" type="checkbox"> Show heading-up minimap</label>
+          <span class="setting-copy">Toggles the lower-right minimap and its checkpoint, boost, and obstacle markers.</span>
+        </div>
+        <div class="setting-row">
+          <label class="setting-check"><input id="motionSetting" type="checkbox"> Reduced motion</label>
+          <span class="setting-copy">Cuts shake and motion streaks, and reduces particle output for readability.</span>
+        </div>
+        <div class="setting-row">
+          <label class="setting-check"><input id="soundSetting" type="checkbox"> UI sounds</label>
+          <span class="setting-copy">Off by default. Enables short generated tones only after you opt in here.</span>
+        </div>
+        <label class="setting-row">
+          <span class="setting-title">Volume <span id="volumeValue">0%</span></span>
+          <input id="volumeSetting" type="range" min="0" max="100" step="5">
+          <span class="setting-copy">Defaults to muted. Controls generated UI sound volume only after UI sounds are enabled.</span>
+        </label>
+      </div>
+      <div class="settings-actions">
+        <button id="closeSettingsButton" type="button">Close Settings</button>
+        <button id="resetSettingsButton" class="secondary" type="button">Reset Defaults</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="hud-actions">
+    <button id="hudSettingsButton" class="hud-button" type="button">Settings</button>
   </div>
 
   <script>
@@ -329,8 +515,29 @@
       const ctx = canvas.getContext("2d");
       const startOverlay = document.getElementById("start");
       const completeOverlay = document.getElementById("complete");
+      const settingsOverlay = document.getElementById("settingsOverlay");
       const startButton = document.getElementById("startButton");
       const restartButton = document.getElementById("restartButton");
+      const titleSettingsButton = document.getElementById("titleSettingsButton");
+      const completeSettingsButton = document.getElementById("completeSettingsButton");
+      const hudSettingsButton = document.getElementById("hudSettingsButton");
+      const closeSettingsButton = document.getElementById("closeSettingsButton");
+      const resetSettingsButton = document.getElementById("resetSettingsButton");
+      const settingsContext = document.getElementById("settingsContext");
+      const steeringSetting = document.getElementById("steeringSetting");
+      const steeringValue = document.getElementById("steeringValue");
+      const assistSetting = document.getElementById("assistSetting");
+      const cameraSetting = document.getElementById("cameraSetting");
+      const cameraValue = document.getElementById("cameraValue");
+      const effectSetting = document.getElementById("effectSetting");
+      const effectValue = document.getElementById("effectValue");
+      const routeCueSetting = document.getElementById("routeCueSetting");
+      const markerSetting = document.getElementById("markerSetting");
+      const minimapSetting = document.getElementById("minimapSetting");
+      const motionSetting = document.getElementById("motionSetting");
+      const soundSetting = document.getElementById("soundSetting");
+      const volumeSetting = document.getElementById("volumeSetting");
+      const volumeValue = document.getElementById("volumeValue");
       const speedEl = document.getElementById("speed");
       const speedFill = document.getElementById("speedFill");
       const lapEl = document.getElementById("lap");
@@ -342,6 +549,23 @@
       const completeText = document.getElementById("completeText");
 
       const totalLaps = 1;
+      const settingsStorageKey = "arcadeKartRacerSettings.v1";
+      const defaultSettings = {
+        steering: 100,
+        assist: "standard",
+        camera: 100,
+        effects: 100,
+        routeCues: true,
+        markers: true,
+        minimap: true,
+        reducedMotion: false,
+        sound: false,
+        volume: 0,
+        audioOptIn: false
+      };
+      let settings = loadSettings();
+      let settingsOpen = false;
+      let audioContext = null;
 
       const track = {
         radiusX: 260,
@@ -421,6 +645,131 @@
         canvas.style.width = width + "px";
         canvas.style.height = height + "px";
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function loadSettings() {
+        try {
+          const stored = JSON.parse(window.localStorage.getItem(settingsStorageKey) || "{}");
+          return sanitizeSettings({ ...defaultSettings, ...stored });
+        } catch {
+          return { ...defaultSettings };
+        }
+      }
+
+      function sanitizeSettings(value) {
+        const audioOptIn = Boolean(value.audioOptIn);
+        return {
+          steering: clamp(Number(value.steering) || defaultSettings.steering, 70, 135),
+          assist: ["stable", "standard", "sport"].includes(value.assist) ? value.assist : defaultSettings.assist,
+          camera: clamp(Number(value.camera) || defaultSettings.camera, 85, 115),
+          effects: clamp(Number(value.effects ?? defaultSettings.effects), 0, 100),
+          routeCues: Boolean(value.routeCues),
+          markers: Boolean(value.markers),
+          minimap: Boolean(value.minimap),
+          reducedMotion: Boolean(value.reducedMotion),
+          sound: audioOptIn && Boolean(value.sound),
+          volume: audioOptIn ? clamp(Number(value.volume ?? defaultSettings.volume), 0, 100) : 0,
+          audioOptIn
+        };
+      }
+
+      function saveSettings() {
+        try {
+          window.localStorage.setItem(settingsStorageKey, JSON.stringify(settings));
+        } catch {
+          setMessage("Settings changed for this session. Browser storage is unavailable.");
+        }
+      }
+
+      function syncSettingsControls() {
+        steeringSetting.value = String(settings.steering);
+        steeringValue.textContent = `${settings.steering}%`;
+        assistSetting.value = settings.assist;
+        cameraSetting.value = String(settings.camera);
+        cameraValue.textContent = settings.camera < 98 ? "Wide" : settings.camera > 102 ? "Close" : "Balanced";
+        effectSetting.value = String(settings.effects);
+        effectValue.textContent = settings.reducedMotion ? "Reduced" : `${settings.effects}%`;
+        routeCueSetting.checked = settings.routeCues;
+        markerSetting.checked = settings.markers;
+        minimapSetting.checked = settings.minimap;
+        motionSetting.checked = settings.reducedMotion;
+        soundSetting.checked = settings.sound;
+        volumeSetting.value = String(settings.volume);
+        volumeValue.textContent = `${settings.volume}%`;
+      }
+
+      function updateSettingsFromControls() {
+        settings = sanitizeSettings({
+          steering: Number(steeringSetting.value),
+          assist: assistSetting.value,
+          camera: Number(cameraSetting.value),
+          effects: Number(effectSetting.value),
+          routeCues: routeCueSetting.checked,
+          markers: markerSetting.checked,
+          minimap: minimapSetting.checked,
+          reducedMotion: motionSetting.checked,
+          sound: soundSetting.checked,
+          volume: Number(volumeSetting.value),
+          audioOptIn: soundSetting.checked
+        });
+        syncSettingsControls();
+        saveSettings();
+      }
+
+      function openSettings() {
+        settingsOpen = true;
+        settingsContext.textContent = state === "racing"
+          ? "Settings are open. The race is paused until you close this panel."
+          : "Adjust handling, readability, effects, and sound. Changes save automatically on this browser.";
+        syncSettingsControls();
+        settingsOverlay.classList.remove("hidden");
+        playTone(520, 0.05, "triangle", 0.45);
+      }
+
+      function closeSettings() {
+        settingsOpen = false;
+        settingsOverlay.classList.add("hidden");
+        lastTime = performance.now();
+        playTone(360, 0.04, "triangle", 0.35);
+      }
+
+      function resetSettings() {
+        settings = { ...defaultSettings };
+        syncSettingsControls();
+        saveSettings();
+        setMessage("Settings reset to defaults.");
+        playTone(260, 0.08, "sine", 0.55);
+      }
+
+      function assistProfile() {
+        if (settings.assist === "stable") return { accel: 0.94, brake: 1.08, align: 1.42, edge: 1.14 };
+        if (settings.assist === "sport") return { accel: 1.1, brake: 0.94, align: 0.72, edge: 0.88 };
+        return { accel: 1, brake: 1, align: 1, edge: 1 };
+      }
+
+      function effectScale() {
+        return settings.reducedMotion ? 0.18 : settings.effects / 100;
+      }
+
+      function playTone(frequency, duration, type, gainScale) {
+        if (!settings.sound || settings.volume <= 0) return;
+        try {
+          audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+          if (audioContext.state === "suspended") audioContext.resume();
+          const oscillator = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          oscillator.type = type || "sine";
+          oscillator.frequency.value = frequency;
+          gain.gain.value = settings.volume / 100 * 0.08 * (gainScale || 1);
+          oscillator.connect(gain).connect(audioContext.destination);
+          oscillator.start();
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + duration);
+          oscillator.stop(audioContext.currentTime + duration + 0.02);
+        } catch {
+          settings.sound = false;
+          syncSettingsControls();
+          saveSettings();
+        }
       }
 
       function centerPoint(angle) {
@@ -571,12 +920,12 @@
 
         drawReadableWorld();
         drawSpeedEffects();
-        drawMiniMap();
+        if (settings.minimap) drawMiniMap();
       }
 
       function drawReadableWorld() {
-        const scale = Math.min(width, height) / 430;
-        const kartScreen = { x: width / 2, y: height * 0.8 };
+        const scale = Math.min(width, height) / 430 * (settings.camera / 100);
+        const kartScreen = { x: width / 2, y: height * (0.8 + (settings.camera - 100) * 0.0012) };
         const heading = forwardVector();
         const right = { x: heading.z, z: -heading.x };
         const currentAngle = normalizeAngle(nearestTrackInfo(kart.x, kart.z).angle);
@@ -629,7 +978,7 @@
         ctx.stroke();
         ctx.setLineDash([]);
 
-        drawReadableRouteCue(toScreen, currentAngle);
+        if (settings.routeCues) drawReadableRouteCue(toScreen, currentAngle);
         drawReadableDriftEffects(toScreen, scale);
         drawReadableBoostPads(toScreen, scale);
         drawReadableObstacles(toScreen, scale);
@@ -704,8 +1053,8 @@
       function drawReadableFinishGate(toScreen, active) {
         const left = toScreen(edgePoint(track.finishAngle, -1));
         const right = toScreen(edgePoint(track.finishAngle, 1));
-        drawGate2d(left, right, active ? "#ffcf45" : "rgba(255, 207, 69, 0.32)", active ? 8 : 4, active);
-        if (active) {
+        drawGate2d(left, right, active ? "#ffcf45" : "rgba(255, 207, 69, 0.32)", active ? 8 : 4, active && settings.markers);
+        if (active && settings.markers) {
           const c = toScreen(centerPoint(track.finishAngle));
           drawLabel(c.x, c.y - 30, "FINISH", "#ffcf45", 18);
         }
@@ -716,8 +1065,8 @@
         const right = toScreen(edgePoint(checkpoint.angle, 1));
         const alpha = cleared ? 0.25 : current ? 1 : 0.28;
         const color = withAlpha(checkpoint.color, alpha);
-        drawGate2d(left, right, color, current ? 8 : 4, current);
-        if (current || cleared) {
+        drawGate2d(left, right, color, current ? 8 : 4, current && settings.markers);
+        if (settings.markers && (current || cleared)) {
           const c = toScreen(centerPoint(checkpoint.angle));
           drawLabel(c.x, c.y - (current ? 34 : 24), checkpoint.label, color, current ? 18 : 13);
         }
@@ -760,10 +1109,12 @@
       }
 
       function drawReadableDriftEffects(toScreen, scale) {
+        const effects = effectScale();
+        if (effects <= 0) return;
         for (const mark of skidMarks) {
           const p = toScreen(mark);
           ctx.save();
-          ctx.globalAlpha = Math.max(0, mark.life);
+          ctx.globalAlpha = Math.max(0, mark.life) * effects;
           ctx.strokeStyle = mark.color;
           ctx.lineWidth = Math.max(2, 3.2 * scale);
           ctx.beginPath();
@@ -776,7 +1127,7 @@
         for (const particle of exhaustParticles) {
           const p = toScreen(particle);
           ctx.save();
-          ctx.globalAlpha = Math.max(0, particle.life);
+          ctx.globalAlpha = Math.max(0, particle.life) * effects;
           ctx.fillStyle = particle.color;
           ctx.beginPath();
           ctx.arc(p.x, p.y, Math.max(2, particle.radius * scale), 0, Math.PI * 2);
@@ -924,11 +1275,13 @@
       }
 
       function drawSpeedEffects() {
+        const effects = effectScale();
+        if (effects <= 0) return;
         const speedRatio = Math.min(1, Math.abs(kart.speed) / 150);
         if (speedRatio < 0.52 && boostTimer <= 0) return;
         const intensity = Math.max(speedRatio, boostTimer > 0 ? 0.9 : 0);
         ctx.save();
-        ctx.globalAlpha = 0.16 + intensity * 0.2;
+        ctx.globalAlpha = (0.16 + intensity * 0.2) * effects;
         ctx.strokeStyle = boostTimer > 0 ? "#8df5ff" : "#ffffff";
         ctx.lineWidth = 2;
         const lines = 9;
@@ -1124,6 +1477,11 @@
       }
 
       function update(dt) {
+        if (settingsOpen) {
+          updateHud();
+          return;
+        }
+
         if (state !== "racing") {
           speedEl.textContent = "0";
           updateHud();
@@ -1142,9 +1500,10 @@
         const left = keys.has("arrowleft") || keys.has("a");
         const right = keys.has("arrowright") || keys.has("d");
         const drifting = keys.has("space") || keys.has("shift");
+        const assist = assistProfile();
 
-        if (accelerating) kart.speed += 95 * dt;
-        if (braking) kart.speed -= 130 * dt;
+        if (accelerating) kart.speed += 95 * assist.accel * dt;
+        if (braking) kart.speed -= 130 * assist.brake * dt;
         if (!accelerating && !braking) {
           const drag = Math.min(Math.abs(kart.speed), 45 * dt);
           kart.speed += kart.speed > 0 ? -drag : drag;
@@ -1155,9 +1514,10 @@
         const steer = (left ? 1 : 0) - (right ? 1 : 0);
         updateDrift(dt, steer, drifting);
         const steerStrength = Math.min(1, Math.abs(kart.speed) / 45);
+        const steeringMultiplier = settings.steering / 100;
         const driftTurnBonus = driftActive ? 0.62 : 1;
         const releaseSteerEase = driftReleaseTimer > 0 ? 0.34 : 1;
-        kart.yaw += steer * steerStrength * 2.25 * driftTurnBonus * releaseSteerEase * dt * (kart.speed >= 0 ? 1 : -1);
+        kart.yaw += steer * steerStrength * 2.25 * steeringMultiplier * driftTurnBonus * releaseSteerEase * dt * (kart.speed >= 0 ? 1 : -1);
 
         const f = forwardVector();
         kart.x += f.x * kart.speed * dt;
@@ -1171,14 +1531,14 @@
           const clampedOffset = Math.sign(info.offset) * maxOffset;
           kart.x = info.center.x + info.normal.x * clampedOffset;
           kart.z = info.center.z + info.normal.z * clampedOffset;
-          kart.speed *= driftActive ? 0.68 : 0.42;
+          kart.speed *= (driftActive ? 0.68 : 0.42) * assist.edge;
           weakenDrift("Wall scrub: drift charge weakened.");
         }
 
         if (kart.speed > 12) {
           const trackDirection = tangentAt(nearestTrackInfo(kart.x, kart.z).angle);
           const desiredYaw = Math.atan2(trackDirection.x, trackDirection.z);
-          const alignmentRate = driftActive ? 2.0 : driftReleaseTimer > 0 ? 2.6 : 0.9;
+          const alignmentRate = (driftActive ? 2.0 : driftReleaseTimer > 0 ? 2.6 : 0.9) * assist.align;
           kart.yaw += clamp(angleDelta(desiredYaw, kart.yaw), -0.7, 0.7) * alignmentRate * dt;
         }
 
@@ -1246,6 +1606,7 @@
           const desiredYaw = Math.atan2(trackDirection.x, trackDirection.z);
           kart.yaw += clamp(angleDelta(desiredYaw, kart.yaw), -0.9, 0.9);
           setMessage(`Drift boost released: ${stage.label} boost.`);
+          playTone(stage.level === 3 ? 760 : stage.level === 2 ? 640 : 520, 0.1, "triangle", 0.7);
         }
         driftActive = false;
         driftCharge = 0;
@@ -1264,6 +1625,7 @@
         }
         driftCancelTimer = 0.75;
         setMessage(message);
+        playTone(180, 0.06, "sawtooth", 0.55);
       }
 
       function cancelDrift(message) {
@@ -1274,6 +1636,7 @@
         announcedDriftStage = 0;
         driftCancelTimer = 0.75;
         setMessage(message);
+        playTone(150, 0.08, "sawtooth", 0.6);
       }
 
       function driftStage() {
@@ -1284,6 +1647,8 @@
       }
 
       function addDriftParticles() {
+        const effects = effectScale();
+        if (effects <= 0) return;
         const heading = forwardVector();
         const side = { x: heading.z, z: -heading.x };
         const stage = driftStage();
@@ -1331,6 +1696,7 @@
           boostTimer = 0.85;
           lastBoostPad = index;
           setMessage("Boost pad hit: speed surge.");
+          playTone(720, 0.07, "square", 0.48);
         });
       }
 
@@ -1353,6 +1719,7 @@
             cancelDrift(`${obstacle.label} hit: drift canceled.`);
           } else {
             setMessage(`${obstacle.label} hit: recover with throttle and steering.`);
+            playTone(130, 0.08, "sawtooth", 0.6);
           }
           break;
         }
@@ -1422,6 +1789,7 @@
         announcedDriftStage = 0;
         completeText.textContent = `Lap ${totalLaps}/${totalLaps} complete in ${formatTime(finalTime)}.`;
         setMessage(`Race complete: ${formatTime(finalTime)}.`);
+        playTone(880, 0.14, "triangle", 0.65);
         completeOverlay.classList.remove("hidden");
         updateHud();
       }
@@ -1519,6 +1887,7 @@
         startOverlay.classList.add("hidden");
         completeOverlay.classList.add("hidden");
         lastTime = performance.now();
+        playTone(440, 0.08, "triangle", 0.45);
         updateHud();
       }
 
@@ -1532,6 +1901,23 @@
       window.addEventListener("resize", resize);
       window.addEventListener("keydown", (event) => {
         const key = keyName(event);
+        if (key === "o") {
+          event.preventDefault();
+          if (settingsOpen) closeSettings();
+          else openSettings();
+          return;
+        }
+        if (key === "escape" && settingsOpen) {
+          event.preventDefault();
+          closeSettings();
+          return;
+        }
+        const settingControlFocused = settingsOpen && ["INPUT", "SELECT", "BUTTON"].includes(event.target.tagName);
+        if (settingControlFocused) return;
+        if (settingsOpen) {
+          event.preventDefault();
+          return;
+        }
         if (["arrowup", "arrowdown", "arrowleft", "arrowright", "w", "a", "s", "d", "space", "shift"].includes(key)) {
           event.preventDefault();
           keys.add(key);
@@ -1550,8 +1936,29 @@
       });
       startButton.addEventListener("click", startRace);
       restartButton.addEventListener("click", startRace);
+      titleSettingsButton.addEventListener("click", openSettings);
+      completeSettingsButton.addEventListener("click", openSettings);
+      hudSettingsButton.addEventListener("click", openSettings);
+      closeSettingsButton.addEventListener("click", closeSettings);
+      resetSettingsButton.addEventListener("click", resetSettings);
+      [
+        steeringSetting,
+        assistSetting,
+        cameraSetting,
+        effectSetting,
+        routeCueSetting,
+        markerSetting,
+        minimapSetting,
+        motionSetting,
+        soundSetting,
+        volumeSetting
+      ].forEach((control) => {
+        control.addEventListener("input", updateSettingsFromControls);
+        control.addEventListener("change", updateSettingsFromControls);
+      });
 
       resize();
+      syncSettingsControls();
       requestAnimationFrame(frame);
     })();
   </script>

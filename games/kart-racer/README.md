@@ -15,6 +15,7 @@ The required gates appear in sequence on the forward route from the start: `CP1`
 - `D` or `Arrow Right`: steer right
 - `Enter` or `Space`: start from the title screen
 - `Space` or `Shift`: drift while steering at speed
+- `O`: open or close settings
 - `R`: restart the race
 
 ## Track Rules
@@ -52,6 +53,21 @@ The race timer starts when the race begins and stops when the scored lap is comp
 ## Speed Feedback
 
 The HUD speed bar fills as speed increases. Boosting, drift release, and high speed add motion streaks, skid trails, and tire/exhaust particles.
+
+## Settings
+
+Open settings from the title screen, the in-race `Settings` button, the completion screen, or with `O`. Opening settings during a race pauses the timer and kart movement until the panel is closed.
+
+- Steering sensitivity changes how sharply the kart turns while driving and drifting.
+- Driving assist changes acceleration, route alignment, and edge recovery. `Stable` is easiest to keep on route, `Standard` is the default, and `Sport` gives punchier throttle with less assist.
+- Camera readability zooms the heading-up chase view in or out.
+- Route chevrons, checkpoint labels, and the heading-up minimap can be shown or hidden independently.
+- Effect intensity scales speed streaks, skid trails, and exhaust particles. Reduced motion cuts motion-heavy effects further.
+- Audio is off and muted by default on first load and after `Reset Defaults`; no sound plays before you opt in.
+- UI sounds enables short generated tones for start, boost, drift, collision, completion, and settings actions. Turn on `UI sounds` in settings and raise `Volume` above `0%` to hear them.
+- Older saved settings that predate the audio opt-in are treated as muted until you enable sounds again.
+- Settings save automatically in this browser and persist after reload.
+- `Reset Defaults` restores the default handling, readability, effect, audio, and marker settings.
 
 ## Restart
 

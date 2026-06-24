@@ -19,6 +19,9 @@
       --good: #76d46f;
       --bad: #ff6b6b;
       --focus: #ffffff;
+      --chip-duration: 960ms;
+      --trail-duration: 520ms;
+      --hp-duration: 260ms;
     }
 
     * {
@@ -28,6 +31,7 @@
     body {
       margin: 0;
       min-height: 100vh;
+      font-size: 16px;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
         linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
@@ -38,6 +42,14 @@
       background-size: 42px 42px, 42px 42px, auto, auto, auto;
       color: var(--text);
       overflow-x: hidden;
+    }
+
+    body[data-text-size="small"] {
+      font-size: 14px;
+    }
+
+    body[data-text-size="large"] {
+      font-size: 18px;
     }
 
     button {
@@ -194,7 +206,7 @@
       height: 100%;
       border-radius: inherit;
       background: linear-gradient(90deg, #80d66f, #e7c64a);
-      transition: width 260ms ease;
+      transition: width var(--hp-duration) ease;
     }
 
     .enemy .hp-fill {
@@ -507,7 +519,7 @@
       text-align: center;
       box-shadow: 0 12px 28px rgba(0,0,0,0.36);
       transform: translate(-50%, -50%);
-      animation: float-chip 960ms ease-out forwards;
+      animation: float-chip var(--chip-duration) ease-out forwards;
     }
 
     .floating-chip.damage {
@@ -538,7 +550,103 @@
       font-weight: 800;
       box-shadow: 0 18px 42px rgba(0,0,0,0.42);
       transform: translate(-50%, -50%);
-      animation: play-trail 520ms ease-in forwards;
+      animation: play-trail var(--trail-duration) ease-in forwards;
+    }
+
+    body[data-feedback="quiet"] .floating-chip {
+      min-width: 44px;
+      padding: 5px 8px;
+      font-size: 0.78rem;
+      opacity: 0.78;
+    }
+
+    body[data-feedback="emphatic"] .floating-chip {
+      min-width: 64px;
+      padding: 9px 13px;
+      border-width: 2px;
+      font-size: 1.05rem;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.48);
+    }
+
+    body[data-reduced-motion="true"] .hp-fill,
+    body[data-reduced-motion="true"] .btn,
+    body[data-reduced-motion="true"] .card {
+      transition: none;
+    }
+
+    body[data-reduced-motion="true"] .play-trail {
+      display: none;
+    }
+
+    body[data-reduced-motion="true"] .floating-chip {
+      animation: none;
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+
+    .settings-grid {
+      display: grid;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .setting-row {
+      display: grid;
+      grid-template-columns: 1fr minmax(150px, 220px);
+      gap: 12px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #141b22;
+      padding: 12px;
+    }
+
+    .setting-row label,
+    .setting-row .setting-label {
+      font-weight: 800;
+    }
+
+    .setting-help {
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.35;
+      margin-top: 4px;
+    }
+
+    .setting-row select,
+    .setting-row input[type="checkbox"] {
+      justify-self: end;
+    }
+
+    .setting-row select {
+      width: 100%;
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #10161c;
+      color: var(--text);
+      padding: 8px;
+      font: inherit;
+    }
+
+    .setting-row input[type="checkbox"] {
+      width: 26px;
+      height: 26px;
+      accent-color: var(--accent);
+    }
+
+    .settings-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      margin-top: 12px;
+    }
+
+    .settings-summary {
+      min-height: 28px;
+      color: var(--muted);
+      line-height: 1.4;
     }
 
     @keyframes float-chip {
@@ -575,6 +683,8 @@
 
     .modal {
       width: min(620px, 100%);
+      max-height: calc(100vh - 36px);
+      overflow-y: auto;
       border: 1px solid var(--line);
       border-radius: 8px;
       background: #172029;
@@ -650,8 +760,14 @@
       }
 
       .stats,
-      .piles {
+      .piles,
+      .setting-row {
         grid-template-columns: 1fr;
+      }
+
+      .setting-row select,
+      .setting-row input[type="checkbox"] {
+        justify-self: start;
       }
     }
   </style>
@@ -665,6 +781,7 @@
         <p class="subtitle" id="runLine">Encounter 1 of 2. Deck: 12 cards.</p>
       </div>
       <div class="top-actions">
+        <button class="btn" id="settingsButton" type="button">Settings</button>
         <button class="btn" id="newGameButton" type="button">New Run</button>
         <button class="btn primary" id="endTurnButton" type="button">End Turn</button>
       </div>
@@ -748,7 +865,100 @@
       <h2 id="startTitle">Ash Circuit</h2>
       <p>Defeat the Glass Warden with a deterministic starter deck. Each player turn starts with 3 energy and a five-card hand. The enemy intent panel shows its next move before you end your turn.</p>
       <p>After the first combat, choose one reward card. The selected card is added to your deck before the second encounter. Win the second encounter for final victory.</p>
+      <button class="btn" id="startSettingsButton" type="button">Settings</button>
       <button class="btn primary" id="startButton" type="button">Start Run</button>
+    </section>
+  </div>
+
+  <div class="overlay" id="settingsOverlay" hidden>
+    <section class="modal" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" tabindex="-1">
+      <h2 id="settingsTitle">Settings</h2>
+      <p>Adjust readability, confirmations, and feedback. Saved settings persist on this device when persistence is enabled.</p>
+      <div class="settings-grid">
+        <div class="setting-row">
+          <div>
+            <label for="animationSpeedSelect">Animation speed</label>
+            <p class="setting-help">Changes card trails, HP bar transitions, and feedback chip timing.</p>
+          </div>
+          <select id="animationSpeedSelect">
+            <option value="0.75">Relaxed</option>
+            <option value="1">Standard</option>
+            <option value="1.5">Fast</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <div>
+            <span class="setting-label">Reduced motion</span>
+            <p class="setting-help">Removes travel animations and shortens visual movement while keeping state feedback visible.</p>
+          </div>
+          <input id="reducedMotionToggle" type="checkbox" aria-label="Reduced motion">
+        </div>
+        <div class="setting-row">
+          <div>
+            <label for="detailLevelSelect">Tooltip detail</label>
+            <p class="setting-help">Compact previews show outcomes only; detailed previews include Focus and Fractured math.</p>
+          </div>
+          <select id="detailLevelSelect">
+            <option value="detailed">Detailed</option>
+            <option value="compact">Compact</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <div>
+            <label for="textSizeSelect">Text size</label>
+            <p class="setting-help">Adjusts the game UI text size for readability.</p>
+          </div>
+          <select id="textSizeSelect">
+            <option value="small">Small</option>
+            <option value="normal">Normal</option>
+            <option value="large">Large</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <div>
+            <span class="setting-label">Confirm End Turn</span>
+            <p class="setting-help">Shows a confirmation before ending your turn.</p>
+          </div>
+          <input id="confirmEndTurnToggle" type="checkbox" aria-label="Confirm End Turn">
+        </div>
+        <div class="setting-row">
+          <div>
+            <span class="setting-label">Confirm no-guard turns</span>
+            <p class="setting-help">Warns before ending a turn with 0 guard while the enemy intends to attack.</p>
+          </div>
+          <input id="confirmNoGuardToggle" type="checkbox" aria-label="Confirm no-guard turns">
+        </div>
+        <div class="setting-row">
+          <div>
+            <label for="feedbackIntensitySelect">Feedback intensity</label>
+            <p class="setting-help">Changes the size and emphasis of floating damage, guard, draw, and status chips.</p>
+          </div>
+          <select id="feedbackIntensitySelect">
+            <option value="quiet">Quiet</option>
+            <option value="standard">Standard</option>
+            <option value="emphatic">Emphatic</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <div>
+            <span class="setting-label">Audio feedback</span>
+            <p class="setting-help">Off by default. When enabled, short generated UI tones play only after player actions.</p>
+          </div>
+          <input id="audioEnabledToggle" type="checkbox" aria-label="Enable audio feedback">
+        </div>
+        <div class="setting-row">
+          <div>
+            <span class="setting-label">Persistence</span>
+            <p class="setting-help">When enabled, settings save to this browser with localStorage and survive reloads.</p>
+          </div>
+          <input id="persistenceToggle" type="checkbox" aria-label="Persist settings">
+        </div>
+      </div>
+      <p class="settings-summary" id="settingsSummary"></p>
+      <div class="settings-actions">
+        <button class="btn" id="resetSettingsButton" type="button">Reset Defaults</button>
+        <button class="btn primary" id="closeSettingsButton" type="button">Close</button>
+      </div>
     </section>
   </div>
 
@@ -812,15 +1022,45 @@
       { id: "reward-shield", name: "Shield Loom", type: "guard", cost: 1, block: 7, text: "Gain 7 guard." },
       { id: "reward-surge", name: "Surge Plan", type: "mixed", cost: 1, damage: 5, block: 5, text: "Deal 5 damage and gain 5 guard." }
     ];
+    const SETTINGS_KEY = "ash-circuit-settings-v1";
+    const AUDIO_CONSENT_VERSION = 1;
+    const DEFAULT_SETTINGS = {
+      animationSpeed: "1",
+      reducedMotion: false,
+      detailLevel: "detailed",
+      textSize: "normal",
+      confirmEndTurn: false,
+      confirmNoGuard: false,
+      feedbackIntensity: "standard",
+      audioEnabled: false,
+      audioConsentVersion: 0,
+      persistence: true
+    };
 
     const elements = {
       startOverlay: document.getElementById("startOverlay"),
       resultOverlay: document.getElementById("resultOverlay"),
       rewardOverlay: document.getElementById("rewardOverlay"),
+      settingsOverlay: document.getElementById("settingsOverlay"),
+      settingsModal: document.getElementById("settingsModal"),
       startButton: document.getElementById("startButton"),
+      settingsButton: document.getElementById("settingsButton"),
+      startSettingsButton: document.getElementById("startSettingsButton"),
+      closeSettingsButton: document.getElementById("closeSettingsButton"),
+      resetSettingsButton: document.getElementById("resetSettingsButton"),
       restartButton: document.getElementById("restartButton"),
       newGameButton: document.getElementById("newGameButton"),
       endTurnButton: document.getElementById("endTurnButton"),
+      animationSpeedSelect: document.getElementById("animationSpeedSelect"),
+      reducedMotionToggle: document.getElementById("reducedMotionToggle"),
+      detailLevelSelect: document.getElementById("detailLevelSelect"),
+      textSizeSelect: document.getElementById("textSizeSelect"),
+      confirmEndTurnToggle: document.getElementById("confirmEndTurnToggle"),
+      confirmNoGuardToggle: document.getElementById("confirmNoGuardToggle"),
+      feedbackIntensitySelect: document.getElementById("feedbackIntensitySelect"),
+      audioEnabledToggle: document.getElementById("audioEnabledToggle"),
+      persistenceToggle: document.getElementById("persistenceToggle"),
+      settingsSummary: document.getElementById("settingsSummary"),
       rewardChoices: document.getElementById("rewardChoices"),
       rewardText: document.getElementById("rewardText"),
       runLine: document.getElementById("runLine"),
@@ -857,6 +1097,8 @@
     };
 
     let state;
+    let settings = loadSettings();
+    let audioContext = null;
 
     function freshState() {
       return {
@@ -915,6 +1157,120 @@
       return cards.map(card => ({ ...card }));
     }
 
+    function loadSettings() {
+      try {
+        const saved = window.localStorage.getItem(SETTINGS_KEY);
+        if (!saved) return { ...DEFAULT_SETTINGS };
+        return normalizeSettings(JSON.parse(saved));
+      } catch {
+        return { ...DEFAULT_SETTINGS };
+      }
+    }
+
+    function normalizeSettings(candidate) {
+      candidate = candidate || {};
+      return {
+        ...DEFAULT_SETTINGS,
+        ...candidate,
+        animationSpeed: ["0.75", "1", "1.5"].includes(String(candidate?.animationSpeed)) ? String(candidate.animationSpeed) : DEFAULT_SETTINGS.animationSpeed,
+        detailLevel: ["compact", "detailed"].includes(candidate?.detailLevel) ? candidate.detailLevel : DEFAULT_SETTINGS.detailLevel,
+        textSize: ["small", "normal", "large"].includes(candidate?.textSize) ? candidate.textSize : DEFAULT_SETTINGS.textSize,
+        feedbackIntensity: ["quiet", "standard", "emphatic"].includes(candidate?.feedbackIntensity) ? candidate.feedbackIntensity : DEFAULT_SETTINGS.feedbackIntensity,
+        reducedMotion: Boolean(candidate?.reducedMotion),
+        confirmEndTurn: Boolean(candidate?.confirmEndTurn),
+        confirmNoGuard: Boolean(candidate?.confirmNoGuard),
+        audioEnabled: candidate?.audioConsentVersion === AUDIO_CONSENT_VERSION && candidate?.audioEnabled === true,
+        audioConsentVersion: candidate?.audioConsentVersion === AUDIO_CONSENT_VERSION && candidate?.audioEnabled === true ? AUDIO_CONSENT_VERSION : 0,
+        persistence: candidate?.persistence !== false
+      };
+    }
+
+    function saveSettings() {
+      if (!settings.persistence) {
+        window.localStorage.removeItem(SETTINGS_KEY);
+        return;
+      }
+      window.localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    }
+
+    function applySettings() {
+      const root = document.documentElement;
+      const speed = Number(settings.animationSpeed) || 1;
+      const chipDuration = settings.reducedMotion ? 1 : Math.round(960 / speed);
+      const trailDuration = settings.reducedMotion ? 1 : Math.round(520 / speed);
+      const hpDuration = settings.reducedMotion ? 1 : Math.round(260 / speed);
+      root.style.setProperty("--chip-duration", `${chipDuration}ms`);
+      root.style.setProperty("--trail-duration", `${trailDuration}ms`);
+      root.style.setProperty("--hp-duration", `${hpDuration}ms`);
+      document.body.dataset.textSize = settings.textSize;
+      document.body.dataset.reducedMotion = String(settings.reducedMotion);
+      document.body.dataset.feedback = settings.feedbackIntensity;
+      renderSettingsControls();
+      if (state) render();
+    }
+
+    function renderSettingsControls() {
+      elements.animationSpeedSelect.value = settings.animationSpeed;
+      elements.reducedMotionToggle.checked = settings.reducedMotion;
+      elements.detailLevelSelect.value = settings.detailLevel;
+      elements.textSizeSelect.value = settings.textSize;
+      elements.confirmEndTurnToggle.checked = settings.confirmEndTurn;
+      elements.confirmNoGuardToggle.checked = settings.confirmNoGuard;
+      elements.feedbackIntensitySelect.value = settings.feedbackIntensity;
+      elements.audioEnabledToggle.checked = settings.audioEnabled;
+      elements.persistenceToggle.checked = settings.persistence;
+      elements.settingsSummary.textContent = `Active: ${labelForSpeed(settings.animationSpeed)} animations, ${settings.reducedMotion ? "reduced motion on" : "motion on"}, ${settings.detailLevel} previews, ${settings.textSize} text, ${settings.feedbackIntensity} feedback, audio ${settings.audioEnabled ? "on" : "off"}, ${settings.persistence ? "saved" : "not saved"}.`;
+    }
+
+    function labelForSpeed(value) {
+      if (value === "0.75") return "relaxed";
+      if (value === "1.5") return "fast";
+      return "standard";
+    }
+
+    function readSettingsControls() {
+      settings = {
+        animationSpeed: elements.animationSpeedSelect.value,
+        reducedMotion: elements.reducedMotionToggle.checked,
+        detailLevel: elements.detailLevelSelect.value,
+        textSize: elements.textSizeSelect.value,
+        confirmEndTurn: elements.confirmEndTurnToggle.checked,
+        confirmNoGuard: elements.confirmNoGuardToggle.checked,
+        feedbackIntensity: elements.feedbackIntensitySelect.value,
+        audioEnabled: elements.audioEnabledToggle.checked,
+        audioConsentVersion: elements.audioEnabledToggle.checked ? AUDIO_CONSENT_VERSION : 0,
+        persistence: elements.persistenceToggle.checked
+      };
+      applySettings();
+      saveSettings();
+      if (settings.audioEnabled) playUiSound("ui");
+    }
+
+    function openSettings() {
+      renderSettingsControls();
+      elements.settingsOverlay.hidden = false;
+      elements.settingsModal.scrollTop = 0;
+      elements.settingsModal.focus({ preventScroll: true });
+      window.requestAnimationFrame(() => {
+        elements.settingsModal.scrollTop = 0;
+      });
+    }
+
+    function closeSettings() {
+      elements.settingsOverlay.hidden = true;
+      if (!elements.startOverlay.hidden) {
+        elements.startSettingsButton.focus();
+      } else {
+        elements.settingsButton.focus();
+      }
+    }
+
+    function resetSettings() {
+      settings = { ...DEFAULT_SETTINGS };
+      applySettings();
+      saveSettings();
+    }
+
     function addLog(message) {
       state.log.unshift(message);
       state.log = state.log.slice(0, 10);
@@ -949,6 +1305,7 @@
       state.discardPile.push(card);
 
       animateCardPlay(card, sourceElement);
+      playUiSound(card.damage ? "attack" : "support");
       resolveCard(card);
 
       if (state.enemyHp <= 0) {
@@ -959,7 +1316,9 @@
 
     function endTurn() {
       if (!state.playerTurn || state.gameOver) return;
+      if (!confirmEndTurnIfNeeded()) return;
       state.playerTurn = false;
+      playUiSound("turn");
       while (state.hand.length) {
         state.discardPile.push(state.hand.shift());
       }
@@ -972,6 +1331,17 @@
         if (!state.gameOver) beginPlayerTurn();
         render();
       }, 520);
+    }
+
+    function confirmEndTurnIfNeeded() {
+      const intent = currentIntent();
+      const messages = [];
+      if (settings.confirmEndTurn) messages.push("End your turn now?");
+      if (settings.confirmNoGuard && state.block <= 0 && intent.attack > 0) {
+        messages.push(`You have 0 guard and ${currentEncounter().name} intends to attack for ${intent.attack}.`);
+      }
+      if (!messages.length) return true;
+      return window.confirm(`${messages.join("\n")}\n\nContinue?`);
     }
 
     function resolveCard(card) {
@@ -1100,6 +1470,7 @@
       state.runDeck.push(rewardCard);
       state.selectedReward = card.name;
       elements.rewardOverlay.hidden = true;
+      playUiSound("reward");
       beginEncounter(1, state.playerHp, `${card.name} added to the deck.`);
     }
 
@@ -1182,7 +1553,7 @@
         const math = [];
         if (state.focus > 0) math.push(`+${state.focus} Focus`);
         if (outcome.fracturePenalty > 0) math.push(`-2 Fractured`);
-        if (math.length) detail += ` (${card.damage} base ${math.join(" ")})`;
+        if (settings.detailLevel === "detailed" && math.length) detail += ` (${card.damage} base ${math.join(" ")})`;
         pieces.push(detail);
       }
       if (card.block) pieces.push(`gain ${card.block} guard`);
@@ -1203,7 +1574,7 @@
     }
 
     function animateCardPlay(card, sourceElement) {
-      if (!sourceElement) return;
+      if (!sourceElement || settings.reducedMotion) return;
       const sourceRect = sourceElement.getBoundingClientRect();
       const targetElement = card.damage ? elements.enemyPanel : card.block || card.focus ? elements.playerPanel : elements.centerPanel;
       const targetRect = targetElement.getBoundingClientRect();
@@ -1220,6 +1591,33 @@
         sourceElement.classList.remove("is-playing");
         trail.remove();
       }, 560);
+    }
+
+    function playUiSound(kind) {
+      if (!settings.audioEnabled) return;
+      const AudioCtor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtor) return;
+      if (!audioContext) audioContext = new AudioCtor();
+      if (audioContext.state === "suspended") audioContext.resume();
+      const now = audioContext.currentTime;
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      const frequencies = {
+        attack: 260,
+        support: 420,
+        turn: 180,
+        reward: 520,
+        ui: 360
+      };
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(frequencies[kind] || 320, now);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.045, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+      oscillator.connect(gain);
+      gain.connect(audioContext.destination);
+      oscillator.start(now);
+      oscillator.stop(now + 0.09);
     }
 
     function renderLog() {
@@ -1241,11 +1639,27 @@
     }
 
     elements.startButton.addEventListener("click", startCombat);
+    elements.settingsButton.addEventListener("click", openSettings);
+    elements.startSettingsButton.addEventListener("click", openSettings);
+    elements.closeSettingsButton.addEventListener("click", closeSettings);
+    elements.resetSettingsButton.addEventListener("click", resetSettings);
+    [
+      elements.animationSpeedSelect,
+      elements.reducedMotionToggle,
+      elements.detailLevelSelect,
+      elements.textSizeSelect,
+      elements.confirmEndTurnToggle,
+      elements.confirmNoGuardToggle,
+      elements.feedbackIntensitySelect,
+      elements.audioEnabledToggle,
+      elements.persistenceToggle
+    ].forEach(control => control.addEventListener("change", readSettingsControls));
     elements.restartButton.addEventListener("click", startCombat);
     elements.newGameButton.addEventListener("click", startCombat);
     elements.endTurnButton.addEventListener("click", endTurn);
 
     state = freshState();
+    applySettings();
     render();
   </script>
 </body>
