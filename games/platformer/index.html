@@ -341,6 +341,33 @@
             <small>Changes coyote-time and jump-buffer timing.</small>
           </div>
           <div class="setting">
+            <label for="airControlSelect">Air Control
+              <select id="airControlSelect">
+                <option value="steady">Steady</option>
+                <option value="snappy">Snappy</option>
+                <option value="floaty">Floaty</option>
+              </select>
+            </label>
+            <small>Changes how strongly left/right movement responds while airborne.</small>
+          </div>
+          <div class="setting">
+            <label for="damageProfileSelect">Damage Profile
+              <select id="damageProfileSelect">
+                <option value="standard">Standard</option>
+                <option value="gentle">Gentle</option>
+                <option value="practice">Practice</option>
+              </select>
+            </label>
+            <small>Standard can fail the run, Gentle gives longer recovery, Practice respawns without losing health.</small>
+          </div>
+          <div class="setting">
+            <div class="setting-row">
+              <label for="checkpointAssistCheck">Checkpoint Assist</label>
+              <input id="checkpointAssistCheck" type="checkbox">
+            </div>
+            <small>Starts respawns from the mid marker even before it is touched.</small>
+          </div>
+          <div class="setting">
             <label for="cameraSmoothingRange">Camera Smoothing <span id="cameraSmoothingValue"></span>
               <input id="cameraSmoothingRange" type="range" min="5" max="24" step="1">
             </label>
@@ -357,6 +384,42 @@
               <input id="routeMarkersRange" type="range" min="0" max="100" step="5">
             </label>
             <small>Controls safe-deck and optional-route marker visibility.</small>
+          </div>
+          <div class="setting">
+            <label for="routeCueStyleSelect">Route Cue Style
+              <select id="routeCueStyleSelect">
+                <option value="full">Full: Lines And Labels</option>
+                <option value="lines">Lines Only</option>
+                <option value="labels">Labels Only</option>
+              </select>
+            </label>
+            <small>Changes whether route readability cues use lines, text labels, or both.</small>
+          </div>
+          <div class="setting">
+            <div class="setting-row">
+              <label for="highContrastHazardsCheck">High-Contrast Hazards</label>
+              <input id="highContrastHazardsCheck" type="checkbox">
+            </div>
+            <small>Adds bright outlines and stripe cues to vents and patrol runners.</small>
+          </div>
+          <div class="setting">
+            <label for="objectiveLabelsSelect">Objective Labels
+              <select id="objectiveLabelsSelect">
+                <option value="normal">Normal</option>
+                <option value="large">Large</option>
+              </select>
+            </label>
+            <small>Changes the size of EXIT, checkpoint, and route text labels.</small>
+          </div>
+          <div class="setting">
+            <label for="parallaxSelect">Background Detail
+              <select id="parallaxSelect">
+                <option value="full">Full Parallax</option>
+                <option value="reduced">Reduced</option>
+                <option value="off">Static</option>
+              </select>
+            </label>
+            <small>Reduces or disables background parallax drawing for comfort and performance.</small>
           </div>
           <div class="setting">
             <label for="effectIntensityRange">Effect Intensity <span id="effectIntensityValue"></span>
@@ -436,6 +499,13 @@
       const audioEnabledCheck = document.getElementById("audioEnabledCheck");
       const volumeRange = document.getElementById("volumeRange");
       const volumeValue = document.getElementById("volumeValue");
+      const airControlSelect = document.getElementById("airControlSelect");
+      const damageProfileSelect = document.getElementById("damageProfileSelect");
+      const checkpointAssistCheck = document.getElementById("checkpointAssistCheck");
+      const routeCueStyleSelect = document.getElementById("routeCueStyleSelect");
+      const highContrastHazardsCheck = document.getElementById("highContrastHazardsCheck");
+      const objectiveLabelsSelect = document.getElementById("objectiveLabelsSelect");
+      const parallaxSelect = document.getElementById("parallaxSelect");
 
       const keys = new Set();
       const jumpCodes = new Set(["Space", "ArrowUp", "KeyW"]);
@@ -445,9 +515,16 @@
         cameraSmoothing: 12,
         cameraLookahead: 42,
         routeMarkers: 100,
+        routeCueStyle: "full",
         effectIntensity: 100,
         reducedMotion: false,
         hudSize: "normal",
+        airControl: "steady",
+        damageProfile: "standard",
+        checkpointAssist: false,
+        highContrastHazards: false,
+        objectiveLabels: "normal",
+        parallaxDetail: "full",
         audioEnabled: false,
         audioConsent: false,
         volume: 0
@@ -456,6 +533,16 @@
         precise: { coyote: 0.07, buffer: 0.08 },
         standard: { coyote: 0.12, buffer: 0.13 },
         forgiving: { coyote: 0.16, buffer: 0.16 }
+      };
+      const airControlProfiles = {
+        steady: 2500,
+        snappy: 3200,
+        floaty: 1800
+      };
+      const damageProfiles = {
+        standard: { loseHealth: true, invulnerability: 1.2 },
+        gentle: { loseHealth: true, invulnerability: 2.2 },
+        practice: { loseHealth: false, invulnerability: 1.6 }
       };
       let settings = loadSettings();
       let settingsOpen = false;
@@ -552,6 +639,14 @@
         return jumpProfiles[settings.jumpAssist] || jumpProfiles.standard;
       }
 
+      function activeAirControl() {
+        return airControlProfiles[settings.airControl] || airControlProfiles.steady;
+      }
+
+      function activeDamageProfile() {
+        return damageProfiles[settings.damageProfile] || damageProfiles.standard;
+      }
+
       function effectScale() {
         if (settings.reducedMotion) return 0.2;
         return settings.effectIntensity / 100;
@@ -569,10 +664,17 @@
         cameraLookaheadValue.textContent = `${settings.cameraLookahead}%`;
         routeMarkersRange.value = settings.routeMarkers;
         routeMarkersValue.textContent = `${settings.routeMarkers}%`;
+        routeCueStyleSelect.value = settings.routeCueStyle;
         effectIntensityRange.value = settings.effectIntensity;
         effectIntensityValue.textContent = `${settings.effectIntensity}%`;
         reducedMotionCheck.checked = settings.reducedMotion;
         hudSizeSelect.value = settings.hudSize;
+        airControlSelect.value = settings.airControl;
+        damageProfileSelect.value = settings.damageProfile;
+        checkpointAssistCheck.checked = settings.checkpointAssist;
+        highContrastHazardsCheck.checked = settings.highContrastHazards;
+        objectiveLabelsSelect.value = settings.objectiveLabels;
+        parallaxSelect.value = settings.parallaxDetail;
         audioEnabledCheck.checked = settings.audioEnabled;
         volumeRange.value = settings.volume;
         volumeValue.textContent = `${settings.volume}%`;
@@ -659,8 +761,8 @@
         keys.clear();
         for (const core of collectibles) core.collected = false;
         player.health = 3;
-        checkpoint.active = false;
-        respawnPoint = { ...startRespawn };
+        checkpoint.active = settings.checkpointAssist;
+        respawnPoint = settings.checkpointAssist ? { ...checkpointRespawn } : { ...startRespawn };
         for (const patrol of patrols) {
           patrol.x = patrol.minX;
           patrol.dir = 1;
@@ -728,14 +830,19 @@
 
       function damagePlayer() {
         if (player.invulnerable > 0 || mode !== "playing") return;
-        player.health -= 1;
-        if (player.health <= 0) {
-          player.health = 0;
-          failRun();
-          return;
+        const damageProfile = activeDamageProfile();
+        if (damageProfile.loseHealth) {
+          player.health -= 1;
+          if (player.health <= 0) {
+            player.health = 0;
+            failRun();
+            return;
+          }
+          status.textContent = "Damaged - respawned";
+        } else {
+          status.textContent = "Practice hit - respawned";
         }
-        status.textContent = "Damaged - respawned";
-        resetPlayer(respawnInvulnerability);
+        resetPlayer(damageProfile.invulnerability);
         playTone("damage");
       }
 
@@ -773,7 +880,7 @@
         player.wasGrounded = player.grounded;
         updatePatrols(dt);
         const speed = 360;
-        const accel = player.grounded ? 3400 : 2500;
+        const accel = player.grounded ? 3400 : activeAirControl();
         const brake = player.grounded ? 4200 : 1200;
         const maxFall = 1200;
         const moveLeft = isDown("ArrowLeft", "KeyA");
@@ -881,68 +988,83 @@
         ctx.fillStyle = sky;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.save();
-        ctx.translate(-cameraX * 0.24, 0);
-        for (let i = -1; i < 18; i++) {
-          const x = i * 220;
-          const h = 130 + (i % 5) * 28;
-          ctx.fillStyle = i % 2 ? "rgba(18, 34, 48, 0.58)" : "rgba(24, 45, 63, 0.62)";
-          ctx.fillRect(x, 360 - h, 150, h + 240);
-          ctx.fillStyle = "rgba(255, 218, 130, 0.22)";
-          for (let wy = 245; wy < 360; wy += 26) {
-            for (let wx = x + 20; wx < x + 135; wx += 32) {
-              ctx.fillRect(wx, wy, 12, 9);
+        if (settings.parallaxDetail !== "off") {
+          const reduced = settings.parallaxDetail === "reduced";
+          ctx.save();
+          ctx.translate(-cameraX * (reduced ? 0.1 : 0.24), 0);
+          const buildingCount = reduced ? 10 : 18;
+          for (let i = -1; i < buildingCount; i++) {
+            const x = i * 220;
+            const h = 130 + (i % 5) * 28;
+            ctx.fillStyle = i % 2 ? "rgba(18, 34, 48, 0.58)" : "rgba(24, 45, 63, 0.62)";
+            ctx.fillRect(x, 360 - h, 150, h + 240);
+            if (!reduced) {
+              ctx.fillStyle = "rgba(255, 218, 130, 0.22)";
+              for (let wy = 245; wy < 360; wy += 26) {
+                for (let wx = x + 20; wx < x + 135; wx += 32) {
+                  ctx.fillRect(wx, wy, 12, 9);
+                }
+              }
             }
           }
+          ctx.restore();
         }
-        ctx.restore();
 
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.16)";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(0, 118);
-        ctx.bezierCurveTo(250, 92, 430, 142, 680, 110);
-        ctx.bezierCurveTo(840, 88, 1040, 128, 1160, 100);
-        ctx.stroke();
+        if (settings.parallaxDetail === "full") {
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.16)";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(0, 118);
+          ctx.bezierCurveTo(250, 92, 430, 142, 680, 110);
+          ctx.bezierCurveTo(840, 88, 1040, 128, 1160, 100);
+          ctx.stroke();
+        }
       }
 
       function drawRouteMarkers() {
         const markerAlpha = routeMarkerScale();
         if (markerAlpha <= 0) return;
+        const drawLines = settings.routeCueStyle !== "labels";
+        const drawLabels = settings.routeCueStyle !== "lines";
+        const labelScale = settings.objectiveLabels === "large" ? 1.35 : 1;
         ctx.save();
         ctx.translate(-cameraX, 0);
-        ctx.strokeStyle = `rgba(96, 211, 148, ${0.55 * markerAlpha})`;
-        ctx.lineWidth = 5;
-        ctx.beginPath();
-        ctx.moveTo(40, 506);
-        ctx.lineTo(world.width - 150, 506);
-        ctx.stroke();
+        if (drawLines) {
+          ctx.strokeStyle = `rgba(96, 211, 148, ${0.55 * markerAlpha})`;
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(40, 506);
+          ctx.lineTo(world.width - 150, 506);
+          ctx.stroke();
 
-        ctx.strokeStyle = `rgba(255, 209, 102, ${0.48 * markerAlpha})`;
-        ctx.lineWidth = 4;
-        ctx.setLineDash([16, 10]);
-        ctx.beginPath();
-        ctx.moveTo(700, 432);
-        ctx.lineTo(980, 432);
-        ctx.moveTo(1128, 382);
-        ctx.lineTo(1344, 382);
-        ctx.moveTo(1476, 442);
-        ctx.lineTo(1870, 442);
-        ctx.moveTo(2028, 396);
-        ctx.lineTo(2264, 396);
-        ctx.moveTo(2406, 336);
-        ctx.lineTo(2650, 336);
-        ctx.stroke();
-        ctx.setLineDash([]);
+          ctx.strokeStyle = `rgba(255, 209, 102, ${0.48 * markerAlpha})`;
+          ctx.lineWidth = 4;
+          ctx.setLineDash([16, 10]);
+          ctx.beginPath();
+          ctx.moveTo(700, 432);
+          ctx.lineTo(980, 432);
+          ctx.moveTo(1128, 382);
+          ctx.lineTo(1344, 382);
+          ctx.moveTo(1476, 442);
+          ctx.lineTo(1870, 442);
+          ctx.moveTo(2028, 396);
+          ctx.lineTo(2264, 396);
+          ctx.moveTo(2406, 336);
+          ctx.lineTo(2650, 336);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
 
-        ctx.font = "800 15px Inter, sans-serif";
-        ctx.textAlign = "left";
-        ctx.fillStyle = `rgba(189, 248, 208, ${markerAlpha})`;
-        ctx.fillText("SAFE DECK", 92, 500);
-        ctx.fillStyle = `rgba(255, 226, 155, ${markerAlpha})`;
-        ctx.fillText("CORE ROUTE", 708, 422);
-        ctx.fillStyle = `rgba(255, 179, 167, ${markerAlpha})`;
-        ctx.fillText("DANGER", 10, 458);
+        if (drawLabels) {
+          ctx.font = `800 ${15 * labelScale}px Inter, sans-serif`;
+          ctx.textAlign = "left";
+          ctx.fillStyle = `rgba(189, 248, 208, ${markerAlpha})`;
+          ctx.fillText("SAFE DECK", 92, 500);
+          ctx.fillStyle = `rgba(255, 226, 155, ${markerAlpha})`;
+          ctx.fillText("CORE ROUTE", 708, 422);
+          ctx.fillStyle = `rgba(255, 179, 167, ${markerAlpha})`;
+          ctx.fillText("DANGER", 10, 458);
+        }
         ctx.restore();
       }
 
@@ -965,6 +1087,15 @@
         const x = Math.round(hazard.x - cameraX);
         ctx.fillStyle = "#d83a34";
         ctx.fillRect(x, hazard.y, hazard.w, hazard.h);
+        if (settings.highContrastHazards) {
+          ctx.strokeStyle = "#ffffff";
+          ctx.lineWidth = 3;
+          ctx.strokeRect(x - 2, hazard.y - 2, hazard.w + 4, hazard.h + 4);
+          ctx.fillStyle = "#111827";
+          for (let stripe = -hazard.h; stripe < hazard.w; stripe += 12) {
+            ctx.fillRect(x + stripe, hazard.y, 6, hazard.h);
+          }
+        }
         ctx.fillStyle = "#ffb3a7";
         for (let spike = 8; spike < hazard.w; spike += 18) {
           ctx.beginPath();
@@ -993,6 +1124,13 @@
         ctx.fill();
         ctx.fillStyle = "#ff7a59";
         ctx.fillRect(x + 4, patrol.y + 8, patrol.w - 8, patrol.h - 6);
+        if (settings.highContrastHazards) {
+          ctx.strokeStyle = "#ffffff";
+          ctx.lineWidth = 3;
+          ctx.strokeRect(x + 2, patrol.y + 6, patrol.w - 4, patrol.h - 2);
+          ctx.fillStyle = "#111827";
+          ctx.fillRect(x + 8, patrol.y + 18, patrol.w - 16, 4);
+        }
         ctx.fillStyle = "#262d39";
         ctx.fillRect(x + 8, patrol.y + 2, patrol.w - 16, 12);
         ctx.fillStyle = "#fff4d6";
@@ -1007,6 +1145,7 @@
 
       function drawCheckpoint() {
         const x = checkpoint.x - cameraX;
+        const labelScale = settings.objectiveLabels === "large" ? 1.35 : 1;
         ctx.fillStyle = checkpoint.active ? "#60d394" : "#aeb8c7";
         ctx.fillRect(x + 20, checkpoint.y + 8, 6, checkpoint.h - 8);
         ctx.fillStyle = checkpoint.active ? "rgba(96, 211, 148, 0.32)" : "rgba(174, 184, 199, 0.28)";
@@ -1017,7 +1156,7 @@
         ctx.closePath();
         ctx.fill();
         ctx.fillStyle = checkpoint.active ? "#eafff2" : "#f4f7fb";
-        ctx.font = "800 13px Inter, sans-serif";
+        ctx.font = `800 ${13 * labelScale}px Inter, sans-serif`;
         ctx.textAlign = "center";
         ctx.fillText("MID", x + 43, checkpoint.y - 4);
       }
@@ -1044,6 +1183,7 @@
       function drawExit() {
         const x = exit.x - cameraX;
         const motion = settings.reducedMotion ? 0 : effectScale();
+        const labelScale = settings.objectiveLabels === "large" ? 1.35 : 1;
         ctx.fillStyle = `rgba(96, 211, 148, ${0.14 * effectScale()})`;
         ctx.fillRect(x - 26, exit.y - 16, exit.w + 52, exit.h + 16);
         ctx.strokeStyle = "#60d394";
@@ -1054,7 +1194,7 @@
         ctx.arc(x + exit.w / 2, exit.y + 22, 18 + Math.sin(performance.now() / 180) * 3 * motion, 0, Math.PI * 2);
         ctx.fill();
         ctx.fillStyle = "#eafff2";
-        ctx.font = "700 16px Inter, sans-serif";
+        ctx.font = `700 ${16 * labelScale}px Inter, sans-serif`;
         ctx.textAlign = "center";
         ctx.fillText("EXIT", x + exit.w / 2, exit.y - 12);
       }
@@ -1186,12 +1326,30 @@
         playTone("settings");
       });
       jumpAssistSelect.addEventListener("change", () => updateSetting("jumpAssist", jumpAssistSelect.value));
+      airControlSelect.addEventListener("change", () => updateSetting("airControl", airControlSelect.value));
+      damageProfileSelect.addEventListener("change", () => updateSetting("damageProfile", damageProfileSelect.value));
+      checkpointAssistCheck.addEventListener("change", () => {
+        updateSetting("checkpointAssist", checkpointAssistCheck.checked);
+        if (settings.checkpointAssist && mode === "playing") {
+          checkpoint.active = true;
+          respawnPoint = { ...checkpointRespawn };
+          checkpointHud.textContent = "Checkpoint: mid";
+        } else if (!settings.checkpointAssist && mode === "playing" && checkpoint.active && player.x < checkpoint.x) {
+          checkpoint.active = false;
+          respawnPoint = { ...startRespawn };
+          checkpointHud.textContent = "Checkpoint: start";
+        }
+      });
       cameraSmoothingRange.addEventListener("input", () => updateSetting("cameraSmoothing", Number(cameraSmoothingRange.value)));
       cameraLookaheadRange.addEventListener("input", () => updateSetting("cameraLookahead", Number(cameraLookaheadRange.value)));
       routeMarkersRange.addEventListener("input", () => updateSetting("routeMarkers", Number(routeMarkersRange.value)));
+      routeCueStyleSelect.addEventListener("change", () => updateSetting("routeCueStyle", routeCueStyleSelect.value));
       effectIntensityRange.addEventListener("input", () => updateSetting("effectIntensity", Number(effectIntensityRange.value)));
       reducedMotionCheck.addEventListener("change", () => updateSetting("reducedMotion", reducedMotionCheck.checked));
       hudSizeSelect.addEventListener("change", () => updateSetting("hudSize", hudSizeSelect.value));
+      highContrastHazardsCheck.addEventListener("change", () => updateSetting("highContrastHazards", highContrastHazardsCheck.checked));
+      objectiveLabelsSelect.addEventListener("change", () => updateSetting("objectiveLabels", objectiveLabelsSelect.value));
+      parallaxSelect.addEventListener("change", () => updateSetting("parallaxDetail", parallaxSelect.value));
       audioEnabledCheck.addEventListener("change", () => {
         if (audioEnabledCheck.checked) {
           settings = {

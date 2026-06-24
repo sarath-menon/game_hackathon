@@ -24,13 +24,20 @@ Open settings from the title screen, during play, or after a run. Opening settin
 
 Available settings:
 
-- Jump Assist: changes the coyote-time and jump-buffer forgiveness profile.
-- Camera Smoothing: changes how quickly the camera follows the player.
-- Camera Lookahead: changes where the player sits in the camera frame.
-- Route Marker Intensity: changes safe-deck and optional-route marker visibility.
-- Effect Intensity: changes glow, landing, and feedback effect strength.
-- Reduced Motion: minimizes decorative pulsing and blink effects.
-- HUD/Text Size: changes HUD label size.
+- Jump Assist: changes the coyote-time and jump-buffer forgiveness profile. Default: `Standard`.
+- Air Control: changes how strongly left/right movement responds while airborne. Default: `Steady`.
+- Damage Profile: `Standard` keeps normal health loss, `Gentle` adds longer recovery after damage, and `Practice` respawns after hazards without losing health. Default: `Standard`.
+- Checkpoint Assist: when enabled, respawns start from the mid-level marker even before it is touched. Default: `Off`.
+- Camera Smoothing: changes how quickly the camera follows the player. Default: `12`.
+- Camera Lookahead: changes where the player sits in the camera frame. Default: `42%`.
+- Route Marker Intensity: changes safe-deck and optional-route marker visibility. Default: `100%`.
+- Route Cue Style: chooses full lines plus labels, lines only, or labels only. Default: `Full`.
+- High-Contrast Hazards: adds bright outlines and stripe cues to red vents and orange patrol runners. Default: `Off`.
+- Objective Labels: changes EXIT, checkpoint, and route-label size. Default: `Normal`.
+- Effect Intensity: changes glow, landing, and feedback effect strength. Default: `100%`.
+- Reduced Motion: minimizes decorative pulsing and blink effects. Default: `Off`.
+- HUD/Text Size: changes HUD label size. Default: `Normal`.
+- Background Detail: chooses full parallax, reduced parallax, or static background drawing. Default: `Full Parallax`.
 - Generated UI Sounds and Volume: sounds are off with volume `0%` by default. Enable this setting to opt in to simple generated tones for actions and results.
 - Reset Defaults: restores the original settings, saves them, and returns generated sounds to off with volume `0%`.
 
