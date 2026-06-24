@@ -27,6 +27,7 @@ Each cycle:
 - require industry-style black-box QA with test cases, severity, regression checks, readability/usability gates, browser checks, and continuous gameplay evidence
 - route failures back to the builder, then retest
 - update dashboard/log as work moves, not only at the end: active goal, current builder/tester status, pending evidence, completed evidence, fixed feedback, and next action should stay visible in the UI
+- treat dashboard freshness as part of every orchestration transition: after a builder handoff, tester handoff, FAIL, fix request, retest, PASS closure, or new upgrade selection, the dashboard thread must be told the new state and asked to verify the UI
 - commit often after coherent, verified progress
 
 There is no terminal success condition for this loop. Keep iterating through higher-quality upgrades unless the user pauses or redirects.
@@ -39,11 +40,11 @@ There is no terminal success condition for this loop. Keep iterating through hig
 - Current phase state:
   - Initial Arcade Kart Racer, Side-Scrolling Platformer, and Turn-Based Deckbuilder phases are complete through Phase 3.
   - The Arcade Kart Racer orientation/readability reopen was fixed and black-box retested as `PASS`.
-  - Current active continuous-upgrade lane: **Arcade Kart Racer, Upgrade Phase A: Drift And Boost Feel**.
-  - First Phase A black-box QA returned `FAIL`: Ready/Strong drift stages and release boost were not clear enough from normal play.
-  - The kart builder completed the fix and reported Early/Ready/Strong visibility, visible release boosts, wall-scrub feedback, and normal route completion.
-  - The orchestrator sent a fresh black-box retest handoff to the kart tester with evidence folder `evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/`.
-  - The dashboard must reflect this live fix loop as it changes, including FAIL, builder-fix-active, retest-pending, retest-active, and PASS states.
+  - Arcade Kart Racer, Upgrade Phase A: Drift And Boost Feel is closed as `PASS` after Retest 1.
+  - The original Phase A report remains preserved as `FAIL` evidence; Retest 1 verifies Early/Ready/Strong stage visibility, visible release boosts, wall-scrub feedback, normal route completion, and readability/usability gate `PASS`.
+  - Current active continuous-upgrade lane: Side-Scrolling Platformer, Upgrade Phase A: Movement Feel Pass.
+  - Platformer builder handoff has been sent to thread `019ef96e-1dd7-7f13-91d4-855909736edc`; builder is active on coyote time, jump buffering, variable jump height, jump-cut, apex hang, landing feedback, and visible player-state feedback while preserving all previously passed Phase 1/2/3 behavior.
+  - The dashboard must reflect this live fix loop as it changes, including selected-upgrade, builder-active, builder-complete, tester-handoff, tester-active, FAIL, fix-active, retest-pending, retest-active, and PASS states.
 - QA upgrade artifacts:
   - `qa-upgrade/QA_STANDARDS_PROPOSAL.md`
   - `qa-upgrade/KART_BENCHMARK_AUDIT.md`

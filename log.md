@@ -39,6 +39,16 @@ Current active upgrade lane:
 - Retest evidence folder: `evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/`
 - Retest focus: verify the previous FAIL blockers are fixed, preserve all route/race regressions, produce a fresh continuous MP4, and write `TEST_REPORT.md` plus `expected-flow.md`.
 - Dashboard should now show builder fix complete / retest active, while preserving the original FAIL evidence and later showing the retest result as a separate row.
+- Retest 1 verdict: `PASS`.
+- Retest 1 evidence folder: `evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/`
+- Required evidence exists: `TEST_REPORT.md`, `expected-flow.md`, and ignored `gameplay-recording.mp4`.
+- Tester confirmed Early, Ready, and Strong staged drift feedback are visible, release from each stage produces visible/recoverable `DRIFT Boost` feedback, wall scrub weakens/cuts charge with understandable feedback, normal CP1 -> CP2 -> CP3 -> finish completion still works, and the readability/usability gate is `PASS`.
+- Arcade Kart Racer Upgrade Phase A is approved and closed. Dashboard should now show the original FAIL and Retest 1 PASS as separate evidence rows.
+- Goal amendment: dashboard freshness is now part of the active orchestration goal, not a final cleanup task. After each builder handoff, tester handoff, FAIL, fix request, retest, PASS closure, or new upgrade selection, the orchestrator must send a dashboard-thread update and ask it to verify the UI state.
+- New active upgrade lane: Side-Scrolling Platformer, Upgrade Phase A: Movement Feel Pass.
+- Platformer builder handoff sent to thread `019ef96e-1dd7-7f13-91d4-855909736edc`.
+- Builder scope: add coyote time, jump buffering, variable jump height, jump-cut, slight apex hang, landing feedback, and visible player-state changes while preserving the already-passed movement, completion, hazards, collectibles, checkpoint, restart, failure, and no-softlock behavior.
+- Dashboard should now show Platformer Upgrade Phase A as builder-active/current, while preserving Kart Upgrade Phase A as closed PASS with both original FAIL and Retest 1 PASS evidence rows.
 
 ## 2026-06-24: Project Goal Replaced
 
