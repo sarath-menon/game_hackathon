@@ -1639,3 +1639,64 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - verify persistence/reload and Reset Defaults;
   - verify title, in-run, failure, and completion settings access where available;
   - regression smoke lower-deck completion, health-zero failure under Standard, checkpoint/respawn, route readability, collectibles/hazards/exit/restart, no softlocks/runtime errors, and narrow viewport usability.
+
+## Platformer Settings Polish 2 BLOCKED_ENVIRONMENT - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` attempted Side-Scrolling Platformer / Skyline Stepper Settings Polish 2.
+- Evidence folder: `evidence/platformer/settings-polish-2/`.
+- Required outputs exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `BLOCKED_ENVIRONMENT`.
+- This is not a Platformer game `FAIL`.
+- Clean evidence verified:
+  - hosted game loads;
+  - Settings opens from title;
+  - title/settings UI is readable;
+  - audio defaults show Generated UI Sounds unchecked and Volume `0%`;
+  - top controls are recoverable by keyboard scroll;
+  - documented defaults are visible for Jump Assist, Air Control, Damage Profile, Checkpoint Assist, Route Cue Style, High-Contrast Hazards, Objective Labels, and Background Detail.
+- Blocker:
+  - during regression-smoke continuation, the shared browser-harness target drifted to dashboard/evidence tabs;
+  - screenshots `24` and later are contaminated and explicitly discarded by the tester;
+  - gameplay, reset, persistence, failure, completion, and narrow-viewport checks could not be completed reliably.
+- Inconclusive possible issue:
+  - variant dropdown attempts did not visibly change Air Control or Damage Profile before the environment blocker, but the tester did not classify this as a confirmed game bug because the harness session became unreliable.
+- Action:
+  - browser maintenance cleanup requested before a fresh retry of the same Platformer handoff;
+  - after cleanup reports stable shared-window targeting, rerun Platformer Settings Polish 2 with a fresh evidence folder or explicit retest folder.
+
+## Browser Maintenance Cleanup Before Platformer Settings Polish 2 Retest 1 - 2026-06-25
+
+- Browser maintenance thread `019ef9ba-1477-7662-b7a3-c5da570cdb77` completed cleanup after the Platformer blocked attempt.
+- Inspected:
+  - 3 relevant processes: normal Chrome, `browser_harness.daemon`, and local HTTP server;
+  - 5 Chrome page targets.
+- Closed:
+  - old Kart game tab: `http://127.0.0.1:8765/games/kart-racer/index.html`;
+  - duplicate dashboard tab: `http://127.0.0.1:8765/dashboard.html`.
+- Preserved/skipped:
+  - one dashboard tab;
+  - current Platformer retry surface;
+  - one ambiguous Deckbuilder page.
+- Health result:
+  - shared Chrome and browser-harness responsive;
+  - target set clean and small enough for fresh Platformer retry;
+  - local HTTP server untouched.
+
+## Platformer Settings Polish 2 Retest 1 Handoff Active - 2026-06-25
+
+- Orchestrator handed Side-Scrolling Platformer / Skyline Stepper Settings Polish 2 Retest 1 to canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Evidence target: `evidence/platformer/settings-polish-2-retest-1/`.
+- Inputs:
+  - game URL: `http://127.0.0.1:8765/games/platformer/index.html`;
+  - manual URL/path: `http://127.0.0.1:8765/games/platformer/README.md` and `games/platformer/README.md`.
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Added anti-contamination rule for this retry:
+  - before each major segment, tester should verify the active page URL is the Platformer game URL and capture a focus screenshot;
+  - if target drifts to dashboard/evidence/manual/another game, stop and classify `BLOCKED_ENVIRONMENT` from clean evidence only;
+  - if variant dropdowns or controls still cannot be changed while the active URL is verified as the Platformer game, classify as `FAIL` with repro and severity.

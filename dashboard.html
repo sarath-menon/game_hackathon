@@ -715,16 +715,16 @@
         <h2>Current Live Status</h2>
         <p><strong>Two-track Game QA Suite is active.</strong> Track 1 improves the three local HTML games; Track 2 black-box tests five hosted online games to strengthen QA methodology.</p>
         <div class="loop-grid" aria-label="Active upgrade status">
-          <div class="loop-cell"><strong>Track 1 Local Games</strong>Kart settings retest 2 PASS/CLOSED; Platformer Settings Polish 2 QA ACTIVE; Deckbuilder PASS</div>
+          <div class="loop-cell"><strong>Track 1 Local Games</strong>Kart settings retest 2 PASS/CLOSED; Platformer Settings Polish 2 Retest 1 ACTIVE; Deckbuilder PASS</div>
           <div class="loop-cell"><strong>Track 2 Online Games</strong>All five external games PASS_WITH_FINDINGS</div>
           <div class="loop-cell"><strong>Canonical Tester</strong>019ef96e-99ee-7f62-b4d2-7d2c3cd29217 across both tracks</div>
           <div class="loop-cell"><strong>Browser Harness</strong>Serialized URL/manual/evidence runs in one shared Chrome window</div>
           <div class="loop-cell"><strong>Local Focus</strong>Settings depth, accessibility, audio defaults, feel, visuals, performance, polish</div>
-          <div class="loop-cell"><strong>Next Action</strong>Platformer Settings Polish 2 QA ACTIVE; wait for canonical tester verdict</div>
+          <div class="loop-cell"><strong>Next Action</strong>Wait for Platformer Settings Polish 2 Retest 1 canonical tester verdict</div>
         </div>
         <div class="qa-links" aria-label="QA upgrade research links">
           <span>Gate: <strong>dashboard fresh/verified before transition complete</strong></span>
-          <span>Track 1 active lanes: Arcade Kart Racer settings-depth retest 2 is <strong>PASS/CLOSED</strong> at <code>evidence/kart-racer/settings-depth-retest-2/</code> (<a href="evidence/kart-racer/settings-depth-retest-2/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/settings-depth-retest-2/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/settings-depth-retest-2/gameplay-recording.mp4">recording</a>). Summary: settings sections reachable, audio defaults/reset/persistence passed, in-race settings pause/close passed, route/drift/restart smoke passed, and full lap was not repeated in this settings-focused retest. Side-Scrolling Platformer / Skyline Stepper Settings Polish 2 is <strong>QA ACTIVE</strong> with the canonical tester at <code>evidence/platformer/settings-polish-2/</code>; required outputs are <code>TEST_REPORT.md</code>, <code>expected-flow.md</code>, and <code>gameplay-recording.mp4</code>.</span>
+          <span>Track 1 active lanes: Arcade Kart Racer settings-depth retest 2 is <strong>PASS/CLOSED</strong> at <code>evidence/kart-racer/settings-depth-retest-2/</code> (<a href="evidence/kart-racer/settings-depth-retest-2/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/settings-depth-retest-2/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/settings-depth-retest-2/gameplay-recording.mp4">recording</a>). Side-Scrolling Platformer / Skyline Stepper Settings Polish 2 first attempt is <strong>BLOCKED_ENVIRONMENT</strong>, not game FAIL, at <code>evidence/platformer/settings-polish-2/</code> (<a href="evidence/platformer/settings-polish-2/TEST_REPORT.md">report</a>, <a href="evidence/platformer/settings-polish-2/expected-flow.md">expected-flow</a>, <a href="evidence/platformer/settings-polish-2/gameplay-recording.mp4">recording</a>). Clean evidence supports title/settings/default observations through screenshot <code>23</code>; screenshots <code>24</code> and later are contaminated/discarded because shared-window browser-harness target drifted to dashboard/evidence tabs during gameplay regression. Browser maintenance inspected <strong>5 Chrome page targets</strong>, closed old Kart and duplicate dashboard tabs, preserved one dashboard tab, the current Platformer game tab, and one ambiguous Deckbuilder tab; shared-window harness is stable enough for retry. Platformer Settings Polish 2 Retest 1 is <strong>ACTIVE</strong> through the canonical tester at <code>evidence/platformer/settings-polish-2-retest-1/</code>; required outputs remain <code>TEST_REPORT.md</code>, <code>expected-flow.md</code>, and <code>gameplay-recording.mp4</code>.</span>
           <span>Settings QA: Kart Settings Phase 1 is superseded/no-verdict (<a href="evidence/kart-racer/settings-phase-1/TEST_REPORT.md">report</a>); Arcade Kart Racer settings-depth retest 1 remains historical <strong>BLOCKED_ENVIRONMENT</strong> at <code>evidence/kart-racer/settings-depth-retest-1/</code> (<a href="evidence/kart-racer/settings-depth-retest-1/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/settings-depth-retest-1/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/settings-depth-retest-1/gameplay-recording.mp4">recording</a>). Platformer QA scope: Air Control, Damage Profile, Checkpoint Assist, Route Cue Style, High-Contrast Hazards, Objective Labels, Background Detail, audio defaults/reset, persistence/reload, settings contexts, lower-deck completion, health-zero failure under Standard, checkpoint/respawn, route readability, and narrow viewport.</span>
           <span>Kart accepted evidence: audio defaults are PASS at <a href="evidence/kart-racer/audio-default-hotfix-single-tester-retest-2/TEST_REPORT.md">audio retest 2</a>; orientation is PASS at <a href="evidence/kart-racer/orientation-retest/TEST_REPORT.md">orientation retest</a>. Platformer PASS at <code>evidence/platformer/settings-phase-1/</code>; Deckbuilder PASS at <code>evidence/deckbuilder/settings-phase-1/</code>; Deckbuilder polish PASS at <code>evidence/deckbuilder/settings-polish-1-scroll/</code></span>
           <span>Audio default hotfix: audio/sounds must default off or muted until opt-in. Kart <strong>PASS</strong> at <code>evidence/kart-racer/audio-default-hotfix-single-tester-retest-2/</code>; canonical retest 1 remains FAIL/fixed at <code>evidence/kart-racer/audio-default-hotfix-single-tester-retest-1/</code>; Platformer <strong>PASS</strong> at <code>evidence/platformer/audio-default-hotfix/</code>; Deckbuilder <strong>PASS</strong> at <code>evidence/deckbuilder/audio-default-hotfix-shared-window-retest-1/</code></span>
@@ -832,7 +832,7 @@
         name: "Side-Scrolling Platformer",
         status: "attention",
         statusLabel: "SETTINGS QA",
-        summary: "Historical phases, Movement Feel upgrade, Settings Panel Phase 1, and audio-default hotfix are PASS; Settings Polish 2 is QA active with canonical tester.",
+        summary: "Historical phases, Movement Feel upgrade, Settings Panel Phase 1, and audio-default hotfix are PASS; Settings Polish 2 attempt 1 is environment-blocked, and Retest 1 is active after browser maintenance cleanup.",
         gameUrl: "games/platformer/index.html",
         readmeUrl: "games/platformer/README.md",
         primaryPhase: "upgrade-a",
@@ -846,7 +846,8 @@
           { label: "Phases 1-3", status: "pass", statusLabel: "PASS", note: "Core movement, hazards/collectibles, and level polish approved.", openKey: "platformer:3" },
           { label: "Movement Feel Upgrade A", status: "pass", statusLabel: "PASS", note: "Coyote time, buffering, variable jumps, landing feedback approved.", openKey: "platformer:upgrade-a" },
           { label: "Settings Panel Phase 1", status: "pass", statusLabel: "PASS", note: "Settings discoverability, persistence/reset, pause/input isolation, narrow viewport usability, audio volume, regressions, and readability gate approved.", openKey: "platformer:settings-1" },
-          { label: "Settings Polish 2", status: "attention", statusLabel: "QA ACTIVE", note: "Canonical tester is checking Air Control, Damage Profile, Checkpoint Assist, Route Cue Style, High-Contrast Hazards, Objective Labels, Background Detail, audio defaults/reset, persistence, contexts, routes, failure, checkpoints, readability, and narrow viewport.", openKey: "platformer:settings-polish-2" },
+          { label: "Settings Polish 2 Attempt 1", status: "attention", statusLabel: "BLOCKED_ENVIRONMENT", note: "Target drift contaminated gameplay regression after clean settings screenshots through 23; not game FAIL.", openKey: "platformer:settings-polish-2" },
+          { label: "Settings Polish 2 Retest 1", status: "attention", statusLabel: "ACTIVE", note: "Browser maintenance cleaned 5 Chrome targets and reported the shared-window harness stable enough to retry; canonical tester verdict pending.", openKey: "platformer:settings-polish-2-retest-1" },
           { label: "Audio Default Hotfix", status: "pass", statusLabel: "PASS", note: "Generated UI sounds default off, volume 0%, stale saved audio cannot re-enable without explicit consent; evidence complete at evidence/platformer/audio-default-hotfix/.", openKey: "platformer:audio-default" }
         ],
         evidenceSeries: [
@@ -855,6 +856,8 @@
           { label: "Phase 3: Level Polish", status: "PASS", evidenceDir: "evidence/platformer/phase-3" },
           { label: "Upgrade Phase A: Movement Feel Pass", status: "PASS - UPGRADE A", hydrateStatus: true, evidenceDir: "evidence/platformer/upgrade-phase-a-movement-feel" },
           { label: "Settings Panel Phase 1", status: "PASS - SETTINGS", hydrateStatus: true, evidenceDir: "evidence/platformer/settings-phase-1" },
+          { label: "Settings Polish 2 Attempt 1", status: "BLOCKED_ENVIRONMENT - NOT GAME FAIL", hydrateStatus: true, evidenceDir: "evidence/platformer/settings-polish-2" },
+          { label: "Settings Polish 2 Retest 1", status: "ACTIVE - PENDING VERDICT", evidenceDir: "evidence/platformer/settings-polish-2-retest-1" },
           { label: "Audio Default Hotfix", status: "PASS - AUDIO DEFAULT", hydrateStatus: true, evidenceDir: "evidence/platformer/audio-default-hotfix" }
         ]
       },
@@ -1227,6 +1230,8 @@
           ? { number: "Settings Polish 1", title: "Settings Panel Polish 1", current: "pass", evidenceDir: `evidence/${gameId}/settings-polish-1-scroll` }
         : phaseNumber === "settings-polish-2"
           ? { number: "Settings Polish 2", title: "Settings Polish 2", current: "attention", evidenceDir: `evidence/${gameId}/settings-polish-2` }
+        : phaseNumber === "settings-polish-2-retest-1"
+          ? { number: "Settings Polish 2 Retest 1", title: "Settings Polish 2 Retest 1", current: "attention", evidenceDir: `evidence/${gameId}/settings-polish-2-retest-1` }
         : phaseNumber === "settings-depth-retest-1"
           ? { number: "Settings Depth Retest 1", title: "Settings Depth Retest 1", current: "attention", evidenceDir: `evidence/${gameId}/settings-depth-retest-1` }
         : phaseNumber === "settings-depth-retest-2"
