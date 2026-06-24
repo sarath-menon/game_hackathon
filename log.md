@@ -1517,3 +1517,24 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - settings persistence after safe reload;
   - route/checkpoint/drift/boost/restart/completion regression smoke.
 - Verdict must be `PASS`, `FAIL`, or `BLOCKED_ENVIRONMENT`.
+
+## Arcade Kart Racer Settings-Depth Retest 1 BLOCKED_ENVIRONMENT - 2026-06-25
+
+- Canonical tester attempted Arcade Kart Racer settings-depth retest 1 at `evidence/kart-racer/settings-depth-retest-1/`.
+- Required/available artifacts:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+  - `01-title-first-load.png`
+- Verdict: `BLOCKED_ENVIRONMENT`.
+- Evidence summary:
+  - hosted Kart game loaded to title screen;
+  - first screenshot captured the title screen, start/settings controls, HUD panels, minimap, and route view;
+  - no settings-depth interactions were completed.
+- Exact blocker:
+  - repeated tester-thread/system interruption after the title screen loaded prevented reliable settings-depth QA;
+  - settings controls, persistence, audio defaults, reset/defaults, in-race settings, and route/drift/boost regression smoke were not evaluated.
+- Classification:
+  - this is not a Kart game `FAIL`;
+  - the build remains unapproved;
+  - rerun the same settings-depth handoff after tester/harness stability is resolved.
