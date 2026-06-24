@@ -2,6 +2,28 @@
 
 This log records the important project decisions and milestone state so a fresh main agent can resume without chat history. The canonical operating protocol remains `AGENTS.md`.
 
+## 2026-06-25: Continuous QA Upgrade Loop Started
+
+The user replaced the old monitor-style automation with an active main-agent goal: continuously improve the Three-Game Lockstep Suite toward genre-leading browser game quality. There is no terminal success condition; each cycle should choose a high-impact quality gap, send a scoped builder goal, black-box test the result with upgraded QA standards, update dashboard/log, and commit often after coherent verified progress.
+
+Guardrail: use genre references for quality-bar signals only. Do not copy protected names, characters, art, music, logos, maps, card names/effects verbatim, UI skins, branding, or other protected assets. The target is original games with comparable clarity, feel, polish, and test rigor.
+
+Completed research/audit artifacts:
+
+- `qa-upgrade/QA_STANDARDS_PROPOSAL.md`
+- `qa-upgrade/KART_BENCHMARK_AUDIT.md`
+- `qa-upgrade/PLATFORMER_BENCHMARK_AUDIT.md`
+- `qa-upgrade/DECKBUILDER_BENCHMARK_AUDIT.md`
+
+Current active upgrade lane:
+
+- Game: Arcade Kart Racer
+- Upgrade Phase A: Drift And Boost Feel
+- Builder thread: `019ef96d-c407-7be3-9934-6595866643ee`
+- Tester thread: `019ef96d-ef59-7d20-9dbe-b5d06edc720f`
+- Builder handoff sent: add documented drift/power-slide input, staged drift charge, release boost, charge cancellation/weakening on wall or obstacle impact, readable skid/particle feedback, and a compact drift/boost meter while preserving all previously passed route, completion, restart, boost, obstacle, and orientation behavior.
+- Tester is not yet handed this upgrade; wait for builder completion, then send only the URL/manual/evidence paths and upgraded black-box QA criteria.
+
 ## 2026-06-24: Project Goal Replaced
 
 The user replaced the original single-game Signal Runner goal with the **Three-Game Lockstep Build/Test Suite**.

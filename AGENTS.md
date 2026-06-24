@@ -14,15 +14,38 @@ The suite contains:
 
 The previous Signal Runner work is historical only. Do not continue Signal Runner milestones unless the user explicitly restores that goal.
 
+## Continuous QA Upgrade Goal
+
+The initial three-game suite phases are complete. The active project is now an ongoing quality loop: continuously improve one game at a time toward genre-leading browser game quality without copying protected IP.
+
+Each cycle:
+
+- benchmark one game against genre references for quality-bar signals only
+- identify the highest-impact gap in feel, clarity, visuals, UI, performance, accessibility, or polish
+- send a scoped upgrade goal to that game's builder
+- after the builder reports completion, send the updated URL/manual/evidence paths to that game's tester
+- require industry-style black-box QA with test cases, severity, regression checks, readability/usability gates, browser checks, and continuous gameplay evidence
+- route failures back to the builder, then retest
+- update dashboard/log with what changed, what was fixed, and current evidence
+- commit often after coherent, verified progress
+
+There is no terminal success condition for this loop. Keep iterating through higher-quality upgrades unless the user pauses or redirects.
+
 ## Current State
 
 - Workspace: `/Users/sarathmenon/Documents/game_hackathon`
 - Canonical protocol: `AGENTS.md`
 - Project log: `log.md`
-- Active suite phases:
-  - **Arcade Kart Racer, Phase 1: Basic Drivable Track**
-  - **Side-Scrolling Platformer, Phase 1: Core Movement**
-  - **Turn-Based Deckbuilder, Phase 1: Basic Card Combat**
+- Current phase state:
+  - Initial Arcade Kart Racer, Side-Scrolling Platformer, and Turn-Based Deckbuilder phases are complete through Phase 3.
+  - The Arcade Kart Racer orientation/readability reopen was fixed and black-box retested as `PASS`.
+  - Current active continuous-upgrade lane: **Arcade Kart Racer, Upgrade Phase A: Drift And Boost Feel**.
+  - The kart builder has been handed the scoped Phase A build goal; the kart tester is on standby until the orchestrator sends a fresh explicit test handoff.
+- QA upgrade artifacts:
+  - `qa-upgrade/QA_STANDARDS_PROPOSAL.md`
+  - `qa-upgrade/KART_BENCHMARK_AUDIT.md`
+  - `qa-upgrade/PLATFORMER_BENCHMARK_AUDIT.md`
+  - `qa-upgrade/DECKBUILDER_BENCHMARK_AUDIT.md`
 - Local server command:
 
 ```sh
