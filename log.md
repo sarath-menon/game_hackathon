@@ -1233,3 +1233,20 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - treat track selection Play as a second target after main menu Play;
   - keep provider-language issues separate from game UI issues.
 - Dashboard must show PolyTrack as `PASS_WITH_FINDINGS` with retry 2 evidence and make OvO the next external retry.
+
+## OvO Poki External QA Retry 1 Active - 2026-06-25
+
+- Orchestrator started OvO Classic Poki shared-window retry 1 through canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Provider path: `https://poki.com/en/g/ovo-classic`.
+- Manual: `external-qa/ovo-poki/README.md`.
+- Fresh evidence target: `evidence/external/ovo-poki-shared-window-retry-1/`.
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Tester instructions preserve the external QA taxonomy:
+  - `PASS_WITH_FINDINGS` if playable and acceptable with nonblocking issues;
+  - `FAIL` only if playable enough to evaluate but failing QA criteria;
+  - `BLOCKED_PROVIDER` for provider/shell/iframe/startup/ad/consent path blockers;
+  - `BLOCKED_ENVIRONMENT` for local browser-harness/canvas/input/storage environment blockers.
+- If Poki blocks, the orchestrator should route the next retry to another reputable provider path such as Coolmath, using `external-qa/ovo-coolmath/README.md`.
