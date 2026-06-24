@@ -1250,3 +1250,33 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - `BLOCKED_PROVIDER` for provider/shell/iframe/startup/ad/consent path blockers;
   - `BLOCKED_ENVIRONMENT` for local browser-harness/canvas/input/storage environment blockers.
 - If Poki blocks, the orchestrator should route the next retry to another reputable provider path such as Coolmath, using `external-qa/ovo-coolmath/README.md`.
+
+## OvO Poki External QA Retry 1 PASS_WITH_FINDINGS - 2026-06-25
+
+- Canonical tester completed OvO Classic Poki shared-window retry 1.
+- Evidence folder: `evidence/external/ovo-poki-shared-window-retry-1/`.
+- Required files are present:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS_WITH_FINDINGS`.
+- Verified:
+  - Poki provider loaded and redirected to `https://poki.com/id/g/ovo-classic`;
+  - game iframe and interactive menu loaded;
+  - playable Level 1 started;
+  - left/right movement, Space jump, and Down slide/progression worked;
+  - timer, player, platforms, prompts, route, and finish area were readable;
+  - reset/restart returned the level to the start;
+  - Escape opened a pause/menu recovery overlay;
+  - short-run performance was stable.
+- Nonblocking findings:
+  - provider shell redirected to Indonesian locale while game UI remained readable;
+  - settings/options/audio/fullscreen/skins/modes coverage was partial;
+  - finish area and flag were reached, but next-level transition after crossing the finish was not fully verified;
+  - death/fail behavior was not covered.
+- Methodology carry-forward:
+  - for external platformers, confirm real iframe focus before judging keyboard input;
+  - capture route-readability frames at start, mid-route, and finish area;
+  - separate provider-shell localization from in-game usability;
+  - future platformer passes should explicitly capture finish crossing and next-level transition.
+- No Coolmath retry is required for basic playability because the Poki provider reached playable state and passed with findings.
