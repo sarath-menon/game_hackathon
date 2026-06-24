@@ -1496,3 +1496,24 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - narrow/mobile should capture both production and store/options layout.
 - No provider retry is required. A follow-up focused Cookie pass may target the remaining coverage gaps later.
 - Next serialized canonical tester handoff should be Arcade Kart Racer settings-depth retest once the tester thread is idle.
+
+## Arcade Kart Racer Settings-Depth Retest 1 Handoff Active - 2026-06-25
+
+- Orchestrator handed Arcade Kart Racer settings-depth retest 1 to canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` after Cookie Clicker pass 1 closed.
+- Allowed tester inputs:
+  - game URL: `http://127.0.0.1:8765/games/kart-racer/index.html`;
+  - manual URL/path: `http://127.0.0.1:8765/games/kart-racer/README.md` and `games/kart-racer/README.md`;
+  - evidence target: `evidence/kart-racer/settings-depth-retest-1/`.
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Scope:
+  - settings open from title and in-race flow;
+  - pause behavior while settings are open;
+  - documented handling/assist, visual/readability, camera/HUD, audio, persistence, and reset/default settings;
+  - HUD scale, minimap size, marker intensity, high contrast, input help visibility, reduced motion/effects, markers/labels/minimap visibility, UI sounds/volume opt-in, and Reset Defaults;
+  - first load and Reset Defaults keep audio off/volume 0 until explicit opt-in;
+  - settings persistence after safe reload;
+  - route/checkpoint/drift/boost/restart/completion regression smoke.
+- Verdict must be `PASS`, `FAIL`, or `BLOCKED_ENVIRONMENT`.

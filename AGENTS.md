@@ -125,7 +125,7 @@ A popular external browser game must not receive final `FAIL` solely because one
     - Dungeons & Degenerate Gamblers completed as `PASS with nonblocking findings`; launch, run start, deck selection, tavern entry, and first table interaction were verified.
     - Townscaper completed as `PASS WITH FINDINGS`; WebGL load, block placement, URL hash state, camera movement/zoom, and mobile rendering were verified.
     - Townscaper deep settings/removal/mobile pass 1 is `PASS_WITH_FINDINGS` at `evidence/external/townscaper-settings-removal-mobile-pass-1/`: playable WebGL, placement, color selection, removal/undo attempts, gear clicks, camera drag, zoom, mobile viewport, and recording evidence were completed; remaining findings are nonblocking discoverability and subtle-feedback items.
-    - Current next QA handoff: Arcade Kart Racer settings-depth retest should go to the canonical tester after the Cookie Clicker tester thread is idle.
+    - Current active local QA handoff: Arcade Kart Racer settings-depth retest 1 through the canonical tester, evidence target `evidence/kart-racer/settings-depth-retest-1/`.
   - The dashboard must reflect the live loop as it changes, including selected-upgrade, builder-active, builder-complete, tester-handoff, tester-active, FAIL, fix-active, retest-pending, retest-active, PASS closure, and next-upgrade selection states.
 - QA upgrade artifacts:
   - `qa-upgrade/QA_STANDARDS_PROPOSAL.md`
