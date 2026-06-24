@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Arcade Kart Racer - Phase 3</title>
+  <title>Arcade Kart Racer</title>
   <style>
     :root {
       color-scheme: dark;
@@ -103,6 +103,22 @@
       border-radius: inherit;
       background: linear-gradient(90deg, #49d38a, #ffcf45, #ff6b7a);
       transition: width 120ms linear;
+    }
+
+    .drift-track {
+      height: 8px;
+      margin-top: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .drift-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #6ee787, #ffcf45, #ff6b7a);
+      transition: width 120ms linear, background 120ms linear;
     }
 
     .hint {
@@ -251,7 +267,7 @@
       <div class="panel">
         <div class="label">Objective</div>
         <div>Clear checkpoints in order, then cross the yellow finish gate.</div>
-        <div class="hint">Clear CP1, CP2, CP3, then finish. Hit cyan boost pads. Avoid red barriers. Press R to restart.</div>
+        <div class="hint">Clear CP1, CP2, CP3, then finish. Hold Space or Shift while turning to drift. Hit cyan boost pads. Avoid red barriers. Press R to restart.</div>
       </div>
       <div class="stats">
         <div class="panel stat">
@@ -271,6 +287,11 @@
           <div class="label">Next</div>
           <div class="value"><span id="next">CP1</span></div>
         </div>
+        <div class="panel stat">
+          <div class="label">Drift</div>
+          <div class="value"><span id="drift">Idle</span></div>
+          <div class="drift-track" aria-hidden="true"><div class="drift-fill" id="driftFill"></div></div>
+        </div>
       </div>
     </div>
     <div class="panel message" id="message">Start the race and aim for Checkpoint 1.</div>
@@ -279,12 +300,13 @@
   <div id="start" class="center">
     <section class="card">
       <h1>Arcade Kart Racer</h1>
-      <p>Phase 3: clear the checkpoint route, use cyan boost pads, avoid red barriers, then cross the yellow finish gate.</p>
+      <p>Clear the checkpoint route, use cyan boost pads, power-slide through bends, avoid red barriers, then cross the yellow finish gate.</p>
       <div class="controls">
         <div class="control"><kbd>W</kbd><kbd>↑</kbd> Accelerate</div>
         <div class="control"><kbd>S</kbd><kbd>↓</kbd> Brake / reverse</div>
         <div class="control"><kbd>A</kbd><kbd>←</kbd> Steer left</div>
         <div class="control"><kbd>D</kbd><kbd>→</kbd> Steer right</div>
+        <div class="control"><kbd>Space</kbd><kbd>Shift</kbd> Drift while turning</div>
         <div class="control"><kbd>R</kbd> Restart</div>
       </div>
       <button id="startButton" type="button">Start Race</button>
@@ -314,6 +336,8 @@
       const lapEl = document.getElementById("lap");
       const timeEl = document.getElementById("time");
       const nextEl = document.getElementById("next");
+      const driftEl = document.getElementById("drift");
+      const driftFill = document.getElementById("driftFill");
       const messageEl = document.getElementById("message");
       const completeText = document.getElementById("completeText");
 
@@ -379,6 +403,14 @@
       let collisionTimer = 0;
       let shakeTimer = 0;
       let lastBoostPad = -1;
+      let driftActive = false;
+      let driftCharge = 0;
+      let driftDirection = 0;
+      let driftReleaseTimer = 0;
+      let driftCancelTimer = 0;
+      let announcedDriftStage = 0;
+      const skidMarks = [];
+      const exhaustParticles = [];
 
       function resize() {
         dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -598,6 +630,7 @@
         ctx.setLineDash([]);
 
         drawReadableRouteCue(toScreen, currentAngle);
+        drawReadableDriftEffects(toScreen, scale);
         drawReadableBoostPads(toScreen, scale);
         drawReadableObstacles(toScreen, scale);
         drawReadableRaceMarkers(toScreen, scale);
@@ -724,6 +757,32 @@
         ctx.fillStyle = "#f4b24a";
         ctx.fillRect(-9 * scale, -8 * scale, 18 * scale, 18 * scale);
         ctx.restore();
+      }
+
+      function drawReadableDriftEffects(toScreen, scale) {
+        for (const mark of skidMarks) {
+          const p = toScreen(mark);
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, mark.life);
+          ctx.strokeStyle = mark.color;
+          ctx.lineWidth = Math.max(2, 3.2 * scale);
+          ctx.beginPath();
+          ctx.moveTo(p.x - mark.dx * scale, p.y - mark.dz * scale);
+          ctx.lineTo(p.x + mark.dx * scale, p.y + mark.dz * scale);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        for (const particle of exhaustParticles) {
+          const p = toScreen(particle);
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, particle.life);
+          ctx.fillStyle = particle.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, Math.max(2, particle.radius * scale), 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
       }
 
       function polygon2d(points, fill, stroke, lineWidth) {
@@ -1082,6 +1141,7 @@
         const braking = keys.has("arrowdown") || keys.has("s");
         const left = keys.has("arrowleft") || keys.has("a");
         const right = keys.has("arrowright") || keys.has("d");
+        const drifting = keys.has("space") || keys.has("shift");
 
         if (accelerating) kart.speed += 95 * dt;
         if (braking) kart.speed -= 130 * dt;
@@ -1090,16 +1150,20 @@
           kart.speed += kart.speed > 0 ? -drag : drag;
         }
 
-        const maxSpeed = boostTimer > 0 ? 148 : 128;
+        const maxSpeed = boostTimer > 0 ? 156 : 128;
         kart.speed = Math.max(-46, Math.min(maxSpeed, kart.speed));
         const steer = (left ? 1 : 0) - (right ? 1 : 0);
+        updateDrift(dt, steer, drifting);
         const steerStrength = Math.min(1, Math.abs(kart.speed) / 45);
-        kart.yaw += steer * steerStrength * 2.25 * dt * (kart.speed >= 0 ? 1 : -1);
+        const driftTurnBonus = driftActive ? 0.62 : 1;
+        const releaseSteerEase = driftReleaseTimer > 0 ? 0.34 : 1;
+        kart.yaw += steer * steerStrength * 2.25 * driftTurnBonus * releaseSteerEase * dt * (kart.speed >= 0 ? 1 : -1);
 
         const f = forwardVector();
         kart.x += f.x * kart.speed * dt;
         kart.z += f.z * kart.speed * dt;
         kart.distanceFromStart += Math.abs(kart.speed * dt);
+        updateDriftParticles(dt);
 
         const info = nearestTrackInfo(kart.x, kart.z);
         const maxOffset = track.halfWidth - 5;
@@ -1107,13 +1171,15 @@
           const clampedOffset = Math.sign(info.offset) * maxOffset;
           kart.x = info.center.x + info.normal.x * clampedOffset;
           kart.z = info.center.z + info.normal.z * clampedOffset;
-          kart.speed *= 0.42;
+          kart.speed *= driftActive ? 0.68 : 0.42;
+          weakenDrift("Wall scrub: drift charge weakened.");
         }
 
         if (kart.speed > 12) {
           const trackDirection = tangentAt(nearestTrackInfo(kart.x, kart.z).angle);
           const desiredYaw = Math.atan2(trackDirection.x, trackDirection.z);
-          kart.yaw += clamp(angleDelta(desiredYaw, kart.yaw), -0.7, 0.7) * 0.9 * dt;
+          const alignmentRate = driftActive ? 2.0 : driftReleaseTimer > 0 ? 2.6 : 0.9;
+          kart.yaw += clamp(angleDelta(desiredYaw, kart.yaw), -0.7, 0.7) * alignmentRate * dt;
         }
 
         checkBoostPads();
@@ -1122,6 +1188,138 @@
 
         speedEl.textContent = String(Math.round(Math.abs(kart.speed)));
         updateHud();
+      }
+
+      function updateDrift(dt, steer, driftHeld) {
+        driftReleaseTimer = Math.max(0, driftReleaseTimer - dt);
+        driftCancelTimer = Math.max(0, driftCancelTimer - dt);
+        const steerDir = Math.sign(steer);
+        const canStart = driftHeld && steerDir !== 0 && Math.abs(kart.speed) >= 48 && kart.speed > 0;
+
+        if (!driftActive && canStart) {
+          driftActive = true;
+          driftDirection = steerDir;
+          driftCharge = Math.max(driftCharge, 0.08);
+          announcedDriftStage = 0;
+          setMessage("Drift started: hold to charge, release to boost.");
+        }
+
+        if (!driftActive) {
+          if (!driftHeld) driftCharge = Math.max(0, driftCharge - dt * 1.5);
+          return;
+        }
+
+        if (!driftHeld || Math.abs(kart.speed) < 28) {
+          releaseDrift();
+          return;
+        }
+
+        if (steerDir !== 0 && steerDir !== driftDirection) {
+          driftDirection = steerDir;
+          driftCharge *= 0.72;
+        }
+
+        const chargeRate = (steerDir === 0 ? 0.82 : 1.12) + Math.min(0.86, Math.abs(kart.speed) / 140);
+        driftCharge = Math.min(2.15, driftCharge + dt * chargeRate);
+        const stage = driftStage();
+        if (stage.level > announcedDriftStage) {
+          announcedDriftStage = stage.level;
+          if (stage.level > 0) setMessage(`Drift charge ${stage.label}: release for boost.`);
+        }
+        addDriftParticles();
+      }
+
+      function releaseDrift() {
+        const stage = driftStage();
+        if (stage.level > 0) {
+          kart.speed = Math.min(166, Math.max(kart.speed + stage.boost, stage.targetSpeed));
+          boostTimer = Math.max(boostTimer, stage.duration);
+          driftReleaseTimer = stage.duration;
+          lastBoostPad = -1;
+          const info = nearestTrackInfo(kart.x, kart.z);
+          if (Math.abs(info.offset) > track.halfWidth * 0.42) {
+            const saferOffset = Math.sign(info.offset) * track.halfWidth * 0.28;
+            kart.x = info.center.x + info.normal.x * saferOffset;
+            kart.z = info.center.z + info.normal.z * saferOffset;
+          }
+          const trackDirection = tangentAt(info.angle);
+          const desiredYaw = Math.atan2(trackDirection.x, trackDirection.z);
+          kart.yaw += clamp(angleDelta(desiredYaw, kart.yaw), -0.9, 0.9);
+          setMessage(`Drift boost released: ${stage.label} boost.`);
+        }
+        driftActive = false;
+        driftCharge = 0;
+        driftDirection = 0;
+        announcedDriftStage = 0;
+      }
+
+      function weakenDrift(message) {
+        if (!driftActive && driftCharge <= 0) return;
+        driftCharge *= 0.35;
+        if (driftCharge < 0.32) {
+          driftActive = false;
+          driftDirection = 0;
+          driftCharge = 0;
+          announcedDriftStage = 0;
+        }
+        driftCancelTimer = 0.75;
+        setMessage(message);
+      }
+
+      function cancelDrift(message) {
+        if (!driftActive && driftCharge <= 0) return;
+        driftActive = false;
+        driftCharge = 0;
+        driftDirection = 0;
+        announcedDriftStage = 0;
+        driftCancelTimer = 0.75;
+        setMessage(message);
+      }
+
+      function driftStage() {
+        if (driftCharge >= 1.05) return { level: 3, label: "Strong", color: "#ff6b7a", boost: 48, targetSpeed: 160, duration: 1.12 };
+        if (driftCharge >= 0.62) return { level: 2, label: "Ready", color: "#ffcf45", boost: 34, targetSpeed: 150, duration: 0.86 };
+        if (driftCharge >= 0.28) return { level: 1, label: "Early", color: "#6ee787", boost: 22, targetSpeed: 138, duration: 0.54 };
+        return { level: 0, label: driftActive ? "Build" : "Idle", color: "#6b7280", boost: 0, targetSpeed: 0, duration: 0 };
+      }
+
+      function addDriftParticles() {
+        const heading = forwardVector();
+        const side = { x: heading.z, z: -heading.x };
+        const stage = driftStage();
+        const color = stage.level === 3 ? "#ff6b7a" : stage.level === 2 ? "#ffcf45" : "#6ee787";
+        for (const sideSign of [-1, 1]) {
+          skidMarks.push({
+            x: kart.x - heading.x * 12 + side.x * sideSign * 8,
+            z: kart.z - heading.z * 12 + side.z * sideSign * 8,
+            dx: side.x * 7,
+            dz: side.z * 7,
+            color,
+            life: 0.9
+          });
+        }
+        exhaustParticles.push({
+          x: kart.x - heading.x * 18 + (Math.random() - 0.5) * 6,
+          z: kart.z - heading.z * 18 + (Math.random() - 0.5) * 6,
+          radius: 3 + stage.level,
+          color,
+          life: 0.75
+        });
+        if (skidMarks.length > 90) skidMarks.splice(0, skidMarks.length - 90);
+        if (exhaustParticles.length > 70) exhaustParticles.splice(0, exhaustParticles.length - 70);
+      }
+
+      function updateDriftParticles(dt) {
+        for (let i = skidMarks.length - 1; i >= 0; i -= 1) {
+          skidMarks[i].life -= dt * 0.7;
+          if (skidMarks[i].life <= 0) skidMarks.splice(i, 1);
+        }
+        for (let i = exhaustParticles.length - 1; i >= 0; i -= 1) {
+          const particle = exhaustParticles[i];
+          particle.life -= dt * 1.1;
+          particle.radius += dt * 4;
+          if (particle.life <= 0) exhaustParticles.splice(i, 1);
+        }
       }
 
       function checkBoostPads() {
@@ -1151,7 +1349,11 @@
           kart.speed = -24;
           collisionTimer = 0.75;
           shakeTimer = 0.34;
-          setMessage(`${obstacle.label} hit: recover with throttle and steering.`);
+          if (driftActive || driftCharge > 0) {
+            cancelDrift(`${obstacle.label} hit: drift canceled.`);
+          } else {
+            setMessage(`${obstacle.label} hit: recover with throttle and steering.`);
+          }
           break;
         }
       }
@@ -1160,7 +1362,8 @@
         const required = checkpoints[nextCheckpoint];
         if (required && reachedGate(required.angle, bx, bz, 42, track.halfWidth + 22)) {
           nextCheckpoint += 1;
-          setMessage(nextCheckpoint < checkpoints.length ? `Checkpoint ${nextCheckpoint} cleared. Next: ${checkpoints[nextCheckpoint].label}.` : "All checkpoints cleared. Cross the yellow finish gate.");
+          const progressMessage = nextCheckpoint < checkpoints.length ? `Checkpoint ${nextCheckpoint} cleared. Next: ${checkpoints[nextCheckpoint].label}.` : "All checkpoints cleared. Cross the yellow finish gate.";
+          setMessage(driftReleaseTimer > 0 ? `Drift boost active. ${progressMessage}` : progressMessage);
           return;
         }
 
@@ -1212,6 +1415,11 @@
         kart.speed = 0;
         completedLaps = totalLaps;
         finalTime = raceTime;
+        driftActive = false;
+        driftCharge = 0;
+        driftDirection = 0;
+        driftReleaseTimer = 0;
+        announcedDriftStage = 0;
         completeText.textContent = `Lap ${totalLaps}/${totalLaps} complete in ${formatTime(finalTime)}.`;
         setMessage(`Race complete: ${formatTime(finalTime)}.`);
         completeOverlay.classList.remove("hidden");
@@ -1222,8 +1430,27 @@
         lapEl.textContent = `${completedLaps}/${totalLaps}`;
         timeEl.textContent = formatTime(state === "complete" ? finalTime : raceTime);
         nextEl.textContent = state === "complete" ? "Done" : checkpoints[nextCheckpoint]?.label || "Finish";
-        const speedRatio = Math.min(100, Math.round(Math.abs(kart.speed) / 172 * 100));
+        const speedRatio = Math.min(100, Math.round(Math.abs(kart.speed) / 166 * 100));
         speedFill.style.width = `${speedRatio}%`;
+        const stage = driftStage();
+        const chargeRatio = Math.min(100, Math.round(driftCharge / 1.05 * 100));
+        if (driftActive) {
+          driftEl.textContent = stage.label;
+          driftFill.style.width = `${Math.max(8, chargeRatio)}%`;
+          driftFill.style.background = `linear-gradient(90deg, #6ee787, ${stage.color})`;
+        } else if (driftReleaseTimer > 0) {
+          driftEl.textContent = "Boost";
+          driftFill.style.width = "100%";
+          driftFill.style.background = "linear-gradient(90deg, #6ee787, #ffcf45, #ff6b7a)";
+        } else if (driftCancelTimer > 0) {
+          driftEl.textContent = "Cut";
+          driftFill.style.width = "18%";
+          driftFill.style.background = "linear-gradient(90deg, #ff6b7a, #6b7280)";
+        } else {
+          driftEl.textContent = "Idle";
+          driftFill.style.width = "0%";
+          driftFill.style.background = "linear-gradient(90deg, #6ee787, #ffcf45, #ff6b7a)";
+        }
         if (performance.now() > messageUntil && state === "racing") {
           statusMessage = checkpoints[nextCheckpoint] ? `Next gate: ${checkpoints[nextCheckpoint].label}.` : "All checkpoints cleared. Cross the yellow finish gate.";
         }
@@ -1279,6 +1506,14 @@
         collisionTimer = 0;
         shakeTimer = 0;
         lastBoostPad = -1;
+        driftActive = false;
+        driftCharge = 0;
+        driftDirection = 0;
+        driftReleaseTimer = 0;
+        driftCancelTimer = 0;
+        announcedDriftStage = 0;
+        skidMarks.length = 0;
+        exhaustParticles.length = 0;
         statusMessage = "Aim for Checkpoint 1.";
         messageUntil = performance.now() + 1800;
         startOverlay.classList.add("hidden");
@@ -1287,10 +1522,17 @@
         updateHud();
       }
 
+      function keyName(event) {
+        const key = event.key.toLowerCase();
+        if (key === " ") return "space";
+        if (key === "shift") return "shift";
+        return key;
+      }
+
       window.addEventListener("resize", resize);
       window.addEventListener("keydown", (event) => {
-        const key = event.key.toLowerCase();
-        if (["arrowup", "arrowdown", "arrowleft", "arrowright", "w", "a", "s", "d"].includes(key)) {
+        const key = keyName(event);
+        if (["arrowup", "arrowdown", "arrowleft", "arrowright", "w", "a", "s", "d", "space", "shift"].includes(key)) {
           event.preventDefault();
           keys.add(key);
         }
@@ -1298,13 +1540,13 @@
           event.preventDefault();
           startRace();
         }
-        if ((key === "enter" || key === " ") && state === "title") {
+        if ((key === "enter" || key === "space") && state === "title") {
           event.preventDefault();
           startRace();
         }
       }, { passive: false });
       window.addEventListener("keyup", (event) => {
-        keys.delete(event.key.toLowerCase());
+        keys.delete(keyName(event));
       });
       startButton.addEventListener("click", startRace);
       restartButton.addEventListener("click", startRace);

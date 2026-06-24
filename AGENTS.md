@@ -26,7 +26,7 @@ Each cycle:
 - after the builder reports completion, send the updated URL/manual/evidence paths to that game's tester
 - require industry-style black-box QA with test cases, severity, regression checks, readability/usability gates, browser checks, and continuous gameplay evidence
 - route failures back to the builder, then retest
-- update dashboard/log with what changed, what was fixed, and current evidence
+- update dashboard/log as work moves, not only at the end: active goal, current builder/tester status, pending evidence, completed evidence, fixed feedback, and next action should stay visible in the UI
 - commit often after coherent, verified progress
 
 There is no terminal success condition for this loop. Keep iterating through higher-quality upgrades unless the user pauses or redirects.
@@ -40,7 +40,10 @@ There is no terminal success condition for this loop. Keep iterating through hig
   - Initial Arcade Kart Racer, Side-Scrolling Platformer, and Turn-Based Deckbuilder phases are complete through Phase 3.
   - The Arcade Kart Racer orientation/readability reopen was fixed and black-box retested as `PASS`.
   - Current active continuous-upgrade lane: **Arcade Kart Racer, Upgrade Phase A: Drift And Boost Feel**.
-  - The kart builder has been handed the scoped Phase A build goal; the kart tester is on standby until the orchestrator sends a fresh explicit test handoff.
+  - First Phase A black-box QA returned `FAIL`: Ready/Strong drift stages and release boost were not clear enough from normal play.
+  - The kart builder completed the fix and reported Early/Ready/Strong visibility, visible release boosts, wall-scrub feedback, and normal route completion.
+  - The orchestrator sent a fresh black-box retest handoff to the kart tester with evidence folder `evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/`.
+  - The dashboard must reflect this live fix loop as it changes, including FAIL, builder-fix-active, retest-pending, retest-active, and PASS states.
 - QA upgrade artifacts:
   - `qa-upgrade/QA_STANDARDS_PROPOSAL.md`
   - `qa-upgrade/KART_BENCHMARK_AUDIT.md`

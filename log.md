@@ -6,6 +6,10 @@ This log records the important project decisions and milestone state so a fresh 
 
 The user replaced the old monitor-style automation with an active main-agent goal: continuously improve the Three-Game Lockstep Suite toward genre-leading browser game quality. There is no terminal success condition; each cycle should choose a high-impact quality gap, send a scoped builder goal, black-box test the result with upgraded QA standards, update dashboard/log, and commit often after coherent verified progress.
 
+Dashboard requirement added: the dashboard must track the continuous QA goal as live operational state, not only historical phase PASS evidence. As the loop moves, the UI should show active builder/tester status, pending evidence folders, completed evidence, fixed feedback, and the current next action.
+
+Dashboard live-update requirement tightened: the dashboard must update during each loop transition, including active FAIL reports, builder-fix-active status, retest-pending status, retest-active status, PASS closure, and evidence paths. It should not wait for a final passing report before reflecting the current goal.
+
 Guardrail: use genre references for quality-bar signals only. Do not copy protected names, characters, art, music, logos, maps, card names/effects verbatim, UI skins, branding, or other protected assets. The target is original games with comparable clarity, feel, polish, and test rigor.
 
 Completed research/audit artifacts:
@@ -22,7 +26,19 @@ Current active upgrade lane:
 - Builder thread: `019ef96d-c407-7be3-9934-6595866643ee`
 - Tester thread: `019ef96d-ef59-7d20-9dbe-b5d06edc720f`
 - Builder handoff sent: add documented drift/power-slide input, staged drift charge, release boost, charge cancellation/weakening on wall or obstacle impact, readable skid/particle feedback, and a compact drift/boost meter while preserving all previously passed route, completion, restart, boost, obstacle, and orientation behavior.
-- Tester is not yet handed this upgrade; wait for builder completion, then send only the URL/manual/evidence paths and upgraded black-box QA criteria.
+- Builder completed Phase A and reported hosted syntax/load checks, non-drift route completion, staged drift feedback, release boost, and wall-scrub cancellation.
+- Tester handoff sent for black-box QA with evidence folder `evidence/kart-racer/upgrade-phase-a-drift-boost/`.
+- Tester verdict: `FAIL`.
+- Evidence folder: `evidence/kart-racer/upgrade-phase-a-drift-boost/`
+- Passing regressions: hosted/manual load, visible controls, heading-up route clarity, normal route completion, race complete/final time, restart, standstill drift remains idle, wall/edge cut behavior, no blocking runtime errors.
+- Blocking findings: Ready/Strong drift charge stages are not reliably observable in black-box play, release boost is not clearly visible/recoverable, and drift timing/feedback requires probing beyond the manual/HUD.
+- Fix request sent to kart builder: make Early/Ready/Strong charge stages reliably visible during normal documented drift, make release from each stage produce an obvious recoverable boost, preserve route readability and normal non-drift completion, and update README only if player-facing drift behavior changes.
+- Dashboard thread was instructed to show this as a live Continuous QA Loop state rather than historical-only PASS state. After the FAIL was routed back to the builder, the dashboard should show builder fix active / retest pending until the builder reports a completed fix and the tester receives a fresh handoff.
+- Builder fix completed. Builder reported Early -> Ready -> Strong visibility during normal held drift, visible recoverable boosts from Early/Ready/Strong releases, authoritative wall-scrub cut feedback, and no-drift CP1 -> CP2 -> CP3 -> finish completion.
+- Orchestrator sent a fresh black-box retest handoff to the kart tester.
+- Retest evidence folder: `evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/`
+- Retest focus: verify the previous FAIL blockers are fixed, preserve all route/race regressions, produce a fresh continuous MP4, and write `TEST_REPORT.md` plus `expected-flow.md`.
+- Dashboard should now show builder fix complete / retest active, while preserving the original FAIL evidence and later showing the retest result as a separate row.
 
 ## 2026-06-24: Project Goal Replaced
 

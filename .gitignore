@@ -5,3 +5,5 @@
 *.webm
 evidence/**/capture-metadata.txt
 evidence/**/frames/
+evidence/**/recording-frames/
+evidence/**/probes/

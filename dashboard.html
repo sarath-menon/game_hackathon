@@ -100,6 +100,10 @@
       border-left-color: var(--attention);
     }
 
+    .status-tile[data-status="fail"] {
+      border-left-color: var(--fail);
+    }
+
     .status-tile strong {
       display: block;
       font-size: 0.9rem;
@@ -133,6 +137,18 @@
       background: #f2fbf8;
     }
 
+    .attention-panel[data-state="active"] {
+      border-color: rgba(154, 91, 0, 0.3);
+      border-left-color: var(--attention);
+      background: #fffaf0;
+    }
+
+    .attention-panel[data-state="fail"] {
+      border-color: rgba(180, 35, 24, 0.28);
+      border-left-color: var(--fail);
+      background: #fff5f3;
+    }
+
     .attention-panel h2 {
       font-size: 1rem;
       margin-bottom: 4px;
@@ -142,6 +158,38 @@
       margin: 0;
       color: #594100;
       font-size: 0.9rem;
+    }
+
+    .loop-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(140px, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .loop-cell {
+      padding: 8px;
+      border: 1px solid rgba(154, 91, 0, 0.22);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.72);
+      font-size: 0.82rem;
+    }
+
+    .loop-cell strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--ink);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .qa-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 0.82rem;
     }
 
     .filters {
@@ -199,6 +247,10 @@
       border-left-color: var(--attention);
     }
 
+    .game-card[data-status="fail"] {
+      border-left-color: var(--fail);
+    }
+
     .game-head {
       display: flex;
       justify-content: space-between;
@@ -245,6 +297,13 @@
       border-color: rgba(154, 91, 0, 0.3);
       background: rgba(154, 91, 0, 0.1);
       color: var(--attention);
+    }
+
+    .badge[data-status="fail"],
+    .chip[data-status="fail"] {
+      border-color: rgba(180, 35, 24, 0.28);
+      background: rgba(180, 35, 24, 0.08);
+      color: var(--fail);
     }
 
     .phase-chips {
@@ -430,6 +489,37 @@
       gap: 7px;
     }
 
+    .artifact-states {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .artifact-state {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #f8fafb;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .artifact-state[data-state="present"] {
+      border-color: rgba(15, 118, 110, 0.25);
+      background: rgba(15, 118, 110, 0.08);
+      color: var(--pass);
+    }
+
+    .artifact-state[data-state="missing"] {
+      border-color: rgba(154, 91, 0, 0.25);
+      background: rgba(154, 91, 0, 0.08);
+      color: var(--attention);
+    }
+
     video {
       width: 100%;
       height: 100%;
@@ -533,7 +623,8 @@
       }
 
       .attention-panel,
-      .issue-row {
+      .issue-row,
+      .loop-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -559,12 +650,27 @@
       <section class="status-strip" id="status-strip" aria-label="Game status summary"></section>
     </header>
 
-    <section class="attention-panel" id="attention-panel" data-state="clear">
+    <section class="attention-panel" id="attention-panel" data-state="active">
       <div>
-        <h2>Current Attention</h2>
-        <p><strong>No active open issues.</strong> Kart orientation/readability retest is closed with PASS evidence and Natural Orientation Sanity Check PASS.</p>
+        <h2>Continuous QA Loop</h2>
+        <p><strong>Kart drift/boost feel retest is active.</strong> Original Upgrade Phase A evidence remains FAIL; builder fix is complete and the tester has a fresh retest handoff.</p>
+        <div class="loop-grid" aria-label="Active upgrade status">
+          <div class="loop-cell"><strong>Active Game</strong>Arcade Kart Racer</div>
+          <div class="loop-cell"><strong>Upgrade Phase</strong>Upgrade Phase A: Drift And Boost Feel</div>
+          <div class="loop-cell"><strong>Builder</strong>Fix complete</div>
+          <div class="loop-cell"><strong>Tester</strong>Retest active / in progress</div>
+          <div class="loop-cell"><strong>Next Action</strong>Wait for retest verdict; close on PASS or summarize blocker on FAIL</div>
+        </div>
+        <div class="qa-links" aria-label="QA upgrade research links">
+          <span>Evidence: <code>evidence/kart-racer/upgrade-phase-a-drift-boost/</code></span>
+          <span>Retest: <code>evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/</code></span>
+          <a href="qa-upgrade/QA_STANDARDS_PROPOSAL.md">QA_STANDARDS_PROPOSAL.md</a>
+          <a href="qa-upgrade/KART_BENCHMARK_AUDIT.md">KART_BENCHMARK_AUDIT.md</a>
+          <a href="qa-upgrade/PLATFORMER_BENCHMARK_AUDIT.md">PLATFORMER_BENCHMARK_AUDIT.md</a>
+          <a href="qa-upgrade/DECKBUILDER_BENCHMARK_AUDIT.md">DECKBUILDER_BENCHMARK_AUDIT.md</a>
+        </div>
       </div>
-      <button class="action-btn" data-open-phase="kart-racer:3">View Closure Evidence</button>
+      <button class="action-btn" data-open-phase="kart-racer:upgrade-a">View Upgrade Evidence</button>
     </section>
 
     <nav class="filters" aria-label="Dashboard filters">
@@ -576,9 +682,9 @@
     <section class="games" id="games" aria-label="Game cards"></section>
 
     <section class="open-issues" aria-label="Open issues">
-      <header><h2>Open Issues</h2></header>
+      <header><h2>Active QA Work</h2></header>
       <div class="issue-list">
-        <div class="empty-state">No active open issues. All three game lanes are PASS; Kart closure evidence is available from the Kart card.</div>
+        <div class="empty-state">Kart Upgrade Phase A original report remains FAIL. Builder fix is complete and Retest 1 is active; wait for the retest verdict before closing or sending another blocker summary.</div>
       </div>
     </section>
   </main>
@@ -632,12 +738,13 @@
       {
         id: "kart-racer",
         name: "Arcade Kart Racer",
-        status: "pass",
-        statusLabel: "PASS",
-        summary: "Complete after orientation/readability retest PASS and Natural Orientation Sanity Check PASS.",
+        status: "attention",
+        statusLabel: "RETEST ACTIVE",
+        summary: "Historical phases are PASS; original Upgrade Phase A report is FAIL, builder fix is complete, and Retest 1 is active.",
         gameUrl: "games/kart-racer/index.html",
         readmeUrl: "games/kart-racer/README.md",
-        primaryPhase: 3,
+        primaryPhase: "upgrade-a",
+        upgrade: { number: "A", title: "Upgrade Phase A: Drift And Boost Feel", current: "attention", evidenceDir: "evidence/kart-racer/upgrade-phase-a-drift-boost" },
         phases: [
           { number: 1, title: "Basic Drivable Track", current: "pass", evidenceDir: "evidence/kart-racer/phase-1" },
           { number: 2, title: "Race Rules", current: "pass", evidenceDir: "evidence/kart-racer/phase-2" },
@@ -647,7 +754,9 @@
           { label: "Phase 1: Basic Drivable Track", status: "PASS", evidenceDir: "evidence/kart-racer/phase-1" },
           { label: "Phase 2: Race Rules", status: "PASS", evidenceDir: "evidence/kart-racer/phase-2" },
           { label: "Original Phase 3: Game Feel", status: "PASS", evidenceDir: "evidence/kart-racer/phase-3" },
-          { label: "Orientation Closure Retest", status: "PASS", evidenceDir: "evidence/kart-racer/orientation-retest", extraLinks: [{ label: "first-playable-frame.png", href: "evidence/kart-racer/orientation-retest/first-playable-frame.png" }] }
+          { label: "Orientation Closure Retest", status: "PASS", evidenceDir: "evidence/kart-racer/orientation-retest", extraLinks: [{ label: "first-playable-frame.png", href: "evidence/kart-racer/orientation-retest/first-playable-frame.png" }] },
+          { label: "Upgrade Phase A: Drift And Boost Feel", status: "FAIL - ORIGINAL QA", evidenceDir: "evidence/kart-racer/upgrade-phase-a-drift-boost", extraLinks: [{ label: "first-playable-frame.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/first-playable-frame.png" }, { label: "hosted-load.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/hosted-load.png" }] },
+          { label: "Retest 1: Drift And Boost Fix", status: "RETEST ACTIVE / PENDING VERDICT", hydrateStatus: true, evidenceDir: "evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1", extraLinks: [{ label: "first-playable-frame.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/first-playable-frame.png" }, { label: "hosted-load.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/hosted-load.png" }] }
         ]
       },
       {
@@ -703,6 +812,12 @@
         ["Original Phase 3 report", "Phase 3 TEST_REPORT.md says PASS with route clarity PASS and complete boost/obstacle/restart evidence."],
         ["Reopen closure", "Orientation/readability reopen retest is PASS with Natural Orientation Sanity Check PASS."],
         ["Closure evidence", "Inspect evidence/kart-racer/orientation-retest/TEST_REPORT.md, expected-flow.md, gameplay-recording.mp4, and first-playable-frame.png."]
+      ],
+      "kart-racer:upgrade-a": [
+        ["Upgrade goal", "Continuous QA loop selected Arcade Kart Racer Upgrade Phase A: Drift And Boost Feel from the benchmark audit."],
+        ["Tester feedback", "TEST_REPORT.md says FAIL: Ready/Strong drift stages were not reliably observable, and release boost was not clearly visible or recoverable."],
+        ["Builder fix complete", "The Kart builder completed the narrow fix for staged drift charge visibility and release boost readability."],
+        ["Retest active", "Fresh retest handoff has been sent; verdict is pending in evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/."]
       ],
       "platformer:2": [
         ["Blocker", "Exit was unreachable on the hazard route and runs ended before Level Complete."],
@@ -843,10 +958,44 @@
       }
     }
 
+    async function artifactState(path, label) {
+      try {
+        const response = await fetch(path, { method: "HEAD", cache: "no-store" });
+        if (!response.ok) throw new Error(`${response.status}`);
+        return `<span class="artifact-state" data-state="present">${escapeHtml(label)}: present</span>`;
+      } catch {
+        return `<span class="artifact-state" data-state="missing">${escapeHtml(label)}: pending</span>`;
+      }
+    }
+
     function findVerdict(markdown) {
       return markdown.match(/Verdict:\s*`?(PASS|FAIL|PENDING)`?/i)?.[1]?.toUpperCase()
         || markdown.match(/(?:^|\n)\s*(PASS|FAIL|PENDING)\s*(?:\n|$)/i)?.[1]?.toUpperCase()
         || "Unknown";
+    }
+
+    async function resolvedSeriesStatus(item) {
+      if (!item.hydrateStatus) return item.status;
+      try {
+        const response = await fetch(phasePaths(item).report, { cache: "no-store" });
+        if (!response.ok) throw new Error(`${response.status}`);
+        return `RETEST ${findVerdict(await response.text())}`;
+      } catch {
+        return item.status;
+      }
+    }
+
+    function statusKey(value) {
+      const status = String(value || "").toLowerCase();
+      if (status.includes("fail")) return "fail";
+      if (status.includes("pass")) return "pass";
+      return "attention";
+    }
+
+    function currentLabel(value) {
+      if (value === "fail") return "FAIL - FIX NEEDED";
+      if (value === "attention") return "TESTING / PENDING EVIDENCE";
+      return "PASS";
     }
 
     function renderSummary() {
@@ -860,7 +1009,7 @@
 
     function renderCards(filter = "all") {
       const visibleGames = games.filter((game) => {
-        if (filter === "attention") return game.status === "attention";
+        if (filter === "attention") return game.status === "attention" || game.status === "fail";
         if (filter === "pass") return game.status === "pass";
         return true;
       });
@@ -880,7 +1029,7 @@
           <div class="phase-chips">
             ${game.phases.map((phase) => `
               <button class="phase-chip" data-open-phase="${game.id}:${phase.number}" title="Open ${escapeHtml(phase.title)} evidence">
-                <span class="chip" data-status="${phase.current}">P${phase.number} ${phase.current === "attention" ? "Reopened" : "PASS"}</span>
+              <span class="chip" data-status="${phase.current}">P${phase.number} ${currentLabel(phase.current)}</span>
               </button>
             `).join("")}
           </div>
@@ -898,7 +1047,7 @@
 
     async function hydrateLatestReports() {
       await Promise.all(games.map(async (game) => {
-        const phase = game.phases.at(-1);
+        const phase = game.upgrade || game.phases.at(-1);
         const target = document.querySelector(`[data-latest-report="${game.id}"]`);
         try {
           const response = await fetch(phasePaths(phase).report, { cache: "no-store" });
@@ -906,7 +1055,7 @@
           const verdict = findVerdict(await response.text());
           target.textContent = `Latest report: ${verdict}`;
         } catch {
-          target.textContent = "Latest report: missing";
+          target.textContent = game.upgrade ? "Latest report: pending evidence" : "Latest report: missing";
         }
       }));
     }
@@ -914,7 +1063,9 @@
     function findPhase(key) {
       const [gameId, phaseNumber] = key.split(":");
       const game = games.find((item) => item.id === gameId);
-      const phase = game?.phases.find((item) => String(item.number) === phaseNumber);
+      const phase = phaseNumber === "upgrade-a"
+        ? game?.upgrade
+        : game?.phases.find((item) => String(item.number) === phaseNumber);
       return { game, phase, key };
     }
 
@@ -924,8 +1075,8 @@
 
       const paths = phasePaths(phase);
       drawer.hidden = false;
-      drawerTitle.textContent = `${game.name} - Phase ${phase.number}`;
-      drawerSubtitle.textContent = `${phase.title} | Current: ${phase.current === "attention" ? "REOPENED" : "PASS"}`;
+      drawerTitle.textContent = phase.number === "A" ? `${game.name} - Upgrade Phase A` : `${game.name} - Phase ${phase.number}`;
+      drawerSubtitle.textContent = `${phase.title} | Current: ${currentLabel(phase.current)}`;
       drawerSeries.innerHTML = `<p class="missing">Loading evidence series...</p>`;
       drawerReport.innerHTML = `<p class="missing">Loading report...</p>`;
       drawerHistory.innerHTML = (histories[key] || [["No active blocker history", "No phase-specific fix loop is currently tracked."]])
@@ -934,18 +1085,27 @@
 
       const series = game.evidenceSeries || game.phases.map((item) => ({
         label: `Phase ${item.number}: ${item.title}`,
-        status: item.current === "attention" ? "REOPENED" : "PASS",
+        status: currentLabel(item.current),
         evidenceDir: item.evidenceDir
       }));
       const rows = await Promise.all(series.map(async (item) => {
         const itemPaths = phasePaths(item);
         const extraLinks = (item.extraLinks || []).map((link) => `<a href="${link.href}">${escapeHtml(link.label)}</a>`).join("");
+        const resolvedStatus = await resolvedSeriesStatus(item);
+        const rowStatus = statusKey(resolvedStatus);
+        const [videoHtml, reportState, expectedState, videoState] = await Promise.all([
+          videoMarkup(itemPaths.video),
+          artifactState(itemPaths.report, "Report"),
+          artifactState(itemPaths.expected, "Expected flow"),
+          artifactState(itemPaths.video, "Video")
+        ]);
         return `
           <article class="series-card">
-            <div class="video-frame">${await videoMarkup(itemPaths.video)}</div>
+            <div class="video-frame">${videoHtml}</div>
             <div class="series-meta">
               <h3>${escapeHtml(item.label)}</h3>
-              <span class="badge" data-status="pass">${escapeHtml(item.status)}</span>
+              <span class="badge" data-status="${rowStatus}">${escapeHtml(resolvedStatus)}</span>
+              <div class="artifact-states">${reportState}${expectedState}${videoState}</div>
               <div class="series-links">
                 <a href="${itemPaths.report}">TEST_REPORT.md</a>
                 <a href="${itemPaths.expected}">expected-flow.md</a>

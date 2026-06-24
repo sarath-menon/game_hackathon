@@ -1,6 +1,6 @@
 # Arcade Kart Racer
 
-Phase 3 is a single-kart race on a simple 3D loop track with ordered checkpoints, lap counting, boost pads, recoverable obstacles, and a race timer.
+Arcade Kart Racer is a single-kart race on a simple 3D loop track with ordered checkpoints, lap counting, boost pads, recoverable obstacles, drift boosts, and a race timer.
 
 ## Objective
 
@@ -13,8 +13,9 @@ The required gates appear in sequence on the forward route from the start: `CP1`
 - `S` or `Arrow Down`: brake or reverse
 - `A` or `Arrow Left`: steer left
 - `D` or `Arrow Right`: steer right
-- `R`: restart the race
 - `Enter` or `Space`: start from the title screen
+- `Space` or `Shift`: drift while steering at speed
+- `R`: restart the race
 
 ## Track Rules
 
@@ -39,9 +40,18 @@ The race timer starts when the race begins and stops when the scored lap is comp
 - Red barriers and cones slow or bump the kart backward when hit.
 - Obstacle hits show a message and camera shake, but the kart remains recoverable with throttle and steering.
 
+## Drift Boosts
+
+- Hold `Space` or `Shift` while steering left or right at moderate forward speed to start a drift.
+- The drift meter charges quickly through visible stages: green `Early`, yellow `Ready`, and red `Strong`.
+- Keep holding the drift key through the bend to build from `Early` to `Ready` and then `Strong`; the HUD message announces each stage.
+- Release the drift key to convert the current charge into a short speed boost. Stronger stages give a stronger, longer boost and help the kart recover onto the route.
+- Scraping the track edge weakens or cancels the drift charge. Hitting a red obstacle cancels drift charge.
+- Drifting is optional; the checkpoint route can still be completed with normal acceleration and gentle steering.
+
 ## Speed Feedback
 
-The HUD speed bar fills as speed increases. Boosting and high speed also add motion streaks.
+The HUD speed bar fills as speed increases. Boosting, drift release, and high speed add motion streaks, skid trails, and tire/exhaust particles.
 
 ## Restart
 
