@@ -44,6 +44,9 @@ For browser automation or browser-harness work, the tester must first read and f
 
 `/Users/sarathmenon/Documents/startup/image_generation/browser-use-trial/browser-harness/SKILL.md`
 
+The tester must not use Codex native browser use; if browser support is blocked, modify or repair the browser harness instead.
+As proof that the game works, each approved milestone must include an evidence folder containing a gameplay screen recording and a markdown description of what is expected to happen during that tested flow.
+
 ## Communication Rules
 
 - Builder and tester must never communicate directly.
@@ -100,6 +103,9 @@ Current Milestone 1 handoff already sent:
 - Current milestone
 - Verdict: `PENDING`, `PASS`, or `FAIL`
 - Test inputs: URL, README/manual reference, browser, and viewport sizes
+- Evidence folder path containing:
+  - Gameplay screen recording for the tested flow
+  - Markdown description of what is supposed to happen in that recording
 - Summary
 - Findings with severity, status, repro steps, expected behavior, actual behavior, and evidence
 - Regression checklist
@@ -107,7 +113,7 @@ Current Milestone 1 handoff already sent:
 
 ## Approval Standard
 
-A milestone is approved only when `TEST_REPORT.md` says `PASS`, no unresolved critical or high-priority findings remain, and the game behavior matches `README.md`. Ambiguous behavior should be reported as a documentation or design issue.
+A milestone is approved only when `TEST_REPORT.md` says `PASS`, includes an evidence folder path, that folder contains both a gameplay screen recording and an expected-flow markdown description, no unresolved critical or high-priority findings remain, and the game behavior matches `README.md`. Ambiguous behavior should be reported as a documentation or design issue.
 
 ## Current Resume Procedure
 

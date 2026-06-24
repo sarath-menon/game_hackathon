@@ -6,33 +6,39 @@ Milestone 1: Skeleton Playable
 
 ## Verdict
 
-PENDING
+PASS
 
 ## Test inputs
 
-- URL: Not yet provided by orchestrator
-- README/manual: Not yet provided by orchestrator
-- Browser: Not yet tested
-- Viewports: Not yet tested
+- Game URL: http://127.0.0.1:8765/index.html
+- README/manual: http://127.0.0.1:8765/README.md and `/Users/sarathmenon/Documents/game_hackathon/README.md`
+- Browser: Google Chrome 149.0.7827.115, controlled through browser-harness via CDP
+- Viewport: 1200 x 953
+- Automation notes: browser-harness agent helper was used to send black-box keyboard input with correct `key`, `code`, and virtual-key fields for Arrow keys and WASD.
 
 ## Summary
 
-Tester is ready and waiting for the main orchestrator to provide the game URL and README/manual. No black-box testing has started.
+Milestone 1 passes. The hosted game loads, presents a title/start screen, starts from the **Start Run** control, accepts README-documented movement controls, constrains the courier within the play area, shows a visible yellow **Dock 01** target, allows the target to be reached by navigating around the visible walls, and triggers the delivered/win state on contact with the dock.
 
 ## Findings
 
-No findings yet. Testing is blocked until the approved test inputs are provided by the main orchestrator.
+No unresolved findings.
 
 ## Regression checklist
 
-- Game loads: Not tested
-- Controls match README/manual: Not tested
-- Movement works: Not tested
-- Player cannot leave play area: Not tested
-- Delivery target visible: Not tested
-- Delivery target reachable: Not tested
-- Win condition triggers correctly: Not tested
+- Game loads: PASS
+- Title/start screen appears: PASS
+- **Start Run** begins gameplay: PASS
+- Arrow-key movement works: PASS
+- `W`, `A`, `S`, `D` movement works: PASS
+- Wall layout is visible during play: PASS
+- Boundary collision prevents leaving the play area: PASS
+- Delivery target **Dock 01** is visible: PASS
+- Delivery target **Dock 01** is reachable: PASS
+- Win condition triggers correctly: PASS
+- Win state displays delivered feedback: PASS
+- README/manual behavior matches tested Milestone 1 behavior: PASS
 
 ## Approval statement
 
-Milestone 1 is not approved yet. Approval requires a PASS verdict after black-box testing with the orchestrator-provided URL and README/manual.
+Milestone 1 is approved. The skeleton playable matches the README/manual with no blocking issues found.
