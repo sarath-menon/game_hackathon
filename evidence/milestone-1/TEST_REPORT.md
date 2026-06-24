@@ -16,9 +16,15 @@ PASS
 - Viewport: 1200 x 953
 - Automation notes: browser-harness agent helper was used to send black-box keyboard input with correct `key`, `code`, and virtual-key fields for Arrow keys and WASD.
 
+## Evidence
+
+- Evidence folder: `/Users/sarathmenon/Documents/game_hackathon/evidence/milestone-1/`
+- Gameplay screen recording: `/Users/sarathmenon/Documents/game_hackathon/evidence/milestone-1/gameplay-recording.mp4`
+- Expected-flow description: `/Users/sarathmenon/Documents/game_hackathon/evidence/milestone-1/expected-flow.md`
+
 ## Summary
 
-Milestone 1 passes. The hosted game loads, presents a title/start screen, starts from the **Start Run** control, accepts README-documented movement controls, constrains the courier within the play area, shows a visible yellow **Dock 01** target, allows the target to be reached by navigating around the visible walls, and triggers the delivered/win state on contact with the dock.
+Milestone 1 passes. The hosted game loads, presents a title/start screen, starts from the **Start Run** control, accepts README-documented movement controls, constrains the courier within the play area, shows a visible yellow **Dock 01** target, allows the target to be reached by navigating around the visible walls, and triggers the delivered/win state on contact with the dock. Evidence was produced successfully in the Milestone 1 evidence folder.
 
 ## Findings
 

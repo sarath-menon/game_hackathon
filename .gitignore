@@ -1,0 +1,7 @@
+# Generated gameplay evidence artifacts
+.DS_Store
+*.mp4
+*.mov
+*.webm
+evidence/**/capture-metadata.txt
+evidence/**/frames/
