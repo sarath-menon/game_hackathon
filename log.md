@@ -2080,3 +2080,25 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - `gameplay-recording.mp4`
 - External QA classification remains `PASS_WITH_FINDINGS`, `FAIL`, `BLOCKED_PROVIDER`, or `BLOCKED_ENVIRONMENT`; provider/setup/harness blockers are not final game failures.
 - Dashboard must show this pass as active/pending evidence while preserving previous Dungeons retry 1 as historical `PASS_WITH_FINDINGS`.
+
+## Dungeons External QA Follow-Up Pass 2 BLOCKED_ENVIRONMENT / Direct Build Retry Active - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Dungeons Follow-up Pass 2.
+- Evidence folder: `evidence/external/dungeons-degenerate-gamblers-settings-illegal-pass-1/`.
+- Required outputs exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `BLOCKED_ENVIRONMENT`.
+- Provider/environment classification:
+  - not `BLOCKED_PROVIDER`: `https://purplemosscollectors.itch.io/dndg` loaded, the itch `Run game` control worked, and the embedded game menu appeared;
+  - not game `FAIL`: the tester did not reach playable run/combat state, so settings, legal/illegal action clarity, and card-state QA were not evaluable as game quality failures;
+  - environment blocker: in the shared Chrome/browser-harness viewport (`782 x 859`), `Continue` appeared inactive and `New Run` was clipped off the embedded game surface. Zoom, keyboard navigation, horizontal wheel, vertical scroll for provider controls, and clipped-edge clicking did not enter a run.
+- Retry route selected:
+  - Prefer the official direct itch-hosted HTML build over a portal wrapper because the itch page source exposes the iframe URL `https://html-classic.itch.zone/html/15020933/index.html`, and `curl -I -L` returns HTTP 200.
+  - Updated `external-qa/dungeons-degenerate-gamblers/README.md` to include the direct official browser build URL as the player-facing retry path for wrapper/viewport issues.
+  - Direct build retry handoff sent to canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+  - Evidence target: `evidence/external/dungeons-degenerate-gamblers-direct-build-retry-1/`.
+  - Scope remains settings/options/help/pause/restart/give-up/volume/fullscreen controls if visible, legal/illegal action clarity, card-state readability, usability/accessibility/readability, performance/load, and provider/environment classification.
+- Browser maintenance closed the stale itch wrapper tab before the direct-build handoff and reported 0 remaining page targets.
+- Dashboard must show the itch wrapper pass as `BLOCKED_ENVIRONMENT / needs direct-build retry`, not a failed game QA result.
