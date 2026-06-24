@@ -715,17 +715,17 @@
         <h2>Current Live Status</h2>
         <p><strong>Two-track Game QA Suite is active.</strong> Track 1 improves the three local HTML games; Track 2 black-box tests five hosted online games to strengthen QA methodology.</p>
         <div class="loop-grid" aria-label="Active upgrade status">
-          <div class="loop-cell"><strong>Track 1 Local Games</strong>Kart retest 2 ACTIVE; Platformer Settings Polish 2 QA QUEUED; Deckbuilder PASS</div>
+          <div class="loop-cell"><strong>Track 1 Local Games</strong>Kart settings retest 2 PASS/CLOSED; Platformer Settings Polish 2 QA ACTIVE; Deckbuilder PASS</div>
           <div class="loop-cell"><strong>Track 2 Online Games</strong>All five external games PASS_WITH_FINDINGS</div>
           <div class="loop-cell"><strong>Canonical Tester</strong>019ef96e-99ee-7f62-b4d2-7d2c3cd29217 across both tracks</div>
           <div class="loop-cell"><strong>Browser Harness</strong>Serialized URL/manual/evidence runs in one shared Chrome window</div>
           <div class="loop-cell"><strong>Local Focus</strong>Settings depth, accessibility, audio defaults, feel, visuals, performance, polish</div>
-          <div class="loop-cell"><strong>Next Action</strong>Kart settings-depth retest 2 ACTIVE; wait for canonical tester verdict</div>
+          <div class="loop-cell"><strong>Next Action</strong>Platformer Settings Polish 2 QA ACTIVE; wait for canonical tester verdict</div>
         </div>
         <div class="qa-links" aria-label="QA upgrade research links">
           <span>Gate: <strong>dashboard fresh/verified before transition complete</strong></span>
-          <span>Track 1 active lanes: Kart settings-depth retest 2 is ACTIVE with the canonical tester; Side-Scrolling Platformer / Skyline Stepper Settings Polish 2: Advanced Player Settings is <strong>BUILDER COMPLETE / QA QUEUED</strong> from thread <code>019ef96e-1dd7-7f13-91d4-855909736edc</code>. Changed files: <code>games/platformer/index.html</code> and <code>games/platformer/README.md</code>. New defaults/settings: Air Control <code>Steady</code>, Damage Profile <code>Standard</code>, Checkpoint Assist <code>Off</code>, Route Cue Style <code>Full</code>, High-Contrast Hazards <code>Off</code>, Objective Labels <code>Normal</code>, Background Detail <code>Full Parallax</code>. Builder self-checks passed: script parse/static settings hooks, hosted game/manual 200, default lower-deck completion route, and default health-zero failure path. No evidence folder/report yet; Platformer QA waits for canonical tester after active Kart retest completion.</span>
-          <span>Settings QA: Kart Settings Phase 1 is superseded/no-verdict (<a href="evidence/kart-racer/settings-phase-1/TEST_REPORT.md">report</a>); Arcade Kart Racer settings-depth retest 1 remains historical <strong>BLOCKED_ENVIRONMENT</strong> at <code>evidence/kart-racer/settings-depth-retest-1/</code> (<a href="evidence/kart-racer/settings-depth-retest-1/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/settings-depth-retest-1/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/settings-depth-retest-1/gameplay-recording.mp4">recording</a>). Retest 2 is <strong>ACTIVE</strong> through the canonical tester at <code>evidence/kart-racer/settings-depth-retest-2/</code>; required outputs are <code>TEST_REPORT.md</code>, <code>expected-flow.md</code>, and <code>gameplay-recording.mp4</code>. Browser maintenance inspected 25 Chrome page targets and closed 22 stale targets, reporting shared Chrome/browser-harness healthy enough to retry. Approval remains pending until tester verdict and required evidence exist.</span>
+          <span>Track 1 active lanes: Arcade Kart Racer settings-depth retest 2 is <strong>PASS/CLOSED</strong> at <code>evidence/kart-racer/settings-depth-retest-2/</code> (<a href="evidence/kart-racer/settings-depth-retest-2/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/settings-depth-retest-2/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/settings-depth-retest-2/gameplay-recording.mp4">recording</a>). Summary: settings sections reachable, audio defaults/reset/persistence passed, in-race settings pause/close passed, route/drift/restart smoke passed, and full lap was not repeated in this settings-focused retest. Side-Scrolling Platformer / Skyline Stepper Settings Polish 2 is <strong>QA ACTIVE</strong> with the canonical tester at <code>evidence/platformer/settings-polish-2/</code>; required outputs are <code>TEST_REPORT.md</code>, <code>expected-flow.md</code>, and <code>gameplay-recording.mp4</code>.</span>
+          <span>Settings QA: Kart Settings Phase 1 is superseded/no-verdict (<a href="evidence/kart-racer/settings-phase-1/TEST_REPORT.md">report</a>); Arcade Kart Racer settings-depth retest 1 remains historical <strong>BLOCKED_ENVIRONMENT</strong> at <code>evidence/kart-racer/settings-depth-retest-1/</code> (<a href="evidence/kart-racer/settings-depth-retest-1/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/settings-depth-retest-1/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/settings-depth-retest-1/gameplay-recording.mp4">recording</a>). Platformer QA scope: Air Control, Damage Profile, Checkpoint Assist, Route Cue Style, High-Contrast Hazards, Objective Labels, Background Detail, audio defaults/reset, persistence/reload, settings contexts, lower-deck completion, health-zero failure under Standard, checkpoint/respawn, route readability, and narrow viewport.</span>
           <span>Kart accepted evidence: audio defaults are PASS at <a href="evidence/kart-racer/audio-default-hotfix-single-tester-retest-2/TEST_REPORT.md">audio retest 2</a>; orientation is PASS at <a href="evidence/kart-racer/orientation-retest/TEST_REPORT.md">orientation retest</a>. Platformer PASS at <code>evidence/platformer/settings-phase-1/</code>; Deckbuilder PASS at <code>evidence/deckbuilder/settings-phase-1/</code>; Deckbuilder polish PASS at <code>evidence/deckbuilder/settings-polish-1-scroll/</code></span>
           <span>Audio default hotfix: audio/sounds must default off or muted until opt-in. Kart <strong>PASS</strong> at <code>evidence/kart-racer/audio-default-hotfix-single-tester-retest-2/</code>; canonical retest 1 remains FAIL/fixed at <code>evidence/kart-racer/audio-default-hotfix-single-tester-retest-1/</code>; Platformer <strong>PASS</strong> at <code>evidence/platformer/audio-default-hotfix/</code>; Deckbuilder <strong>PASS</strong> at <code>evidence/deckbuilder/audio-default-hotfix-shared-window-retest-1/</code></span>
           <span>Track 2 online-game QA: PolyTrack, OvO, Dungeons &amp; Degenerate Gamblers, Townscaper, and Cookie Clicker are each <strong>PASS_WITH_FINDINGS</strong>. Reports are preserved at <a href="evidence/external/polytrack-poki-shared-window-retry-2/TEST_REPORT.md">PolyTrack</a>, <a href="evidence/external/ovo-poki-shared-window-retry-1/TEST_REPORT.md">OvO</a>, <a href="evidence/external/dungeons-degenerate-gamblers-shared-window-retry-1/TEST_REPORT.md">DNDG</a>, <a href="evidence/external/townscaper-settings-removal-mobile-pass-1/TEST_REPORT.md">Townscaper pass 1</a>, and <a href="evidence/external/cookie-clicker-settings-persistence-mobile-pass-1/TEST_REPORT.md">Cookie Clicker pass 1</a>. Cookie Clicker pass 1 closed at <code>evidence/external/cookie-clicker-settings-persistence-mobile-pass-1/</code> (<a href="evidence/external/cookie-clicker-settings-persistence-mobile-pass-1/expected-flow.md">expected-flow</a>, <a href="evidence/external/cookie-clicker-settings-persistence-mobile-pass-1/gameplay-recording.mp4">recording</a>). It reached direct Cookie URL playable state and Options, so it is not BLOCKED_PROVIDER; shared-window harness captured usable evidence and MP4, so it is not overall BLOCKED_ENVIRONMENT; persistence/reload and narrow/mobile are open coverage findings from interruption, not observed game-quality failures. Verified direct load, English selection, banner dismissal, cookie click state creation, purchase/store feedback, cursor/CPS feedback, Options open/scroll, export-save access, and safe exit. Open findings: persistence/reload not verified, narrow/mobile not captured, and deeper Options coverage for audio/visual/accessibility/warnings/import/reset remains partial.</span>
@@ -799,7 +799,7 @@
         name: "Arcade Kart Racer",
         status: "attention",
         statusLabel: "SETTINGS QA",
-        summary: "Historical phases, orientation, Drift/Boost upgrade, and audio-default hotfix are PASS; old Settings Phase 1 is superseded/no-verdict, retest 1 is environment-blocked, and settings-depth retest 2 is active.",
+        summary: "Historical phases, orientation, Drift/Boost upgrade, audio-default hotfix, and settings-depth retest 2 are PASS; old Settings Phase 1 is superseded/no-verdict and retest 1 is environment-blocked.",
         gameUrl: "games/kart-racer/index.html",
         readmeUrl: "games/kart-racer/README.md",
         primaryPhase: "upgrade-a",
@@ -813,7 +813,7 @@
           { label: "Phases 1-3", status: "pass", statusLabel: "PASS", note: "Drivable track, race rules, game feel, and orientation closure approved.", openKey: "kart-racer:3" },
           { label: "Orientation Closure Retest", status: "pass", statusLabel: "PASS", note: "Natural orientation sanity check closed.", openKey: "kart-racer:3" },
           { label: "Drift/Boost Upgrade A", status: "pass", statusLabel: "FAIL -> PASS", note: "Original QA failed; Retest 1 fixed drift stages and release boost.", openKey: "kart-racer:upgrade-a" },
-          { label: "Settings Depth Retest 2", status: "attention", statusLabel: "ACTIVE", note: "Shared Chrome cleanup closed 22 stale targets; canonical tester is retrying settings-depth QA.", openKey: "kart-racer:settings-depth-retest-2" },
+          { label: "Settings Depth Retest 2", status: "pass", statusLabel: "PASS", note: "Settings sections, audio defaults/reset/persistence, in-race pause/close, route/drift/restart smoke approved; full lap not repeated.", openKey: "kart-racer:settings-depth-retest-2" },
           { label: "Audio Default Hotfix", status: "pass", statusLabel: "PASS", note: "Retest 2 verifies default-off audio, opt-in audio, opt-out/reset silence, stale saved settings muted, smoke path, and manual match.", openKey: "kart-racer:audio-default" }
         ],
         evidenceSeries: [
@@ -832,7 +832,7 @@
         name: "Side-Scrolling Platformer",
         status: "attention",
         statusLabel: "SETTINGS QA",
-        summary: "Historical phases, Movement Feel upgrade, Settings Panel Phase 1, and audio-default hotfix are PASS; Settings Polish 2 is builder-complete and queued for canonical QA after Kart.",
+        summary: "Historical phases, Movement Feel upgrade, Settings Panel Phase 1, and audio-default hotfix are PASS; Settings Polish 2 is QA active with canonical tester.",
         gameUrl: "games/platformer/index.html",
         readmeUrl: "games/platformer/README.md",
         primaryPhase: "upgrade-a",
@@ -846,7 +846,7 @@
           { label: "Phases 1-3", status: "pass", statusLabel: "PASS", note: "Core movement, hazards/collectibles, and level polish approved.", openKey: "platformer:3" },
           { label: "Movement Feel Upgrade A", status: "pass", statusLabel: "PASS", note: "Coyote time, buffering, variable jumps, landing feedback approved.", openKey: "platformer:upgrade-a" },
           { label: "Settings Panel Phase 1", status: "pass", statusLabel: "PASS", note: "Settings discoverability, persistence/reset, pause/input isolation, narrow viewport usability, audio volume, regressions, and readability gate approved.", openKey: "platformer:settings-1" },
-          { label: "Settings Polish 2", status: "attention", statusLabel: "QA QUEUED", note: "Builder complete: Air Control Steady, Damage Profile Standard, Checkpoint Assist Off, Route Cue Style Full, High-Contrast Hazards Off, Objective Labels Normal, Background Detail Full Parallax; no evidence yet, canonical QA after Kart." },
+          { label: "Settings Polish 2", status: "attention", statusLabel: "QA ACTIVE", note: "Canonical tester is checking Air Control, Damage Profile, Checkpoint Assist, Route Cue Style, High-Contrast Hazards, Objective Labels, Background Detail, audio defaults/reset, persistence, contexts, routes, failure, checkpoints, readability, and narrow viewport.", openKey: "platformer:settings-polish-2" },
           { label: "Audio Default Hotfix", status: "pass", statusLabel: "PASS", note: "Generated UI sounds default off, volume 0%, stale saved audio cannot re-enable without explicit consent; evidence complete at evidence/platformer/audio-default-hotfix/.", openKey: "platformer:audio-default" }
         ],
         evidenceSeries: [
@@ -1225,10 +1225,12 @@
           ? { number: "Settings 1", title: "Settings Panel Phase 1", current: "pass", evidenceDir: `evidence/${gameId}/settings-phase-1` }
         : phaseNumber === "settings-polish-1"
           ? { number: "Settings Polish 1", title: "Settings Panel Polish 1", current: "pass", evidenceDir: `evidence/${gameId}/settings-polish-1-scroll` }
+        : phaseNumber === "settings-polish-2"
+          ? { number: "Settings Polish 2", title: "Settings Polish 2", current: "attention", evidenceDir: `evidence/${gameId}/settings-polish-2` }
         : phaseNumber === "settings-depth-retest-1"
           ? { number: "Settings Depth Retest 1", title: "Settings Depth Retest 1", current: "attention", evidenceDir: `evidence/${gameId}/settings-depth-retest-1` }
         : phaseNumber === "settings-depth-retest-2"
-          ? { number: "Settings Depth Retest 2", title: "Settings Depth Retest 2", current: "attention", evidenceDir: `evidence/${gameId}/settings-depth-retest-2` }
+          ? { number: "Settings Depth Retest 2", title: "Settings Depth Retest 2", current: "pass", evidenceDir: `evidence/${gameId}/settings-depth-retest-2` }
         : phaseNumber === "audio-default"
           ? {
               number: "Audio Default",

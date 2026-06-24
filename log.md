@@ -1600,3 +1600,42 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - `Background Detail: Static` removes parallax decoration only; gameplay geometry is unchanged;
   - verify audio remains off/muted by default and after Reset Defaults.
 - Status: builder-complete, queued for canonical tester after the active Kart settings-depth retest 2 finishes. This build is not approved until the canonical tester writes passing evidence.
+
+## Arcade Kart Racer Settings-Depth Retest 2 PASS - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Arcade Kart Racer settings-depth retest 2.
+- Evidence folder: `evidence/kart-racer/settings-depth-retest-2/`.
+- Required outputs exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS`.
+- Verified:
+  - Settings opens from title and during race;
+  - settings sections are readable and scroll-reachable;
+  - first-load audio defaults to UI sounds off and Volume `0%`;
+  - explicit UI sounds/volume opt-in works;
+  - Reset Defaults restores UI sounds off and Volume `0%`;
+  - HUD scale persists after reload while audio remains off/Volume `0%`;
+  - race smoke covers start, route readability, HUD/minimap/checkpoint labels, driving, drift input/release, in-race settings pause/close, and restart.
+- Nonblocking coverage note:
+  - race regression was smoke-level and did not repeat full lap completion or boost traversal.
+- Status: closed as approved for this settings-depth retest.
+
+## Platformer Settings Polish 2 QA Handoff Active - 2026-06-25
+
+- Orchestrator is handing Side-Scrolling Platformer / Skyline Stepper Settings Polish 2 to canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Evidence target: `evidence/platformer/settings-polish-2/`.
+- Inputs:
+  - game URL: `http://127.0.0.1:8765/games/platformer/index.html`;
+  - manual URL/path: `http://127.0.0.1:8765/games/platformer/README.md` and `games/platformer/README.md`.
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Scope:
+  - verify the new advanced settings: Air Control, Damage Profile, Checkpoint Assist, Route Cue Style, High-Contrast Hazards, Objective Labels, and Background Detail;
+  - verify audio remains off/muted by default and after Reset Defaults;
+  - verify persistence/reload and Reset Defaults;
+  - verify title, in-run, failure, and completion settings access where available;
+  - regression smoke lower-deck completion, health-zero failure under Standard, checkpoint/respawn, route readability, collectibles/hazards/exit/restart, no softlocks/runtime errors, and narrow viewport usability.
