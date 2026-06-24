@@ -1333,3 +1333,21 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - future card-game passes should deliberately seek unavailable-action states after core reachability is proven;
   - future settings passes should explicitly cover audio/volume, fullscreen, restart, and give-up behavior.
 - No provider reroute is required for basic Dungeons playability. The next external QA action should be a deeper settings/options pass for another completed target such as Cookie Clicker or Townscaper, or a methodology pass selected by the orchestrator.
+
+## Townscaper Deep Settings/Removal/Mobile External QA Handoff Active - 2026-06-25
+
+- Orchestrator selected Townscaper for the next Track 2 external-game QA methodology pass because the prior report left the highest-impact creative/WebGL gaps around removal/undo discoverability, gear/settings behavior, mobile/narrow viewport polish, visible help/control discoverability, and camera/zoom depth.
+- Canonical cross-game tester: `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Provider path: `https://oskarstalberg.com/Townscaper/`.
+- Manual: `external-qa/townscaper/README.md`.
+- Fresh evidence target: `evidence/external/townscaper-settings-removal-mobile-pass-1/`.
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Tester instructions preserve the external QA taxonomy:
+  - `PASS_WITH_FINDINGS` if playable and acceptable with nonblocking issues;
+  - `FAIL` only if playable enough to evaluate but failing functional, usability, accessibility, settings/options, performance, or QA acceptance criteria;
+  - `BLOCKED_PROVIDER` for provider/shell/iframe/startup/ad/consent path blockers;
+  - `BLOCKED_ENVIRONMENT` for local browser-harness/input/WebGL/storage environment blockers.
+- This pass must use browser-harness only in the single shared Chrome window and must not inspect old reports or evidence.
