@@ -26,7 +26,9 @@ Current live state:
 - Kart Upgrade Phase A is closed `PASS` after Retest 1.
 - Platformer Upgrade Phase A is closed `PASS`.
 - Dashboard has been verified as current through the Platformer closure.
-- Next action: select the next continuous QA upgrade, then update the dashboard as selected/builder-active before continuing.
+- Next active lane selected: Turn-Based Deckbuilder, Upgrade Phase 1: Combat Feedback And Math Preview.
+- Deckbuilder builder handoff is being sent to thread `019ef96e-7780-7763-b444-12cf7698a97a`; tester remains on standby until builder completion and orchestrator handoff.
+- Dashboard must be updated now to show Deckbuilder selected/builder-active, evidence pending at `evidence/deckbuilder/upgrade-phase-1-combat-feedback/`, and next action waiting for builder completion.
 
 Continuous QA loop history, first upgrade lane:
 
