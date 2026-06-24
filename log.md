@@ -1407,3 +1407,27 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - removal/undo should be verified with a clearly isolated placed object;
   - mobile/narrow checks should verify both control layout and build-target reachability.
 - No alternate-provider retry is required for this Townscaper pass.
+
+## Cookie Clicker Deeper Settings/Persistence/Narrow External QA Handoff Active - 2026-06-25
+
+- Orchestrator selected Cookie Clicker for the next Track 2 external-game QA methodology pass because the prior report passed with limitations and left narrow/mobile viewport evidence inconclusive.
+- Canonical cross-game tester: `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Provider path: `https://orteil.dashnet.org/cookieclicker/`.
+- Manual: `external-qa/cookie-clicker/README.md`.
+- Fresh evidence target: `evidence/external/cookie-clicker-settings-persistence-mobile-pass-1/`.
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- QA scope:
+  - direct URL playable state;
+  - click/purchase loop enough to create visible state;
+  - Options/settings coverage for save/export/import presence, language, audio/volume, visual/performance toggles, screen-reader/accessibility options if visible, warning toggles, and reset/destructive-control separation;
+  - persistence/reload of non-destructive state;
+  - narrow/mobile viewport evidence in the shared Chrome window where possible;
+  - usability/accessibility/readability, localization impact, modal clarity, and performance/load.
+- Tester instructions preserve the external QA taxonomy:
+  - `PASS_WITH_FINDINGS` if playable and acceptable with nonblocking issues;
+  - `FAIL` only if playable enough to evaluate but failing functional, usability, accessibility, settings/options, performance, or QA acceptance criteria;
+  - `BLOCKED_PROVIDER` for provider/shell/iframe/startup/ad/consent path blockers;
+  - `BLOCKED_ENVIRONMENT` for local browser-harness/input/storage/viewport environment blockers.
