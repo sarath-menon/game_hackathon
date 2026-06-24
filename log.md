@@ -1538,3 +1538,35 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - this is not a Kart game `FAIL`;
   - the build remains unapproved;
   - rerun the same settings-depth handoff after tester/harness stability is resolved.
+
+## Browser Maintenance Cleanup Before Kart Retest 2 - 2026-06-25
+
+- Browser maintenance thread `019ef9ba-1477-7662-b7a3-c5da570cdb77` ran a cleanup/health pass after Kart settings-depth retest 1 blocked.
+- Inspected:
+  - 3 relevant processes;
+  - 25 Chrome page targets.
+- Closed:
+  - 22 stale targets, including 14 duplicate dashboard tabs, 3 stale blank/internal tabs, and 5 completed external QA/probe tabs.
+- Preserved:
+  - one dashboard tab;
+  - current Kart page;
+  - one ambiguous Deckbuilder page.
+- Health result:
+  - shared Chrome running;
+  - browser-harness responsive and attached successfully;
+  - Kart page loaded;
+  - local HTTP server still healthy;
+  - healthy enough to retry Kart through browser-harness.
+
+## Arcade Kart Racer Settings-Depth Retest 2 Handoff Active - 2026-06-25
+
+- Orchestrator handed Arcade Kart Racer settings-depth retest 2 to canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` after cleanup.
+- Evidence target: `evidence/kart-racer/settings-depth-retest-2/`.
+- Inputs:
+  - game URL: `http://127.0.0.1:8765/games/kart-racer/index.html`;
+  - manual URL/path: `http://127.0.0.1:8765/games/kart-racer/README.md` and `games/kart-racer/README.md`.
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Scope matches retest 1: documented settings-depth coverage, audio defaults/reset, persistence, and route/checkpoint/drift/boost regression smoke.
