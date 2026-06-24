@@ -2179,3 +2179,33 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - illegal/unavailable action feedback remains unproven because no clearly invalid/out-of-state action was reached;
   - restart confirmation/cancel copy did not appear after one safe boundary click, and deeper destructive clicks were avoided.
 - Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` also fixed `dashboard.html` verdict hydration so Markdown reports with `PASS_WITH_FINDINGS`, `BLOCKED_PROVIDER`, `BLOCKED_ENVIRONMENT`, and `UNTESTABLE_IN_CURRENT_ENVIRONMENT` render accurately instead of `Unknown`.
+
+## PolyTrack Poki Settings/Race Follow-Up Active - 2026-06-25
+
+- Browser maintenance thread `019ef9ba-1477-7662-b7a3-c5da570cdb77` cleaned up after the completed Dungeons pass before this handoff:
+  - inspected 3 Chrome page targets;
+  - closed completed Dungeons direct-build and duplicate dashboard targets;
+  - preserved 0 targets;
+  - left 0 remaining page targets;
+  - did not touch files or the local HTTP server.
+- Orchestrator handed PolyTrack Poki Follow-up 3 to canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Allowed tester inputs:
+  - URL: `https://poki.com/en/g/polytrack`
+  - manual: `external-qa/polytrack-poki/README.md`
+  - evidence target: `evidence/external/polytrack-poki-settings-race-followup-1/`
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Reason:
+  - prior PolyTrack Poki retry 2 was `PASS_WITH_FINDINGS`;
+  - remaining nonblocking gaps were provider locale redirect, partial settings/audio/graphics/persistence coverage, and unclear pause-state evidence.
+- Focus:
+  - reach playable PolyTrack through visible provider/game controls;
+  - confirm no duplicate-instance blocker after cleanup;
+  - test visible settings/options more deeply, including language/provider-shell behavior, units, camera/cockpit, ghost/checkpoint/reset hints, apply/cancel/reset/defaults, graphics/audio/fullscreen where visible;
+  - test one non-destructive settings change and safe reload persistence where practical;
+  - inspect `Music: On` or equivalent without intentionally playing loud audio;
+  - verify pause/menu clarity during a started run if safe;
+  - drive a short continuous segment with timer/HUD/route readability and reset/restart regression;
+  - classify provider/environment blockers separately from game QA findings.
