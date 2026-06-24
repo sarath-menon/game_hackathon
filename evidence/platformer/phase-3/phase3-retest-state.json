@@ -1,18 +1,11 @@
 {
-  "text": "Glow core collected\nHealth: 2\nCheckpoint: start\nCores: 1/8\n171 m",
+  "text": "Reach the exit beacon\nHealth: 3\nCheckpoint: start\nCores: 0/8\n301 m",
   "states": [
     "initial: Reach the exit beacon | Health: 3 | Checkpoint: start | Cores: 0/8 | 301 m | Skyline Stepper |  | Run across the rooftop route, collect glow cores, avoid red vent hazards, and touch the green exit beacon at the far end. |  | Move | A D or \u2190 \u2192 | Jump | W \u2191 or Space | Start | Enter | Start Run",
     "started: Reach the exit beacon | Health: 3 | Checkpoint: start | Cores: 0/8 | 301 m",
-    "failure-hit1: Damaged - respawned | Health: 2 | Checkpoint: start | Cores: 0/8 | 312 m",
-    "failure-hit2: Damaged - respawned | Health: 2 | Checkpoint: start | Cores: 0/8 | 312 m",
-    "failure-hit3: Damaged - respawned | Health: 2 | Checkpoint: start | Cores: 0/8 | 312 m",
-    "after failure restart: Damaged - respawned | Health: 2 | Checkpoint: start | Cores: 0/8 | 312 m",
-    "complete-i10: Damaged - respawned | Health: 2 | Checkpoint: start | Cores: 0/8 | 286 m",
-    "complete-i20: Glow core collected | Health: 2 | Checkpoint: start | Cores: 1/8 | 201 m",
-    "complete-i30: Glow core collected | Health: 2 | Checkpoint: start | Cores: 1/8 | 171 m",
-    "complete-i40: Glow core collected | Health: 2 | Checkpoint: start | Cores: 1/8 | 171 m",
-    "complete: Glow core collected | Health: 2 | Checkpoint: start | Cores: 1/8 | 171 m",
-    "after completion restart: Glow core collected | Health: 2 | Checkpoint: start | Cores: 1/8 | 171 m"
+    "left-hit1: Damaged - respawned | Health: 1 | Checkpoint: start | Cores: 0/8 | 301 m",
+    "left-hit2: Run ended | Health: 0 | Checkpoint: start | Cores: 0/8 | 308 m | Run Ended |  | Health reached 0 after collecting 0/8 glow cores. |  | Run Again",
+    "after failure restart: Reach the exit beacon | Health: 3 | Checkpoint: start | Cores: 0/8 | 301 m"
   ],
   "errors": []
 }
