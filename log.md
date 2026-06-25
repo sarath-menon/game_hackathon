@@ -2587,3 +2587,30 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - when initial placement appears inert, look for hover/outline target states before declaring failure;
   - for icon-only settings/help controls, try a small set of normal activation paths, then classify discoverability instead of over-probing.
 - Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` should mark this follow-up `PASS_WITH_FINDINGS`, preserve the prior Townscaper baseline pass, and surface the new evidence links.
+
+## Kart Driving Assists Upgrade And Cookie Clicker Follow-Up 3 Active - 2026-06-25
+
+- Next Track 1 local improvement selected: Arcade Kart Racer, Driving Assists And Control Accessibility Upgrade.
+- Kart builder thread `019ef96d-c407-7be3-9934-6595866643ee` was handed a build-only goal.
+- Builder scope:
+  - edit only `games/kart-racer/index.html` and `games/kart-racer/README.md`;
+  - add materially testable assist/control/accessibility settings such as steering assist, auto-accelerate, brake/recovery assist, off-track recovery help, route/readability cues, camera/control aids, reduced effects, reset-to-track behavior, or control-help visibility;
+  - preserve CP1 -> CP2 -> CP3 -> finish route, drift/boost, restart, completion, minimap, audio-off defaults, Reset Defaults, and approved orientation/readability behavior;
+  - report completion to the orchestrator without acceptance testing or committing.
+- No Kart tester handoff exists yet; canonical tester waits until the builder reports complete and the orchestrator sends URL/manual/evidence paths.
+
+- Next Track 2 external QA pass selected: Cookie Clicker, Accessibility, Narrow-Viewport, And Settings Persistence Follow-Up 3.
+- Canonical tester thread `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` was handed:
+  - provider URL: `https://orteil.dashnet.org/cookieclicker/`;
+  - manual: `external-qa/cookie-clicker/README.md`;
+  - evidence target: `evidence/external/cookie-clicker-accessibility-narrow-followup-3/`.
+- Tester focus:
+  - direct-provider playability classification;
+  - basic click/purchase economy loop;
+  - deeper Options/Settings coverage, including save/export/import affordances, volume/audio, visual/performance toggles, warning toggles, screen-reader/accessibility mode if visible, language/settings persistence, and wipe/reset boundary checks;
+  - safe manual-save reload persistence;
+  - narrow/mobile-like viewport attempt, with any device-metrics or viewport harness limitation classified as `BLOCKED_ENVIRONMENT` for that sub-area rather than whole-game `FAIL`;
+  - accessibility/usability and performance notes;
+  - smooth continuous gameplay evidence in the single shared Chrome/browser-harness window.
+- Verdict taxonomy remains `PASS_WITH_FINDINGS`, `FAIL`, `BLOCKED_PROVIDER`, or `BLOCKED_ENVIRONMENT`; provider/setup/storage/viewport/harness blockers must not be treated as final game failure.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` was asked to surface both active items in the existing panels while preserving prior Kart settings-depth retest 2 and Cookie Clicker Follow-up Pass 2 evidence.
