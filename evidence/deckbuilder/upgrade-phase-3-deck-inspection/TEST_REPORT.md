@@ -28,6 +28,9 @@ Settings regression checks passed: corrected Reset Defaults restored audio off/v
 - Severity: None
 - Status: Closed
 - Evidence: `15-after-correct-reset-defaults.png`, `16-after-correct-close-settings.png`, `18-inspection-open-top.png`, `22-inspection-after-strike.png`, `35-reward-inspect-current-deck.png`, `39-encounter2-inspection-after-reward.png`, `41-after-new-run-restart.png`
+- Evidence clip: `gameplay-recording.mp4 @ 00:03-00:20`
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording segment shows corrected settings reset/close behavior, deck inspection before and after card play, reward-state inspection, encounter 2 reward persistence, and New Run restart.
 - Expected: Deck inspection, settings close/reset, reward update, and restart all work through visible controls.
 - Actual: Behavior matched the manual and assigned QA scope.
 
@@ -36,6 +39,9 @@ Settings regression checks passed: corrected Reset Defaults restored audio off/v
 - Severity: Low
 - Status: Accepted coverage limitation
 - Evidence: All clean screenshots from the shared `782 x 859` viewport
+- Evidence clip: `gameplay-recording.mp4 @ 00:00-00:20`
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The full recording shows the pass conducted in the shared narrow-ish viewport, with no separate mobile-emulation evidence included.
 - Expected: Include responsive/narrow coverage if practical without destabilizing the run.
 - Actual: The pass used a relatively narrow shared Chrome viewport and the UI remained readable. Separate mobile emulation was not attempted because the shared-window harness was already sufficient for the assigned pass and avoiding target instability was prioritized.
 

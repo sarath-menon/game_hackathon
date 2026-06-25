@@ -2961,3 +2961,13 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - overall `NEEDS_VIDEO_EVIDENCE` count dropped from 37 to 34;
   - overall `OK` count increased from 2 to 5.
 - Evidence references use `gameplay-recording.mp4 @ 00:00-00:02` and cite the visible opening start modal/dimmed combat HUD evidence.
+
+## Finding-Level Video Audit Parallelization - 2026-06-25
+
+- The first verified slice stayed with the canonical tester to validate the report-quality standard before wider fan-out.
+- Remaining cleanup is now split into non-overlapping file batches so workers do not edit the same reports:
+  - Deckbuilder continuation: canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+  - External-game reports: evidence cleanup worker `019efd0c-34e2-79d1-897b-a79d8efab1b0`.
+  - Kart reports: evidence cleanup worker `019efd0c-3b5c-7e53-b9de-ae10eedc1c67`.
+  - Platformer reports: evidence cleanup worker `019efd0c-406b-7d22-bfb7-a2fb10928b6b`.
+- All cleanup workers are restricted to existing `TEST_REPORT.md` files and same-folder media, with no browser use and no source inspection.

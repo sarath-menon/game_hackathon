@@ -39,6 +39,9 @@ No blocking console/runtime errors were observed during a separate start, tactic
 - Expected behavior: The start panel should clearly gate the run until Start Run is pressed.
 - Actual behavior: The start panel appears and works, but the dimmed combat HUD and controls remain visible behind the overlay.
 - Evidence: `gameplay-recording.mp4`, initial seconds.
+- Evidence clip: `gameplay-recording.mp4 @ 00:00-00:02`
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The opening recording segment shows the Ash Circuit start modal with the dimmed combat HUD and controls visible behind it.
 - Impact: Does not block the upgrade. Start Run is clear and functional.
 
 ## State/Action Clarity Assessment

@@ -39,6 +39,9 @@ Blocking issue:
 - Severity: High
 - Status: Open
 - Evidence: `36-turn3-focus-fractured-previews.png`, `37-turn3-after-strike-fractured-cleared.png`, `38-turn3-after-heavy-spark-focus-only.png`, `41-turn4-focus-only-preview-bug.png`, `42-turn4-hand-preview-visible.png`, `43-after-drive-plate-reward-screen.png`
+- Evidence clip: `gameplay-recording.mp4 @ 00:23-00:29`
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The final recording segment shows Focus active after Fractured clears, the incorrect Drive Plate/Strike preview math, and the reward screen after Drive Plate resolves.
 
 Repro steps:
 

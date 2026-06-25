@@ -29,6 +29,9 @@ One low-severity usability issue remains: the settings panel can open scrolled t
 - Expected behavior: Settings should open with the title and first setting visible, or otherwise make the scroll position obvious without hiding the initial control.
 - Actual behavior: The panel can open near the bottom; on desktop the Animation speed select is partially above the viewport, and on narrow viewport several upper settings can be above the visible panel until scrolling.
 - Evidence: `26-scroll-before-wheel.png`, `27-scroll-after-wheel-up.png`, `31-narrow-after-wheel-down.png`
+- Evidence clip: `gameplay-recording.mp4 @ 00:01-00:08`
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording segment shows the Settings panel at different scroll positions where the top controls are not immediately visible until scrolling exposes them.
 
 ## Settings QA Checklist
 
