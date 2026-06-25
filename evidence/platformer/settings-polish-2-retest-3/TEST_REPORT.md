@@ -25,6 +25,9 @@ This is classified as a game `FAIL`, not `BLOCKED_ENVIRONMENT`, because the shar
 
 ### HIGH - Air Control and Damage Profile variants still do not change through normal visible controls
 
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:02
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recorded Settings sequence shows the Air Control and Damage Profile rows before and after normal dropdown/arrow-region attempts, with Air Control still `Steady`, Damage Profile still `Standard`, and no successful visible state change.
 - Status: Open
 - Evidence:
   - `01-url-verified-title.png` - verified clean Platformer target
@@ -46,6 +49,9 @@ This is classified as a game `FAIL`, not `BLOCKED_ENVIRONMENT`, because the shar
 
 ### MEDIUM - Manual documents visible option buttons that are not visible in the tested Settings panel
 
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:01
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The top Settings view in the recording shows the Air Control and Damage Profile rows with dropdown-style controls only, and no separate visible option-button block for the documented variants.
 - Status: Open
 - Evidence: `02-title-settings-open.png`, `03-before-air-control-interaction.png`
 - Repro steps:

@@ -41,6 +41,9 @@ Blocked areas:
 
 ### Blocker - Tester/Harness/Thread Interruption Prevented Reliable QA
 
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:06
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The full recording remains on the title screen and never reaches settings-depth or gameplay-regression coverage, proving the run ended before reliable QA could be completed.
 - Severity: Blocker
 - Status: Open
 - Repro steps: Begin the assigned shared-window browser-harness retest and load the game URL.

@@ -25,6 +25,9 @@ Per the handoff classification, missing top-level variant buttons while the acti
 
 ### HIGH - Required Player Variant Controls block and six variant buttons are missing
 
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:03
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording includes the top Settings view and the post-reload top/lower Settings views; none show the expected full-width `Player Variant Controls` block or six Air/Damage option buttons.
 - Status: Open
 - Evidence:
   - `01-url-verified-title.png` - clean verified Platformer target
@@ -42,6 +45,9 @@ Per the handoff classification, missing top-level variant buttons while the acti
 
 ### MEDIUM - Settings reopens scrolled near the bottom after reload/title flow
 
+- Evidence clip: gameplay-recording.mp4 @ 00:01-00:03
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: After the title/reload sequence, the recording shows Settings opening in the lower settings area before a top-of-panel inspection, demonstrating the inconsistent initial scroll position.
 - Status: Open
 - Evidence:
   - `07-after-title-settings-dom-coord.png`

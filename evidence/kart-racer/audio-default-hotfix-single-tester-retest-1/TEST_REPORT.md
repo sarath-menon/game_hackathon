@@ -29,6 +29,9 @@ The hotfix fails because after explicitly enabling audio, then turning UI sounds
 
 ### HIGH - Reset Defaults can emit generated audio after opt-out
 
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:07
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording shows the visible Settings/audio flow and reset/off state used for the failure; the actual generated-audio event is proven by the same-folder `run-observations.json` probe data referenced below, not by visual frames alone.
 - Status: Open
 - Repro steps:
   1. Clear the localhost game storage for the kart racer origin.

@@ -35,6 +35,9 @@ No open critical or high-priority findings.
 
 ### KART-P1-001: Finish-complete state not demonstrated
 
+- Evidence clip: gameplay-recording.mp4 @ 00:03-00:12
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording shows the retest driving into the yellow finish area and remaining on the completed finish state, proving the prior finish-complete blocker was resolved.
 - Severity: High
 - Status: Resolved
 - Retest result: PASS

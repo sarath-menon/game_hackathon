@@ -52,6 +52,9 @@ This pass is blocked by environment/harness reliability, not by a confirmed Skyl
 
 ### Critical - Shared Browser-Harness Target Contamination Prevented Completion
 
+- Evidence clip: gameplay-recording.mp4 @ 00:08-00:11
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording leaves the Platformer settings surface and shows the dashboard/evidence report page, matching the reported target contamination and proving the captured sequence could no longer support Platformer gameplay QA.
 - Status: Blocking
 - Repro steps: Continue test after settings interaction attempts and capture gameplay screenshots.
 - Expected behavior: The shared-window harness stays on the Platformer game tab and records only assigned-game evidence.
@@ -61,6 +64,9 @@ This pass is blocked by environment/harness reliability, not by a confirmed Skyl
 
 ### Medium - Settings Variant Interaction Could Not Be Reliably Verified Before Blocker
 
+- Evidence clip: gameplay-recording.mp4 @ 00:03-00:07
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The clean Platformer settings segment shows Air Control and Damage Profile visible through the interaction-attempt sequence while their displayed values remain on the defaults before the later contaminated target segment.
 - Status: Inconclusive
 - Repro steps: Attempt to change Air Control and Damage Profile from visible dropdowns using coordinate click and keyboard activation.
 - Expected behavior: Selected values visibly change to documented variants such as Snappy, Floaty, Gentle, or Practice.

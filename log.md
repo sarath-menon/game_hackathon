@@ -2971,3 +2971,16 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - Kart reports: evidence cleanup worker `019efd0c-3b5c-7e53-b9de-ae10eedc1c67`.
   - Platformer reports: evidence cleanup worker `019efd0c-406b-7d22-bfb7-a2fb10928b6b`.
 - All cleanup workers are restricted to existing `TEST_REPORT.md` files and same-folder media, with no browser use and no source inspection.
+
+## Finding-Level Video Audit Wider Fan-Out - 2026-06-25
+
+- External evidence cleanup was split further after the user asked why the work was not parallelized more.
+- The original external worker `019efd0c-34e2-79d1-897b-a79d8efab1b0` was narrowed to Cookie Clicker and Dungeons reports only.
+- New non-overlapping external subworkers:
+  - OvO reports: `019efd0f-5c68-7332-829e-fe9d94c1bf1b`.
+  - PolyTrack reports: `019efd0f-6223-7290-988c-e5000a0ccaa7`.
+  - Townscaper reports: `019efd0f-683d-76f3-bf11-45e8a83187e0`.
+- Kart worker completed its assigned report metadata pass; local audit shows all assigned Kart rows as `OK`.
+- Platformer worker completed its assigned report metadata pass with five `OK` rows and two honest remaining `Needs Evidence Clip` items where the existing MP4 does not prove the blocker/limitation:
+  - `evidence/platformer/settings-polish-2-retest-1/TEST_REPORT.md`: URL drift was terminal-only, with no post-drift video clip.
+  - `evidence/platformer/settings-polish-2-retest-6/TEST_REPORT.md`: narrow viewport helper failure was not captured in the MP4.

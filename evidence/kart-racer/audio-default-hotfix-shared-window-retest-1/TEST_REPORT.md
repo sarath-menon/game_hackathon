@@ -35,6 +35,9 @@ Because the same run later switched to another game tab, these observations must
 
 ### ENV-001 - Shared-Window Contention Contaminated Test Surface
 
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:15
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording starts on the Kart title/settings/race surface, then later shows a different game/settings surface, proving the attempt's captured test surface was contaminated and cannot approve Kart.
 - Severity: High
 - Status: Open for this attempt
 - Classification: environment / test harness contention

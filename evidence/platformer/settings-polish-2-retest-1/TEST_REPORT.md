@@ -25,6 +25,9 @@ Per handoff instructions, testing stopped immediately and no contaminated eviden
 
 ### Critical - Shared Browser-Harness Target Drift Blocked Completion
 
+- Evidence clip: Needs Evidence Clip
+- Evidence status: Needs Evidence Clip
+- Why this evidence proves the finding: The same-folder MP4 contains only the pre-drift clean Settings screenshots; the report states the blocking URL drift was captured by terminal URL check with no post-drift screenshots, so the recording itself does not prove this blocker.
 - Status: Blocking
 - Repro steps: Open fresh Platformer tab, verify URL, capture title/settings evidence, then perform the next required URL check before continuing variant-control testing.
 - Expected behavior: Active browser-harness target remains `http://127.0.0.1:8765/games/platformer/index.html`.
@@ -34,6 +37,9 @@ Per handoff instructions, testing stopped immediately and no contaminated eviden
 
 ### Medium - Variant Controls Remained Inconclusive Before Environment Blocker
 
+- Evidence clip: gameplay-recording.mp4 @ 00:02-00:07
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording shows the clean Settings panel during repeated variant-control attempts and lower settings navigation, with the visible controls still not confirming successful changed values before the reported environment blocker stopped the pass.
 - Status: Inconclusive
 - Repro steps: With active URL verified earlier in the segment, focus visible selects and attempt to change Air Control, Damage Profile, Route Cue Style, Objective Labels, and Background Detail.
 - Expected behavior: Values visibly change to documented variants.

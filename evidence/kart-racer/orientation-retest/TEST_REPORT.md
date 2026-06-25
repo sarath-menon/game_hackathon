@@ -45,6 +45,9 @@ No blocking findings.
 
 ### Informational - WASD harness path was less reliable than Arrow controls
 
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:02
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The clip captures the successful Arrow-control route orientation and checkpoint progression used as the passing comparison; it does not show the less reliable WASD probes, which are documented as harness-only supporting probes outside the main MP4.
 - Severity: Low
 - Status: Not blocking
 - Classification: control/input harness limitation

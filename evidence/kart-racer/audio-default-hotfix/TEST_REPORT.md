@@ -32,6 +32,9 @@ These observations are not an approval verdict and must be retested under the sh
 
 ### OPS-001 - Test Environment Superseded
 
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:08
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The partial recording shows only the superseded isolated-profile hotfix flow before the orchestrator stop, supporting the operational finding that this run cannot be used as shared-window approval evidence.
 - Severity: High
 - Status: Open / blocks verdict
 - Repro steps: Start hotfix QA in an isolated Chrome profile, then receive the shared-window-only operational correction.

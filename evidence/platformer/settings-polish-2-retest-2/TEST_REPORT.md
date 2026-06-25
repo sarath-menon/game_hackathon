@@ -25,6 +25,9 @@ This is not classified as `BLOCKED_ENVIRONMENT`: the target URL was verified bef
 
 ### HIGH - Documented settings variant dropdowns do not change via normal player input
 
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:02
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording shows the Settings panel after native selection attempts with Air Control still reading `Steady` and Damage Profile still reading `Standard`, matching the blocked variant-change path.
 - Status: Open
 - Evidence:
   - `01-url-verified-title.png` - clean Platformer URL/title-state evidence
@@ -46,6 +49,9 @@ This is not classified as `BLOCKED_ENVIRONMENT`: the target URL was verified bef
 
 ### MEDIUM - Initial Settings open did not present the top controls until the panel was moved to top
 
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:01
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The first recorded frame is scrolled below the top Settings controls, followed by the corrected top-of-panel view, showing that a repositioning step was needed before the first controls were fully visible.
 - Status: Open / secondary
 - Evidence:
   - `02-title-settings-open.png`

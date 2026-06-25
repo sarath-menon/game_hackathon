@@ -27,6 +27,9 @@ No open game findings.
 
 ### Coverage limitation - narrow viewport not captured
 
+- Evidence clip: Needs Evidence Clip
+- Evidence status: Needs Evidence Clip
+- Why this evidence proves the finding: The recording contains only desktop Settings and gameplay segments; the report says the narrow viewport attempt failed before any narrow screenshot was captured, so the existing MP4 cannot prove the CDP/helper error itself.
 - Severity: Low
 - Status: Environment-limited sub-scope
 - Evidence: browser-harness CDP emulation attempt returned a helper error before any narrow screenshot was captured.
@@ -36,6 +39,9 @@ No open game findings.
 
 ### Coverage limitation - route completion and failure path were smoke-limited
 
+- Evidence clip: gameplay-recording.mp4 @ 00:05-00:06
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording shows only the start-area route and post-settings resume smoke state, not a completed lower-deck route, checkpoint, exit, health-zero failure, or restart path.
 - Severity: Low
 - Status: Not blocking
 - Evidence: `08-run-started-clean.png`, `10-after-escape-close-run-settings.png`, `11-after-move-input-post-escape-close.png`, `13-after-button-close-run-settings.png`, `14-after-move-input-post-button-close.png`

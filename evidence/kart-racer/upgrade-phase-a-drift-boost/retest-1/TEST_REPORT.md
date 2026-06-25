@@ -51,6 +51,9 @@ No open blocking findings.
 
 ### Informational - Drift stages can advance quickly
 
+- Evidence clip: gameplay-recording.mp4 @ 00:01-00:03
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The drift segment shows stage/boost feedback appearing over a short interval while the route remains playable, supporting the note that the stages are visible but advance quickly.
 - Severity: Low
 - Status: Accepted / non-blocking
 - Classification: usability observation

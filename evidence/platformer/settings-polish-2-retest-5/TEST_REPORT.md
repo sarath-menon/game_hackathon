@@ -25,6 +25,9 @@ The pass still fails because the in-run settings close/resume path leaves the ga
 
 ### HIGH - Closing Settings during a run leaves the game paused with no panel visible
 
+- Evidence clip: gameplay-recording.mp4 @ 00:07-00:12
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The run segment shows the HUD reading `Settings paused`, then a no-panel gameplay view that still remains in the paused HUD state after follow-up movement/jump input, proving the in-run close path did not resume normal play.
 - Status: Open
 - Evidence:
   - `33-in-run-settings-closed.png` - Settings panel still visible during the attempted in-run close sequence
@@ -42,6 +45,9 @@ The pass still fails because the in-run settings close/resume path leaves the ga
 
 ### LOW - Manual and current cache-busted UI now match for variant controls
 
+- Evidence clip: gameplay-recording.mp4 @ 00:01-00:04
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording shows the cache-busted Settings UI with the `Player Variant Controls` block, Snappy/Practice selected states, persisted Settings view, and Reset Defaults returning the controls to their default states.
 - Status: Verified fixed / informational
 - Evidence:
   - `02-settings-open-after-cache-busted.png`

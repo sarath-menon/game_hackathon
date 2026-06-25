@@ -43,6 +43,9 @@ No open critical or high-priority findings.
 
 ### KART-P2-001: Checkpoint progression blocks after CP1
 
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:07
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording shows ordered checkpoint progression continuing after CP1 through the final-gate route, proving the prior CP1 progression blocker was resolved in the retest.
 - Severity: High
 - Status: Resolved
 - Retest result: PASS
@@ -50,6 +53,9 @@ No open critical or high-priority findings.
 
 ### KART-P2-002: Scored lap completion and final-time screen remain unreachable
 
+- Evidence clip: gameplay-recording.mp4 @ 00:04-00:07
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The end of the recording shows the finish route state and completion outcome after ordered checkpoints, proving scored lap completion was reachable in the retest.
 - Severity: High
 - Status: Resolved
 - Retest result: PASS
@@ -58,6 +64,9 @@ No open critical or high-priority findings.
 
 ### KART-P2-003: Lap counter starts at 1/1 before race completion
 
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:01
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The opening recorded race state shows the HUD at the start of the run before completion, supporting the resolved lap-counter check alongside the referenced start screenshot.
 - Severity: Medium
 - Status: Resolved
 - Retest result: PASS

@@ -25,6 +25,9 @@ No blocking runtime, browser, or harness errors were observed in the captured ev
 
 ### Low - Race Regression Coverage Was Smoke-Level Only
 
+- Evidence clip: gameplay-recording.mp4 @ 00:15-00:18
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The final recording segment shows start/driving, in-race settings, and restart smoke coverage, while no full-lap completion segment is present, proving the limitation is coverage scope rather than an observed game failure.
 - Status: Open as coverage note, not a game failure
 - Repro steps: Start race, drive along visible route, hold/release drift input, open/close in-race Settings, restart.
 - Expected behavior: For a settings-depth retest, confirm the approved race path is not obviously broken while focusing on settings behavior.

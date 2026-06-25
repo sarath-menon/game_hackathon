@@ -46,6 +46,9 @@ The upgrade does not pass because the new drift system does not match the README
 
 ### P1 - Drift charge stages beyond Early are not observable
 
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:04
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The drift attempt segment shows only early/brief boost or idle/cut feedback in the main recording, with no visible Ready or Strong stage progression before the run moves on.
 - Severity: High
 - Status: Open
 - Classification: mechanical / feedback
@@ -56,6 +59,9 @@ The upgrade does not pass because the new drift system does not match the README
 
 ### P1 - Drift release boost is not clearly visible or recoverable
 
+- Evidence clip: gameplay-recording.mp4 @ 00:01-00:04
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The release-attempt portion does not show a clear recoverable speed surge after drift charge, matching the finding that the documented boost was not readable from normal black-box play.
 - Severity: High
 - Status: Open
 - Classification: mechanical / feedback
@@ -66,6 +72,9 @@ The upgrade does not pass because the new drift system does not match the README
 
 ### P2 - Drift usability requires repeated probing
 
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:04
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The clip shows the tester repeatedly relying on short drift attempts without stable staged feedback, demonstrating why the feature required probing beyond the visible/manual guidance.
 - Severity: Medium
 - Status: Open
 - Classification: readability/usability

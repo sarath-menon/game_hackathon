@@ -34,6 +34,9 @@ No critical or high-severity findings.
 
 ### Informational - Browser harness server availability during setup
 
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:03
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording only starts after the local server was restored and shows hosted gameplay loading and running, which proves the setup issue was resolved; the earlier connection-refused state is not present in the MP4.
 - Severity: Low
 - Status: Resolved during test setup
 - Repro steps: Attempted to load the hosted URL after the local HTTP server process had exited.
