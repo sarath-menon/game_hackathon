@@ -99,7 +99,7 @@ A popular external browser game must not receive final `FAIL` solely because one
   - Current active suite lanes: local settings-panel quality and external browser-game QA methodology.
   - Arcade Kart Racer Settings Panel Phase 1 was superseded by the audio-default hotfix and must be retested through the canonical tester before approval.
   - Arcade Kart Racer settings-depth retest 2 is closed as `PASS` at `evidence/kart-racer/settings-depth-retest-2/`.
-  - Arcade Kart Racer Driving Assists And Control Accessibility Upgrade is currently active with builder `019ef96d-c407-7be3-9934-6595866643ee`; no tester handoff or evidence exists yet.
+  - Arcade Kart Racer Driving Assists And Control Accessibility Upgrade is closed as `PASS` after Retest 1 at `evidence/kart-racer/driving-assists-accessibility-retest-1/`; the earlier attempt at `evidence/kart-racer/driving-assists-accessibility/` remains historical `BLOCKED_ENVIRONMENT`, not a game failure.
   - Side-Scrolling Platformer Settings Panel Phase 1 is closed as `PASS`.
   - Turn-Based Deckbuilder Settings Panel Phase 1 is closed as `PASS`; Deckbuilder Settings Panel Polish 1 is also closed as `PASS`.
   - Cross-game audio-default hotfix:
@@ -145,6 +145,7 @@ A popular external browser game must not receive final `FAIL` solely because one
     - Dungeons & Degenerate Gamblers Direct Official Build Follow-up 2 is `PASS_WITH_FINDINGS` at `evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/`: the direct build remained playable, HIT/STAND turn flow and visible HP/card/score/chip deltas were verified, pause menu/restart-boundary evidence was captured, and no provider/environment blocker occurred. Remaining nonblocking limitations: illegal/unavailable action feedback remains unproven because attempted post-resolution actions continued valid play, and restart confirmation/cancel copy did not appear after one safe boundary click.
     - PolyTrack Poki Follow-up 3 is `PASS_WITH_FINDINGS` at `evidence/external/polytrack-poki-settings-race-followup-1/`: provider reached playable PolyTrack in the shared Chrome/browser-harness surface, no duplicate-instance blocker occurred, Units changed to Imperial and persisted after reload, Music toggled visibly Off, Summer 1 started, short keyboard driving advanced timer/HUD while route remained readable, and track detail Play flow produced a clean restart. Remaining nonblocking findings: `/en/` provider URL redirects to Indonesian shell, pause state is unclear because Escape returns to track list/menu, visible graphics/audio/fullscreen/default coverage remains partial, and the `T` start-over key did not conclusively reset timer in the captured frame.
     - Deckbuilder Upgrade Phase 2: Enemy Intent And Status Explainability is closed as `PASS` after Retest 1 at `evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1/`. The first pass remains preserved as `FAIL` at `evidence/deckbuilder/upgrade-phase-2-intent-status/`; the builder fixed calculated Focus/Fractured damage display for attack/mixed cards, and the canonical tester verified the blocker plus preserved explainability gates.
+    - Side-Scrolling Platformer Upgrade Phase B: Camera And Route Readability Pass is currently `FAIL / FIX ACTIVE` at `evidence/platformer/upgrade-phase-b-camera-route-readability/`: the canonical tester verified that the lower safe route stalls near the mid-checkpoint approach under normal documented movement/jump input, blocking the route/readability gate. The orchestrator routed a narrow fix to the Platformer builder `019ef96e-1dd7-7f13-91d4-855909736edc`; this phase is not approved until a retest returns `PASS`.
   - The dashboard must reflect the live loop as it changes, including selected-upgrade, builder-active, builder-complete, tester-handoff, tester-active, FAIL, fix-active, retest-pending, retest-active, PASS closure, and next-upgrade selection states.
 - QA upgrade artifacts:
   - `qa-upgrade/QA_STANDARDS_PROPOSAL.md`
@@ -237,6 +238,10 @@ The dashboard should make the lockstep process auditable. In addition to phase s
 - current status: fixed, still open, retesting, or superseded
 - related phase report path
 - related evidence/video state when present
+
+The dashboard must present QA reports through one unified `Reports` area with exactly two top-level lanes: `Track 1: Local Game QA Reports` and `Track 2: External Browser QA Reports`. Individual game drawers/pop-ups may still show details, timelines, Markdown reports, and evidence, but they should be reached from this unified section rather than appearing as multiple competing final-report panels.
+
+Each report row/card should show the latest status, latest phase or provider path, `TEST_REPORT.md`, `expected-flow.md`, main recording, and a finding-level evidence summary. Finding rows should display severity/status, short summary, source report, fix/retest state, and either a dedicated clip path, a main-recording timestamp range, a screenshot-only marker, or `Needs Evidence Clip`.
 
 ## Communication Rules
 
