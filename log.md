@@ -2754,3 +2754,64 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - driving-assist variant mechanical A/B comparison remains partial beyond visible setting/readability coverage.
 - The earlier `evidence/kart-racer/driving-assists-accessibility/` attempt remains historical `BLOCKED_ENVIRONMENT`, not a game `FAIL`.
 - Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` should mark the Kart Driving Assists And Control Accessibility Upgrade as `PASS/CLOSED`, surface Retest 1 report/flow/recording links, preserve Attempt 1 as historical `BLOCKED_ENVIRONMENT`, and keep the two coverage limitations visible as follow-ups rather than blockers.
+
+## Platformer Upgrade Phase B Camera And Route Readability Builder Active - 2026-06-25
+
+- Next Track 1 local improvement selected after Kart Driving Assists Retest 1 closed `PASS`.
+- Game: Side-Scrolling Platformer / Skyline Stepper.
+- Builder thread: `019ef96e-1dd7-7f13-91d4-855909736edc`.
+- Upgrade: Phase B - Camera And Route Readability Pass.
+- Builder scope:
+  - committed-direction camera lookahead so rightward movement shows more upcoming route before jump/hazard commitment;
+  - small horizontal camera dead zone/window to reduce jitter during fine positioning;
+  - stable vertical camera during ordinary jumps, with route-decision framing for higher platforms when relevant;
+  - stronger safe-versus-optional route language using original rails, chevrons/arrows, non-truncated labels, and clearer approach framing;
+  - stronger exit beacon visibility before final approach;
+  - continuous lower safe-route readability from start to exit.
+- Preservation requirements:
+  - keep prior Platformer Phase 1-3, Movement Feel Upgrade A, Settings Panel Phase 1, Settings Polish 2 Retest 6, and audio-default hotfix behavior intact;
+  - preserve Player Variant Controls, settings persistence/reset, audio off/default/reset, and in-run Settings close/resume.
+- No tester handoff yet. This build is not approved until the canonical cross-game tester receives the hosted URL/manual/evidence paths and writes a passing report with required evidence.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` should show Platformer Camera And Route Readability as the active Track 1 builder lane while preserving closed Kart Retest 1 and Cookie Follow-Up 3 states.
+
+## Platformer Upgrade Phase B Build Complete / Tester Handoff Active - 2026-06-25
+
+- Platformer builder `019ef96e-1dd7-7f13-91d4-855909736edc` completed Upgrade Phase B - Camera And Route Readability Pass.
+- Changed files:
+  - `games/platformer/index.html`
+  - `games/platformer/README.md`
+- Builder-reported changes:
+  - committed-direction camera lookahead;
+  - horizontal camera dead zone;
+  - stable vertical camera behavior;
+  - green safe-route rail, forward chevrons, amber optional-route rails, danger approach marks, boxed labels, and stronger exit approach/beacon treatment;
+  - README wording for Camera Smoothing, Camera Lookahead, and Route Marker Intensity.
+- Builder self-checks:
+  - game and README returned `200 OK`;
+  - embedded script parsed;
+  - runtime smoke moved through early route and checked desktop/narrow screenshots;
+  - in-run Settings open/close still resumed gameplay;
+  - lower safe route reached `Level complete` with `1/8` cores and `3` health.
+- Canonical tester handoff is active for evidence target:
+  - `evidence/platformer/upgrade-phase-b-camera-route-readability/`
+- This build is not approved until the canonical tester writes `PASS` with `TEST_REPORT.md`, `expected-flow.md`, `gameplay-recording.mp4`, and finding-level evidence references.
+
+## Finding-Level Evidence Clips Dashboard Goal Active - 2026-06-25
+
+- New cross-suite dashboard/QA presentation goal selected by the user.
+- Main orchestrator goal:
+  - keep the tester, dashboard, builder handoffs, `AGENTS.md`, and `log.md` aligned around finding-level evidence traceability;
+  - do not treat a generic pass recording as sufficient when findings are listed without clip/timestamp/screenshot evidence;
+  - route future missing evidence references back to the tester as report/evidence correction unless the missing evidence hides a real game defect;
+  - keep dashboard state current so each game pop-up shows `finding -> evidence clip/timestamp -> fix/retest status`.
+- Goal:
+  - every game evidence pop-up should include a `Findings Evidence` view;
+  - each QA finding should show severity/status, short finding summary, source report link, fix/retest state when known, and either a matching evidence clip/timestamp or `Needs Evidence Clip`;
+  - existing `gameplay-recording.mp4` files may be used immediately with displayed timestamp ranges when dedicated per-finding clips do not exist;
+  - future tester passes should create or reference per-finding evidence clips/timestamps as part of the report, rather than relying only on one generic gameplay recording.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` should implement this inside each game's existing evidence drawer/pop-up, not as a separate page or unrelated panel.
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` should adopt the future reporting requirement:
+  - every severity-rated finding must include an `Evidence clip` field with a clip path or main-recording timestamp;
+  - if a finding cannot yet be visually proven, mark `Needs Evidence Clip` and explain why;
+  - for local-game retests, fixed findings should reference both the original evidence and the retest evidence when available.
+- Main orchestrator will treat missing clips as a dashboard/report quality gap, not automatically as a game failure, unless the missing evidence prevents approval of a required acceptance gate.

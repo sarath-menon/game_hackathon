@@ -202,6 +202,10 @@ Shared-window browser-harness tests must be serialized by the orchestrator and r
 
 When testing Google AI Studio hosted games, first open the provided AI Studio app URL with browser-harness and inspect whether the actual playable app is embedded in a preview iframe. If an iframe points to a hosted preview origin such as a `run.app` URL, open that preview URL directly in a new browser-harness tab and test the game there as the black-box surface. Do not assume the lobby, room, create/join, start, or multiplayer flow is reusable across apps; those controls are app-specific and must be discovered from the visible UI and any user-provided manual. Reusable checks are only: confirm the AI Studio page or direct preview loads without an auth wall, identify the real playable surface, focus the game canvas or interactive area, use visible controls/documented keys through browser-harness, and stop for user help if Google login, permissions, or unavailable preview errors block access.
 
+### Tunneling And Ngrok Hosted Games
+
+When testing a user-provided tunneled game URL such as `ngrok-free.dev`, first perform a lightweight reachability check before browser QA. Use the tunnel URL exactly as provided, follow redirects, and include `ngrok-skip-browser-warning: true` for HTTP probes and browser-harness navigation when supported so the ngrok interstitial does not masquerade as the game. Confirm that the response is the playable game surface or a plausible game HTML page, not a tunnel warning, auth wall, expired tunnel, 404/502, or provider error. If the tunnel serves the game, test it like any other external hosted game using only the URL, manual/instructions, and evidence paths. If the tunnel is down, expired, blocked by the warning page, or unstable, classify the result as `BLOCKED_PROVIDER` for tunnel/provider access or `BLOCKED_ENVIRONMENT` for local harness/browser limitations; do not mark the game itself as `FAIL` unless the game reaches a playable state and then fails QA criteria.
+
 ### Browser Maintenance Thread
 
 The browser maintenance thread keeps browser-harness and Chrome state from accumulating stale tabs. It reports only to the main orchestrator and must not communicate with builders or testers. It must not modify game files, manuals, protocol docs, dashboard files, or evidence reports unless the orchestrator explicitly asks.
@@ -354,6 +358,11 @@ Each phase report must include:
   - recording method, including capture cadence or FPS
 - Summary
 - Findings with severity, status, repro steps, expected behavior, actual behavior, and evidence
+- Finding-level evidence references:
+  - Every severity-rated finding, coverage limitation, blocker, or `PASS_WITH_FINDINGS` item must include an `Evidence clip` field pointing to either a dedicated clip path or the main `gameplay-recording.mp4` with an approximate timestamp range.
+  - Every such item must include `Evidence status`: `Clip present`, `Main recording segment`, `Screenshot only`, or `Needs Evidence Clip`.
+  - Every such item must include one sentence explaining why the cited evidence proves the finding.
+  - For local-game retests that fix prior findings, cite both the original finding evidence and the retest/fix evidence when available.
 - Readability / route clarity assessment:
   - This section is mandatory and must have an explicit `PASS` or `FAIL`.
   - For spatial games, state whether the camera, labels, minimap, start pose, objective markers, and intended route make the next action visually clear from normal play.
@@ -373,6 +382,7 @@ A phase is approved only when:
 - `gameplay-recording.mp4` exists
 - The recording shows smooth continuous play rather than sparse checkpoint jumps
 - The recording demonstrates the phase's required end state
+- Findings, blockers, and coverage limitations have finding-level evidence clips, timestamps, screenshots, or explicit `Needs Evidence Clip` markers
 - The mandatory readability/orientation or state/action clarity gate says `PASS`
 - No unresolved critical or high-priority findings remain
 - Observed behavior matches the README/manual

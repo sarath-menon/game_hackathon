@@ -28,9 +28,9 @@ Available settings:
 - Air Control: changes how strongly left/right movement responds while airborne. Default: `Steady`.
 - Damage Profile: `Standard` keeps normal health loss, `Gentle` adds longer recovery after damage, and `Practice` respawns after hazards without losing health. Default: `Standard`.
 - Checkpoint Assist: when enabled, respawns start from the mid-level marker even before it is touched. Default: `Off`.
-- Camera Smoothing: changes how quickly the camera follows the player. Default: `12`.
-- Camera Lookahead: changes where the player sits in the camera frame. Default: `42%`.
-- Route Marker Intensity: changes safe-deck and optional-route marker visibility. Default: `100%`.
+- Camera Smoothing: changes how quickly the camera follows the player after the small horizontal dead zone is crossed. Default: `12`.
+- Camera Lookahead: changes the base camera frame; committed movement adds extra lookahead toward the route ahead. Default: `42%`.
+- Route Marker Intensity: changes safe-deck and optional-route marker visibility, including rails, chevrons, and boxed labels. Default: `100%`.
 - Route Cue Style: chooses full lines plus labels, lines only, or labels only. Default: `Full`.
 - High-Contrast Hazards: adds bright outlines and stripe cues to red vents and orange patrol runners. Default: `Off`.
 - Objective Labels: changes EXIT, checkpoint, and route-label size. Default: `Normal`.

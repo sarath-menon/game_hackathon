@@ -686,6 +686,7 @@
       let respawnPoint = { ...startRespawn };
 
       let cameraX = 0;
+      let cameraLookDirection = 1;
       let mode = "title";
       let lastTime = performance.now();
 
@@ -849,6 +850,7 @@
         player.landingTimer = 0;
         player.wasGrounded = false;
         cameraX = 0;
+        cameraLookDirection = 1;
       }
 
       function startGame() {
@@ -1069,7 +1071,19 @@
       }
 
       function updateCamera() {
-        const target = player.x + player.w / 2 - canvas.width * (settings.cameraLookahead / 100);
+        const playerCenter = player.x + player.w / 2;
+        if (Math.abs(player.vx) > 110) cameraLookDirection = Math.sign(player.vx);
+        const baseAnchor = settings.cameraLookahead / 100;
+        const committedOffset = cameraLookDirection > 0 ? -0.08 : 0.08;
+        const anchor = Math.max(0.3, Math.min(0.58, baseAnchor + committedOffset));
+        const deadZone = 56;
+        const relativeX = playerCenter - cameraX;
+        const zoneCenter = canvas.width * anchor;
+        const minRelative = zoneCenter - deadZone;
+        const maxRelative = zoneCenter + deadZone;
+        let target = cameraX;
+        if (relativeX < minRelative) target = playerCenter - minRelative;
+        if (relativeX > maxRelative) target = playerCenter - maxRelative;
         const max = world.width - canvas.width;
         cameraX += (Math.max(0, Math.min(max, target)) - cameraX) * (settings.cameraSmoothing / 100);
       }
@@ -1115,24 +1129,77 @@
         }
       }
 
+      function drawWorldLabel(text, x, y, fill, alpha, labelScale = 1) {
+        if (x < cameraX - 180 || x > cameraX + canvas.width + 180) return;
+        const fontSize = 14 * labelScale;
+        ctx.save();
+        ctx.font = `900 ${fontSize}px Inter, sans-serif`;
+        const paddingX = 10 * labelScale;
+        const paddingY = 6 * labelScale;
+        const width = ctx.measureText(text).width + paddingX * 2;
+        const height = fontSize + paddingY * 2;
+        const minX = cameraX + 18 + width / 2;
+        const maxX = cameraX + canvas.width - 18 - width / 2;
+        const labelX = Math.max(minX, Math.min(maxX, x));
+        ctx.fillStyle = `rgba(15, 23, 31, ${0.72 * alpha})`;
+        ctx.fillRect(labelX - width / 2, y - height + 4, width, height);
+        ctx.strokeStyle = fill.replace("ALPHA", `${0.86 * alpha}`);
+        ctx.lineWidth = 2;
+        ctx.strokeRect(labelX - width / 2, y - height + 4, width, height);
+        ctx.fillStyle = fill.replace("ALPHA", `${alpha}`);
+        ctx.textAlign = "center";
+        ctx.fillText(text, labelX, y);
+        ctx.restore();
+      }
+
+      function drawChevronRun(startX, endX, y, fill, alpha, direction = 1) {
+        const step = 120;
+        ctx.fillStyle = fill.replace("ALPHA", `${alpha}`);
+        for (let x = startX; x < endX; x += step) {
+          ctx.beginPath();
+          if (direction > 0) {
+            ctx.moveTo(x, y - 10);
+            ctx.lineTo(x + 22, y);
+            ctx.lineTo(x, y + 10);
+          } else {
+            ctx.moveTo(x + 22, y - 10);
+            ctx.lineTo(x, y);
+            ctx.lineTo(x + 22, y + 10);
+          }
+          ctx.closePath();
+          ctx.fill();
+        }
+      }
+
       function drawRouteMarkers() {
         const markerAlpha = routeMarkerScale();
         if (markerAlpha <= 0) return;
         const drawLines = settings.routeCueStyle !== "labels";
         const drawLabels = settings.routeCueStyle !== "lines";
         const labelScale = settings.objectiveLabels === "large" ? 1.35 : 1;
+        const safe = "rgba(96, 211, 148, ALPHA)";
+        const optional = "rgba(255, 209, 102, ALPHA)";
+        const danger = "rgba(255, 113, 94, ALPHA)";
         ctx.save();
         ctx.translate(-cameraX, 0);
         if (drawLines) {
-          ctx.strokeStyle = `rgba(96, 211, 148, ${0.55 * markerAlpha})`;
-          ctx.lineWidth = 5;
+          ctx.strokeStyle = `rgba(16, 25, 25, ${0.7 * markerAlpha})`;
+          ctx.lineWidth = 12;
           ctx.beginPath();
-          ctx.moveTo(40, 506);
-          ctx.lineTo(world.width - 150, 506);
+          ctx.moveTo(44, 506);
+          ctx.lineTo(exit.x - 12, 506);
           ctx.stroke();
 
-          ctx.strokeStyle = `rgba(255, 209, 102, ${0.48 * markerAlpha})`;
-          ctx.lineWidth = 4;
+          ctx.strokeStyle = `rgba(96, 211, 148, ${0.78 * markerAlpha})`;
+          ctx.lineWidth = 6;
+          ctx.beginPath();
+          ctx.moveTo(44, 506);
+          ctx.lineTo(exit.x - 12, 506);
+          ctx.stroke();
+          drawChevronRun(140, exit.x - 130, 490, safe, 0.54 * markerAlpha, 1);
+
+          ctx.strokeStyle = `rgba(255, 209, 102, ${0.72 * markerAlpha})`;
+          ctx.lineWidth = 5;
           ctx.setLineDash([16, 10]);
           ctx.beginPath();
           ctx.moveTo(700, 432);
@@ -1147,17 +1214,28 @@
           ctx.lineTo(2650, 336);
           ctx.stroke();
           ctx.setLineDash([]);
+          drawChevronRun(730, 960, 418, optional, 0.48 * markerAlpha, 1);
+          drawChevronRun(1160, 1320, 368, optional, 0.48 * markerAlpha, 1);
+          drawChevronRun(1510, 1840, 428, optional, 0.48 * markerAlpha, 1);
+          drawChevronRun(2055, 2240, 382, optional, 0.48 * markerAlpha, 1);
+          drawChevronRun(2435, 2630, 322, optional, 0.48 * markerAlpha, 1);
+
+          for (const hazard of hazards) {
+            ctx.strokeStyle = `rgba(255, 113, 94, ${0.55 * markerAlpha})`;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(hazard.x - 14, hazard.y - 28);
+            ctx.lineTo(hazard.x + hazard.w + 14, hazard.y - 28);
+            ctx.stroke();
+          }
         }
 
         if (drawLabels) {
-          ctx.font = `800 ${15 * labelScale}px Inter, sans-serif`;
-          ctx.textAlign = "left";
-          ctx.fillStyle = `rgba(189, 248, 208, ${markerAlpha})`;
-          ctx.fillText("SAFE DECK", 92, 500);
-          ctx.fillStyle = `rgba(255, 226, 155, ${markerAlpha})`;
-          ctx.fillText("CORE ROUTE", 708, 422);
-          ctx.fillStyle = `rgba(255, 179, 167, ${markerAlpha})`;
-          ctx.fillText("DANGER", 10, 458);
+          drawWorldLabel("SAFE LOWER ROUTE", 210, 494, safe, markerAlpha, labelScale);
+          drawWorldLabel("OPTIONAL CORE PATH", 850, 414, optional, markerAlpha, labelScale);
+          drawWorldLabel("VENT - JUMP OR STAY LOW", 1260, 370, danger, markerAlpha, labelScale);
+          drawWorldLabel("MID CHECKPOINT", checkpoint.x + 50, checkpoint.y - 14, safe, markerAlpha, labelScale);
+          drawWorldLabel("EXIT AHEAD", 2868, 392, safe, markerAlpha, labelScale);
         }
         ctx.restore();
       }
@@ -1278,11 +1356,26 @@
         const x = exit.x - cameraX;
         const motion = settings.reducedMotion ? 0 : effectScale();
         const labelScale = settings.objectiveLabels === "large" ? 1.35 : 1;
+        const beam = ctx.createLinearGradient(x + exit.w / 2, 84, x + exit.w / 2, exit.y + exit.h);
+        beam.addColorStop(0, `rgba(96, 211, 148, ${0.05 * effectScale()})`);
+        beam.addColorStop(0.55, `rgba(96, 211, 148, ${0.19 * effectScale()})`);
+        beam.addColorStop(1, `rgba(96, 211, 148, ${0.08 * effectScale()})`);
+        ctx.fillStyle = beam;
+        ctx.fillRect(x + exit.w / 2 - 16, 84, 32, exit.y + exit.h - 84);
         ctx.fillStyle = `rgba(96, 211, 148, ${0.14 * effectScale()})`;
         ctx.fillRect(x - 26, exit.y - 16, exit.w + 52, exit.h + 16);
         ctx.strokeStyle = "#60d394";
         ctx.lineWidth = 6;
         ctx.strokeRect(x + 10, exit.y + 10, exit.w - 20, exit.h - 10);
+        ctx.strokeStyle = `rgba(234, 255, 242, ${0.66 * effectScale()})`;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(x - 150, exit.y + 78);
+        ctx.lineTo(x - 48, exit.y + 78);
+        ctx.lineTo(x - 66, exit.y + 60);
+        ctx.moveTo(x - 48, exit.y + 78);
+        ctx.lineTo(x - 66, exit.y + 96);
+        ctx.stroke();
         ctx.fillStyle = "#60d394";
         ctx.beginPath();
         ctx.arc(x + exit.w / 2, exit.y + 22, 18 + Math.sin(performance.now() / 180) * 3 * motion, 0, Math.PI * 2);
