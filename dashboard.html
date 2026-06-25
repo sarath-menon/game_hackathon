@@ -193,6 +193,113 @@
       text-transform: uppercase;
     }
 
+    .ops-board {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--attention);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .ops-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .ops-title p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .summary-grid,
+    .tracks-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .summary-card,
+    .track-card,
+    .detail-panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdfd;
+    }
+
+    .summary-card,
+    .detail-panel {
+      padding: 12px;
+    }
+
+    .summary-card strong,
+    .detail-section strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .summary-card p,
+    .detail-section p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .track-card h3 {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.95rem;
+    }
+
+    .ops-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+    }
+
+    .ops-table th,
+    .ops-table td {
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .ops-table th {
+      color: var(--muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .ops-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .detail-panel {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .detail-panel h3 {
+      grid-column: 1 / -1;
+      font-size: 1rem;
+    }
+
+    .detail-section {
+      min-width: 0;
+    }
+
     .qa-links {
       display: flex;
       flex-wrap: wrap;
@@ -704,56 +811,120 @@
   <main class="shell">
     <header class="topbar">
       <div>
-        <h1>Three-Game Lockstep Dashboard</h1>
-        <p class="subtitle">Live source of truth for the open-ended continuous QA loop. Dashboard freshness is a hard orchestration gate; transitions are not complete until this page is updated and verified.</p>
+        <h1>Game QA Suite</h1>
+        <p class="subtitle">Local builds + external QA methodology. Live source of truth for current lockstep work and verified evidence.</p>
       </div>
       <section class="status-strip" id="status-strip" aria-label="Game status summary"></section>
     </header>
 
-    <section class="attention-panel compact" id="attention-panel" data-state="clear">
-      <div>
-        <h2>Current Live Status</h2>
-        <p><strong>Two-track Game QA Suite is active.</strong> Track 1 improves the three local HTML games; Track 2 black-box tests five hosted online games to strengthen QA methodology.</p>
-        <div class="loop-grid" aria-label="Active upgrade status">
-          <div class="loop-cell"><strong>Track 1 Local Games</strong>Kart Driving Assists builder active; Deckbuilder and Platformer latest QA PASS/CLOSED</div>
-          <div class="loop-cell"><strong>Track 2 Online Games</strong>Cookie Clicker follow-up 3 TESTER ACTIVE / evidence pending</div>
-          <div class="loop-cell"><strong>Canonical Tester</strong>019ef96e-99ee-7f62-b4d2-7d2c3cd29217 across both tracks</div>
-          <div class="loop-cell"><strong>Browser Harness</strong>Serialized URL/manual/evidence runs in one shared Chrome window</div>
-          <div class="loop-cell"><strong>Local Focus</strong>Settings depth, accessibility, audio defaults, feel, visuals, performance, polish</div>
-          <div class="loop-cell"><strong>Next Action</strong>Wait for Kart builder implementation and Cookie Clicker follow-up 3 verdict</div>
+    <section class="ops-board" id="attention-panel" aria-label="Game QA Suite operations board">
+      <div class="ops-title">
+        <div>
+          <h2>Game QA Suite</h2>
+          <p>Local builds + external QA methodology. Current work is kept separate from closed evidence.</p>
         </div>
-        <div class="qa-links" aria-label="QA upgrade research links">
-          <span>Gate: <strong>dashboard fresh/verified before transition complete</strong></span>
-          <span>Track 1 closed: Turn-Based Deckbuilder / Ash Circuit <strong>Upgrade Phase 3 - Deck, Draw, And Discard Inspection</strong> is <strong>PASS/CLOSED</strong> at <code>evidence/deckbuilder/upgrade-phase-3-deck-inspection/</code> (<a href="evidence/deckbuilder/upgrade-phase-3-deck-inspection/TEST_REPORT.md">report</a>, <a href="evidence/deckbuilder/upgrade-phase-3-deck-inspection/expected-flow.md">expected-flow</a>, <a href="evidence/deckbuilder/upgrade-phase-3-deck-inspection/gameplay-recording.mp4">recording</a>).</span>
-          <span>Deckbuilder Phase 3 verified: Inspector is discoverable from normal combat; Current Deck, Hand, Draw Pile, Discard Pile, Exhaust/Removed, Recent Reward Additions, counts, card names, types/costs, and effect text were verified. Counts matched HUD before/after card play, Strike appeared in discard after play, reward-state inspection worked, Flare Shot persisted into encounter 2 and appeared in Current Deck, Draw Pile, and Recent Reward Additions, and Escape/Close Inspection returned to gameplay without state mutation. Settings reset/close, audio defaults, intent/status explainability, Fractured math, reward flow, and New Run restart passed. Nonblocking limitation: dedicated mobile emulation was not attempted; shared Chrome viewport <code>782 x 859</code> was readable.</span>
-          <span>Track 1 active: Arcade Kart Racer <strong>Driving Assists And Control Accessibility Upgrade</strong> is <strong>BUILDER ACTIVE / awaiting implementation</strong>. Scope: materially testable assist/control/accessibility settings such as steering assist, auto-accelerate, recovery/brake assist, camera/control/readability aids, persistence, reset defaults, and audio-off safeguards. No evidence folder yet; tester handoff waits until builder completion. Historical Kart settings-depth retest 2 remains <strong>PASS</strong> at <code>evidence/kart-racer/settings-depth-retest-2/</code> (<a href="evidence/kart-racer/settings-depth-retest-2/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/settings-depth-retest-2/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/settings-depth-retest-2/gameplay-recording.mp4">recording</a>).</span>
-          <span>Track 1 closed: Turn-Based Deckbuilder / Ash Circuit <strong>Upgrade Phase 2 - Enemy Intent And Status Explainability</strong> is <strong>PASS/CLOSED</strong> after Retest 1 at <code>evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1/</code> (<a href="evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1/TEST_REPORT.md">report</a>, <a href="evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1/expected-flow.md">expected-flow</a>, <a href="evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1/gameplay-recording.mp4">recording</a>). First failed QA remains preserved at <code>evidence/deckbuilder/upgrade-phase-2-intent-status/</code> (<a href="evidence/deckbuilder/upgrade-phase-2-intent-status/TEST_REPORT.md">report</a>, <a href="evidence/deckbuilder/upgrade-phase-2-intent-status/expected-flow.md">expected-flow</a>, <a href="evidence/deckbuilder/upgrade-phase-2-intent-status/gameplay-recording.mp4">recording</a>) as <strong>FAIL - FIXED IN NEXT BUILD</strong>. Retest verified the fix: Drive Plate at Focus <code>2</code>/no Fractured shows calculated <code>6</code> damage + <code>4</code> guard at enemy <code>4</code> HP, Strike Focus-only resolves <code>8</code>, Focus+Fractured subtracts once and clears, and explainability, audio, and reward gates are preserved.</span>
-          <span>Track 1 active lanes: Arcade Kart Racer settings-depth retest 2 is <strong>PASS/CLOSED</strong> at <code>evidence/kart-racer/settings-depth-retest-2/</code> (<a href="evidence/kart-racer/settings-depth-retest-2/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/settings-depth-retest-2/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/settings-depth-retest-2/gameplay-recording.mp4">recording</a>). Side-Scrolling Platformer / Skyline Stepper Settings Polish 2 is <strong>PASS/CLOSED</strong> at <code>evidence/platformer/settings-polish-2-retest-6/</code> (<a href="evidence/platformer/settings-polish-2-retest-6/TEST_REPORT.md">report</a>, <a href="evidence/platformer/settings-polish-2-retest-6/expected-flow.md">expected-flow</a>, <a href="evidence/platformer/settings-polish-2-retest-6/gameplay-recording.mp4">recording</a>). Retest 6 verified in-run Settings close/resume: opening Settings during a run shows <code>Settings paused</code>; closing with <code>Escape</code> and closing with visible <code>Close Settings</code> both return HUD to <code>Reach the exit beacon</code>; post-close movement/input no longer leaves the run stuck paused. Retest 6 also preserved prior fixes: Player Variant Controls are visible/usable, <code>Snappy</code> and <code>Practice</code> update selected state/dropdowns, and Reset Defaults restores Air <code>Steady</code>, Damage <code>Standard</code>, generated sounds off, and volume <code>0%</code>. Nonblocking limitations: narrow viewport capture was blocked by a browser-harness CDP helper, and lower-deck route/checkpoint/exit/failure/restart coverage was smoke-limited because Retest 6 focused on the in-run settings resume regression.</span>
-          <span>Platformer Settings Polish 2 evidence trail: attempt 1 <strong>BLOCKED_ENVIRONMENT</strong> at <code>evidence/platformer/settings-polish-2/</code>; Retest 1 <strong>BLOCKED_ENVIRONMENT</strong> at <code>evidence/platformer/settings-polish-2-retest-1/</code>; Retest 2 <strong>FAIL</strong> at <code>evidence/platformer/settings-polish-2-retest-2/</code>; Retest 3 <strong>FAIL</strong> at <code>evidence/platformer/settings-polish-2-retest-3/</code>; Retest 4 tester <strong>FAIL</strong> but orchestration <strong>NEEDS CACHE-BUSTED RETRY</strong> at <code>evidence/platformer/settings-polish-2-retest-4/</code>; Retest 5 <strong>FAIL</strong> at <code>evidence/platformer/settings-polish-2-retest-5/</code>; Retest 6 <strong>PASS</strong> at <code>evidence/platformer/settings-polish-2-retest-6/</code>.</span>
-          <span>Settings QA: Kart Settings Phase 1 is superseded/no-verdict (<a href="evidence/kart-racer/settings-phase-1/TEST_REPORT.md">report</a>); Arcade Kart Racer settings-depth retest 1 remains historical <strong>BLOCKED_ENVIRONMENT</strong> at <code>evidence/kart-racer/settings-depth-retest-1/</code> (<a href="evidence/kart-racer/settings-depth-retest-1/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/settings-depth-retest-1/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/settings-depth-retest-1/gameplay-recording.mp4">recording</a>). Platformer QA scope: Air Control, Damage Profile, Checkpoint Assist, Route Cue Style, High-Contrast Hazards, Objective Labels, Background Detail, audio defaults/reset, persistence/reload, settings contexts, lower-deck completion, health-zero failure under Standard, checkpoint/respawn, route readability, and narrow viewport.</span>
-          <span>Kart accepted evidence: audio defaults are PASS at <a href="evidence/kart-racer/audio-default-hotfix-single-tester-retest-2/TEST_REPORT.md">audio retest 2</a>; orientation is PASS at <a href="evidence/kart-racer/orientation-retest/TEST_REPORT.md">orientation retest</a>. Platformer PASS at <code>evidence/platformer/settings-phase-1/</code>; Deckbuilder PASS at <code>evidence/deckbuilder/settings-phase-1/</code>; Deckbuilder polish PASS at <code>evidence/deckbuilder/settings-polish-1-scroll/</code></span>
-          <span>Audio default hotfix: audio/sounds must default off or muted until opt-in. Kart <strong>PASS</strong> at <code>evidence/kart-racer/audio-default-hotfix-single-tester-retest-2/</code>; canonical retest 1 remains FAIL/fixed at <code>evidence/kart-racer/audio-default-hotfix-single-tester-retest-1/</code>; Platformer <strong>PASS</strong> at <code>evidence/platformer/audio-default-hotfix/</code>; Deckbuilder <strong>PASS</strong> at <code>evidence/deckbuilder/audio-default-hotfix-shared-window-retest-1/</code></span>
-          <span>Track 2 active: Cookie Clicker <strong>Accessibility, Narrow-Viewport, And Settings Persistence Follow-Up 3</strong> is <strong>TESTER ACTIVE / evidence pending</strong> at <code>evidence/external/cookie-clicker-accessibility-narrow-followup-3/</code> (<a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/TEST_REPORT.md">report</a>, <a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/expected-flow.md">expected-flow</a>, <a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/gameplay-recording.mp4">recording</a>). Previous Cookie Clicker Follow-up Pass 2 remains historical <strong>PASS_WITH_FINDINGS</strong> at <code>evidence/external/cookie-clicker-followup-pass-2/</code> (<a href="evidence/external/cookie-clicker-followup-pass-2/TEST_REPORT.md">report</a>, <a href="evidence/external/cookie-clicker-followup-pass-2/expected-flow.md">expected-flow</a>, <a href="evidence/external/cookie-clicker-followup-pass-2/gameplay-recording.mp4">recording</a>).</span>
-          <span>Cookie Clicker pass 2 verified: playable direct provider load, dismissible backup reminder, cookie clicks, safe Grandma purchase, manual Save, reload persistence with Grandma count <code>1</code> and CPS <code>1.2</code>, deeper Options coverage including export/import safe modals, save/load file affordances, language, volume/audio, visual/performance toggles, warning toggles, screen reader mode, mod data, and separated Wipe save controls. Narrow desktop viewport <code>782 x 859</code> remained usable but dense.</span>
-          <span>Track 2 closed: Townscaper Web <strong>Removal, Undo, Gear/Settings, And Placement-Clarity Follow-Up 1</strong> is <strong>PASS_WITH_FINDINGS / CLOSED</strong> at <code>evidence/external/townscaper-removal-undo-settings-followup-1/</code> (<a href="evidence/external/townscaper-removal-undo-settings-followup-1/TEST_REPORT.md">report</a>, <a href="evidence/external/townscaper-removal-undo-settings-followup-1/expected-flow.md">expected-flow</a>, <a href="evidence/external/townscaper-removal-undo-settings-followup-1/gameplay-recording.mp4">recording</a>). Direct provider reached playable WebGL after slow startup; not <strong>BLOCKED_PROVIDER</strong> and not <strong>BLOCKED_ENVIRONMENT</strong>; no alternate provider retry required.</span>
-          <span>Townscaper follow-up result: placement proof improved with outlined cell after camera movement, click placed a distinct detached platform/roof section, and right-click removed it. Wheel zoom and camera drag stayed interactive after placement/removal. Findings: Medium gear/settings/help icon did not reveal visible panel/help; Low undo/redo not visibly supported; Low placement target affordance depends on subtle outline; Low color-only swatches/selected-state feedback; Low startup delay. Prior Townscaper <strong>PASS_WITH_FINDINGS</strong> remains historical at <code>evidence/external/townscaper-settings-removal-mobile-pass-1/</code> (<a href="evidence/external/townscaper-settings-removal-mobile-pass-1/TEST_REPORT.md">report</a>, <a href="evidence/external/townscaper-settings-removal-mobile-pass-1/expected-flow.md">expected-flow</a>, <a href="evidence/external/townscaper-settings-removal-mobile-pass-1/gameplay-recording.mp4">recording</a>).</span>
-          <span>Track 2 closed: OvO Classic <strong>Finish Transition And Settings/Options Follow-Up 1</strong> is <strong>PASS_WITH_FINDINGS</strong> at <code>evidence/external/ovo-poki-finish-settings-followup-1/</code> (<a href="evidence/external/ovo-poki-finish-settings-followup-1/TEST_REPORT.md">report</a>, <a href="evidence/external/ovo-poki-finish-settings-followup-1/expected-flow.md">expected-flow</a>, <a href="evidence/external/ovo-poki-finish-settings-followup-1/gameplay-recording.mp4">recording</a>). Provider classification: not <strong>BLOCKED_PROVIDER</strong> and not <strong>BLOCKED_ENVIRONMENT</strong>; Poki redirected <code>/en/</code> to an Indonesian shell, but the game loaded and stayed playable in shared Chrome/browser-harness.</span>
-          <span>OvO follow-up verified finish crossing from Level 1 to Level 2, final-time modal, settings/wrench screen with Music/Sounds sliders, Hard/Advanced toggles, Data, Device, Inputs, and Back controls, Inputs bindings panel, and pause/Escape/quit path. Nonblocking findings: provider locale mismatch, manual says Space while visible game/Input binding uses Up for jump, and deeper levels/trophy/skin/provider fullscreen/reset coverage remains partial after Inputs overlay behavior.</span>
-          <span>OvO prior outcome preserved: <code>evidence/external/ovo-poki-shared-window-retry-1/TEST_REPORT.md</code> remains historical <strong>PASS_WITH_FINDINGS</strong> with earlier coverage limitations around settings/options and finish/next-level transition (<a href="evidence/external/ovo-poki-shared-window-retry-1/TEST_REPORT.md">report</a>, <a href="evidence/external/ovo-poki-shared-window-retry-1/expected-flow.md">expected-flow</a>, <a href="evidence/external/ovo-poki-shared-window-retry-1/gameplay-recording.mp4">recording</a>).</span>
-          <span>Track 2 closed: PolyTrack Poki Follow-up 3 is <strong>PASS_WITH_FINDINGS</strong> at <code>evidence/external/polytrack-poki-settings-race-followup-1/</code> (<a href="evidence/external/polytrack-poki-settings-race-followup-1/TEST_REPORT.md">report</a>, <a href="evidence/external/polytrack-poki-settings-race-followup-1/expected-flow.md">expected-flow</a>, <a href="evidence/external/polytrack-poki-settings-race-followup-1/gameplay-recording.mp4">recording</a>). Poki reached playable PolyTrack in the shared Chrome/browser-harness surface; no duplicate-instance blocker occurred; Units changed to Imperial and persisted after reload; Music toggled visibly Off; Summer 1 started; short keyboard driving advanced timer/HUD while route remained readable; clean restart through track detail Play returned to <code>00:00.000</code>. Nonblocking findings: <code>/en/</code> provider URL redirects to Indonesian shell; Escape returns to track list/menu rather than clear pause overlay; graphics/audio/fullscreen/default coverage remains partial; <code>T</code> start-over key was inconclusive.</span>
-          <span>Track 2 historical wrapper blocker: Dungeons &amp; Degenerate Gamblers Follow-up Pass 2 is <strong>BLOCKED_ENVIRONMENT</strong>, not game <strong>FAIL</strong> and not <strong>BLOCKED_PROVIDER</strong>, at <code>evidence/external/dungeons-degenerate-gamblers-settings-illegal-pass-1/</code> (<a href="evidence/external/dungeons-degenerate-gamblers-settings-illegal-pass-1/TEST_REPORT.md">report</a>, <a href="evidence/external/dungeons-degenerate-gamblers-settings-illegal-pass-1/expected-flow.md">expected-flow</a>, <a href="evidence/external/dungeons-degenerate-gamblers-settings-illegal-pass-1/gameplay-recording.mp4">recording</a>). Official itch provider and embedded game menu loaded, but the shared-window browser-harness viewport could not reach the clipped <code>New Run</code> control after same-window recovery attempts, so settings/legal-action QA could not be evaluated.</span>
-          <span>Dungeons Direct Official Build Retry 1 is <strong>PASS_WITH_FINDINGS</strong> at <code>evidence/external/dungeons-degenerate-gamblers-direct-build-retry-1/</code> (<a href="evidence/external/dungeons-degenerate-gamblers-direct-build-retry-1/TEST_REPORT.md">report</a>, <a href="evidence/external/dungeons-degenerate-gamblers-direct-build-retry-1/expected-flow.md">expected-flow</a>, <a href="evidence/external/dungeons-degenerate-gamblers-direct-build-retry-1/gameplay-recording.mp4">recording</a>). The direct official itch-hosted build reached playable run state, avoided the prior wrapper clipping blocker, and verified menu, deck selection, tavern/node entry, first table HIT/STAND actions, settings/options, pause/menu controls, and restart boundary attempts. Nonblocking findings: illegal/unavailable action feedback was not clearly proven, and restart/give-up confirmation copy was only partially verified.</span>
-          <span>Dungeons focused follow-up is <strong>PASS_WITH_FINDINGS</strong> at <code>evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/</code> (<a href="evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/TEST_REPORT.md">report</a>, <a href="evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/expected-flow.md">expected-flow</a>, <a href="evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/gameplay-recording.mp4">recording</a>). Direct official build remained playable; Continue reached table state; HIT/STAND state transitions and visible HP/card/score/chip deltas were verified; pause menu and Restart Run boundary were captured; no provider/environment blocker occurred. Nonblocking findings: illegal/unavailable action feedback remains unproven because attempted post-resolution actions continued valid play, and Restart Run confirmation/cancel copy did not appear after one safe boundary click while deeper destructive clicks were avoided.</span>
-          <span>Track 2 preserved outcomes: PolyTrack, PolyTrack Follow-up 3, OvO baseline, OvO finish/settings follow-up, Dungeons &amp; Degenerate Gamblers retry 1, Townscaper baseline, Townscaper follow-up, Cookie Clicker, Dungeons direct build retry 1, and Dungeons focused follow-up remain <strong>PASS_WITH_FINDINGS</strong>. Reports are preserved at <a href="evidence/external/polytrack-poki-shared-window-retry-2/TEST_REPORT.md">PolyTrack</a>, <a href="evidence/external/polytrack-poki-settings-race-followup-1/TEST_REPORT.md">PolyTrack follow-up 3</a>, <a href="evidence/external/ovo-poki-shared-window-retry-1/TEST_REPORT.md">OvO baseline</a>, <a href="evidence/external/ovo-poki-finish-settings-followup-1/TEST_REPORT.md">OvO follow-up</a>, <a href="evidence/external/dungeons-degenerate-gamblers-shared-window-retry-1/TEST_REPORT.md">DNDG retry 1</a>, <a href="evidence/external/dungeons-degenerate-gamblers-direct-build-retry-1/TEST_REPORT.md">DNDG direct retry 1</a>, <a href="evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/TEST_REPORT.md">DNDG focused follow-up</a>, <a href="evidence/external/townscaper-settings-removal-mobile-pass-1/TEST_REPORT.md">Townscaper baseline</a>, <a href="evidence/external/townscaper-removal-undo-settings-followup-1/TEST_REPORT.md">Townscaper follow-up</a>, <a href="evidence/external/cookie-clicker-settings-persistence-mobile-pass-1/TEST_REPORT.md">Cookie Clicker pass 1</a>, and <a href="evidence/external/cookie-clicker-followup-pass-2/TEST_REPORT.md">Cookie Clicker pass 2</a>. Previous Dungeons shared-window retry 1 remains historical <strong>PASS_WITH_FINDINGS</strong> at <code>evidence/external/dungeons-degenerate-gamblers-shared-window-retry-1/</code>.</span>
-          <span>External verdict taxonomy: <strong>PASS_WITH_FINDINGS</strong>, <strong>FAIL</strong>, <strong>BLOCKED_PROVIDER</strong>, <strong>BLOCKED_ENVIRONMENT</strong>, and <strong>UNTESTABLE_IN_CURRENT_ENVIRONMENT</strong>. Provider, WebGL, setup, and browser-harness blockers are not final game failures.</span>
-          <span>Latest closed: <code>evidence/deckbuilder/upgrade-phase-3-deck-inspection/</code></span>
-          <a href="qa-upgrade/QA_STANDARDS_PROPOSAL.md">QA_STANDARDS_PROPOSAL.md</a>
-          <a href="qa-upgrade/KART_BENCHMARK_AUDIT.md">KART_BENCHMARK_AUDIT.md</a>
-          <a href="qa-upgrade/PLATFORMER_BENCHMARK_AUDIT.md">PLATFORMER_BENCHMARK_AUDIT.md</a>
-          <a href="qa-upgrade/DECKBUILDER_BENCHMARK_AUDIT.md">DECKBUILDER_BENCHMARK_AUDIT.md</a>
+        <span class="badge" data-status="attention">Live</span>
+      </div>
+
+      <div class="summary-grid" aria-label="Current work summary">
+        <div class="summary-card">
+          <strong>Active Now</strong>
+          <p>Arcade Kart Racer builder is implementing Driving Assists And Control Accessibility. Cookie Clicker follow-up 3 is with the canonical tester and pending result.</p>
+        </div>
+        <div class="summary-card">
+          <strong>Next Action</strong>
+          <p>Wait for builder/tester output, then route the next lockstep step: tester handoff, fix request, PASS closure, or next QA target.</p>
         </div>
       </div>
-      <button class="action-btn" data-open-phase="deckbuilder:upgrade-phase-3">View Deckbuilder Evidence</button>
+
+      <div class="tracks-grid">
+        <section class="track-card" aria-labelledby="track-local-title">
+          <h3 id="track-local-title">Track 1: Local Games</h3>
+          <table class="ops-table">
+            <thead>
+              <tr><th>Game</th><th>Current</th><th>Last Verdict</th><th>Evidence</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Arcade Kart Racer</td>
+                <td><span class="badge" data-status="attention">BUILDER ACTIVE</span><br>Driving assists and control accessibility upgrade</td>
+                <td><span class="badge" data-status="pass">PASS</span><br><a href="evidence/kart-racer/settings-depth-retest-2/TEST_REPORT.md">settings-depth retest 2</a></td>
+                <td><button class="action-btn" data-open-phase="kart-racer:settings-depth-retest-2">View timeline</button></td>
+              </tr>
+              <tr>
+                <td>Side-Scrolling Platformer</td>
+                <td><span class="badge" data-status="pass">CLOSED</span></td>
+                <td><span class="badge" data-status="pass">PASS</span><br><a href="evidence/platformer/settings-polish-2-retest-6/TEST_REPORT.md">settings polish 2 retest 6</a></td>
+                <td><button class="action-btn" data-open-phase="platformer:settings-polish-2-retest-6">View timeline</button></td>
+              </tr>
+              <tr>
+                <td>Turn-Based Deckbuilder</td>
+                <td><span class="badge" data-status="pass">CLOSED</span></td>
+                <td><span class="badge" data-status="pass">PASS</span><br><a href="evidence/deckbuilder/upgrade-phase-3-deck-inspection/TEST_REPORT.md">upgrade phase 3</a></td>
+                <td><button class="action-btn" data-open-phase="deckbuilder:upgrade-phase-3">View timeline</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="track-card" aria-labelledby="track-external-title">
+          <h3 id="track-external-title">Track 2: External Browser QA</h3>
+          <table class="ops-table">
+            <thead>
+              <tr><th>Game</th><th>Current</th><th>Last Verdict</th><th>Evidence</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cookie Clicker</td>
+                <td><span class="badge" data-status="attention">TESTER ACTIVE</span><br>accessibility, narrow viewport, settings persistence follow-up 3</td>
+                <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span><br><a href="evidence/external/cookie-clicker-followup-pass-2/TEST_REPORT.md">follow-up pass 2</a></td>
+                <td><a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/TEST_REPORT.md">View latest</a></td>
+              </tr>
+              <tr>
+                <td>PolyTrack</td>
+                <td><span class="badge" data-status="pass">CLOSED</span></td>
+                <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></td>
+                <td><a href="evidence/external/polytrack-poki-settings-race-followup-1/TEST_REPORT.md">View latest</a></td>
+              </tr>
+              <tr>
+                <td>OvO</td>
+                <td><span class="badge" data-status="pass">CLOSED</span></td>
+                <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></td>
+                <td><a href="evidence/external/ovo-poki-finish-settings-followup-1/TEST_REPORT.md">View latest</a></td>
+              </tr>
+              <tr>
+                <td>Dungeons &amp; Degenerate Gamblers</td>
+                <td><span class="badge" data-status="pass">CLOSED</span></td>
+                <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></td>
+                <td><a href="evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/TEST_REPORT.md">View latest</a></td>
+              </tr>
+              <tr>
+                <td>Townscaper</td>
+                <td><span class="badge" data-status="pass">CLOSED</span></td>
+                <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></td>
+                <td><a href="evidence/external/townscaper-removal-undo-settings-followup-1/TEST_REPORT.md">View latest</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+
+      <section class="detail-panel" aria-labelledby="selected-detail-title">
+        <h3 id="selected-detail-title">Selected Detail: Arcade Kart Racer</h3>
+        <div class="detail-section">
+          <strong>Current Work</strong>
+          <p>Driving Assists And Control Accessibility Upgrade is builder active: steering assist, auto-accelerate, recovery/brake assist, camera/control/readability aids, persistence, reset defaults, and audio-off safeguards. No evidence folder yet.</p>
+        </div>
+        <div class="detail-section">
+          <strong>Latest Approved Evidence</strong>
+          <p>Settings-depth retest 2 is PASS: <a href="evidence/kart-racer/settings-depth-retest-2/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/settings-depth-retest-2/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/settings-depth-retest-2/gameplay-recording.mp4">recording</a>.</p>
+        </div>
+        <div class="detail-section">
+          <strong>Feedback / Fix Trail</strong>
+          <p>Prior Kart settings, audio-default, orientation, and drift/boost evidence remains accessible in the timeline. Tester handoff waits for builder completion.</p>
+          <button class="action-btn" data-open-phase="kart-racer:settings-depth-retest-2">View Kart timeline</button>
+        </div>
+      </section>
     </section>
 
     <nav class="filters" aria-label="Dashboard filters">
