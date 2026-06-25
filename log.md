@@ -2241,3 +2241,27 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - external racing QA should pair settings persistence with a visible HUD consequence where possible;
   - pause/menu and reset/start-over should be reported separately rather than inferred from one another;
   - provider locale redirects are usability findings, not provider blockers, when game UI remains playable.
+
+## Deckbuilder Upgrade Phase 2 Builder Active - 2026-06-25
+
+- Orchestrator selected the next Track 1 local-game improvement after two completed external QA loops.
+- Rationale:
+  - Deckbuilder Upgrade Phase 1: Combat Feedback And Math Preview is already closed as `PASS`;
+  - `qa-upgrade/DECKBUILDER_BENCHMARK_AUDIT.md` lists the next planned phase as Enemy Intent And Status Explainability;
+  - this improves moment-to-moment QA readability without expanding run structure or changing the already-approved deterministic combat model.
+- Builder handoff sent to deckbuilder builder `019ef96e-7780-7763-b444-12cf7698a97a`.
+- Files builder may update:
+  - `games/deckbuilder/index.html`
+  - `games/deckbuilder/README.md`
+- Builder scope:
+  - add original icon + label + number chips for enemy attack, debuff, heavy attack, and mixed effects;
+  - add brief visible enemy intent resolution feedback for enemy action, guard absorption, HP loss, and status application;
+  - add Focus and Fractured help by mouse and keyboard focus/click;
+  - ensure card consequence previews clearly incorporate Focus and Fractured where relevant;
+  - add optional next-intent preview without exposing hidden details beyond documented deterministic cycle;
+  - preserve current deterministic combat, reward flow, settings/audio-default behavior, and approved run structure;
+  - update README with player-facing intent/status/preview help only.
+- Tester state:
+  - canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` is idle but must not receive a handoff until the builder reports completion.
+- Expected future evidence target after builder completion:
+  - `evidence/deckbuilder/upgrade-phase-2-intent-status/`
