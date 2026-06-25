@@ -2209,3 +2209,35 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - verify pause/menu clarity during a started run if safe;
   - drive a short continuous segment with timer/HUD/route readability and reset/restart regression;
   - classify provider/environment blockers separately from game QA findings.
+
+## PolyTrack Poki Settings/Race Follow-Up PASS_WITH_FINDINGS - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed PolyTrack Poki Follow-up 3.
+- Evidence folder: `evidence/external/polytrack-poki-settings-race-followup-1/`.
+- Required outputs exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS_WITH_FINDINGS`.
+- Provider/environment classification:
+  - not `BLOCKED_PROVIDER`: Poki reached playable PolyTrack state after dismissing a non-required account/progress prompt;
+  - not `BLOCKED_ENVIRONMENT`: the shared Chrome/browser-harness surface completed settings, reload, music toggle, track start, driving, pause/menu, and restart checks;
+  - no final game `FAIL`: remaining issues are nonblocking provider/settings/pause/reset clarity findings.
+- Verified:
+  - `/en/` URL redirected to `/id/g/polytrack`, but game UI remained playable;
+  - no duplicate-instance blocker appeared after cleanup and safe reload;
+  - Settings was readable and included language, units, reset hint, ghost car, default camera/cockpit, cockpit mode, checkpoints, Cancel, Reset, and Apply;
+  - Units changed from Metric to Imperial, applied, persisted after reload, and later appeared in-race as mph;
+  - Music toggled visibly from On to Off without intentionally playing loud audio;
+  - Summer 1 track started with readable route, car, checkpoint counter, timer, and speed readout;
+  - short keyboard driving worked and advanced the timer/HUD;
+  - clean restart was verified through the track detail Play flow at `00:00.000`.
+- Remaining nonblocking findings:
+  - provider locale redirect from `/en/` to Indonesian shell remains open;
+  - Escape returned to track list/menu instead of showing a clear pause overlay;
+  - graphics/audio/fullscreen/defaults coverage remains partial because no graphics controls or volume slider were found and fullscreen was not activated;
+  - the visible `T` start-over key did not conclusively reset timer in the captured frame.
+- QA methodology carry-forward:
+  - external racing QA should pair settings persistence with a visible HUD consequence where possible;
+  - pause/menu and reset/start-over should be reported separately rather than inferred from one another;
+  - provider locale redirects are usability findings, not provider blockers, when game UI remains playable.
