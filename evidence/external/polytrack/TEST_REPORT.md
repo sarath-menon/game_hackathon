@@ -77,9 +77,9 @@ Because the game never became playable, gameplay controls, route readability, re
 - Expected behavior: If duplicate instances are unsupported, the game should clearly tell the user which tab can continue.
 - Actual behavior: A clear message appeared: another PolyTrack instance is open and the player should switch to that tab/window.
 - Evidence: `polytrack-menu.png`
-- Evidence clip: Needs Evidence Clip
-- Evidence status: Screenshot-only evidence available in same folder as `polytrack-menu.png`; the assigned `gameplay-recording.mp4` documents the later startup-error sequence and does not capture the duplicate-instance setup.
-- Why this evidence proves the finding: The same-folder screenshot documents the duplicate-instance message, but the existing MP4 cannot independently prove this informational item without fabricating a timestamp.
+- Evidence clip: `supplemental-polytrack-duplicate-instance.mp4 @ 00:00-00:09`
+- Evidence status: Supplemental screenshot-derived clip
+- Why this evidence proves the finding: The supplemental clip is explicitly derived from same-folder `polytrack-menu.png` and proves only the captured duplicate-instance message, not a live retest of duplicate-tab behavior.
 - Impact: The message is understandable, but duplicate-tab behavior could not be expanded into full gameplay testing due the later harness attachment and startup limitations.
 
 ## Readability / Route Clarity Assessment

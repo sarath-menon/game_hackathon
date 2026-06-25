@@ -41,9 +41,9 @@ During startup, the language picker was exercised and the UI localized to Czech.
 - Expected: captured viewport reflects 390x844 mobile/narrow layout.
 - Actual: captured screenshot remained 1536x608, so the product's actual narrow layout could not be judged from this run.
 - Evidence: `screenshots/24-mobile-390x844-focused.png`
-- Evidence clip: Needs Evidence Clip
-- Evidence status: Needs Evidence Clip
-- Why this evidence proves the finding: The MP4 remains at the desktop capture size and does not include a proven 390x844 narrow/mobile recording segment, so this limitation still needs a dedicated clip.
+- Evidence clip: `supplemental-cookie-narrow-followup.mp4 @ 00:00-00:10`
+- Evidence status: Supplemental follow-up clip
+- Why this evidence proves the finding: The supplemental clip shows a current harness follow-up where the Cookie Clicker viewport changes from desktop to a captured 390x844 narrow viewport and then clears back to desktop, closing the prior video-evidence gap for the narrow-capture limitation.
 
 ### F2 - Backup reminder modal reappears after reload and covers central play area
 

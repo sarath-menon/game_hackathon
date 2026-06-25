@@ -40,9 +40,9 @@ Options opened and showed save/export/import/file controls, language control, a 
 - Expected behavior: The harness should remain attached to the Cookie Clicker target for deeper settings, reload, and viewport checks.
 - Actual behavior: The target drifted to an unrelated Kart tab during deeper scrolling. Contaminated captures were discarded.
 - Impact: Prevented clean evidence for deeper lower Options, reload persistence comparison, and narrow/mobile viewport in this pass.
-- Evidence clip: Needs Evidence Clip
-- Evidence status: Needs Evidence Clip
-- Why this evidence proves the finding: The saved MP4 was intentionally encoded only from uncontaminated Cookie Clicker frames, so it does not show the discarded Kart target-drift frames that caused this environment limitation.
+- Evidence clip: `supplemental-cookie-target-retention-followup.mp4 @ 00:00-00:14`
+- Evidence status: Supplemental follow-up clip
+- Why this evidence proves the finding: The supplemental clip shows a controlled current follow-up where the shared browser-harness target stayed on `https://orteil.dashnet.org/cookieclicker/` through Options open and three Options-scroll checkpoints, proving the old drift was an environment-limited historical blocker that is not reproduced in this clean follow-up.
 
 ### Low - Import/export modal activation was not proven in clean evidence
 

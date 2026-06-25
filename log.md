@@ -2994,3 +2994,13 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - `evidence/external/cookie-clicker/TEST_REPORT.md`: narrow/mobile viewport limitation lacks a narrow/mobile MP4 segment.
   - `evidence/external/polytrack/TEST_REPORT.md`: duplicate-instance handling is screenshot-only and not present in the MP4.
 - Canonical tester was assigned the two Platformer follow-up evidence gaps with browser-harness because those require new supplemental recording.
+
+## Finding-Level Video Audit Closure - 2026-06-25
+
+- Canonical tester completed the final supplemental evidence pass for the remaining external rows.
+- Final supplemental evidence updates:
+  - `evidence/external/cookie-clicker-accessibility-narrow-followup-3/TEST_REPORT.md` now references `supplemental-cookie-target-retention-followup.mp4` for the shared-target-retention limitation.
+  - `evidence/external/cookie-clicker/TEST_REPORT.md` now references `supplemental-cookie-narrow-followup.mp4` for the narrow/mobile viewport limitation.
+  - `evidence/external/polytrack/TEST_REPORT.md` now references `supplemental-polytrack-duplicate-instance.mp4` as a clearly labeled screenshot-derived duplicate-instance evidence clip.
+- Final local audit command: `scripts/audit-finding-videos.sh`.
+- Final audit result: zero `NEEDS_VIDEO_EVIDENCE` rows remain.
