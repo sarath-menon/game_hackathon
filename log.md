@@ -2408,3 +2408,34 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - specifically capture finish crossing/level transition plus deeper visible settings/options/menu behavior.
 - Dashboard action:
   - dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` was asked to surface this active follow-up in the existing OvO/external QA area while preserving the prior `PASS_WITH_FINDINGS` row.
+
+## OvO Classic Finish/Settings Follow-Up PASS_WITH_FINDINGS - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed OvO Classic Finish Transition And Settings/Options Follow-Up 1.
+- Evidence folder: `evidence/external/ovo-poki-finish-settings-followup-1/`.
+- Required outputs exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS_WITH_FINDINGS`.
+- Provider/environment classification:
+  - not `BLOCKED_PROVIDER`;
+  - not `BLOCKED_ENVIRONMENT`;
+  - Poki redirected `https://poki.com/en/g/ovo-classic` to the Indonesian shell, but the embedded game loaded and remained playable through the shared Chrome/browser-harness path.
+- Follow-up goals verified:
+  - prior core path still holds: menu, Level 1 start, frame focus, movement, jump, slide, pause, and route readability were playable;
+  - finish crossing advanced Level 1 to Level 2, closing the prior finish-transition coverage gap;
+  - final-time modal and quit-to-menu path were captured;
+  - settings/wrench screen was captured with Music/Sounds sliders, Hard/Advanced toggles, Data, Device, Inputs, and Back controls;
+  - Inputs bindings panel was captured.
+- Nonblocking findings:
+  - provider `/en/` URL redirects to Indonesian shell;
+  - manual lists Space for jump while the game prompt and Inputs panel show Up as the active jump key;
+  - deeper Levels/Trophy/Skin/provider fullscreen/reset coverage remains partial because the Inputs overlay stayed active during the final menu-control pass.
+- Methodology carry-forward:
+  - compare manual controls against in-game prompts and input bindings before judging platformer input issues;
+  - capture finish transition separately from final-time/quit flows;
+  - distinguish provider localization friction from gameplay failure;
+  - test one external-game modal at a time and capture clean return-to-menu state before opening the next panel.
+- Dashboard action:
+  - dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` was asked to mark this follow-up as the latest OvO `PASS_WITH_FINDINGS` status while preserving the prior OvO baseline report.
