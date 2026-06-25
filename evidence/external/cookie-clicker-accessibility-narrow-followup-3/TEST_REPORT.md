@@ -40,6 +40,9 @@ Options opened and showed save/export/import/file controls, language control, a 
 - Expected behavior: The harness should remain attached to the Cookie Clicker target for deeper settings, reload, and viewport checks.
 - Actual behavior: The target drifted to an unrelated Kart tab during deeper scrolling. Contaminated captures were discarded.
 - Impact: Prevented clean evidence for deeper lower Options, reload persistence comparison, and narrow/mobile viewport in this pass.
+- Evidence clip: Needs Evidence Clip
+- Evidence status: Needs Evidence Clip
+- Why this evidence proves the finding: The saved MP4 was intentionally encoded only from uncontaminated Cookie Clicker frames, so it does not show the discarded Kart target-drift frames that caused this environment limitation.
 
 ### Low - Import/export modal activation was not proven in clean evidence
 
@@ -52,6 +55,9 @@ Options opened and showed save/export/import/file controls, language control, a 
 - Expected behavior: Export/import controls should expose a safe text/modal boundary that is understandable without overwriting progress.
 - Actual behavior: Clean evidence confirms the affordances and explanatory copy are visible, but modal activation was not conclusively captured before the environment drift.
 - Impact: Nonblocking because controls are visible and described, but modal clarity remains partially unverified.
+- Evidence clip: gameplay-recording.mp4 @ 00:02-00:04
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording shows the Options panel and save/export/import affordance area before the clean evidence ends, but it does not show a completed safe modal activation sequence.
 
 ### Low - Settings panel is dense and text-heavy on desktop
 
@@ -63,6 +69,9 @@ Options opened and showed save/export/import/file controls, language control, a 
 - Expected behavior: Settings should remain readable and destructive controls should be visually separated.
 - Actual behavior: Text is small and dense but readable at the tested desktop size. Wipe Save is strongly separated with red styling and warning copy.
 - Impact: Acceptable on desktop, but reinforces the need for narrow/mobile capture in a stable harness pass.
+- Evidence clip: gameplay-recording.mp4 @ 00:02-00:04
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The Options screen is visible in the main recording, showing the dense small-text settings layout and the separated destructive controls area at the tested desktop viewport.
 
 ## Coverage Table
 
@@ -107,4 +116,3 @@ Screenshots captured after the harness drifted to Arcade Kart Racer were removed
 ## Approval Statement
 
 Approved as `PASS_WITH_FINDINGS`. No provider retry is needed for basic Cookie Clicker playability. A future cleanup-stable pass could specifically target reload persistence, lower Options accessibility/screen-reader controls, and narrow/mobile viewport evidence.
-

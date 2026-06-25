@@ -32,6 +32,9 @@ The main issues are discoverability and documentation gaps: no in-game text expl
 ### Medium: Block removal was not confirmed through documented/visible controls
 
 - Status: Open
+- Evidence clip: `gameplay-recording.mp4` @ 00:00-00:04
+- Evidence status: Video clip plus same-folder stills document the desktop interaction state used for the removal check.
+- Why this evidence proves the finding: The clip shows the stable playable canvas during the recorded interaction path, and the paired `scoped-03-right-lower-block.png` frame preserves the right-click removal attempt state where no targeted block disappearance or feedback was visible.
 - Repro:
   1. Load the game.
   2. Place blocks on visible grid/water positions.
@@ -44,6 +47,9 @@ The main issues are discoverability and documentation gaps: no in-game text expl
 ### Medium: Gear/settings discoverability is unclear
 
 - Status: Open
+- Evidence clip: `gameplay-recording.mp4` @ 00:00-00:06
+- Evidence status: Video clip plus same-folder stills document that no readable settings/options panel appeared during the captured valid path.
+- Why this evidence proves the finding: The clip remains on the canvas with the gear icon visible and no settings/options overlay, while `scoped-00-before-gear.png`, `scoped-01-gear.png`, and `scoped-02-gear-menu-click.png` preserve the before/after gear-click states with no readable menu.
 - Repro:
   1. Load the game.
   2. Click the visible gear icon in the upper-right.
@@ -55,6 +61,9 @@ The main issues are discoverability and documentation gaps: no in-game text expl
 ### Low: Controls are icon-only and undocumented in the game surface
 
 - Status: Open
+- Evidence clip: `gameplay-recording.mp4` @ 00:00-00:06
+- Evidence status: Video clip plus same-folder stills document the visible first-screen controls.
+- Why this evidence proves the finding: The clip shows the game surface exposing color swatches and a gear icon without textual help, and `scoped-00-before-gear.png` confirms the first-screen state lacks readable control instructions.
 - Repro:
   1. Load the game.
   2. Inspect the first screen without outside knowledge.
@@ -66,6 +75,9 @@ The main issues are discoverability and documentation gaps: no in-game text expl
 ### Low: Narrow/mobile viewport is visually functional but cramped
 
 - Status: Open
+- Evidence clip: `gameplay-recording.mp4` @ 00:00-00:06
+- Evidence status: Supporting desktop video clip plus same-folder mobile screenshot document the responsive-state comparison.
+- Why this evidence proves the finding: The clip establishes the normal desktop canvas and palette spacing, while `scoped-04-mobile.png` shows the same game surface in the emulated 390x844 viewport with the bottom palette compressed and the play area narrow but still visible.
 - Repro:
   1. Emulate 390x844 mobile viewport.
   2. Observe the scene and palette.
@@ -77,6 +89,9 @@ The main issues are discoverability and documentation gaps: no in-game text expl
 ### Low: Browser-harness capture instability limited recording length
 
 - Status: Test limitation
+- Evidence clip: `gameplay-recording.mp4` @ 00:00-00:06
+- Evidence status: Video clip metadata and same-folder recording output document the short valid capture.
+- Why this evidence proves the finding: The report's recording metadata states the MP4 is 50 frames and 6.25 seconds, and the clip itself is a short target-scoped Townscaper capture, matching the limitation that still evidence had to carry several interaction claims.
 - Details: Global browser-harness helpers intermittently drifted to another active tab in the shared Chrome profile. Target-scoped CDP calls produced valid Townscaper screenshots, but screenshot capture remained slow and the continuous MP4 is shorter than ideal.
 - Evidence: valid Townscaper screenshots are target-scoped; invalid tab-drift screenshots were excluded from findings.
 - Impact: The report relies on still evidence for several interactions and a short continuous recording for motion continuity.

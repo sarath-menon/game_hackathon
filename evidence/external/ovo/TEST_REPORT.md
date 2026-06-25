@@ -45,6 +45,9 @@ Because the launch path is blocked before player control, controls, movement, re
 - Severity: Critical
 - Status: Open
 - Area: Load/accessibility
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:55
+- Evidence status: Video clip supports the blocked-provider finding.
+- Why this evidence proves the finding: The recording begins on the OvO loader/progress bar, continues through repeated wait checkpoints with only loading indicators, and later shows the directly opened frame still loading without any menu, controls prompt, or playable state.
 - Repro steps:
   1. Open https://www.crazygames.com/game/ovo.
   2. Wait for the CrazyGames portal and embedded game area to load.
@@ -65,6 +68,9 @@ Because the launch path is blocked before player control, controls, movement, re
 - Severity: High
 - Status: Open
 - Area: Load/error handling/readability
+- Evidence clip: gameplay-recording.mp4 @ 00:35-00:55
+- Evidence status: Video clip supports the no-recovery finding.
+- Why this evidence proves the finding: The later portion of the recording shows the loader persisting after extended waiting and direct-frame retry, with no visible error message, retry button, browser requirement, or other recovery action replacing the stalled loading state.
 - Repro steps:
   1. Trigger the stuck load state from OVO-001.
   2. Observe the game area and surrounding CrazyGames controls.

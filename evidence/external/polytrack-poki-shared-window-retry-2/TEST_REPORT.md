@@ -37,6 +37,9 @@ Settings/options were partially verified: the in-game Settings panel exposed lan
 - Expected behavior: The provider shell would stay in English or clearly preserve the requested `/en/` locale.
 - Actual behavior: The URL redirected to `https://poki.com/id/g/polytrack`, and provider text was Indonesian. The game UI itself remained readable in English after load.
 - Evidence: `01-provider-loaded.png`, `02-main-menu-visible.png`.
+- Evidence clip: `gameplay-recording.mp4 @ 00:00-00:02`
+- Evidence status: Clip available.
+- Why this evidence proves the finding: The recording opens on the localized Poki provider shell around the embedded game before the English PolyTrack menu becomes visible.
 
 ### LOW - Settings coverage is partial for audio/graphics/persistence
 
@@ -45,6 +48,9 @@ Settings/options were partially verified: the in-game Settings panel exposed lan
 - Expected behavior: External QA ideally verifies all visible options, including persistence after reload where practical.
 - Actual behavior: Core settings were visible and readable, but this pass did not fully verify settings persistence, graphics/quality controls, or audio behavior beyond the visible `Music: On` control.
 - Evidence: `07-after-w-accelerate.png`, `17-before-targeted-cancel.png`.
+- Evidence clip: `gameplay-recording.mp4 @ 00:03-00:08`
+- Evidence status: Clip available.
+- Why this evidence proves the finding: The clip shows the Settings panel and visible menu controls, enough to confirm partial settings reachability while also showing that deeper persistence, graphics-quality, and audio-behavior checks were not completed in this pass.
 
 ### LOW - Pause state was not visibly confirmed
 
@@ -53,6 +59,9 @@ Settings/options were partially verified: the in-game Settings panel exposed lan
 - Expected behavior: If Space is intended to pause, a visible pause state or menu should make the result clear.
 - Actual behavior: The sampled frame after Space did not show a clear pause overlay. This did not block driving/reset checks.
 - Evidence: `37-track-space-pause.png`.
+- Evidence clip: `gameplay-recording.mp4 @ 00:19-00:21`
+- Evidence status: Clip available.
+- Why this evidence proves the finding: The late-race segment shows driving/reset coverage followed by the sampled Space state, but no clear pause overlay or explicit paused label appears before the recording ends.
 
 ## QA Checklist
 

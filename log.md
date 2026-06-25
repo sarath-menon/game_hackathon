@@ -2984,3 +2984,13 @@ python3 -m http.server 8765 --bind 127.0.0.1
 - Platformer worker completed its assigned report metadata pass with five `OK` rows and two honest remaining `Needs Evidence Clip` items where the existing MP4 does not prove the blocker/limitation:
   - `evidence/platformer/settings-polish-2-retest-1/TEST_REPORT.md`: URL drift was terminal-only, with no post-drift video clip.
   - `evidence/platformer/settings-polish-2-retest-6/TEST_REPORT.md`: narrow viewport helper failure was not captured in the MP4.
+
+## Finding-Level Video Audit External Metadata Results - 2026-06-25
+
+- External metadata-only cleanup workers completed.
+- Rows converted to `OK` include Dungeons, both OvO reports, four PolyTrack reports, and both Townscaper reports.
+- Remaining external `Needs Evidence Clip` items require follow-up evidence rather than more metadata-only cleanup:
+  - `evidence/external/cookie-clicker-accessibility-narrow-followup-3/TEST_REPORT.md`: target-drift environment limitation was intentionally excluded from the clean Cookie MP4.
+  - `evidence/external/cookie-clicker/TEST_REPORT.md`: narrow/mobile viewport limitation lacks a narrow/mobile MP4 segment.
+  - `evidence/external/polytrack/TEST_REPORT.md`: duplicate-instance handling is screenshot-only and not present in the MP4.
+- Canonical tester was assigned the two Platformer follow-up evidence gaps with browser-harness because those require new supplemental recording.

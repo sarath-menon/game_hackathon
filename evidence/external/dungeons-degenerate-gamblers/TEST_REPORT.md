@@ -43,6 +43,9 @@ The core card-game state is understandable once at the table: player and bartend
 - Expected: The visible label and its nearby art should have an obvious, forgiving click target.
 - Actual: During exploratory testing, single clicks on the text label did not consistently advance; clicking nearby art/center regions did.
 - Evidence: `9333-after-newrun.png`, `9333-after-newrun-multiclick.png`, `9333-table-1.png`, `9333-table-clicks.png`, `gameplay-recording.mp4`.
+- Evidence clip: gameplay-recording.mp4 @ 00:10-00:28
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The segment shows the menu/tavern navigation path where visible labels and surrounding card/art regions had to be used before the run reached the table.
 
 ### F2: Embedded load time is long and progress feedback becomes sparse
 
@@ -55,6 +58,9 @@ The core card-game state is understandable once at the table: player and bartend
 - Expected: The player should receive continuous progress feedback or a prompt if load is expected to take tens of seconds.
 - Actual: The game eventually loaded, but the wait was long enough to appear stalled during one isolated-profile run before reaching the menu.
 - Evidence: `after-run-verified.png`, `load-0.png` through `load-5.png`, `9333-menu.png`, `gameplay-recording.mp4`.
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:12
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording begins with the itch launch and multiple splash/loading frames before the playable menu appears, demonstrating the long load and sparse progress feedback.
 
 ### F3: No visible in-game settings or volume controls found in first-run path
 
@@ -67,6 +73,9 @@ The core card-game state is understandable once at the table: player and bartend
 - Expected: If audio or accessibility options are present, they should be discoverable from the menu or play surface.
 - Actual: No clear settings/volume panel was found in the verified path. It may exist deeper in the demo or behind icons that were not safely verified.
 - Evidence: `9333-menu-2.png`, `9333-table-clicks.png`.
+- Evidence clip: gameplay-recording.mp4 @ 00:12-00:54
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording covers the main menu, run start, deck/map flow, and first table controls without a visible settings, volume, or accessibility panel in the exercised first-run path.
 
 ### F4: Itch embed competes with page chrome and below-page content
 
@@ -78,6 +87,9 @@ The core card-game state is understandable once at the table: player and bartend
 - Expected: The active game surface should be visually isolated enough that bottom controls and cards are easy to parse.
 - Actual: The game is playable, but the itch page content begins immediately below the embed, and the fullscreen icon sits close to the bottom edge. This slightly reduces readability in normal embedded mode.
 - Evidence: `9333-table-clicks.png`, `final-recording-frame.png`.
+- Evidence clip: gameplay-recording.mp4 @ 00:28-00:54
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The table sequence shows the game running inside the itch embed with surrounding page chrome/content visible near the lower edge of the active play surface.
 
 ## Readability / State-Action Clarity Assessment
 

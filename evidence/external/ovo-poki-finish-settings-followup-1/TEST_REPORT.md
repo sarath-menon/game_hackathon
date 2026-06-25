@@ -34,6 +34,9 @@ OvO Classic on Poki reached playable state in the shared Chrome/browser-harness 
 ### Low - Provider `/en/` URL Redirects To Indonesian Shell
 
 - Status: Open
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:11
+- Evidence status: Video shows the localized Poki provider shell around the playable embed; screenshots and the observed URL line provide the exact redirected `/id/` URL.
+- Why this evidence proves the finding: The clip starts on the Poki wrapper with Indonesian shell text visible while the OvO Classic embed loads into an English game menu, matching the reported shell/game language mismatch.
 - Evidence: `01-provider-load.png`, `02-after-wait.png`
 - Repro steps: Open `https://poki.com/en/g/ovo-classic` in the shared Chrome/browser-harness surface.
 - Expected: Provider shell remains English, or locale behavior is predictable from the requested URL.
@@ -43,6 +46,9 @@ OvO Classic on Poki reached playable state in the shared Chrome/browser-harness 
 ### Low - Jump Control Is Ambiguous Between Manual And Visible Game Prompt
 
 - Status: Open
+- Evidence clip: gameplay-recording.mp4 @ 00:01-00:06
+- Evidence status: Video proves the in-game prompt and successful finish path; manual mismatch is documented in the report inputs/manual reference.
+- Why this evidence proves the finding: The clip shows Level 1 displaying the Up-key jump prompt during route traversal, then the player reaches the finish transition and Level 2, demonstrating that the visible Up prompt was the actionable jump control for completion.
 - Evidence: `04-after-basic-key-inputs.png`, `11-route-right-4.png`, `12-finish-hop-attempt.png`, `14-level-end-transition.png`, `26-after-main-menu-levels.png`
 - Repro steps: Start Level 1 and follow the visible route to the end-of-level hop.
 - Expected: Manual and visible controls should align, or the game should make the active jump key unmistakable.
@@ -52,6 +58,9 @@ OvO Classic on Poki reached playable state in the shared Chrome/browser-harness 
 ### Low - Deeper Menu Coverage Was Limited After Inputs Overlay Stayed Active
 
 - Status: Coverage limitation
+- Evidence clip: gameplay-recording.mp4 @ 00:11-00:18
+- Evidence status: Video clip supports the limitation.
+- Why this evidence proves the finding: The clip shows the main menu/settings route reaching the options screen and then the Inputs panel, after which the recording remains on that Inputs overlay through the final frames instead of returning to cleanly exercise Levels, Trophy, or Skin panels.
 - Evidence: `24-after-main-menu-wrench.png`, `26-after-main-menu-levels.png`, `31-after-inputs-close.png`, `33-after-levels-panel.png`, `37-after-random-skin-final.png`
 - Repro steps: From main menu, open the wrench/settings screen and then open Inputs.
 - Expected: Inputs should be easy to close with visible close/back controls or keyboard Escape, allowing quick return to Levels/Trophy/Skin checks.

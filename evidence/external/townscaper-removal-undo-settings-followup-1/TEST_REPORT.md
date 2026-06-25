@@ -32,6 +32,9 @@ The main nonblocking concerns are that the gear icon did not visibly open any se
 ### Medium - Gear/settings/help icon did not expose visible settings or help
 
 - Status: Open
+- Evidence clip: `gameplay-recording.mp4` @ 00:06-00:08
+- Evidence status: Video clip plus same-folder stills document the normal gear activation attempts.
+- Why this evidence proves the finding: The clip segment corresponds to the gear-click sequence, and the paired `13-after-gear-css-click.png`, `14-after-gear-screenshot-pixel-click.png`, and `15-after-gear-raw-cdp-click.png` frames continue to show the canvas without a readable settings/help panel or visible changed state.
 - Evidence: `13-after-gear-css-click.png`, `14-after-gear-screenshot-pixel-click.png`, `15-after-gear-raw-cdp-click.png`
 - Repro steps:
   1. Load the playable WebGL scene.
@@ -44,6 +47,9 @@ The main nonblocking concerns are that the gear icon did not visibly open any se
 ### Low - Undo/redo behavior was not discoverable or visibly supported
 
 - Status: Open
+- Evidence clip: `gameplay-recording.mp4` @ 00:10-00:13
+- Evidence status: Video clip plus same-folder stills document the removal state and subsequent shortcut attempts.
+- Why this evidence proves the finding: The clip segment maps to the post-removal and undo/redo sequence; `21-after-right-click-removal.png`, `23-after-ctrl-z-undo.png`, `24-after-cmd-z-undo.png`, and `25-after-ctrl-shift-z-redo.png` show that the removed section did not visibly return and no explanatory feedback appeared.
 - Evidence: `21-after-right-click-removal.png`, `23-after-ctrl-z-undo.png`, `24-after-cmd-z-undo.png`, `25-after-ctrl-shift-z-redo.png`
 - Repro steps:
   1. Place a visible new block/section.
@@ -57,6 +63,9 @@ The main nonblocking concerns are that the gear icon did not visibly open any se
 ### Low - Placement target clarity depends on a subtle outlined-cell state
 
 - Status: Open
+- Evidence clip: `gameplay-recording.mp4` @ 00:02-00:10
+- Evidence status: Video clip plus same-folder stills document the before/after placement attempts.
+- Why this evidence proves the finding: The clip covers the playable scene through the successful outlined-cell placement window, while the paired stills show earlier plausible placement attempts without an obvious change and the later `18-before-outlined-cell-click.png` to `19-after-outlined-cell-click.png` change once the subtle white target outline is visible.
 - Evidence: `05-placement-before.png` through `12-after-roof-placement-screenshot-pixel.png`, `18-before-outlined-cell-click.png`, `19-after-outlined-cell-click.png`
 - Repro steps:
   1. Load the playable scene.
@@ -70,6 +79,9 @@ The main nonblocking concerns are that the gear icon did not visibly open any se
 ### Low - Color controls are color-only and selected-color feedback is limited
 
 - Status: Open
+- Evidence clip: `gameplay-recording.mp4` @ 00:01-00:06
+- Evidence status: Video clip plus same-folder stills document the visible swatch-only palette and selected-color check.
+- Why this evidence proves the finding: The clip shows the palette as color swatches without text labels, and `06-after-blue-swatch.png` plus `11-after-blue-swatch-screenshot-pixel.png` preserve the post-swatch state without a readable label, tooltip, or clear selected-state callout.
 - Evidence: `04-after-22s.png`, `06-after-blue-swatch.png`, `11-after-blue-swatch-screenshot-pixel.png`
 - Repro steps:
   1. Load the playable scene.
@@ -82,6 +94,9 @@ The main nonblocking concerns are that the gear icon did not visibly open any se
 ### Low - Startup delay is noticeable but not blocking
 
 - Status: Open
+- Evidence clip: `gameplay-recording.mp4` @ 00:00-00:02
+- Evidence status: Timelapse video clip plus same-folder load stills document slow-but-successful startup.
+- Why this evidence proves the finding: The clip begins in the loading state and reaches the playable scene shortly afterward because the recording was encoded from spaced captures; the still sequence `01-initial-load.png`, `02-after-5s.png`, `03-after-12s.png`, and `04-after-22s.png` provides the real elapsed wait markers behind that condensed startup path.
 - Evidence: `01-initial-load.png`, `02-after-5s.png`, `03-after-12s.png`, `04-after-22s.png`
 - Repro steps:
   1. Open the direct Townscaper URL.
@@ -124,4 +139,3 @@ Startup was slow but completed. After the playable scene appeared, WebGL interac
 ## Approval Statement
 
 Approved as `PASS_WITH_FINDINGS` for this external QA pass. No provider retry is required for basic playability. A future focused pass could target gear/help behavior and undo/redo documentation if the orchestrator wants deeper settings/help coverage.
-

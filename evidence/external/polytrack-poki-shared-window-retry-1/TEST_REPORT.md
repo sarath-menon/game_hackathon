@@ -45,6 +45,9 @@ The run is still not acceptable as a gameplay QA pass because the clean shared-w
 - Expected behavior: The QA harness should activate the visible Play flow and reach a track so driving controls and route/timer/reset behavior can be evaluated.
 - Actual behavior: Clean evidence reached the main menu and Settings, but not a drivable track.
 - Evidence: `02-iframe-visible-after-wait.png`, `05-after-w-accelerate.png`, `18-after-play-click.png`, `21-after-track-w-accelerate.png`, `26-after-track-space-pause.png`, `gameplay-recording.mp4`.
+- Evidence clip: `gameplay-recording.mp4 @ 00:00-00:14`
+- Evidence status: Clip available.
+- Why this evidence proves the finding: The full recording shows the provider/game menu and then repeated Settings-screen states through the end of the run, with no transition to a drivable track, car movement, timer, or race HUD.
 
 ## Checks Completed
 

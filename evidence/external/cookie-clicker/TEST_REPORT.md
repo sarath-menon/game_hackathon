@@ -41,6 +41,9 @@ During startup, the language picker was exercised and the UI localized to Czech.
 - Expected: captured viewport reflects 390x844 mobile/narrow layout.
 - Actual: captured screenshot remained 1536x608, so the product's actual narrow layout could not be judged from this run.
 - Evidence: `screenshots/24-mobile-390x844-focused.png`
+- Evidence clip: Needs Evidence Clip
+- Evidence status: Needs Evidence Clip
+- Why this evidence proves the finding: The MP4 remains at the desktop capture size and does not include a proven 390x844 narrow/mobile recording segment, so this limitation still needs a dedicated clip.
 
 ### F2 - Backup reminder modal reappears after reload and covers central play area
 
@@ -53,6 +56,9 @@ During startup, the language picker was exercised and the UI localized to Czech.
 - Expected: backup reminder may appear and should be dismissible.
 - Actual: reminder appeared over the center panel but did not block the left cookie or right store permanently.
 - Evidence: `screenshots/23-after-reload-persistence-focused.png`
+- Evidence clip: gameplay-recording.mp4 @ 00:00-00:07
+- Evidence status: Main recording segment
+- Why this evidence proves the finding: The recording repeatedly shows the backup reminder modal centered over the play area while the cookie and store columns remain visible and reachable around it.
 
 ## Functional Coverage
 

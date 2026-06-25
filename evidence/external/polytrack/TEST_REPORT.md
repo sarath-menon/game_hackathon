@@ -46,6 +46,9 @@ Because the game never became playable, gameplay controls, route readability, re
 - Expected behavior: The game should load to a start/menu screen or playable track, or provide a clear unsupported-browser message before throwing an internal exception.
 - Actual behavior: The game displays an unexpected error screen before gameplay: `Cannot read properties of undefined (reading 'autoReset')`.
 - Evidence: `gameplay-recording.mp4`, `remote-menu.png`, `after-reset-reload.png`
+- Evidence clip: `gameplay-recording.mp4 @ 00:00-00:05`
+- Evidence status: Clip available.
+- Why this evidence proves the finding: The recording shows the tested provider path sitting on the PolyTrack startup exception and hardware-acceleration warning instead of reaching a menu, track, or other playable state.
 - Impact: Blocks all black-box gameplay QA and prevents normal player access in this browser environment.
 
 ### P1 - Visible Recovery Controls Do Not Recover From Startup Error
@@ -59,6 +62,9 @@ Because the game never became playable, gameplay controls, route readability, re
 - Expected behavior: Recovery controls should either restore default settings and reload successfully, or clearly state that the environment is unsupported and play cannot continue.
 - Actual behavior: The same startup exception remains after reset/reload, and dismissing the warning does not reveal a playable menu.
 - Evidence: `gameplay-recording.mp4`, `after-reset-click.png`, `after-reset-reload.png`, `after-ok.png`
+- Evidence clip: `gameplay-recording.mp4 @ 00:05-00:08`
+- Evidence status: Clip available.
+- Why this evidence proves the finding: The recording continues through the recovery-attempt portion and ends with the same startup exception state still visible, proving the in-page controls did not recover gameplay in the captured run.
 - Impact: Players who encounter this state have no effective in-page recovery path.
 
 ### P2 - Duplicate Instance Handling Was Observed But Not Fully Tested
@@ -71,6 +77,9 @@ Because the game never became playable, gameplay controls, route readability, re
 - Expected behavior: If duplicate instances are unsupported, the game should clearly tell the user which tab can continue.
 - Actual behavior: A clear message appeared: another PolyTrack instance is open and the player should switch to that tab/window.
 - Evidence: `polytrack-menu.png`
+- Evidence clip: Needs Evidence Clip
+- Evidence status: Screenshot-only evidence available in same folder as `polytrack-menu.png`; the assigned `gameplay-recording.mp4` documents the later startup-error sequence and does not capture the duplicate-instance setup.
+- Why this evidence proves the finding: The same-folder screenshot documents the duplicate-instance message, but the existing MP4 cannot independently prove this informational item without fabricating a timestamp.
 - Impact: The message is understandable, but duplicate-tab behavior could not be expanded into full gameplay testing due the later harness attachment and startup limitations.
 
 ## Readability / Route Clarity Assessment

@@ -58,6 +58,9 @@ Visible recovery controls were attempted: `OK`, `Reset Settings`, and `Reload`. 
 - Expected behavior: The game frame should reach a playable menu or track.
 - Actual behavior: The frame displays a hardware acceleration warning and an uncaught startup exception before gameplay.
 - Evidence: `gameplay-recording.mp4`, `after-run-click.png`
+- Evidence clip: `gameplay-recording.mp4 @ 00:00-00:04`
+- Evidence status: Clip available.
+- Why this evidence proves the finding: The recording starts with the Itch page/frame launch and then shows the PolyTrack frame reaching the hardware-acceleration warning plus uncaught startup exception instead of a playable menu or track.
 - Impact: Gameplay, controls, route readability, restart, settings, performance, and fullscreen QA cannot be completed in this environment.
 
 ### E1 - In-Frame Recovery Controls Do Not Restore Play In This Environment
@@ -72,6 +75,9 @@ Visible recovery controls were attempted: `OK`, `Reset Settings`, and `Reload`. 
 - Expected behavior: The game either recovers to menu/play or presents a clear unsupported-environment state.
 - Actual behavior: The frame remains blocked or reloads back to the same startup error state.
 - Evidence: `after-ok.png`, `after-reset-settings.png`, `after-reload.png`, `gameplay-recording.mp4`
+- Evidence clip: `gameplay-recording.mp4 @ 00:04-00:09`
+- Evidence status: Clip available.
+- Why this evidence proves the finding: The recording shows the error state continuing through the recovery-control sequence and ending back on the same startup-error screen rather than gameplay.
 - Impact: Recovery controls do not allow black-box QA to proceed in the remote harness browser.
 
 ## Load / Accessibility
