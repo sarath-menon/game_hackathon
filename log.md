@@ -2466,3 +2466,38 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - audio remains off by default and after Reset Defaults.
 - Future tester evidence target after builder completion:
   - `evidence/deckbuilder/upgrade-phase-3-deck-inspection/`
+
+## Deckbuilder Upgrade Phase 3 Builder Complete / Tester Handoff - 2026-06-25
+
+- Deckbuilder builder `019ef96e-7780-7763-b444-12cf7698a97a` completed Upgrade Phase 3: Deck, Draw, And Discard Inspection.
+- Changed artifacts:
+  - `games/deckbuilder/index.html`
+  - `games/deckbuilder/README.md`
+- Builder summary:
+  - added a read-only `Inspect Deck` surface from the combat header and center pile area;
+  - added `Inspect Current Deck` from the reward-choice overlay;
+  - inspector shows Current Deck, Hand, Draw Pile, Discard Pile, Exhaust / Removed, and Recent Reward Additions;
+  - card rows show card name, type, cost, and effect text;
+  - Draw Pile lists the next card first and empty piles show explicit empty states;
+  - Escape and Close return focus to the opener with a scoped focus trap while open;
+  - README documents inspection controls and draw/discard visibility.
+- Builder self-checks reported:
+  - game and README return `200 OK`;
+  - embedded script parses;
+  - combat inspector opened with deck/draw/hand/discard counts and entries visible;
+  - playing `Quick Study` updated draw `5`, hand `6`, discard `1`, and discard showed `Quick Study`;
+  - reward-state inspection worked;
+  - selecting `Flare Shot` showed deck `13`, reward added, and `Flare Shot` under Recent Reward Additions in encounter 2;
+  - Escape/Close returned focus and gameplay remained usable;
+  - audio remains off by default and after Reset Defaults.
+- Canonical tester handoff sent to `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Allowed tester inputs:
+  - URL: `http://127.0.0.1:8765/games/deckbuilder/index.html`
+  - manual: `http://127.0.0.1:8765/games/deckbuilder/README.md`
+  - evidence target: `evidence/deckbuilder/upgrade-phase-3-deck-inspection/`
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Tester focus:
+  - black-box verification of inspector discoverability, sections, counts, card entries, discard updates, reward-state inspection, reward addition visibility, Escape/Close focus return, audio/default/settings regression, intent/status readability, Focus/Fractured coherence, reward flow, restart/new-run, and state/action clarity.
