@@ -2552,3 +2552,38 @@ python3 -m http.server 8765 --bind 127.0.0.1
 - Verdict taxonomy:
   - `PASS_WITH_FINDINGS`, `FAIL`, `BLOCKED_PROVIDER`, or `BLOCKED_ENVIRONMENT`;
   - provider/setup/WebGL/harness blockers must not be treated as final game failure.
+
+## Townscaper External QA Follow-Up PASS_WITH_FINDINGS - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Townscaper Web Removal, Undo, Gear/Settings, And Placement-Clarity Follow-Up 1.
+- Evidence folder:
+  - `evidence/external/townscaper-removal-undo-settings-followup-1/`
+- Required artifacts are present:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS_WITH_FINDINGS`.
+- Provider/environment classification:
+  - not `BLOCKED_PROVIDER`: the direct provider URL reached playable WebGL state;
+  - not `BLOCKED_ENVIRONMENT`: shared Chrome/browser-harness loaded, interacted with, and captured the game;
+  - no provider retry required for this pass.
+- Tester verified:
+  - direct URL reached playable WebGL after slow but finite startup around the `04-after-22s.png` frame;
+  - a clear outlined placement target was established after camera movement;
+  - clicking the outlined cell placed a visually distinct detached platform/roof section;
+  - right-click removal removed that placed section;
+  - wheel zoom changed camera distance/framing;
+  - camera drag remained interactive after placement/removal;
+  - WebGL stayed stable without crash, runtime error, or provider block.
+- Open nonblocking findings:
+  - `Medium`: gear/settings/help icon did not expose visible settings/help after multiple normal activation attempts;
+  - `Low`: undo/redo shortcuts did not visibly restore/redo the removed block or explain availability;
+  - `Low`: placement target clarity depends on subtle outlined-cell state;
+  - `Low`: color controls are color-only with limited selected-state feedback;
+  - `Low`: startup delay is noticeable but not blocking.
+- QA methodology carry-forward:
+  - for creative/WebGL games, use stable before/after framing and visual deltas as primary proof;
+  - treat URL/hash changes only as supporting context;
+  - when initial placement appears inert, look for hover/outline target states before declaring failure;
+  - for icon-only settings/help controls, try a small set of normal activation paths, then classify discoverability instead of over-probing.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` should mark this follow-up `PASS_WITH_FINDINGS`, preserve the prior Townscaper baseline pass, and surface the new evidence links.
