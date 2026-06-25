@@ -260,6 +260,86 @@
       font-size: 0.95rem;
     }
 
+    .status-list {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .status-card {
+      display: grid;
+      grid-template-columns: minmax(145px, 0.9fr) minmax(0, 1.1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--pass);
+      border-radius: 8px;
+      background: #fff;
+      min-width: 0;
+    }
+
+    .status-card[data-status="attention"] {
+      border-left-color: var(--attention);
+    }
+
+    .status-card[data-status="fail"] {
+      border-left-color: var(--fail);
+    }
+
+    .status-card strong,
+    .status-card span,
+    .status-card p,
+    .status-card a {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .status-card-label {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .status-card-title {
+      display: grid;
+      gap: 5px;
+      font-weight: 900;
+    }
+
+    .status-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .status-card-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    .status-card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .status-card-actions .action-btn {
+      padding: 6px 9px;
+      min-height: 30px;
+      font-size: 0.78rem;
+    }
+
     .ops-table {
       width: 100%;
       border-collapse: collapse;
@@ -1007,11 +1087,11 @@
       <section class="status-strip" id="status-strip" aria-label="Game status summary"></section>
     </header>
 
-    <section class="ops-board" id="attention-panel" aria-label="Game QA Suite operations board">
+    <section class="ops-board" id="attention-panel" aria-label="Current QA status board">
       <div class="ops-title">
         <div>
-          <h2>Current Board</h2>
-          <p>Local builds + external QA methodology. Current work is kept separate from closed evidence.</p>
+          <h2>Current Status</h2>
+          <p>Concise project state. Use View Evidence buttons to open detailed evidence, recordings, and findings in the drawer.</p>
         </div>
         <span class="badge" data-status="attention">Live</span>
       </div>
@@ -1019,239 +1099,118 @@
       <div class="summary-grid" aria-label="Current work summary">
         <div class="summary-card">
           <strong>Active Now</strong>
-          <p>Platformer Upgrade Phase B - Camera And Route Readability Pass is TESTER ACTIVE / EVIDENCE PENDING. Kart driving assists Retest 1 is PASS / CLOSED. Cookie Clicker follow-up 3 is closed PASS_WITH_FINDINGS.</p>
+          <p>Platformer Upgrade Phase B Retest 1 is RETEST ACTIVE / EVIDENCE PENDING after a narrow lower-route geometry fix. Kart driving assists Retest 1 is PASS / CLOSED. Cookie Clicker follow-up 3 is PASS_WITH_FINDINGS.</p>
         </div>
         <div class="summary-card">
           <strong>Next Action</strong>
-          <p>Wait for Platformer tester verdict at evidence/platformer/upgrade-phase-b-camera-route-readability/.</p>
+          <p>Wait for the Platformer Retest 1 verdict at evidence/platformer/upgrade-phase-b-camera-route-readability-retest-1/.</p>
         </div>
       </div>
 
       <div class="tracks-grid">
         <section class="track-card" aria-labelledby="track-local-title">
           <h3 id="track-local-title">Track 1: Local Games</h3>
-          <table class="ops-table">
-            <thead>
-              <tr><th>Game</th><th>Current</th><th>Last Verdict</th><th>Evidence</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Arcade Kart Racer</td>
-                <td><span class="badge" data-status="pass">PASS / CLOSED</span><br>driving assists Retest 1 closed</td>
-                <td><span class="badge" data-status="pass">PASS</span><br><a href="evidence/kart-racer/driving-assists-accessibility-retest-1/TEST_REPORT.md">driving assists retest 1</a></td>
-                <td><button class="action-btn" data-open-phase="kart-racer:driving-assists">View timeline</button></td>
-              </tr>
-              <tr>
-                <td>Side-Scrolling Platformer</td>
-                <td><span class="badge" data-status="attention">TESTER ACTIVE</span><br>Upgrade Phase B evidence pending</td>
-                <td><span class="badge" data-status="pass">PASS</span><br><a href="evidence/platformer/settings-polish-2-retest-6/TEST_REPORT.md">settings polish 2 retest 6</a></td>
-                <td><button class="action-btn" data-open-phase="platformer:upgrade-phase-b">View timeline</button></td>
-              </tr>
-              <tr>
-                <td>Turn-Based Deckbuilder</td>
-                <td><span class="badge" data-status="pass">CLOSED</span></td>
-                <td><span class="badge" data-status="pass">PASS</span><br><a href="evidence/deckbuilder/upgrade-phase-3-deck-inspection/TEST_REPORT.md">upgrade phase 3</a></td>
-                <td><button class="action-btn" data-open-phase="deckbuilder:upgrade-phase-3">View timeline</button></td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="status-list">
+            <article class="status-card" data-status="pass">
+              <div class="status-card-title">
+                <strong>Arcade Kart Racer</strong>
+                <span class="badge" data-status="pass">PASS / CLOSED</span>
+              </div>
+              <div>
+                <p class="status-card-copy">Driving Assists Retest 1 closed.</p>
+              </div>
+              <div>
+                <div class="status-card-actions">
+                  <button class="action-btn" data-open-phase="kart-racer:driving-assists">View Evidence</button>
+                  <a href="games/kart-racer/index.html">Open game</a>
+                </div>
+              </div>
+              <div>
+                <p class="status-card-copy">Coverage limits tracked in drawer.</p>
+              </div>
+            </article>
+
+            <article class="status-card" data-status="attention">
+              <div class="status-card-title">
+                <strong>Side-Scrolling Platformer</strong>
+                <span class="badge" data-status="attention">RETEST ACTIVE</span>
+              </div>
+              <div>
+                <p class="status-card-copy">Phase B route readability Retest 1; evidence pending.</p>
+              </div>
+              <div>
+                <div class="status-card-actions">
+                  <button class="action-btn" data-open-phase="platformer:upgrade-phase-b-retest-1">View Evidence</button>
+                  <a href="games/platformer/index.html">Open game</a>
+                </div>
+              </div>
+              <div>
+                <p class="status-card-copy">Route stall -> builder fix complete -> retest active.</p>
+              </div>
+            </article>
+
+            <article class="status-card" data-status="pass">
+              <div class="status-card-title">
+                <strong>Turn-Based Deckbuilder</strong>
+                <span class="badge" data-status="pass">PASS / CLOSED</span>
+              </div>
+              <div>
+                <p class="status-card-copy">Upgrade Phase 3 deck inspection closed.</p>
+              </div>
+              <div>
+                <div class="status-card-actions">
+                  <button class="action-btn" data-open-phase="deckbuilder:upgrade-phase-3">View Evidence</button>
+                  <a href="games/deckbuilder/index.html">Open game</a>
+                </div>
+              </div>
+              <div>
+                <p class="status-card-copy">No active blocking findings.</p>
+              </div>
+            </article>
+          </div>
         </section>
 
         <section class="track-card" aria-labelledby="track-external-title">
           <h3 id="track-external-title">Track 2: External Browser QA</h3>
-          <table class="ops-table">
-            <thead>
-              <tr><th>Game</th><th>Current</th><th>Last Verdict</th><th>Evidence</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Cookie Clicker<br><a href="https://orteil.dashnet.org/cookieclicker/">URL</a></td>
-                <td><span class="badge" data-status="pass">CLOSED</span><br>accessibility, narrow viewport, settings persistence follow-up 3</td>
-                <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span><br><a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/TEST_REPORT.md">follow-up 3</a></td>
-                <td><a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/TEST_REPORT.md">report</a> · <a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/expected-flow.md">flow</a> · <a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/gameplay-recording.mp4">video</a></td>
-              </tr>
-              <tr>
-                <td>PolyTrack<br><a href="https://poki.com/en/g/polytrack">URL</a></td>
-                <td><span class="badge" data-status="pass">CLOSED</span></td>
-                <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></td>
-                <td><a href="evidence/external/polytrack-poki-settings-race-followup-1/TEST_REPORT.md">View latest</a></td>
-              </tr>
-              <tr>
-                <td>OvO<br><a href="https://poki.com/en/g/ovo-classic">URL</a></td>
-                <td><span class="badge" data-status="pass">CLOSED</span></td>
-                <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></td>
-                <td><a href="evidence/external/ovo-poki-finish-settings-followup-1/TEST_REPORT.md">View latest</a></td>
-              </tr>
-              <tr>
-                <td>Dungeons &amp; Degenerate Gamblers<br><a href="https://html-classic.itch.zone/html/15020933/index.html">URL</a></td>
-                <td><span class="badge" data-status="pass">CLOSED</span></td>
-                <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></td>
-                <td><a href="evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/TEST_REPORT.md">View latest</a></td>
-              </tr>
-              <tr>
-                <td>Townscaper<br><a href="https://oskarstalberg.com/Townscaper/">URL</a></td>
-                <td><span class="badge" data-status="pass">CLOSED</span></td>
-                <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></td>
-                <td><a href="evidence/external/townscaper-removal-undo-settings-followup-1/TEST_REPORT.md">View latest</a></td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="status-list">
+            <article class="status-card" data-status="pass">
+              <div class="status-card-title"><strong>Cookie Clicker</strong><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></div>
+              <div><p class="status-card-copy">Official provider; follow-up 3 closed.</p></div>
+              <div class="status-card-actions"><a href="https://orteil.dashnet.org/cookieclicker/">URL</a><button class="action-btn" data-open-external="cookie-clicker">View Evidence</button></div>
+              <div><p class="status-card-copy">Findings in drawer.</p></div>
+            </article>
+
+            <article class="status-card" data-status="pass">
+              <div class="status-card-title"><strong>PolyTrack</strong><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></div>
+              <div><p class="status-card-copy">Poki provider; follow-up closed.</p></div>
+              <div class="status-card-actions"><a href="https://poki.com/en/g/polytrack">URL</a><button class="action-btn" data-open-external="polytrack">View Evidence</button></div>
+              <div><p class="status-card-copy">Findings in drawer.</p></div>
+            </article>
+
+            <article class="status-card" data-status="pass">
+              <div class="status-card-title"><strong>OvO</strong><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></div>
+              <div><p class="status-card-copy">Poki provider; follow-up closed.</p></div>
+              <div class="status-card-actions"><a href="https://poki.com/en/g/ovo-classic">URL</a><button class="action-btn" data-open-external="ovo">View Evidence</button></div>
+              <div><p class="status-card-copy">Findings in drawer.</p></div>
+            </article>
+
+            <article class="status-card" data-status="pass">
+              <div class="status-card-title"><strong>Dungeons &amp; Degenerate Gamblers</strong><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></div>
+              <div><p class="status-card-copy">Direct official build follow-up closed.</p></div>
+              <div class="status-card-actions"><a href="https://html-classic.itch.zone/html/15020933/index.html">URL</a><button class="action-btn" data-open-external="dungeons">View Evidence</button></div>
+              <div><p class="status-card-copy">Findings in drawer.</p></div>
+            </article>
+
+            <article class="status-card" data-status="pass">
+              <div class="status-card-title"><strong>Townscaper</strong><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></div>
+              <div><p class="status-card-copy">Removal/settings follow-up closed.</p></div>
+              <div class="status-card-actions"><a href="https://oskarstalberg.com/Townscaper/">URL</a><button class="action-btn" data-open-external="townscaper">View Evidence</button></div>
+              <div><p class="status-card-copy">Findings in drawer.</p></div>
+            </article>
+          </div>
         </section>
       </div>
 
-      <section class="video-strip" aria-label="Latest external browser QA recordings">
-        <article class="milestone-video-card">
-          <header>
-            <div>
-              <h3>Cookie Clicker</h3>
-              <p>Latest external QA: Follow-Up 3</p>
-            </div>
-            <span class="badge" data-status="pass">PASS_WITH_FINDINGS</span>
-          </header>
-          <video controls preload="metadata" src="evidence/external/cookie-clicker-accessibility-narrow-followup-3/gameplay-recording.mp4"></video>
-          <footer>
-            <a href="https://orteil.dashnet.org/cookieclicker/">URL</a>
-            <a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/TEST_REPORT.md">report</a>
-            <a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/expected-flow.md">expected-flow</a>
-            <a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/gameplay-recording.mp4">recording</a>
-          </footer>
-        </article>
-
-        <article class="milestone-video-card">
-          <header>
-            <div>
-              <h3>PolyTrack</h3>
-              <p>Latest external QA: settings/race follow-up</p>
-            </div>
-            <span class="badge" data-status="pass">PASS_WITH_FINDINGS</span>
-          </header>
-          <video controls preload="metadata" src="evidence/external/polytrack-poki-settings-race-followup-1/gameplay-recording.mp4"></video>
-          <footer>
-            <a href="https://poki.com/en/g/polytrack">URL</a>
-            <a href="evidence/external/polytrack-poki-settings-race-followup-1/TEST_REPORT.md">report</a>
-            <a href="evidence/external/polytrack-poki-settings-race-followup-1/expected-flow.md">expected-flow</a>
-            <a href="evidence/external/polytrack-poki-settings-race-followup-1/gameplay-recording.mp4">recording</a>
-          </footer>
-        </article>
-
-        <article class="milestone-video-card">
-          <header>
-            <div>
-              <h3>OvO</h3>
-              <p>Latest external QA: finish/settings follow-up</p>
-            </div>
-            <span class="badge" data-status="pass">PASS_WITH_FINDINGS</span>
-          </header>
-          <video controls preload="metadata" src="evidence/external/ovo-poki-finish-settings-followup-1/gameplay-recording.mp4"></video>
-          <footer>
-            <a href="https://poki.com/en/g/ovo-classic">URL</a>
-            <a href="evidence/external/ovo-poki-finish-settings-followup-1/TEST_REPORT.md">report</a>
-            <a href="evidence/external/ovo-poki-finish-settings-followup-1/expected-flow.md">expected-flow</a>
-            <a href="evidence/external/ovo-poki-finish-settings-followup-1/gameplay-recording.mp4">recording</a>
-          </footer>
-        </article>
-
-        <article class="milestone-video-card">
-          <header>
-            <div>
-              <h3>Dungeons &amp; Degenerate Gamblers</h3>
-              <p>Latest external QA: legality/restart follow-up</p>
-            </div>
-            <span class="badge" data-status="pass">PASS_WITH_FINDINGS</span>
-          </header>
-          <video controls preload="metadata" src="evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/gameplay-recording.mp4"></video>
-          <footer>
-            <a href="https://html-classic.itch.zone/html/15020933/index.html">URL</a>
-            <a href="evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/TEST_REPORT.md">report</a>
-            <a href="evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/expected-flow.md">expected-flow</a>
-            <a href="evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/gameplay-recording.mp4">recording</a>
-          </footer>
-        </article>
-
-        <article class="milestone-video-card">
-          <header>
-            <div>
-              <h3>Townscaper</h3>
-              <p>Latest external QA: removal/undo/settings follow-up</p>
-            </div>
-            <span class="badge" data-status="pass">PASS_WITH_FINDINGS</span>
-          </header>
-          <video controls preload="metadata" src="evidence/external/townscaper-removal-undo-settings-followup-1/gameplay-recording.mp4"></video>
-          <footer>
-            <a href="https://oskarstalberg.com/Townscaper/">URL</a>
-            <a href="evidence/external/townscaper-removal-undo-settings-followup-1/TEST_REPORT.md">report</a>
-            <a href="evidence/external/townscaper-removal-undo-settings-followup-1/expected-flow.md">expected-flow</a>
-            <a href="evidence/external/townscaper-removal-undo-settings-followup-1/gameplay-recording.mp4">recording</a>
-          </footer>
-        </article>
-      </section>
-
-      <section class="video-strip" aria-label="Latest local milestone recordings">
-        <article class="milestone-video-card">
-          <header>
-            <div>
-              <h3>Arcade Kart Racer</h3>
-              <p>Latest approved milestone: settings-depth retest 2</p>
-            </div>
-            <span class="badge" data-status="pass">PASS</span>
-          </header>
-          <video controls preload="metadata" src="evidence/kart-racer/settings-depth-retest-2/gameplay-recording.mp4"></video>
-          <footer>
-            <a href="evidence/kart-racer/settings-depth-retest-2/TEST_REPORT.md">report</a>
-            <a href="evidence/kart-racer/settings-depth-retest-2/expected-flow.md">expected-flow</a>
-            <a href="evidence/kart-racer/settings-depth-retest-2/gameplay-recording.mp4">recording</a>
-          </footer>
-        </article>
-
-        <article class="milestone-video-card">
-          <header>
-            <div>
-              <h3>Side-Scrolling Platformer</h3>
-              <p>Latest approved milestone: Settings Polish 2 Retest 6</p>
-            </div>
-            <span class="badge" data-status="pass">PASS</span>
-          </header>
-          <video controls preload="metadata" src="evidence/platformer/settings-polish-2-retest-6/gameplay-recording.mp4"></video>
-          <footer>
-            <a href="evidence/platformer/settings-polish-2-retest-6/TEST_REPORT.md">report</a>
-            <a href="evidence/platformer/settings-polish-2-retest-6/expected-flow.md">expected-flow</a>
-            <a href="evidence/platformer/settings-polish-2-retest-6/gameplay-recording.mp4">recording</a>
-          </footer>
-        </article>
-
-        <article class="milestone-video-card">
-          <header>
-            <div>
-              <h3>Turn-Based Deckbuilder</h3>
-              <p>Latest approved milestone: Upgrade Phase 3</p>
-            </div>
-            <span class="badge" data-status="pass">PASS</span>
-          </header>
-          <video controls preload="metadata" src="evidence/deckbuilder/upgrade-phase-3-deck-inspection/gameplay-recording.mp4"></video>
-          <footer>
-            <a href="evidence/deckbuilder/upgrade-phase-3-deck-inspection/TEST_REPORT.md">report</a>
-            <a href="evidence/deckbuilder/upgrade-phase-3-deck-inspection/expected-flow.md">expected-flow</a>
-            <a href="evidence/deckbuilder/upgrade-phase-3-deck-inspection/gameplay-recording.mp4">recording</a>
-          </footer>
-        </article>
-      </section>
-
-      <section class="detail-panel" aria-labelledby="selected-detail-title">
-        <h3 id="selected-detail-title">Selected Detail: Side-Scrolling Platformer</h3>
-        <div class="detail-section">
-          <strong>Current Work</strong>
-          <p>Upgrade Phase B - Camera And Route Readability Pass is <strong>TESTER ACTIVE / EVIDENCE PENDING</strong>. Scope: committed-direction lookahead, horizontal camera dead zone, stable vertical camera, clearer safe-vs-optional route rails/chevrons/labels, stronger exit beacon, and preservation of settings/audio/movement regressions. Evidence target: <a href="evidence/platformer/upgrade-phase-b-camera-route-readability/TEST_REPORT.md">report</a>, <a href="evidence/platformer/upgrade-phase-b-camera-route-readability/expected-flow.md">expected-flow</a>, <a href="evidence/platformer/upgrade-phase-b-camera-route-readability/gameplay-recording.mp4">recording</a>. Future tester findings in this pass should include finding-level evidence clips/timestamps.</p>
-        </div>
-        <div class="detail-section">
-          <strong>Latest Approved Evidence</strong>
-          <p>Settings Polish 2 Retest 6 is PASS: <a href="evidence/platformer/settings-polish-2-retest-6/TEST_REPORT.md">report</a>, <a href="evidence/platformer/settings-polish-2-retest-6/expected-flow.md">expected-flow</a>, <a href="evidence/platformer/settings-polish-2-retest-6/gameplay-recording.mp4">recording</a>.</p>
-        </div>
-        <div class="detail-section">
-          <strong>Feedback / Fix Trail</strong>
-          <p>Previous Platformer settings/audio/movement work remains PASS/CLOSED. Canonical QA is now active for camera and route-readability evidence.</p>
-          <button class="action-btn" data-open-phase="platformer:upgrade-phase-b">View Platformer timeline</button>
-        </div>
-      </section>
     </section>
 
     <nav class="filters" aria-label="Dashboard filters">
@@ -1353,8 +1312,8 @@
         id: "platformer",
         name: "Side-Scrolling Platformer",
         status: "attention",
-        statusLabel: "TESTER ACTIVE",
-        summary: "Upgrade Phase B - Camera And Route Readability Pass is tester-active with evidence pending at evidence/platformer/upgrade-phase-b-camera-route-readability/. Scope: committed-direction lookahead, horizontal camera dead zone, stable vertical camera, clearer safe-vs-optional route rails/chevrons/labels, stronger exit beacon, and preserved settings/audio/movement regressions.",
+        statusLabel: "RETEST ACTIVE",
+        summary: "Upgrade Phase B - Camera And Route Readability Pass Retest 1 is active at evidence/platformer/upgrade-phase-b-camera-route-readability-retest-1/. The prior lower safe route stall near the mid-checkpoint remains preserved as failed evidence; builder fix is complete and retest evidence is pending.",
         gameUrl: "games/platformer/index.html",
         readmeUrl: "games/platformer/README.md",
         primaryPhase: "upgrade-phase-b",
@@ -1379,7 +1338,8 @@
           { label: "Settings Polish 2 Resume Fix", status: "pass", statusLabel: "FIX VERIFIED", note: "Retest 6 verifies Escape and Close Settings both resume HUD/input from in-run settings.", openKey: "platformer:settings-polish-2-retest-6" },
           { label: "Settings Polish 2 Retest 6", status: "pass", statusLabel: "PASS", note: "In-run resume fixed; variant controls, persistence, reset defaults, and audio defaults preserved. Narrow viewport and full route/failure coverage are nonblocking limitations.", openKey: "platformer:settings-polish-2-retest-6" },
           { label: "Audio Default Hotfix", status: "pass", statusLabel: "PASS", note: "Generated UI sounds default off, volume 0%, stale saved audio cannot re-enable without explicit consent; evidence complete at evidence/platformer/audio-default-hotfix/.", openKey: "platformer:audio-default" },
-          { label: "Upgrade Phase B: Camera And Route Readability Pass", status: "attention", statusLabel: "TESTER ACTIVE", note: "Canonical QA active; evidence target is evidence/platformer/upgrade-phase-b-camera-route-readability/. Findings should include evidence clips or timestamps when available.", openKey: "platformer:upgrade-phase-b" }
+          { label: "Upgrade Phase B: First QA Pass", status: "fail", statusLabel: "FAIL - FIXED IN NEXT BUILD", note: "Clean QA failure: lower safe route stalls near the mid-checkpoint under normal input. Failed evidence is preserved.", openKey: "platformer:upgrade-phase-b" },
+          { label: "Upgrade Phase B: Retest 1", status: "attention", statusLabel: "RETEST ACTIVE / EVIDENCE PENDING", note: "Builder completed a narrow lower-route geometry fix. Retest 1 evidence target is evidence/platformer/upgrade-phase-b-camera-route-readability-retest-1/.", openKey: "platformer:upgrade-phase-b-retest-1" }
         ],
         evidenceSeries: [
           { label: "Phase 1: Core Movement", status: "PASS", evidenceDir: "evidence/platformer/phase-1" },
@@ -1395,7 +1355,8 @@
           { label: "Settings Polish 2 Retest 5", status: "FAIL - FIXED IN NEXT BUILD", hydrateStatus: true, evidenceDir: "evidence/platformer/settings-polish-2-retest-5" },
           { label: "Settings Polish 2 Retest 6", status: "PASS - CLOSING EVIDENCE", hydrateStatus: true, evidenceDir: "evidence/platformer/settings-polish-2-retest-6" },
           { label: "Audio Default Hotfix", status: "PASS - AUDIO DEFAULT", hydrateStatus: true, evidenceDir: "evidence/platformer/audio-default-hotfix" },
-          { label: "Upgrade Phase B: Camera And Route Readability Pass", status: "TESTER ACTIVE / EVIDENCE PENDING", evidenceDir: "evidence/platformer/upgrade-phase-b-camera-route-readability" }
+          { label: "Upgrade Phase B: Camera And Route Readability Pass", status: "FAIL - FIXED IN NEXT BUILD", hydrateStatus: true, evidenceDir: "evidence/platformer/upgrade-phase-b-camera-route-readability" },
+          { label: "Upgrade Phase B: Retest 1", status: "RETEST ACTIVE / EVIDENCE PENDING", evidenceDir: "evidence/platformer/upgrade-phase-b-camera-route-readability-retest-1" }
         ]
       },
       {
@@ -1481,6 +1442,18 @@
       "platformer:audio-default": [
         ["Audio default hotfix", "Builder completed generated UI sounds off by default, volume 0%, and stale saved audio cannot re-enable without explicit consent."],
         ["Tester PASS / closed", "Shared-window retest evidence is complete in evidence/platformer/audio-default-hotfix/."]
+      ],
+      "platformer:upgrade-phase-b": [
+        ["Tester FAIL", "Canonical QA failed Upgrade Phase B at evidence/platformer/upgrade-phase-b-camera-route-readability/."],
+        ["Blocking finding", "The lower safe route stalls near the mid-checkpoint under normal input, so route readability and progression cannot be approved."],
+        ["Builder fix complete", "The Platformer builder completed a narrow lower-route geometry fix for the route-stall blocker."],
+        ["Retest 1 active", "Retest 1 is active at evidence/platformer/upgrade-phase-b-camera-route-readability-retest-1/ and evidence is pending."],
+        ["Evidence available", "TEST_REPORT.md, expected-flow.md, and gameplay-recording.mp4 are linked from the unified Reports row and evidence drawer."]
+      ],
+      "platformer:upgrade-phase-b-retest-1": [
+        ["Prior tester FAIL", "The first Phase B QA pass failed because the lower safe route stalled near the mid-checkpoint under normal input."],
+        ["Builder fix complete", "A narrow lower-route geometry fix was completed by the Platformer builder."],
+        ["Retest active", "Canonical Retest 1 is active with pending evidence at evidence/platformer/upgrade-phase-b-camera-route-readability-retest-1/."]
       ],
       "deckbuilder:3": [
         ["Lane complete", "Deckbuilder Phases 1-3 are PASS with complete evidence and no active blocker loop."]
@@ -1576,11 +1549,20 @@
       ],
       "platformer": [
         {
-          severity: "Info",
-          status: "Tester active",
-          summary: "Phase B tester active; future tester findings should include finding-level evidence clips or timestamps.",
+          severity: "Blocker",
+          status: "RETEST ACTIVE",
+          summary: "Prior Platformer Phase B blocker: lower safe route stalls near the mid-checkpoint under normal input.",
           report: "evidence/platformer/upgrade-phase-b-camera-route-readability/TEST_REPORT.md",
-          state: "TESTER ACTIVE / EVIDENCE PENDING.",
+          state: "Builder fix complete; Retest 1 active / evidence pending.",
+          evidence: "evidence/platformer/upgrade-phase-b-camera-route-readability/gameplay-recording.mp4",
+          segment: "Use main gameplay-recording.mp4 plus the TEST_REPORT.md blocker section."
+        },
+        {
+          severity: "Retest",
+          status: "Evidence pending",
+          summary: "Platformer Phase B Retest 1 should verify the lower-route geometry fix and route-readability recovery.",
+          report: "evidence/platformer/upgrade-phase-b-camera-route-readability-retest-1/TEST_REPORT.md",
+          state: "RETEST ACTIVE / EVIDENCE PENDING.",
           evidence: "",
           segment: "Needs Evidence Clip"
         }
@@ -1645,6 +1627,49 @@
         segment: "Needs Evidence Clip"
       }
     ];
+
+    const externalReports = {
+      "cookie-clicker": {
+        name: "Cookie Clicker",
+        status: "PASS_WITH_FINDINGS",
+        provider: "Official provider",
+        url: "https://orteil.dashnet.org/cookieclicker/",
+        evidenceDir: "evidence/external/cookie-clicker-accessibility-narrow-followup-3",
+        findings: [externalFindingIndexing[0]]
+      },
+      "polytrack": {
+        name: "PolyTrack",
+        status: "PASS_WITH_FINDINGS",
+        provider: "Poki provider",
+        url: "https://poki.com/en/g/polytrack",
+        evidenceDir: "evidence/external/polytrack-poki-settings-race-followup-1",
+        findings: [externalFindingIndexing[1]]
+      },
+      "ovo": {
+        name: "OvO",
+        status: "PASS_WITH_FINDINGS",
+        provider: "Poki provider",
+        url: "https://poki.com/en/g/ovo-classic",
+        evidenceDir: "evidence/external/ovo-poki-finish-settings-followup-1",
+        findings: [externalFindingIndexing[2]]
+      },
+      "dungeons": {
+        name: "Dungeons & Degenerate Gamblers",
+        status: "PASS_WITH_FINDINGS",
+        provider: "Direct official build",
+        url: "https://html-classic.itch.zone/html/15020933/index.html",
+        evidenceDir: "evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1",
+        findings: [externalFindingIndexing[3]]
+      },
+      "townscaper": {
+        name: "Townscaper",
+        status: "PASS_WITH_FINDINGS",
+        provider: "Official WebGL provider",
+        url: "https://oskarstalberg.com/Townscaper/",
+        evidenceDir: "evidence/external/townscaper-removal-undo-settings-followup-1",
+        findings: [externalFindingIndexing[4]]
+      }
+    };
 
     const gameContainer = document.querySelector("#games");
     const statusStrip = document.querySelector("#status-strip");
@@ -2006,8 +2031,12 @@
           ? { number: "2", upgradeLabel: "Upgrade Phase 2 Retest 1", title: "Upgrade Phase 2: Enemy Intent And Status Explainability Retest 1", current: "pass", evidenceDir: "evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1" }
         : phaseNumber === "upgrade-phase-3"
           ? game?.upgrade
+        : phaseNumber === "driving-assists"
+          ? { number: "Driving Assists", title: "Driving Assists And Control Accessibility Upgrade Retest 1", current: "pass", evidenceDir: "evidence/kart-racer/driving-assists-accessibility-retest-1" }
         : phaseNumber === "upgrade-phase-b"
-          ? { number: "B", upgradeLabel: "Upgrade Phase B", title: "Upgrade Phase B: Camera And Route Readability Pass", current: "attention", evidenceDir: "evidence/platformer/upgrade-phase-b-camera-route-readability" }
+          ? { number: "B", upgradeLabel: "Upgrade Phase B", title: "Upgrade Phase B: Camera And Route Readability Pass", current: "fail", evidenceDir: "evidence/platformer/upgrade-phase-b-camera-route-readability" }
+        : phaseNumber === "upgrade-phase-b-retest-1"
+          ? { number: "B Retest 1", upgradeLabel: "Upgrade Phase B Retest 1", title: "Upgrade Phase B: Camera And Route Readability Pass Retest 1", current: "attention", evidenceDir: "evidence/platformer/upgrade-phase-b-camera-route-readability-retest-1" }
         : phaseNumber === "settings-1"
           ? { number: "Settings 1", title: "Settings Panel Phase 1", current: "pass", evidenceDir: `evidence/${gameId}/settings-phase-1` }
         : phaseNumber === "settings-polish-1"
@@ -2110,6 +2139,60 @@
       }
     }
 
+    async function openExternalEvidence(key) {
+      const report = externalReports[key];
+      if (!report) return;
+
+      const item = {
+        label: `${report.name} latest QA report`,
+        status: report.status,
+        hydrateStatus: true,
+        evidenceDir: report.evidenceDir
+      };
+      const paths = phasePaths(item);
+      drawer.hidden = false;
+      drawerTitle.textContent = `${report.name} - External Browser QA`;
+      drawerSubtitle.textContent = `${report.provider} | Current: ${report.status}`;
+      drawerSeries.innerHTML = `<p class="missing">Loading external evidence...</p>`;
+      drawerReport.innerHTML = `<p class="missing">Loading report...</p>`;
+      drawerHistory.innerHTML = `
+        <div class="history-item"><strong>Provider URL</strong><a href="${report.url}">${escapeHtml(report.url)}</a></div>
+        <div class="history-item"><strong>QA status</strong>${escapeHtml(report.status)}. Provider/setup blockers are tracked separately from game QA findings.</div>
+      `;
+      drawerFindings.innerHTML = report.findings.map(findingMarkup).join("");
+
+      const [videoHtml, reportState, expectedState, videoState, resolvedStatus] = await Promise.all([
+        videoMarkup(paths.video),
+        artifactState(paths.report, "Report"),
+        artifactState(paths.expected, "Expected flow"),
+        artifactState(paths.video, "Video"),
+        resolvedSeriesStatus(item)
+      ]);
+      drawerSeries.innerHTML = `
+        <article class="series-card">
+          <div class="video-frame">${videoHtml}</div>
+          <div class="series-meta">
+            <h3>${escapeHtml(item.label)}</h3>
+            <span class="badge" data-status="${statusKey(resolvedStatus)}">${escapeHtml(resolvedStatus)}</span>
+            <div class="artifact-states">${reportState}${expectedState}${videoState}</div>
+            <div class="series-links">
+              <a href="${paths.report}">TEST_REPORT.md</a>
+              <a href="${paths.expected}">expected-flow.md</a>
+              <a href="${paths.video}">gameplay-recording.mp4</a>
+            </div>
+          </div>
+        </article>
+      `;
+
+      try {
+        const reportResponse = await fetch(paths.report, { cache: "no-store" });
+        if (!reportResponse.ok) throw new Error(`${reportResponse.status} ${reportResponse.statusText}`);
+        drawerReport.innerHTML = markdownToHtml(await reportResponse.text());
+      } catch (error) {
+        drawerReport.innerHTML = `<p class="missing">Could not load TEST_REPORT.md: ${escapeHtml(error.message)}</p>`;
+      }
+    }
+
     function closeEvidence() {
       drawer.hidden = true;
     }
@@ -2167,6 +2250,12 @@
       if (phaseButton) {
         event.preventDefault();
         openEvidence(phaseButton.dataset.openPhase);
+        return;
+      }
+      const externalButton = event.target.closest("[data-open-external]");
+      if (externalButton) {
+        event.preventDefault();
+        openExternalEvidence(externalButton.dataset.openExternal);
         return;
       }
       const link = event.target.closest("a[href]");

@@ -181,6 +181,8 @@ The main agent is the only orchestrator. It owns scope, sequencing, phase approv
 
 The orchestrator should be proactive. Each game has its own builder lane, but QA is intentionally centralized into one cross-game tester so its methodology improves across kart, platformer, deckbuilder, and external browser games. As soon as a builder reports a phase complete, the orchestrator should queue that game's URL and README/manual for the canonical tester. As soon as the tester reports `PASS`, the orchestrator should start that game's next phase builder goal without waiting for unrelated builder work, unless the user explicitly pauses. As soon as the tester reports `FAIL`, the orchestrator should send a narrow fix request to that game's builder.
 
+After every tester report, the orchestrator must run `scripts/audit-finding-videos.sh` from the repo root. `NEEDS_VIDEO_EVIDENCE` means report-quality evidence metadata is missing and should be routed back through the tester/dashboard workflow unless the audit exposes a real game defect; `OK` means each detected finding or coverage limitation has clip/timestamp metadata; `NO_FINDINGS` means no finding headings were detected.
+
 ### Builder Thread
 
 Each game has a dedicated builder. The builder creates and updates that game's files and player manual only. It reports only to the main orchestrator, and should report immediately when the assigned phase is complete or blocked. It must not communicate with testers or other builders. It must not inspect tester reports or evidence unless the orchestrator explicitly sends a summarized fix request.
@@ -239,9 +241,9 @@ The dashboard should make the lockstep process auditable. In addition to phase s
 - related phase report path
 - related evidence/video state when present
 
-The dashboard must present QA reports through one unified `Reports` area with exactly two top-level lanes: `Track 1: Local Game QA Reports` and `Track 2: External Browser QA Reports`. Individual game drawers/pop-ups may still show details, timelines, Markdown reports, and evidence, but they should be reached from this unified section rather than appearing as multiple competing final-report panels.
+The dashboard main page must remain a concise status/control surface with compact game cards and entry buttons such as `View Evidence` and `Open Game`. It must not expose report tables, direct `TEST_REPORT.md` / `expected-flow.md` / `gameplay-recording.mp4` link clusters, or video walls on the main page.
 
-Each report row/card should show the latest status, latest phase or provider path, `TEST_REPORT.md`, `expected-flow.md`, main recording, and a finding-level evidence summary. Finding rows should display severity/status, short summary, source report, fix/retest state, and either a dedicated clip path, a main-recording timestamp range, a screenshot-only marker, or `Needs Evidence Clip`.
+The evidence drawer/pop-up is the single report surface. It should show the relevant Markdown report inline plus structured findings with severity/status, short summary, source report, fix/retest state, and either a dedicated clip path, a main-recording timestamp range, a screenshot-only marker, or `Needs Evidence Clip`. Track 1 local reports and Track 2 external reports may be grouped inside the drawer only if helpful.
 
 ## Communication Rules
 
@@ -368,6 +370,7 @@ Each phase report must include:
   - Every such item must include `Evidence status`: `Clip present`, `Main recording segment`, `Screenshot only`, or `Needs Evidence Clip`.
   - Every such item must include one sentence explaining why the cited evidence proves the finding.
   - For local-game retests that fix prior findings, cite both the original finding evidence and the retest/fix evidence when available.
+  - The orchestrator validates this requirement with `scripts/audit-finding-videos.sh`; reports that show `NEEDS_VIDEO_EVIDENCE` are not evidence-complete until the tester supplies clip/timestamp metadata or explicitly justifies the gap.
 - Readability / route clarity assessment:
   - This section is mandatory and must have an explicit `PASS` or `FAIL`.
   - For spatial games, state whether the camera, labels, minimap, start pose, objective markers, and intended route make the next action visually clear from normal play.
@@ -388,6 +391,7 @@ A phase is approved only when:
 - The recording shows smooth continuous play rather than sparse checkpoint jumps
 - The recording demonstrates the phase's required end state
 - Findings, blockers, and coverage limitations have finding-level evidence clips, timestamps, screenshots, or explicit `Needs Evidence Clip` markers
+- `scripts/audit-finding-videos.sh` has been run after the report, and any `NEEDS_VIDEO_EVIDENCE` result has been routed or explicitly accepted as a report-quality limitation rather than ignored
 - The mandatory readability/orientation or state/action clarity gate says `PASS`
 - No unresolved critical or high-priority findings remain
 - Observed behavior matches the README/manual

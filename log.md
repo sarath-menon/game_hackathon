@@ -2854,3 +2854,77 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - findings without dedicated clips should show `Needs Evidence Clip` rather than being hidden;
   - Platformer Phase B must be shown as `FAIL / FIX ACTIVE`, not `PASS`, until retested.
 - Main orchestrator goal is active to keep builder fixes, tester reports, dashboard state, `AGENTS.md`, and this log aligned around the unified report model.
+
+## Platformer Upgrade Phase B Retest 1 Active - 2026-06-25
+
+- Platformer builder `019ef96e-1dd7-7f13-91d4-855909736edc` completed the narrow fix for the Phase B lower-route blocker.
+- Changed file:
+  - `games/platformer/index.html`
+- Builder-reported fix:
+  - raised the optional mid-route platform cluster above the lower safe route so normal jump+right movement no longer clips the platform edge near the mid-checkpoint approach;
+  - moved matching optional hazard, patrol runner, glow cores, and amber route cue segment with the optional platform so the visual language stays aligned;
+  - preserved Phase B camera/readability work, safe lower rail/chevrons, labels, checkpoint/exit visibility, settings resume behavior, Player Variant Controls, reset defaults, and audio-off defaults;
+  - README unchanged because player-facing rules did not change.
+- Builder self-checks:
+  - game and manual URLs returned `200 OK`;
+  - embedded script parses;
+  - right-only lower route reached `Level complete`;
+  - jump+right lower route reached `Level complete`;
+  - both route checks passed through/activated the mid checkpoint;
+  - Settings during run still paused and then resumed gameplay after closing;
+  - checkpoint approach screenshot showed clear lower-route headroom with the optional route above it.
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` was handed Retest 1.
+- Retest evidence target:
+  - `evidence/platformer/upgrade-phase-b-camera-route-readability-retest-1/`
+- Required retest outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` was asked to show Platformer Phase B as `RETEST ACTIVE / EVIDENCE PENDING` in the unified Track 1 reports lane while preserving the previous failed evidence as historical.
+
+## Platformer Upgrade Phase B Retest 1 BLOCKED_ENVIRONMENT - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Retest 1 as `BLOCKED_ENVIRONMENT`, not `FAIL` and not `PASS`.
+- Evidence folder:
+  - `evidence/platformer/upgrade-phase-b-camera-route-readability-retest-1/`
+- Required artifacts are present:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Blocker:
+  - game URL, title, Settings, Player Variant Controls, audio-off defaults, and run start were captured;
+  - browser-harness movement input did not reliably move the player from the start state;
+  - during input recovery, the active target drifted from the Platformer URL to `dashboard.html`;
+  - the drifted frame was moved under `discarded/` and excluded from the clean recording.
+- Orchestration decision:
+  - do not route this to the Platformer builder as a game bug;
+  - treat Retest 1 as an invalid/environment-blocked QA attempt;
+  - run a clean Platformer Phase B Retest 2 only after dashboard browser-harness verification is finished and the shared Chrome window is stable.
+
+## Dashboard Popup-Only Report Correction Active - 2026-06-25
+
+- User rejected the visible unified Reports-board direction because the dashboard became cluttered.
+- Corrected dashboard goal sent to dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d`:
+  - restore the previous concise card/evidence-entry layout as much as practical;
+  - keep report content only inside the existing pop-up/drawer/modal flow;
+  - change only the report format inside the pop-up so findings show severity, status, clip/timestamp, and evidence state;
+  - do not show large report lanes, report tables, or video walls on the main page.
+- The dashboard thread is using browser-harness rendered verification as requested by the user.
+- Platformer Retest 2 should wait until this dashboard rendered pass is complete to avoid another shared-window target collision.
+
+## Finding-Level Video Audit Gate Added - 2026-06-25
+
+- Added `scripts/audit-finding-videos.sh` as the orchestration gate for report-quality evidence metadata.
+- Required usage: after every tester report, run `scripts/audit-finding-videos.sh` from the repo root.
+- Interpretation:
+  - `OK`: detected findings or limitations each have video clip/timestamp metadata.
+  - `NEEDS_VIDEO_EVIDENCE`: findings or limitations exist but are missing `Evidence clip:` metadata, use `Needs Evidence Clip`, use screenshot-only evidence, or reference missing video.
+  - `NO_FINDINGS`: no finding headings were detected.
+- Current audit run scanned 63 reports:
+  - `OK`: 2
+  - `NEEDS_VIDEO_EVIDENCE`: 37
+  - `NO_FINDINGS`: 24
+- Current clean examples:
+  - `evidence/platformer/upgrade-phase-b-camera-route-readability/TEST_REPORT.md`
+  - `evidence/platformer/upgrade-phase-b-camera-route-readability-retest-1/TEST_REPORT.md`
+- Orchestration rule: route future `NEEDS_VIDEO_EVIDENCE` results back through tester/dashboard workflow as a report-quality gap unless the audit reveals a real game defect.
