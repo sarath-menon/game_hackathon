@@ -27,9 +27,9 @@ No open game findings.
 
 ### Coverage limitation - narrow viewport not captured
 
-- Evidence clip: Needs Evidence Clip
-- Evidence status: Needs Evidence Clip
-- Why this evidence proves the finding: The recording contains only desktop Settings and gameplay segments; the report says the narrow viewport attempt failed before any narrow screenshot was captured, so the existing MP4 cannot prove the CDP/helper error itself.
+- Evidence clip: `supplemental-narrow-viewport-followup.mp4 @ 00:00-00:09`
+- Evidence status: Supplemental follow-up clip
+- Why this evidence proves the finding: The supplemental clip shows a current narrow-viewport follow-up where the Platformer URL remains active but the CDP device-metrics helper still fails, so no successful narrow viewport capture is produced.
 - Severity: Low
 - Status: Environment-limited sub-scope
 - Evidence: browser-harness CDP emulation attempt returned a helper error before any narrow screenshot was captured.

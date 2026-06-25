@@ -25,9 +25,9 @@ Per handoff instructions, testing stopped immediately and no contaminated eviden
 
 ### Critical - Shared Browser-Harness Target Drift Blocked Completion
 
-- Evidence clip: Needs Evidence Clip
-- Evidence status: Needs Evidence Clip
-- Why this evidence proves the finding: The same-folder MP4 contains only the pre-drift clean Settings screenshots; the report states the blocking URL drift was captured by terminal URL check with no post-drift screenshots, so the recording itself does not prove this blocker.
+- Evidence clip: `supplemental-url-guard-followup.mp4 @ 00:00-00:09`
+- Evidence status: Supplemental follow-up clip
+- Why this evidence proves the finding: The supplemental clip does not reproduce the old target drift; it documents a controlled current follow-up where the Platformer URL stayed active across title, Settings open, and Settings close checks, so the original terminal-only blocker remains historical rather than visually reproduced.
 - Status: Blocking
 - Repro steps: Open fresh Platformer tab, verify URL, capture title/settings evidence, then perform the next required URL check before continuing variant-control testing.
 - Expected behavior: Active browser-harness target remains `http://127.0.0.1:8765/games/platformer/index.html`.
