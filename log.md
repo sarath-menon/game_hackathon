@@ -2928,3 +2928,36 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - `evidence/platformer/upgrade-phase-b-camera-route-readability/TEST_REPORT.md`
   - `evidence/platformer/upgrade-phase-b-camera-route-readability-retest-1/TEST_REPORT.md`
 - Orchestration rule: route future `NEEDS_VIDEO_EVIDENCE` results back through tester/dashboard workflow as a report-quality gap unless the audit reveals a real game defect.
+
+## Finding-Level Video Audit Cleanup Batch 1 Sent - 2026-06-25
+
+- Current audit state before cleanup:
+  - `NEEDS_VIDEO_EVIDENCE`: 37 reports
+  - `OK`: 2 reports
+  - `NO_FINDINGS`: 24 reports
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` was assigned the first report-quality cleanup batch.
+- Scope: add real `Evidence clip`, `Evidence status`, and `Why this evidence proves the finding` metadata to 10 existing reports using only each `TEST_REPORT.md` and same-folder `gameplay-recording.mp4`.
+- Batch 1 reports:
+  - `evidence/deckbuilder/phase-1/TEST_REPORT.md`
+  - `evidence/deckbuilder/phase-2/TEST_REPORT.md`
+  - `evidence/deckbuilder/phase-3/TEST_REPORT.md`
+  - `evidence/deckbuilder/settings-phase-1/TEST_REPORT.md`
+  - `evidence/deckbuilder/upgrade-phase-1-combat-feedback/TEST_REPORT.md`
+  - `evidence/deckbuilder/upgrade-phase-2-intent-status/TEST_REPORT.md`
+  - `evidence/deckbuilder/upgrade-phase-3-deck-inspection/TEST_REPORT.md`
+  - `evidence/external/cookie-clicker-accessibility-narrow-followup-3/TEST_REPORT.md`
+  - `evidence/external/cookie-clicker/TEST_REPORT.md`
+  - `evidence/external/dungeons-degenerate-gamblers/TEST_REPORT.md`
+- Tester instructions explicitly prohibit fabricated timestamps; if a recording does not prove an item, the tester must mark it `Needs Evidence Clip` with a reason.
+
+## Finding-Level Video Audit Cleanup First 3 Verified - 2026-06-25
+
+- Canonical tester annotated the first three Batch 1 Deckbuilder phase reports with real same-recording timestamp metadata:
+  - `evidence/deckbuilder/phase-1/TEST_REPORT.md`
+  - `evidence/deckbuilder/phase-2/TEST_REPORT.md`
+  - `evidence/deckbuilder/phase-3/TEST_REPORT.md`
+- Local audit result after the patch:
+  - each of the three rows is `OK`;
+  - overall `NEEDS_VIDEO_EVIDENCE` count dropped from 37 to 34;
+  - overall `OK` count increased from 2 to 5.
+- Evidence references use `gameplay-recording.mp4 @ 00:00-00:02` and cite the visible opening start modal/dimmed combat HUD evidence.
