@@ -2614,3 +2614,70 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - smooth continuous gameplay evidence in the single shared Chrome/browser-harness window.
 - Verdict taxonomy remains `PASS_WITH_FINDINGS`, `FAIL`, `BLOCKED_PROVIDER`, or `BLOCKED_ENVIRONMENT`; provider/setup/storage/viewport/harness blockers must not be treated as final game failure.
 - Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` was asked to surface both active items in the existing panels while preserving prior Kart settings-depth retest 2 and Cookie Clicker Follow-up Pass 2 evidence.
+
+## Cookie Clicker Follow-Up 3 PASS_WITH_FINDINGS - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Cookie Clicker Accessibility, Narrow-Viewport, And Settings Persistence Follow-Up 3.
+- Evidence folder:
+  - `evidence/external/cookie-clicker-accessibility-narrow-followup-3/`
+- Required artifacts are present:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS_WITH_FINDINGS`.
+- Provider/environment classification:
+  - not `BLOCKED_PROVIDER`: the direct provider URL reached playable Cookie Clicker state;
+  - playable core QA passed for provider load, saved-state readability, cookie click loop, safe Grandma purchase, Options access, manual Save, export/import affordances, language, volume/audio controls, visual/performance toggles, warning/destructive separation, and recording;
+  - `BLOCKED_ENVIRONMENT` applies only to deeper Options scrolling, reload-persistence proof, and narrow/mobile viewport capture because the shared browser-harness target drifted to an unrelated Kart tab.
+- Contaminated target-drift frames were excluded from the report and MP4; the verdict rests only on clean Cookie Clicker evidence.
+- QA methodology carry-forward:
+  - verify active URL before and after long scroll/modal sequences in shared-window external QA;
+  - if target drift occurs after playable evidence is collected, discard contaminated frames and classify only the affected sub-area as environment-limited;
+  - for idle/incremental games, capture pre-click count, post-click count, purchase tooltip/owned count, and Options controls before deeper settings exploration.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` should mark Cookie Follow-Up 3 as `PASS_WITH_FINDINGS`, preserve Follow-Up Pass 2 as historical evidence, and surface the environment-limited sub-areas distinctly from game QA failure.
+
+## Kart Driving Assists Builder Complete / Tester Handoff Pending - 2026-06-25
+
+- Kart builder `019ef96d-c407-7be3-9934-6595866643ee` completed the corrected Driving Assists And Control Accessibility Upgrade after the orchestrator rejected the first no-op/stale packet.
+- Changed paths:
+  - `games/kart-racer/index.html`
+  - `games/kart-racer/README.md`
+- Implemented player-facing controls:
+  - Auto-accelerate toggle;
+  - Stability assist slider;
+  - Brake / recovery assist toggle;
+  - Edge recovery help toggle;
+  - Camera height preset;
+  - Route cue intensity slider;
+  - reduced-motion/effect intensity now also reduces camera shake.
+- Builder self-checks reported:
+  - game and README return `200 OK`;
+  - inline script extracts and parses;
+  - new settings show selected state, persist, reset, and mechanically/visibly affect the game;
+  - Reset Defaults restores all new controls and keeps audio off / volume `0`;
+  - auto-accelerate reached speed without holding accelerate;
+  - short route smoke completed CP1 -> CP2 -> CP3 -> finish at `LAP 1/1`.
+- No acceptance test exists yet. The canonical tester handoff is pending.
+- Orchestration note:
+  - dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` is active on screenshot-based dashboard UI polish, so the Kart QA handoff should wait until the dashboard browser-harness pass is idle to avoid shared Chrome/browser-harness contention.
+
+## Kart Driving Assists Tester Handoff Sent - 2026-06-25
+
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` completed the queued dashboard update and static/server verification, then stopped browser screenshot iteration so the shared Chrome/browser-harness surface could be used by QA.
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` was handed the Arcade Kart Racer Driving Assists And Control Accessibility Upgrade.
+- Allowed tester inputs:
+  - game URL: `http://127.0.0.1:8765/games/kart-racer/index.html`
+  - manual path: `games/kart-racer/README.md`
+  - manual URL: `http://127.0.0.1:8765/games/kart-racer/README.md`
+  - evidence target: `evidence/kart-racer/driving-assists-accessibility/`
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Tester focus:
+  - black-box testing only using URL/manual/evidence paths;
+  - settings visibility, selected states, persistence, reset defaults, audio-off default/reset;
+  - auto-accelerate, stability assist, brake/recovery or edge recovery, camera height, route cue intensity, reduced effects;
+  - settings open/close from title and in-race;
+  - CP1 -> CP2 -> CP3 -> finish, restart, drift/boost if reachable, minimap/HUD readability, orientation/readability gate, desktop and narrow viewport attempt if stable;
+  - classify any shared Chrome/browser-harness blocker as `BLOCKED_ENVIRONMENT` for the affected scope instead of game `FAIL`.

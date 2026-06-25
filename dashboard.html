@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Three-Game Lockstep Dashboard</title>
+  <title>Game QA Suite</title>
   <style>
     :root {
       color-scheme: light;
@@ -264,6 +264,7 @@
       width: 100%;
       border-collapse: collapse;
       font-size: 0.86rem;
+      table-layout: fixed;
     }
 
     .ops-table th,
@@ -272,6 +273,7 @@
       border-bottom: 1px solid var(--line);
       text-align: left;
       vertical-align: top;
+      overflow-wrap: anywhere;
     }
 
     .ops-table th {
@@ -339,20 +341,21 @@
 
     .games {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
+      grid-template-columns: 1fr;
+      gap: 10px;
       margin-top: 14px;
     }
 
     .game-card {
       display: grid;
-      gap: 12px;
-      padding: 14px;
+      gap: 0;
+      padding: 0;
       border: 1px solid var(--line);
       border-left-width: 5px;
       border-radius: 8px;
       background: var(--panel);
-      box-shadow: var(--shadow);
+      box-shadow: 0 1px 2px rgba(22, 34, 38, 0.04);
+      overflow: hidden;
     }
 
     .game-card[data-status="pass"] {
@@ -372,16 +375,32 @@
       justify-content: space-between;
       gap: 10px;
       align-items: flex-start;
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfc;
     }
 
     .game-card h2 {
-      font-size: 1.08rem;
+      font-size: 0.98rem;
     }
 
     .game-card p {
       margin: 0;
       color: var(--muted);
-      font-size: 0.88rem;
+      font-size: 0.84rem;
+    }
+
+    .game-body {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.35fr);
+      gap: 0;
+    }
+
+    .game-summary {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border-right: 1px solid var(--line);
     }
 
     .badge,
@@ -436,16 +455,17 @@
     }
 
     .card-meta {
-      display: grid;
-      gap: 5px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
       color: var(--muted);
       font-size: 0.82rem;
     }
 
     .card-timeline {
       display: grid;
-      gap: 7px;
-      padding-top: 2px;
+      gap: 0;
+      align-content: start;
     }
 
     .timeline-row {
@@ -453,11 +473,12 @@
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 8px;
       align-items: center;
-      padding: 8px;
-      border: 1px solid #e1e9ec;
+      padding: 10px 12px;
+      border: 0;
+      border-bottom: 1px solid #e1e9ec;
       border-left: 4px solid var(--line);
-      border-radius: 8px;
-      background: #fbfcfc;
+      border-radius: 0;
+      background: #fff;
       text-align: left;
       cursor: pointer;
     }
@@ -791,8 +812,17 @@
       .attention-panel,
       .issue-row,
       .loop-grid,
-      .attention-panel.compact .loop-grid {
+      .attention-panel.compact .loop-grid,
+      .summary-grid,
+      .tracks-grid,
+      .detail-panel,
+      .game-body {
         grid-template-columns: 1fr;
+      }
+
+      .game-summary {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
       }
     }
 
@@ -829,11 +859,11 @@
       <div class="summary-grid" aria-label="Current work summary">
         <div class="summary-card">
           <strong>Active Now</strong>
-          <p>Arcade Kart Racer builder is implementing Driving Assists And Control Accessibility. Cookie Clicker follow-up 3 is with the canonical tester and pending result.</p>
+          <p>Arcade Kart Racer assists upgrade is with the canonical tester and evidence is pending. Cookie Clicker follow-up 3 is closed PASS_WITH_FINDINGS.</p>
         </div>
         <div class="summary-card">
           <strong>Next Action</strong>
-          <p>Wait for builder/tester output, then route the next lockstep step: tester handoff, fix request, PASS closure, or next QA target.</p>
+          <p>Wait for Kart tester verdict at evidence/kart-racer/driving-assists-accessibility/, then route PASS closure or a narrow fix request.</p>
         </div>
       </div>
 
@@ -847,9 +877,9 @@
             <tbody>
               <tr>
                 <td>Arcade Kart Racer</td>
-                <td><span class="badge" data-status="attention">BUILDER ACTIVE</span><br>Driving assists and control accessibility upgrade</td>
+                <td><span class="badge" data-status="attention">TESTER ACTIVE</span><br>driving assists evidence pending at evidence/kart-racer/driving-assists-accessibility/</td>
                 <td><span class="badge" data-status="pass">PASS</span><br><a href="evidence/kart-racer/settings-depth-retest-2/TEST_REPORT.md">settings-depth retest 2</a></td>
-                <td><button class="action-btn" data-open-phase="kart-racer:settings-depth-retest-2">View timeline</button></td>
+                <td><button class="action-btn" data-open-phase="kart-racer:driving-assists">View timeline</button></td>
               </tr>
               <tr>
                 <td>Side-Scrolling Platformer</td>
@@ -876,9 +906,9 @@
             <tbody>
               <tr>
                 <td>Cookie Clicker</td>
-                <td><span class="badge" data-status="attention">TESTER ACTIVE</span><br>accessibility, narrow viewport, settings persistence follow-up 3</td>
-                <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span><br><a href="evidence/external/cookie-clicker-followup-pass-2/TEST_REPORT.md">follow-up pass 2</a></td>
-                <td><a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/TEST_REPORT.md">View latest</a></td>
+                <td><span class="badge" data-status="pass">CLOSED</span><br>accessibility, narrow viewport, settings persistence follow-up 3</td>
+                <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span><br><a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/TEST_REPORT.md">follow-up 3</a></td>
+                <td><a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/TEST_REPORT.md">report</a> · <a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/expected-flow.md">flow</a> · <a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/gameplay-recording.mp4">video</a></td>
               </tr>
               <tr>
                 <td>PolyTrack</td>
@@ -913,7 +943,7 @@
         <h3 id="selected-detail-title">Selected Detail: Arcade Kart Racer</h3>
         <div class="detail-section">
           <strong>Current Work</strong>
-          <p>Driving Assists And Control Accessibility Upgrade is builder active: steering assist, auto-accelerate, recovery/brake assist, camera/control/readability aids, persistence, reset defaults, and audio-off safeguards. No evidence folder yet.</p>
+          <p>Driving Assists And Control Accessibility Upgrade is <strong>TESTER ACTIVE / EVIDENCE PENDING</strong>: auto-accelerate, stability assist, brake/recovery assist, edge recovery help, camera height, route cue intensity, and reduced shake/effects. Game/manual changes are pending QA and not approved yet. Evidence target: <a href="evidence/kart-racer/driving-assists-accessibility/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/driving-assists-accessibility/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/driving-assists-accessibility/gameplay-recording.mp4">recording</a>.</p>
         </div>
         <div class="detail-section">
           <strong>Latest Approved Evidence</strong>
@@ -921,8 +951,8 @@
         </div>
         <div class="detail-section">
           <strong>Feedback / Fix Trail</strong>
-          <p>Prior Kart settings, audio-default, orientation, and drift/boost evidence remains accessible in the timeline. Tester handoff waits for builder completion.</p>
-          <button class="action-btn" data-open-phase="kart-racer:settings-depth-retest-2">View Kart timeline</button>
+          <p>Prior Kart settings, audio-default, orientation, and drift/boost evidence remains accessible in the timeline. Current assists upgrade is under canonical black-box QA.</p>
+          <button class="action-btn" data-open-phase="kart-racer:driving-assists">View Kart timeline</button>
         </div>
       </section>
     </section>
@@ -986,8 +1016,8 @@
         id: "kart-racer",
         name: "Arcade Kart Racer",
         status: "attention",
-        statusLabel: "BUILDER ACTIVE",
-        summary: "Driving Assists And Control Accessibility Upgrade is builder-active; historical phases, orientation, Drift/Boost upgrade, audio-default hotfix, and settings-depth retest 2 are PASS.",
+        statusLabel: "TESTER ACTIVE",
+        summary: "Driving Assists And Control Accessibility Upgrade is tester-active with evidence pending at evidence/kart-racer/driving-assists-accessibility/; historical phases, orientation, Drift/Boost upgrade, audio-default hotfix, and settings-depth retest 2 are PASS.",
         gameUrl: "games/kart-racer/index.html",
         readmeUrl: "games/kart-racer/README.md",
         primaryPhase: "upgrade-a",
@@ -1002,7 +1032,7 @@
           { label: "Orientation Closure Retest", status: "pass", statusLabel: "PASS", note: "Natural orientation sanity check closed.", openKey: "kart-racer:3" },
           { label: "Drift/Boost Upgrade A", status: "pass", statusLabel: "FAIL -> PASS", note: "Original QA failed; Retest 1 fixed drift stages and release boost.", openKey: "kart-racer:upgrade-a" },
           { label: "Settings Depth Retest 2", status: "pass", statusLabel: "PASS", note: "Settings sections, audio defaults/reset/persistence, in-race pause/close, route/drift/restart smoke approved; full lap not repeated.", openKey: "kart-racer:settings-depth-retest-2" },
-          { label: "Driving Assists And Control Accessibility Upgrade", status: "attention", statusLabel: "BUILDER ACTIVE", note: "Awaiting implementation of steering assist, auto-accelerate, recovery/brake assist, readability aids, persistence, reset defaults, and audio-off safeguards; no evidence folder yet." },
+          { label: "Driving Assists And Control Accessibility Upgrade", status: "attention", statusLabel: "TESTER ACTIVE", note: "Canonical tester active; evidence pending at evidence/kart-racer/driving-assists-accessibility/. Game/manual changes are pending QA and not approved yet.", openKey: "kart-racer:driving-assists" },
           { label: "Audio Default Hotfix", status: "pass", statusLabel: "PASS", note: "Retest 2 verifies default-off audio, opt-in audio, opt-out/reset silence, stale saved settings muted, smoke path, and manual match.", openKey: "kart-racer:audio-default" }
         ],
         evidenceSeries: [
@@ -1013,7 +1043,8 @@
           { label: "Upgrade Phase A: Drift And Boost Feel", status: "FAIL - ORIGINAL QA", evidenceDir: "evidence/kart-racer/upgrade-phase-a-drift-boost", extraLinks: [{ label: "first-playable-frame.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/first-playable-frame.png" }, { label: "hosted-load.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/hosted-load.png" }] },
           { label: "Retest 1: Drift And Boost Fix", status: "PASS - RETEST 1", hydrateStatus: true, evidenceDir: "evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1", extraLinks: [{ label: "first-playable-frame.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/first-playable-frame.png" }, { label: "hosted-load.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/hosted-load.png" }] },
           { label: "Audio Default Hotfix: Canonical Single-Tester Retest 1", status: "FAIL - FIXED IN NEXT BUILD", hydrateStatus: true, evidenceDir: "evidence/kart-racer/audio-default-hotfix-single-tester-retest-1", extraLinks: [{ label: "superseded shared-window report", href: "evidence/kart-racer/audio-default-hotfix-shared-window-retest-1/TEST_REPORT.md" }, { label: "old isolated-profile report", href: "evidence/kart-racer/audio-default-hotfix/TEST_REPORT.md" }] },
-          { label: "Audio Default Hotfix: Canonical Single-Tester Retest 2", status: "PASS - CLOSING EVIDENCE", hydrateStatus: true, evidenceDir: "evidence/kart-racer/audio-default-hotfix-single-tester-retest-2" }
+          { label: "Audio Default Hotfix: Canonical Single-Tester Retest 2", status: "PASS - CLOSING EVIDENCE", hydrateStatus: true, evidenceDir: "evidence/kart-racer/audio-default-hotfix-single-tester-retest-2" },
+          { label: "Driving Assists And Control Accessibility Upgrade", status: "TESTER ACTIVE / EVIDENCE PENDING", evidenceDir: "evidence/kart-racer/driving-assists-accessibility" }
         ]
       },
       {
@@ -1420,33 +1451,41 @@
         return;
       }
 
-      gameContainer.innerHTML = visibleGames.map((game) => `
+      gameContainer.innerHTML = visibleGames.map((game) => {
+        const timeline = game.status === "attention"
+          ? (game.timeline || []).filter((item) => item.status !== "pass").slice(-4)
+          : (game.timeline || []).filter((item) => item.status === "pass").slice(-4);
+        return `
         <article class="game-card" data-status="${game.status}">
           <div class="game-head">
             <h2>${escapeHtml(game.name)}</h2>
             <span class="badge" data-status="${game.status}">${escapeHtml(game.statusLabel)}</span>
           </div>
-          <p>${escapeHtml(game.summary)}</p>
-          <div class="phase-chips">
-            ${game.phases.map((phase) => `
-              <button class="phase-chip" data-open-phase="${game.id}:${phase.number}" title="Open ${escapeHtml(phase.title)} evidence">
-              <span class="chip" data-status="${phase.current}">P${phase.number} ${currentLabel(phase.current)}</span>
-              </button>
-            `).join("")}
-          </div>
-          <div class="card-timeline" aria-label="${escapeHtml(game.name)} timeline">
-            ${(game.timeline || []).map(timelineMarkup).join("")}
-          </div>
-          <div class="card-meta">
-            <span data-latest-report="${game.id}">Latest report: checking</span>
-            <span>Manual: <a href="${game.readmeUrl}">README.md</a></span>
-          </div>
-          <div class="card-actions">
-            <button class="action-btn" data-open-phase="${game.id}:${game.primaryPhase}">View Evidence</button>
-            <a class="action-btn" href="${game.gameUrl}">Open Game</a>
+          <div class="game-body">
+            <div class="game-summary">
+              <p>${escapeHtml(game.summary)}</p>
+              <div class="phase-chips">
+                ${game.phases.map((phase) => `
+                  <button class="phase-chip" data-open-phase="${game.id}:${phase.number}" title="Open ${escapeHtml(phase.title)} evidence">
+                  <span class="chip" data-status="${phase.current}">P${phase.number} ${currentLabel(phase.current)}</span>
+                  </button>
+                `).join("")}
+              </div>
+              <div class="card-meta">
+                <span data-latest-report="${game.id}">Latest report: checking</span>
+                <span>Manual: <a href="${game.readmeUrl}">README.md</a></span>
+              </div>
+              <div class="card-actions">
+                <button class="action-btn" data-open-phase="${game.id}:${game.primaryPhase}">View timeline</button>
+                <a class="action-btn" href="${game.gameUrl}">Open game</a>
+              </div>
+            </div>
+            <div class="card-timeline" aria-label="${escapeHtml(game.name)} latest timeline">
+              ${timeline.map(timelineMarkup).join("") || `<div class="timeline-row" data-status="${game.status}"><span><span class="timeline-title">No visible work items</span><span class="timeline-note">Open the timeline for full evidence history.</span></span><span class="badge" data-status="${game.status}">${escapeHtml(game.statusLabel)}</span></div>`}
+            </div>
           </div>
         </article>
-      `).join("");
+      `}).join("");
     }
 
     async function hydrateLatestReports() {
