@@ -2265,3 +2265,119 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` is idle but must not receive a handoff until the builder reports completion.
 - Expected future evidence target after builder completion:
   - `evidence/deckbuilder/upgrade-phase-2-intent-status/`
+
+## Deckbuilder Upgrade Phase 2 Builder Complete / Tester Handoff - 2026-06-25
+
+- Deckbuilder builder `019ef96e-7780-7763-b444-12cf7698a97a` completed Upgrade Phase 2: Enemy Intent And Status Explainability.
+- Changed artifacts:
+  - `games/deckbuilder/index.html`
+  - `games/deckbuilder/README.md`
+- Builder summary:
+  - added active enemy intent chips with original text icons/labels/numbers for `ATK`, `HVY`, and `HEX`;
+  - added next-intent preview using the documented deterministic cycle;
+  - added Last Enemy Resolution chips showing enemy action, guard absorption, HP loss, and Fractured application;
+  - made Focus and Fractured status chips keyboard/mouse-accessible help controls;
+  - preserved Focus/Fractured card consequence previews, reward flow, final victory path, and audio-off defaults.
+- Orchestrator verification:
+  - `http://127.0.0.1:8765/games/deckbuilder/index.html` returns `200 OK`;
+  - `http://127.0.0.1:8765/games/deckbuilder/README.md` returns `200 OK`.
+- Tester handoff sent to canonical cross-game tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Allowed tester inputs:
+  - URL: `http://127.0.0.1:8765/games/deckbuilder/index.html`
+  - manual: `games/deckbuilder/README.md` / `http://127.0.0.1:8765/games/deckbuilder/README.md`
+  - evidence target: `evidence/deckbuilder/upgrade-phase-2-intent-status/`
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- QA focus:
+  - active and next intent chips are visible and understandable before ending turn;
+  - enemy resolution chips accurately show action, guard absorption, HP loss, and Fractured application;
+  - Focus and Fractured help is reachable by hover, click, and keyboard focus;
+  - card previews incorporate Focus/Fractured consequences;
+  - audio remains off by default, after Reset Defaults, and before explicit opt-in;
+  - reward, encounter transition, final victory, restart, settings, and state/action clarity remain non-regressed.
+
+## Deckbuilder Upgrade Phase 2 Tester FAIL / Builder Fix Active - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed the first Deckbuilder Upgrade Phase 2 QA pass.
+- Evidence folder: `evidence/deckbuilder/upgrade-phase-2-intent-status/`.
+- Required outputs exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `FAIL`.
+- Blocking finding:
+  - with Focus 2 and Fractured cleared, `Drive Plate` previews and resolves as 4 damage despite the manual saying Focus applies to every attack or mixed attack card;
+  - the UI/log can say Focus was added while the final displayed/resolved damage does not include Focus;
+  - `Strike` showed similar inconsistent preview/chip math in the same Focus-only state.
+- Passing observations preserved:
+  - title/settings access and audio off/default/reset behavior;
+  - active enemy intent chips;
+  - next-intent preview;
+  - Last Enemy Resolution chips;
+  - Focus/Fractured help;
+  - Fractured application and clearing;
+  - reward choice appears after encounter 1.
+- Orchestrator action:
+  - sent a narrow summarized fix request to deckbuilder builder `019ef96e-7780-7763-b444-12cf7698a97a`;
+  - builder may update only `games/deckbuilder/index.html` and `games/deckbuilder/README.md` if needed;
+  - required self-checks include Drive Plate resolving 6 damage + 4 guard with Focus 2 and no Fractured, Strike resolving 8 damage with Focus 2 and no Fractured, Focus+Fractured subtraction/clear behavior, and audio-off defaults.
+- Next required action:
+  - wait for builder completion, then hand a retest to the canonical tester in a new evidence folder.
+- Clarification sent to builder:
+  - the failed case happened with the enemy at 4 HP, but player-facing preview/footer/log/feedback should show calculated rule damage, not silently cap displayed damage to remaining HP;
+  - Drive Plate with Focus 2 and no Fractured should communicate 6 damage + 4 guard even if the HP delta only removes the last 4 HP.
+
+## Deckbuilder Upgrade Phase 2 Fix Complete / Retest 1 Handoff - 2026-06-25
+
+- Deckbuilder builder `019ef96e-7780-7763-b444-12cf7698a97a` completed the narrow Focus/Fractured damage-math fix.
+- Changed artifacts:
+  - `games/deckbuilder/index.html`
+  - `games/deckbuilder/README.md`
+- Builder summary:
+  - centralized attack/mixed-card damage display around calculated `finalDamage`;
+  - preview, card footer, combat log, and floating attack feedback now show Focus/Fractured-adjusted calculated damage;
+  - enemy HP still clamps at 0 internally for overkill;
+  - README clarifies that overkill keeps showing calculated card damage while HP stops at 0.
+- Builder self-checks passed:
+  - hosted game/manual return `200 OK`;
+  - embedded script parses;
+  - Glass Warden at 4 HP, Focus 2, Fractured cleared: Drive Plate shows/resolves 6 damage + 4 guard and enemy HP reaches 0;
+  - Strike with Focus 2 and no Fractured shows/resolves 8 damage;
+  - Focus 2 + Fractured attack shows/resolves 6, clears Fractured, and later Drive Plate still shows Focus-adjusted 6;
+  - audio remains off by default and after Reset Defaults.
+- Fresh retest handoff sent to canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Retest evidence target:
+  - `evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1/`
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Retest focus:
+  - verify the prior blocker is fixed, especially low-HP Drive Plate overkill display with Focus 2 and no Fractured;
+  - verify Strike Focus-only math;
+  - verify Focus+Fractured subtraction/clear and later Focus-only attack/mixed-card math;
+  - smoke-check preserved intent chips, next-intent preview, Last Enemy Resolution chips, status help, audio off/default/reset, and reward appearance.
+
+## Deckbuilder Upgrade Phase 2 Retest 1 PASS - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Deckbuilder Upgrade Phase 2 Retest 1.
+- Evidence folder: `evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1/`.
+- Required outputs exist:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS`.
+- Retest verified:
+  - prior blocker fixed: with Focus 2 and Fractured cleared, Drive Plate visibly communicated calculated 6 damage + 4 guard while Glass Warden had 4 HP, resolved HP to 0, and logged 6 damage plus 4 guard;
+  - Strike with Focus 2 and no Fractured communicated and resolved 8 damage;
+  - Focus 2 + Fractured subtracted 2 once, cleared Fractured, and later Focus-only attack/mixed-card math still included Focus;
+  - preview, card footer/chip, log, HP delta/end state, and visible feedback no longer contradicted each other;
+  - active intent chips, next-intent preview, Last Enemy Resolution chips, Focus/Fractured help, audio off/default/reset, reward appearance, and state/action clarity were preserved.
+- Accepted limitations:
+  - full encounter 2 final victory, defeat, and wider desktop responsive coverage were not rerun because the fixed blocker and preserved Phase 2 gates were proven in the focused retest scope.
+- Phase status:
+  - Deckbuilder Upgrade Phase 2 is approved/closed.
+  - First-pass failed evidence remains preserved at `evidence/deckbuilder/upgrade-phase-2-intent-status/`.
+  - Passing retest evidence is canonical at `evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1/`.

@@ -469,6 +469,10 @@
       padding: 8px;
       background: #151b21;
       min-height: 60px;
+      color: var(--text);
+      text-align: left;
+      font: inherit;
+      cursor: help;
     }
 
     .status-pill span {
@@ -477,6 +481,23 @@
       font-size: 0.75rem;
       text-transform: uppercase;
       margin-bottom: 4px;
+    }
+
+    .status-pill:hover,
+    .status-pill:focus-visible {
+      border-color: var(--accent);
+      outline: none;
+    }
+
+    .status-help-line {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #121820;
+      color: var(--muted);
+      padding: 8px;
+      line-height: 1.35;
+      font-size: 0.88rem;
     }
 
     .intent-panel {
@@ -493,6 +514,70 @@
       font-size: 0.75rem;
       text-transform: uppercase;
       margin-bottom: 4px;
+    }
+
+    .intent-chip-row,
+    .intent-resolution {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .intent-chip,
+    .resolution-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 30px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: #151b21;
+      padding: 5px 9px;
+      color: var(--text);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .intent-chip .intent-icon {
+      display: inline-grid;
+      place-items: center;
+      min-width: 34px;
+      height: 20px;
+      border-radius: 6px;
+      background: #2a3440;
+      color: #fff2c2;
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .intent-chip.attack,
+    .resolution-chip.damage {
+      border-color: rgba(255,107,107,0.45);
+    }
+
+    .intent-chip.heavy {
+      border-color: rgba(242,184,75,0.55);
+      background: #2d2418;
+    }
+
+    .intent-chip.debuff,
+    .resolution-chip.status {
+      border-color: rgba(141,117,216,0.55);
+      background: #242138;
+    }
+
+    .resolution-chip.guard {
+      border-color: rgba(77,155,138,0.5);
+    }
+
+    .next-intent-line,
+    .resolution-label {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.35;
     }
 
     .feedback-layer {
@@ -803,9 +888,10 @@
           <div class="stat"><span>Guard</span><strong id="playerBlock">0</strong></div>
         </div>
         <div class="status-grid" aria-label="Player statuses">
-          <div class="status-pill"><span>Focus</span><strong id="playerFocus">0</strong></div>
-          <div class="status-pill"><span>Fractured</span><strong id="playerFractured">No</strong></div>
+          <button class="status-pill" id="focusStatusButton" type="button" aria-describedby="statusHelpLine"><span>Focus</span><strong id="playerFocus">0</strong></button>
+          <button class="status-pill" id="fracturedStatusButton" type="button" aria-describedby="statusHelpLine"><span>Fractured</span><strong id="playerFractured">No</strong></button>
         </div>
+        <p class="status-help-line" id="statusHelpLine">Focus and Fractured explainers appear here on hover, focus, or click.</p>
       </article>
 
       <aside class="center-panel" id="centerPanel" aria-label="Turn controls and piles">
@@ -825,7 +911,12 @@
         <div class="intent-panel" aria-label="Enemy intent">
           <span>Enemy Intent</span>
           <strong id="intentName">Lance</strong>
+          <div class="intent-chip-row" id="intentChips"></div>
           <p id="intentText">Attack for 6.</p>
+          <p class="next-intent-line" id="nextIntentText">Next: Static Hex.</p>
+          <div class="intent-chip-row" id="nextIntentChips"></div>
+          <p class="resolution-label">Last enemy resolution</p>
+          <div class="intent-resolution" id="intentResolution"><span class="resolution-chip">None yet</span></div>
         </div>
         <p class="status-line" id="reshuffleLine">When the draw pile is empty, the discard pile refills it in fixed order.</p>
       </aside>
@@ -1002,18 +1093,18 @@
         name: "Glass Warden",
         hp: 32,
         intents: [
-          { name: "Lance", attack: 6, text: "Attack for 6." },
-          { name: "Static Hex", attack: 4, fractured: true, text: "Attack for 4 and apply Fractured." },
-          { name: "Crushing Arc", attack: 9, text: "Attack for 9." }
+          { name: "Lance", kind: "attack", attack: 6, text: "Attack for 6." },
+          { name: "Static Hex", kind: "mixed", attack: 4, fractured: true, text: "Attack for 4 and apply Fractured." },
+          { name: "Crushing Arc", kind: "heavy", attack: 9, text: "Heavy attack for 9." }
         ]
       },
       {
         name: "Mirror Sentinel",
         hp: 42,
         intents: [
-          { name: "Needle Burst", attack: 7, text: "Attack for 7." },
-          { name: "Splinter Mark", attack: 5, fractured: true, text: "Attack for 5 and apply Fractured." },
-          { name: "Overload Sweep", attack: 10, text: "Attack for 10." }
+          { name: "Needle Burst", kind: "attack", attack: 7, text: "Attack for 7." },
+          { name: "Splinter Mark", kind: "mixed", attack: 5, fractured: true, text: "Attack for 5 and apply Fractured." },
+          { name: "Overload Sweep", kind: "heavy", attack: 10, text: "Heavy attack for 10." }
         ]
       }
     ];
@@ -1073,6 +1164,9 @@
       playerHp: document.getElementById("playerHp"),
       playerHpFill: document.getElementById("playerHpFill"),
       playerBlock: document.getElementById("playerBlock"),
+      focusStatusButton: document.getElementById("focusStatusButton"),
+      fracturedStatusButton: document.getElementById("fracturedStatusButton"),
+      statusHelpLine: document.getElementById("statusHelpLine"),
       enemyName: document.getElementById("enemyName"),
       enemyHp: document.getElementById("enemyHp"),
       enemyHpFill: document.getElementById("enemyHpFill"),
@@ -1080,7 +1174,11 @@
       playerFocus: document.getElementById("playerFocus"),
       playerFractured: document.getElementById("playerFractured"),
       intentName: document.getElementById("intentName"),
+      intentChips: document.getElementById("intentChips"),
       intentText: document.getElementById("intentText"),
+      nextIntentText: document.getElementById("nextIntentText"),
+      nextIntentChips: document.getElementById("nextIntentChips"),
+      intentResolution: document.getElementById("intentResolution"),
       energy: document.getElementById("energy"),
       drawCount: document.getElementById("drawCount"),
       handCount: document.getElementById("handCount"),
@@ -1119,6 +1217,7 @@
         playerTurn: true,
         gameOver: false,
         feedbackTick: 0,
+        intentResolution: [],
         log: []
       };
     }
@@ -1147,6 +1246,7 @@
       state.enemyIntentIndex = 0;
       state.playerTurn = true;
       state.gameOver = false;
+      state.intentResolution = [];
       state.log = [];
       addLog(`${intro} Encounter ${index + 1}: ${encounter.name}. Turn 1 starts with 3 energy.`);
       drawCards(HAND_SIZE);
@@ -1271,6 +1371,14 @@
       saveSettings();
     }
 
+    function showStatusHelp(status) {
+      if (status === "focus") {
+        elements.statusHelpLine.textContent = "Focus adds +1 damage per Focus to each attack or mixed attack card before it resolves.";
+        return;
+      }
+      elements.statusHelpLine.textContent = "Fractured reduces your next attack or mixed attack card by 2 damage, then clears.";
+    }
+
     function addLog(message) {
       state.log.unshift(message);
       state.log = state.log.slice(0, 10);
@@ -1305,7 +1413,7 @@
       state.discardPile.push(card);
 
       animateCardPlay(card, sourceElement);
-      playUiSound(card.damage ? "attack" : "support");
+      playUiSound(hasDamage(card) ? "attack" : "support");
       resolveCard(card);
 
       if (state.enemyHp <= 0) {
@@ -1347,13 +1455,13 @@
     function resolveCard(card) {
       const parts = [];
       const outcome = evaluateCard(card);
-      if (card.damage) {
+      if (outcome.hasDamage) {
         state.enemyHp = Math.max(0, state.enemyHp - outcome.finalDamage);
         if (state.fractured) state.fractured = false;
-        parts.push(`dealt ${outcome.appliedDamage} damage`);
+        parts.push(`dealt ${outcome.finalDamage} damage`);
         if (state.focus > 0) parts.push(`Focus added ${state.focus}`);
         if (outcome.fracturePenalty > 0) parts.push("Fractured reduced damage by 2");
-        emitFeedback(elements.enemyFeedback, `-${outcome.appliedDamage} HP`, "damage");
+        emitFeedback(elements.enemyFeedback, `-${outcome.finalDamage} HP`, "damage");
       }
       if (card.block) {
         state.block += card.block;
@@ -1374,10 +1482,13 @@
     }
 
     function evaluateCard(card) {
-      const baseDamage = card.damage ? card.damage + state.focus : 0;
-      const fracturePenalty = card.damage && state.fractured ? 2 : 0;
+      const printedDamage = hasDamage(card) ? Number(card.damage) : 0;
+      const baseDamage = hasDamage(card) ? printedDamage + state.focus : 0;
+      const fracturePenalty = hasDamage(card) && state.fractured ? 2 : 0;
       const finalDamage = Math.max(0, baseDamage - fracturePenalty);
       return {
+        hasDamage: hasDamage(card),
+        printedDamage,
         baseDamage,
         fracturePenalty,
         finalDamage,
@@ -1385,8 +1496,17 @@
       };
     }
 
+    function hasDamage(card) {
+      return Number.isFinite(Number(card.damage));
+    }
+
     function currentIntent() {
       return ENCOUNTERS[state.encounterIndex].intents[state.enemyIntentIndex];
+    }
+
+    function nextIntent() {
+      const intents = currentEncounter().intents;
+      return intents[(state.enemyIntentIndex + 1) % intents.length];
     }
 
     function currentEncounter() {
@@ -1399,6 +1519,11 @@
       const damage = intent.attack - blocked;
       state.playerHp = Math.max(0, state.playerHp - damage);
       addLog(`${intent.name}: enemy attacked for ${intent.attack}. Guard blocked ${blocked}; player took ${damage}.`);
+      state.intentResolution = [
+        { type: "status", label: intent.name },
+        { type: blocked > 0 ? "guard" : "damage", label: `Guard blocked ${blocked}` },
+        { type: damage > 0 ? "damage" : "guard", label: `HP loss ${damage}` }
+      ];
       if (blocked > 0) emitFeedback(elements.playerFeedback, `${blocked} Blocked`, "guard");
       if (damage > 0) emitFeedback(elements.playerFeedback, `-${damage} HP`, "damage");
       state.block = 0;
@@ -1406,6 +1531,7 @@
         state.fractured = true;
         addLog(`${intent.name} applied Fractured: your next attack or mixed card deals 2 less damage.`);
         emitFeedback(elements.playerFeedback, "Fractured", "status");
+        state.intentResolution.push({ type: "status", label: "Fractured applied" });
       }
       if (state.playerHp <= 0) {
         endCombat(false);
@@ -1454,7 +1580,7 @@
             <span class="cost">${card.cost}</span>
           </div>
           <p>${card.text}</p>
-          <footer>${cardFooter(card)}</footer>
+          <footer>${cardFooter(card, false)}</footer>
         `;
         button.addEventListener("click", () => chooseReward(card));
         elements.rewardChoices.append(button);
@@ -1487,6 +1613,9 @@
       elements.playerFractured.textContent = state.fractured ? "Yes" : "No";
       elements.intentName.textContent = intent.name;
       elements.intentText.textContent = intent.text;
+      renderIntentChips(elements.intentChips, intent);
+      renderNextIntent(nextIntent());
+      renderIntentResolution();
       elements.energy.textContent = `${state.energy} / ${MAX_ENERGY}`;
       elements.drawCount.textContent = String(state.drawPile.length);
       elements.handCount.textContent = String(state.hand.length);
@@ -1505,6 +1634,47 @@
 
       renderHand();
       renderLog();
+    }
+
+    function renderIntentChips(container, intent) {
+      container.textContent = "";
+      intentToChips(intent).forEach(chip => {
+        const item = document.createElement("span");
+        item.className = `intent-chip ${chip.type}`;
+        item.innerHTML = `<span class="intent-icon">${chip.icon}</span><span>${chip.label}</span><strong>${chip.value}</strong>`;
+        container.append(item);
+      });
+    }
+
+    function intentToChips(intent) {
+      const chips = [];
+      const attackType = intent.kind === "heavy" ? "heavy" : "attack";
+      chips.push({
+        type: attackType,
+        icon: intent.kind === "heavy" ? "HVY" : "ATK",
+        label: intent.kind === "heavy" ? "Heavy" : "Attack",
+        value: intent.attack
+      });
+      if (intent.fractured) {
+        chips.push({ type: "debuff", icon: "HEX", label: "Fractured", value: "-2" });
+      }
+      return chips;
+    }
+
+    function renderNextIntent(intent) {
+      elements.nextIntentText.textContent = `Next intent preview: ${intent.name}.`;
+      renderIntentChips(elements.nextIntentChips, intent);
+    }
+
+    function renderIntentResolution() {
+      elements.intentResolution.textContent = "";
+      const steps = state.intentResolution.length ? state.intentResolution : [{ type: "status", label: "None yet" }];
+      steps.forEach(step => {
+        const chip = document.createElement("span");
+        chip.className = `resolution-chip ${step.type}`;
+        chip.textContent = step.label;
+        elements.intentResolution.append(chip);
+      });
     }
 
     function renderHand() {
@@ -1531,7 +1701,7 @@
             <span class="cost">${card.cost}</span>
           </div>
           <p>${card.text}<span class="card-preview">${previewCard(card)}</span><span class="disabled-note">${reason || ""}</span></p>
-          <footer>${cardFooter(card)}</footer>
+          <footer>${cardFooter(card, true)}</footer>
         `;
         button.addEventListener("click", () => playCard(index, button));
         elements.hand.append(button);
@@ -1547,13 +1717,13 @@
 
     function previewCard(card) {
       const pieces = [];
-      if (card.damage) {
-        const outcome = evaluateCard(card);
-        let detail = `deal ${outcome.appliedDamage} damage`;
+      const outcome = evaluateCard(card);
+      if (outcome.hasDamage) {
+        let detail = `deal ${outcome.finalDamage} damage`;
         const math = [];
         if (state.focus > 0) math.push(`+${state.focus} Focus`);
         if (outcome.fracturePenalty > 0) math.push(`-2 Fractured`);
-        if (settings.detailLevel === "detailed" && math.length) detail += ` (${card.damage} base ${math.join(" ")})`;
+        if (settings.detailLevel === "detailed" && math.length) detail += ` (${outcome.printedDamage} base ${math.join(" ")})`;
         pieces.push(detail);
       }
       if (card.block) pieces.push(`gain ${card.block} guard`);
@@ -1576,7 +1746,7 @@
     function animateCardPlay(card, sourceElement) {
       if (!sourceElement || settings.reducedMotion) return;
       const sourceRect = sourceElement.getBoundingClientRect();
-      const targetElement = card.damage ? elements.enemyPanel : card.block || card.focus ? elements.playerPanel : elements.centerPanel;
+      const targetElement = hasDamage(card) ? elements.enemyPanel : card.block || card.focus ? elements.playerPanel : elements.centerPanel;
       const targetRect = targetElement.getBoundingClientRect();
       sourceElement.classList.add("is-playing");
       const trail = document.createElement("span");
@@ -1629,16 +1799,26 @@
       });
     }
 
-    function cardFooter(card) {
-      if (card.type === "attack") return `Attack ${card.damage}`;
+    function cardFooter(card, resolved = false) {
+      const outcome = state && resolved ? evaluateCard(card) : null;
+      const attackValue = outcome?.hasDamage ? outcome.finalDamage : card.damage;
+      if (card.type === "attack") return `Attack ${attackValue}`;
       if (card.type === "guard") return `Guard ${card.block}`;
       if (card.type === "draw") return `Draw ${card.draw}`;
-      if (card.type === "mixed") return `Attack ${card.damage} / Guard ${card.block}`;
+      if (card.type === "mixed") return `Attack ${attackValue} / Guard ${card.block}`;
       if (card.type === "buff") return `Focus +${card.focus}`;
       return "Card";
     }
 
     elements.startButton.addEventListener("click", startCombat);
+    [
+      ["focus", elements.focusStatusButton],
+      ["fractured", elements.fracturedStatusButton]
+    ].forEach(([status, control]) => {
+      control.addEventListener("focus", () => showStatusHelp(status));
+      control.addEventListener("mouseenter", () => showStatusHelp(status));
+      control.addEventListener("click", () => showStatusHelp(status));
+    });
     elements.settingsButton.addEventListener("click", openSettings);
     elements.startSettingsButton.addEventListener("click", openSettings);
     elements.closeSettingsButton.addEventListener("click", closeSettings);

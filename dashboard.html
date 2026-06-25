@@ -715,16 +715,16 @@
         <h2>Current Live Status</h2>
         <p><strong>Two-track Game QA Suite is active.</strong> Track 1 improves the three local HTML games; Track 2 black-box tests five hosted online games to strengthen QA methodology.</p>
         <div class="loop-grid" aria-label="Active upgrade status">
-          <div class="loop-cell"><strong>Track 1 Local Games</strong>Deckbuilder Upgrade Phase 2 BUILDER ACTIVE; Kart and Platformer latest local QA PASS/CLOSED</div>
+          <div class="loop-cell"><strong>Track 1 Local Games</strong>Deckbuilder Upgrade Phase 2 PASS/CLOSED; Kart and Platformer latest local QA PASS/CLOSED</div>
           <div class="loop-cell"><strong>Track 2 Online Games</strong>PolyTrack Poki Follow-up 3 PASS_WITH_FINDINGS</div>
           <div class="loop-cell"><strong>Canonical Tester</strong>019ef96e-99ee-7f62-b4d2-7d2c3cd29217 across both tracks</div>
           <div class="loop-cell"><strong>Browser Harness</strong>Serialized URL/manual/evidence runs in one shared Chrome window</div>
           <div class="loop-cell"><strong>Local Focus</strong>Settings depth, accessibility, audio defaults, feel, visuals, performance, polish</div>
-          <div class="loop-cell"><strong>Next Action</strong>Wait for Deckbuilder builder completion; do not hand off to tester yet</div>
+          <div class="loop-cell"><strong>Next Action</strong>Select next highest-impact local polish or external QA-methodology follow-up</div>
         </div>
         <div class="qa-links" aria-label="QA upgrade research links">
           <span>Gate: <strong>dashboard fresh/verified before transition complete</strong></span>
-          <span>Track 1 active builder handoff: Turn-Based Deckbuilder / Ash Circuit <strong>Phase 2 - Enemy Intent And Status Explainability</strong> is <strong>BUILDER ACTIVE / NOT YET READY FOR TESTER</strong> in builder thread <code>019ef96e-7780-7763-b444-12cf7698a97a</code>. Canonical tester remains idle and must not receive a handoff until builder completion. Future evidence target after builder completion: <code>evidence/deckbuilder/upgrade-phase-2-intent-status/</code>. Scope: original intent icon+label+number chips, visible enemy intent resolution feedback, Focus/Fractured help by mouse and keyboard, card consequence previews including status effects, optional next-intent preview, README updates, and preserving audio-off defaults. Reason: Deckbuilder Upgrade Phase 1 is already PASS, and the benchmark audit lists this as the next local quality phase.</span>
+          <span>Track 1 closed: Turn-Based Deckbuilder / Ash Circuit <strong>Upgrade Phase 2 - Enemy Intent And Status Explainability</strong> is <strong>PASS/CLOSED</strong> after Retest 1 at <code>evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1/</code> (<a href="evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1/TEST_REPORT.md">report</a>, <a href="evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1/expected-flow.md">expected-flow</a>, <a href="evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1/gameplay-recording.mp4">recording</a>). First failed QA remains preserved at <code>evidence/deckbuilder/upgrade-phase-2-intent-status/</code> (<a href="evidence/deckbuilder/upgrade-phase-2-intent-status/TEST_REPORT.md">report</a>, <a href="evidence/deckbuilder/upgrade-phase-2-intent-status/expected-flow.md">expected-flow</a>, <a href="evidence/deckbuilder/upgrade-phase-2-intent-status/gameplay-recording.mp4">recording</a>) as <strong>FAIL - FIXED IN NEXT BUILD</strong>. Retest verified the fix: Drive Plate at Focus <code>2</code>/no Fractured shows calculated <code>6</code> damage + <code>4</code> guard at enemy <code>4</code> HP, Strike Focus-only resolves <code>8</code>, Focus+Fractured subtracts once and clears, and explainability, audio, and reward gates are preserved.</span>
           <span>Track 1 active lanes: Arcade Kart Racer settings-depth retest 2 is <strong>PASS/CLOSED</strong> at <code>evidence/kart-racer/settings-depth-retest-2/</code> (<a href="evidence/kart-racer/settings-depth-retest-2/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/settings-depth-retest-2/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/settings-depth-retest-2/gameplay-recording.mp4">recording</a>). Side-Scrolling Platformer / Skyline Stepper Settings Polish 2 is <strong>PASS/CLOSED</strong> at <code>evidence/platformer/settings-polish-2-retest-6/</code> (<a href="evidence/platformer/settings-polish-2-retest-6/TEST_REPORT.md">report</a>, <a href="evidence/platformer/settings-polish-2-retest-6/expected-flow.md">expected-flow</a>, <a href="evidence/platformer/settings-polish-2-retest-6/gameplay-recording.mp4">recording</a>). Retest 6 verified in-run Settings close/resume: opening Settings during a run shows <code>Settings paused</code>; closing with <code>Escape</code> and closing with visible <code>Close Settings</code> both return HUD to <code>Reach the exit beacon</code>; post-close movement/input no longer leaves the run stuck paused. Retest 6 also preserved prior fixes: Player Variant Controls are visible/usable, <code>Snappy</code> and <code>Practice</code> update selected state/dropdowns, and Reset Defaults restores Air <code>Steady</code>, Damage <code>Standard</code>, generated sounds off, and volume <code>0%</code>. Nonblocking limitations: narrow viewport capture was blocked by a browser-harness CDP helper, and lower-deck route/checkpoint/exit/failure/restart coverage was smoke-limited because Retest 6 focused on the in-run settings resume regression.</span>
           <span>Platformer Settings Polish 2 evidence trail: attempt 1 <strong>BLOCKED_ENVIRONMENT</strong> at <code>evidence/platformer/settings-polish-2/</code>; Retest 1 <strong>BLOCKED_ENVIRONMENT</strong> at <code>evidence/platformer/settings-polish-2-retest-1/</code>; Retest 2 <strong>FAIL</strong> at <code>evidence/platformer/settings-polish-2-retest-2/</code>; Retest 3 <strong>FAIL</strong> at <code>evidence/platformer/settings-polish-2-retest-3/</code>; Retest 4 tester <strong>FAIL</strong> but orchestration <strong>NEEDS CACHE-BUSTED RETRY</strong> at <code>evidence/platformer/settings-polish-2-retest-4/</code>; Retest 5 <strong>FAIL</strong> at <code>evidence/platformer/settings-polish-2-retest-5/</code>; Retest 6 <strong>PASS</strong> at <code>evidence/platformer/settings-polish-2-retest-6/</code>.</span>
           <span>Settings QA: Kart Settings Phase 1 is superseded/no-verdict (<a href="evidence/kart-racer/settings-phase-1/TEST_REPORT.md">report</a>); Arcade Kart Racer settings-depth retest 1 remains historical <strong>BLOCKED_ENVIRONMENT</strong> at <code>evidence/kart-racer/settings-depth-retest-1/</code> (<a href="evidence/kart-racer/settings-depth-retest-1/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/settings-depth-retest-1/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/settings-depth-retest-1/gameplay-recording.mp4">recording</a>). Platformer QA scope: Air Control, Damage Profile, Checkpoint Assist, Route Cue Style, High-Contrast Hazards, Objective Labels, Background Detail, audio defaults/reset, persistence/reload, settings contexts, lower-deck completion, health-zero failure under Standard, checkpoint/respawn, route readability, and narrow viewport.</span>
@@ -745,7 +745,7 @@
           <a href="qa-upgrade/DECKBUILDER_BENCHMARK_AUDIT.md">DECKBUILDER_BENCHMARK_AUDIT.md</a>
         </div>
       </div>
-      <button class="action-btn" data-open-phase="deckbuilder:upgrade-a">View Deckbuilder Evidence</button>
+      <button class="action-btn" data-open-phase="deckbuilder:upgrade-phase-2">View Deckbuilder Evidence</button>
     </section>
 
     <nav class="filters" aria-label="Dashboard filters">
@@ -886,13 +886,13 @@
       {
         id: "deckbuilder",
         name: "Turn-Based Deckbuilder",
-        status: "attention",
-        statusLabel: "BUILDER ACTIVE",
-        summary: "Historical phases, Combat Feedback upgrade, settings work, settings polish, and audio-default hotfix are PASS; Upgrade Phase 2 is builder-active and not ready for tester handoff.",
+        status: "pass",
+        statusLabel: "PASS",
+        summary: "Historical phases, Combat Feedback upgrade, settings work, settings polish, audio-default hotfix, and Upgrade Phase 2 Retest 1 are PASS/CLOSED; the first failed Phase 2 evidence remains preserved.",
         gameUrl: "games/deckbuilder/index.html",
         readmeUrl: "games/deckbuilder/README.md",
-        primaryPhase: "upgrade-a",
-        upgrade: { number: "A", upgradeLabel: "Upgrade Phase 1", title: "Upgrade Phase 1: Combat Feedback And Math Preview", current: "pass", evidenceDir: "evidence/deckbuilder/upgrade-phase-1-combat-feedback" },
+        primaryPhase: "upgrade-phase-2",
+        upgrade: { number: "2", upgradeLabel: "Upgrade Phase 2 Retest 1", title: "Upgrade Phase 2: Enemy Intent And Status Explainability Retest 1", current: "pass", evidenceDir: "evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1" },
         phases: [
           { number: 1, title: "Basic Card Combat", current: "pass", evidenceDir: "evidence/deckbuilder/phase-1" },
           { number: 2, title: "Tactical Variety", current: "pass", evidenceDir: "evidence/deckbuilder/phase-2" },
@@ -901,7 +901,8 @@
         timeline: [
           { label: "Phases 1-3", status: "pass", statusLabel: "PASS", note: "Card combat, tactical variety, and run structure approved.", openKey: "deckbuilder:3" },
           { label: "Upgrade Phase 1: Combat Feedback And Math Preview", status: "pass", statusLabel: "PASS", note: "Math previews, feedback chips, combat log, rewards, and state/action clarity approved.", openKey: "deckbuilder:upgrade-a" },
-          { label: "Upgrade Phase 2: Enemy Intent And Status Explainability", status: "attention", statusLabel: "BUILDER ACTIVE", note: "Builder thread 019ef96e-7780-7763-b444-12cf7698a97a is adding original intent chips, enemy intent resolution feedback, Focus/Fractured help, card consequence/status previews, optional next-intent preview, README updates, and audio-off default preservation. Future evidence target: evidence/deckbuilder/upgrade-phase-2-intent-status/; not ready for tester.", openKey: null },
+          { label: "Upgrade Phase 2: First QA Pass", status: "fail", statusLabel: "FAIL - FIXED", note: "Focus 2 plus cleared Fractured left Drive Plate/Strike preview, log, and final damage inconsistent. This failed evidence is preserved as fixed in the next build.", openKey: "deckbuilder:upgrade-phase-2" },
+          { label: "Upgrade Phase 2: Retest 1", status: "pass", statusLabel: "PASS", note: "Retest 1 verifies Drive Plate 6 damage + 4 guard at enemy 4 HP, Strike Focus-only 8, Focus+Fractured subtracts once/clears, and explainability/audio/reward gates are preserved.", openKey: "deckbuilder:upgrade-phase-2-retest-1" },
           { label: "Settings Panel Phase 1", status: "pass", statusLabel: "PASS", note: "Settings QA approved with one non-blocking LOW initial-scroll finding.", openKey: "deckbuilder:settings-1" },
           { label: "Settings Panel Polish 1", status: "pass", statusLabel: "PASS", note: "LOW initial-scroll/top-control clipping finding -> builder fix -> retest PASS / closed.", openKey: "deckbuilder:settings-polish-1" },
           { label: "Audio Default Hotfix", status: "pass", statusLabel: "PASS", note: "Shared-window retest 1 approved default-off audio opt-in behavior; old partial isolated-profile evidence remains non-approvable.", openKey: "deckbuilder:audio-default" }
@@ -911,6 +912,8 @@
           { label: "Phase 2: Tactical Variety", status: "PASS", evidenceDir: "evidence/deckbuilder/phase-2" },
           { label: "Phase 3: Run Structure", status: "PASS", evidenceDir: "evidence/deckbuilder/phase-3" },
           { label: "Upgrade Phase 1: Combat Feedback And Math Preview", status: "PASS - UPGRADE 1", hydrateStatus: true, evidenceDir: "evidence/deckbuilder/upgrade-phase-1-combat-feedback" },
+          { label: "Upgrade Phase 2: Enemy Intent And Status Explainability", status: "FAIL - FIXED IN NEXT BUILD", hydrateStatus: true, evidenceDir: "evidence/deckbuilder/upgrade-phase-2-intent-status" },
+          { label: "Upgrade Phase 2 Retest 1: Focus Math Fix", status: "PASS - CLOSING EVIDENCE", hydrateStatus: true, evidenceDir: "evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1" },
           { label: "Settings Panel Phase 1", status: "PASS - SETTINGS", hydrateStatus: true, evidenceDir: "evidence/deckbuilder/settings-phase-1" },
           { label: "Settings Panel Polish 1: Scroll Visibility Fix", status: "PASS - POLISH", hydrateStatus: true, evidenceDir: "evidence/deckbuilder/settings-polish-1-scroll" },
           { label: "Audio Default Hotfix", status: "PASS - AUDIO DEFAULT", hydrateStatus: true, evidenceDir: "evidence/deckbuilder/audio-default-hotfix-shared-window-retest-1" }
@@ -970,6 +973,18 @@
         ["Builder complete", "Builder thread 019ef96e-7780-7763-b444-12cf7698a97a completed the combat feedback and math preview implementation."],
         ["Tester PASS / closed", "Tester report says PASS with card previews, Focus and Fractured math, disabled reasons, HP bars, feedback chips, combat log, rewards, encounter transition, final victory, defeat/restart, and state/action clarity approved."],
         ["Evidence complete", "TEST_REPORT.md, expected-flow.md, and gameplay-recording.mp4 are present in evidence/deckbuilder/upgrade-phase-1-combat-feedback/."]
+      ],
+      "deckbuilder:upgrade-phase-2": [
+        ["Builder complete", "Deckbuilder builder completed active intent chips, next-intent preview, last enemy resolution chips, Focus/Fractured mouse+keyboard help, Focus/Fractured card previews, README updates, and audio-off default preservation."],
+        ["Tester FAIL", "Canonical QA failed at evidence/deckbuilder/upgrade-phase-2-intent-status/: Focus 2 plus cleared Fractured leaves Drive Plate/Strike preview, log, and final damage inconsistent."],
+        ["Passing observations", "Intent chips, next-intent preview, last enemy resolution chips, status help, Fractured application/clear, audio off/default/reset, and reward appearance are preserved."],
+        ["Fixed in next build", "Builder completed the Focus math fix; this first failed evidence row remains preserved for audit."]
+      ],
+      "deckbuilder:upgrade-phase-2-retest-1": [
+        ["Builder fix complete", "Calculated damage now drives preview, footer, combat log, and floating feedback; enemy HP clamps internally at 0; README explains overkill display."],
+        ["Retest PASS / closed", "Retest 1 evidence in evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1/ says PASS and is now canonical for Upgrade Phase 2."],
+        ["Fix verified", "Drive Plate at Focus 2/no Fractured shows calculated 6 damage + 4 guard at enemy 4 HP; Strike Focus-only resolves 8; Focus+Fractured subtracts once and clears."],
+        ["Regression gates preserved", "Intent/status explainability, audio off/default/reset, reward appearance, and state/action clarity gates remain approved."]
       ],
       "deckbuilder:settings-1": [
         ["Settings QA PASS / closed", "Deckbuilder Settings Panel Phase 1 report says PASS with required evidence in evidence/deckbuilder/settings-phase-1/."],
@@ -1263,8 +1278,14 @@
     function findPhase(key) {
       const [gameId, phaseNumber] = key.split(":");
       const game = games.find((item) => item.id === gameId);
-      const phase = phaseNumber === "upgrade-a"
-        ? game?.upgrade
+      const phase = phaseNumber === "upgrade-a" && gameId === "deckbuilder"
+        ? { number: "1", upgradeLabel: "Upgrade Phase 1", title: "Upgrade Phase 1: Combat Feedback And Math Preview", current: "pass", evidenceDir: "evidence/deckbuilder/upgrade-phase-1-combat-feedback" }
+        : phaseNumber === "upgrade-a"
+          ? game?.upgrade
+        : phaseNumber === "upgrade-phase-2"
+          ? { number: "2", upgradeLabel: "Upgrade Phase 2", title: "Upgrade Phase 2: Enemy Intent And Status Explainability", current: "fail", evidenceDir: "evidence/deckbuilder/upgrade-phase-2-intent-status" }
+        : phaseNumber === "upgrade-phase-2-retest-1"
+          ? game?.upgrade
         : phaseNumber === "settings-1"
           ? { number: "Settings 1", title: "Settings Panel Phase 1", current: "pass", evidenceDir: `evidence/${gameId}/settings-phase-1` }
         : phaseNumber === "settings-polish-1"

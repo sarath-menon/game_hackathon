@@ -16,6 +16,7 @@ Ash Circuit is a two-encounter, turn-based deck run. Defeat the first enemy, cho
 - Click **Settings** from the title screen or combat header to adjust readability, feedback, confirmations, and persistence.
 - Click a card in your hand to play it.
 - Read the card preview before clicking; it shows the current damage, guard, draw, and status outcome using active Focus or Fractured modifiers.
+- Hover, focus, or click the **Focus** and **Fractured** status chips to show a short rules explanation.
 - Click **End Turn** when finished playing cards.
 - Click one reward card after encounter 1 to add it to your deck and start encounter 2.
 - Click **New Run** or **Play Again** to restart the deterministic run.
@@ -56,7 +57,13 @@ Encounter 1 is **Glass Warden** with 32 HP. It uses this repeating deterministic
 2. **Static Hex**: attack for 4 and apply Fractured.
 3. **Crushing Arc**: attack for 9.
 
-The active intent is shown before you end your turn, including its attack value and extra effect.
+The active intent is shown before you end your turn with icon-style chips:
+
+- **ATK / Attack** means the enemy will deal the shown attack value.
+- **HVY / Heavy** means the enemy will make a larger attack.
+- **HEX / Fractured** means the enemy will apply Fractured after its attack.
+
+The panel also shows a next-intent preview from the documented deterministic cycle. After the enemy acts, the **Last enemy resolution** chips show the enemy action, guard absorption, HP loss, and whether Fractured was applied.
 
 Encounter 2 is **Mirror Sentinel** with 42 HP. It uses this repeating deterministic intent cycle:
 
@@ -89,7 +96,9 @@ The chosen reward is added to the run deck before encounter 2. The run status li
 - **Focus** is a player buff. Each point of Focus adds 1 damage to every attack or mixed attack card.
 - **Fractured** is a player debuff from Static Hex. It reduces the next attack or mixed attack card by 2 damage, then clears.
 - Focus and Fractured are visible in the player status area.
-- Card previews include Focus and Fractured changes before play, and the combat log reports the same resolved math after play.
+- Hover, focus, or click either status chip to display its rule text in the status help line.
+- Card previews and the card footer attack number include Focus and Fractured changes before play, and the combat log reports the same resolved math after play.
+- If an attack deals more damage than the enemy's remaining HP, enemy HP stops at 0 but the preview, footer, feedback chip, and log still show the calculated card damage.
 - Guard still blocks only the next enemy attack and then resets to 0.
 
 ## Feedback Display
