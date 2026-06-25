@@ -2439,3 +2439,30 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - test one external-game modal at a time and capture clean return-to-menu state before opening the next panel.
 - Dashboard action:
   - dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` was asked to mark this follow-up as the latest OvO `PASS_WITH_FINDINGS` status while preserving the prior OvO baseline report.
+
+## Deckbuilder Upgrade Phase 3 Build Active - 2026-06-25
+
+- Track: local game polish / state clarity.
+- Builder: `019ef96e-7780-7763-b444-12cf7698a97a`.
+- Game: Turn-Based Deckbuilder / Ash Circuit.
+- Goal: Upgrade Phase 3 - Deck, Draw, And Discard Inspection.
+- Reason for selection:
+  - Kart settings-depth retest 2 is already closed `PASS`;
+  - Platformer Settings Polish 2 is already closed `PASS`;
+  - Deckbuilder settings and intent/status explainability are closed `PASS`;
+  - the next highest-impact card-game QA gap is player-visible pile/deck/card-state inspection.
+- Build scope sent:
+  - edit only `games/deckbuilder/index.html` and `games/deckbuilder/README.md`;
+  - add a player-facing inspection surface accessible from combat and reward states;
+  - show current deck, draw pile, discard pile, hand, empty states, counts, card names, costs/types, and concise effect text;
+  - preserve deterministic run, enemy intent/status behavior, Focus/Fractured math, reward flow, settings panel, audio-off defaults, persistence behavior, and restart/new-run flow.
+- Required builder self-checks:
+  - hosted game/manual return 200;
+  - embedded script parses;
+  - inspector opens from combat and shows matching deck/draw/discard/hand counts and entries;
+  - after playing a card, discard/hand/draw counts update in the inspector;
+  - after reward selection, selected reward appears in deck inspection if feasible;
+  - Escape/Close returns focus and gameplay remains usable;
+  - audio remains off by default and after Reset Defaults.
+- Future tester evidence target after builder completion:
+  - `evidence/deckbuilder/upgrade-phase-3-deck-inspection/`
