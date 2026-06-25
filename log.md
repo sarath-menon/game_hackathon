@@ -2501,3 +2501,31 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - `gameplay-recording.mp4`
 - Tester focus:
   - black-box verification of inspector discoverability, sections, counts, card entries, discard updates, reward-state inspection, reward addition visibility, Escape/Close focus return, audio/default/settings regression, intent/status readability, Focus/Fractured coherence, reward flow, restart/new-run, and state/action clarity.
+
+## Deckbuilder Upgrade Phase 3 PASS / Closed - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed the black-box QA pass for Upgrade Phase 3: Deck, Draw, And Discard Inspection.
+- Evidence folder:
+  - `evidence/deckbuilder/upgrade-phase-3-deck-inspection/`
+- Required artifacts are present:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS`.
+- Tester verified:
+  - hosted URL and manual loaded;
+  - title Settings opened, corrected Reset Defaults restored generated audio off, volume `0`, and confirmation toggles off;
+  - corrected Close Settings returned to title;
+  - combat inspector was discoverable from normal combat;
+  - inspector showed Current Deck, Hand, Draw Pile, Discard Pile, Exhaust / Removed, and Recent Reward Additions with counts, card names, types/costs, and effect text;
+  - inspector counts matched HUD and visible hand state;
+  - playing Strike updated energy, enemy HP, hand count, discard count, combat log, and inspector discard contents;
+  - Escape and Close Inspection returned to gameplay without mutating state;
+  - encounter 1 reward-state inspection worked before reward selection;
+  - selecting Flare Shot transitioned to encounter 2 with a 13-card deck and Flare Shot visible in Current Deck, Draw Pile, and Recent Reward Additions;
+  - Fractured preview/resolution behavior and enemy intent/status explainability stayed readable;
+  - New Run restarted cleanly.
+- No blocking or major findings remain.
+- Nonblocking limitation:
+  - dedicated mobile emulation was not attempted; shared Chrome viewport `782 x 859` was readable and stable.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` should mark Deckbuilder Upgrade Phase 3 `PASS/CLOSED`, surface evidence links, and preserve the full evidence trail.

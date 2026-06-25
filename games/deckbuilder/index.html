@@ -313,6 +313,11 @@
       text-transform: uppercase;
     }
 
+    .inspect-inline {
+      width: 100%;
+      justify-content: center;
+    }
+
     .turn-banner {
       min-height: 72px;
       border: 1px solid #4f5f6d;
@@ -734,6 +739,102 @@
       line-height: 1.4;
     }
 
+    .inspect-modal {
+      width: min(940px, 100%);
+    }
+
+    .inspect-modal h2 {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+    }
+
+    .inspect-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .inspect-section {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #141b22;
+      padding: 12px;
+      min-width: 0;
+    }
+
+    .inspect-section.full {
+      grid-column: 1 / -1;
+    }
+
+    .inspect-section header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid #2f3a43;
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+    }
+
+    .inspect-section h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .inspect-count {
+      color: var(--accent);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .inspect-note,
+    .inspect-empty {
+      color: var(--muted);
+      line-height: 1.4;
+      font-size: 0.88rem;
+    }
+
+    .inspect-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .inspect-card-row {
+      border: 1px solid #303d49;
+      border-radius: 8px;
+      background: #10161c;
+      padding: 9px;
+      display: grid;
+      gap: 5px;
+    }
+
+    .inspect-card-row strong {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      line-height: 1.25;
+    }
+
+    .inspect-card-row span {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    .inspect-card-row p {
+      margin: 0;
+      color: var(--text);
+      font-size: 0.88rem;
+      line-height: 1.35;
+    }
+
+    .inspect-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 14px;
+    }
+
     @keyframes float-chip {
       0% { opacity: 0; transform: translate(-50%, -20%) scale(0.92); }
       18% { opacity: 1; transform: translate(-50%, -52%) scale(1); }
@@ -834,6 +935,10 @@
         min-height: 320px;
       }
 
+      .inspect-grid {
+        grid-template-columns: 1fr;
+      }
+
       .hand {
         grid-template-columns: repeat(2, minmax(136px, 1fr));
       }
@@ -867,6 +972,7 @@
       </div>
       <div class="top-actions">
         <button class="btn" id="settingsButton" type="button">Settings</button>
+        <button class="btn" id="inspectButton" type="button">Inspect Deck</button>
         <button class="btn" id="newGameButton" type="button">New Run</button>
         <button class="btn primary" id="endTurnButton" type="button">End Turn</button>
       </div>
@@ -905,6 +1011,7 @@
           <div class="pile"><div><strong id="handCount">0</strong><span>Hand</span></div></div>
           <div class="pile"><div><strong id="discardCount">0</strong><span>Discard</span></div></div>
         </div>
+        <button class="btn inspect-inline" id="pileInspectButton" type="button">Inspect Deck, Draw, And Discard</button>
         <div class="turn-banner" id="turnBanner">
           <strong>Your turn.</strong> Play cards or end turn.
         </div>
@@ -1057,7 +1164,19 @@
     <section class="modal" role="dialog" aria-modal="true" aria-labelledby="rewardTitle">
       <h2 id="rewardTitle">Choose A Reward</h2>
       <p id="rewardText">Pick one card. It is added to your deck for encounter 2.</p>
+      <button class="btn" id="rewardInspectButton" type="button">Inspect Current Deck</button>
       <div class="hand" id="rewardChoices"></div>
+    </section>
+  </div>
+
+  <div class="overlay" id="inspectOverlay" hidden>
+    <section class="modal inspect-modal" id="inspectModal" role="dialog" aria-modal="true" aria-labelledby="inspectTitle" tabindex="-1">
+      <h2 id="inspectTitle">Deck Inspection</h2>
+      <p id="inspectSummary">Deck, hand, draw, and discard information appears here.</p>
+      <div class="inspect-grid" id="inspectContent"></div>
+      <div class="inspect-actions">
+        <button class="btn primary" id="closeInspectButton" type="button">Close Inspection</button>
+      </div>
     </section>
   </div>
 
@@ -1132,12 +1251,18 @@
       startOverlay: document.getElementById("startOverlay"),
       resultOverlay: document.getElementById("resultOverlay"),
       rewardOverlay: document.getElementById("rewardOverlay"),
+      inspectOverlay: document.getElementById("inspectOverlay"),
       settingsOverlay: document.getElementById("settingsOverlay"),
       settingsModal: document.getElementById("settingsModal"),
+      inspectModal: document.getElementById("inspectModal"),
       startButton: document.getElementById("startButton"),
       settingsButton: document.getElementById("settingsButton"),
       startSettingsButton: document.getElementById("startSettingsButton"),
+      inspectButton: document.getElementById("inspectButton"),
+      pileInspectButton: document.getElementById("pileInspectButton"),
+      rewardInspectButton: document.getElementById("rewardInspectButton"),
       closeSettingsButton: document.getElementById("closeSettingsButton"),
+      closeInspectButton: document.getElementById("closeInspectButton"),
       resetSettingsButton: document.getElementById("resetSettingsButton"),
       restartButton: document.getElementById("restartButton"),
       newGameButton: document.getElementById("newGameButton"),
@@ -1154,6 +1279,8 @@
       settingsSummary: document.getElementById("settingsSummary"),
       rewardChoices: document.getElementById("rewardChoices"),
       rewardText: document.getElementById("rewardText"),
+      inspectSummary: document.getElementById("inspectSummary"),
+      inspectContent: document.getElementById("inspectContent"),
       runLine: document.getElementById("runLine"),
       playerPanel: document.getElementById("playerPanel"),
       enemyPanel: document.getElementById("enemyPanel"),
@@ -1197,6 +1324,7 @@
     let state;
     let settings = loadSettings();
     let audioContext = null;
+    let inspectReturnFocus = null;
 
     function freshState() {
       return {
@@ -1227,6 +1355,7 @@
       elements.startOverlay.hidden = true;
       elements.resultOverlay.hidden = true;
       elements.rewardOverlay.hidden = true;
+      elements.inspectOverlay.hidden = true;
       beginEncounter(0, MAX_PLAYER_HP, "Run begins.");
     }
 
@@ -1363,6 +1492,53 @@
       } else {
         elements.settingsButton.focus();
       }
+    }
+
+    function openInspection(event) {
+      inspectReturnFocus = event?.currentTarget || document.activeElement;
+      renderInspection();
+      elements.inspectOverlay.hidden = false;
+      elements.inspectModal.scrollTop = 0;
+      elements.closeInspectButton.focus({ preventScroll: true });
+      window.requestAnimationFrame(() => {
+        elements.inspectModal.scrollTop = 0;
+      });
+    }
+
+    function closeInspection() {
+      elements.inspectOverlay.hidden = true;
+      const fallback = !elements.rewardOverlay.hidden ? elements.rewardInspectButton : elements.inspectButton;
+      const target = inspectReturnFocus && document.contains(inspectReturnFocus) && !inspectReturnFocus.disabled
+        ? inspectReturnFocus
+        : fallback;
+      inspectReturnFocus = null;
+      target?.focus({ preventScroll: true });
+    }
+
+    function handleInspectionKeydown(event) {
+      if (elements.inspectOverlay.hidden) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeInspection();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const focusable = getInspectionFocusable();
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    function getInspectionFocusable() {
+      return Array.from(elements.inspectModal.querySelectorAll("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])"))
+        .filter(item => !item.disabled && item.offsetParent !== null);
     }
 
     function resetSettings() {
@@ -1600,6 +1776,124 @@
       beginEncounter(1, state.playerHp, `${card.name} added to the deck.`);
     }
 
+    function renderInspection() {
+      const rewardCards = state.runDeck.filter(card => card.id.endsWith("-chosen"));
+      elements.inspectSummary.textContent = `Encounter ${state.encounterIndex + 1}: deck ${state.runDeck.length}, draw ${state.drawPile.length}, hand ${state.hand.length}, discard ${state.discardPile.length}. ${state.selectedReward ? `Reward added: ${state.selectedReward}.` : "No reward has been added yet."}`;
+      elements.inspectContent.textContent = "";
+      [
+        {
+          title: "Current Deck",
+          count: state.runDeck.length,
+          cards: state.runDeck,
+          note: "All cards in the run deck. This list includes the selected reward after encounter 1.",
+          full: true,
+          empty: "No cards are in the deck."
+        },
+        {
+          title: "Hand",
+          count: state.hand.length,
+          cards: state.hand,
+          note: "Cards currently visible and playable when you have enough energy.",
+          empty: "No cards are currently in hand."
+        },
+        {
+          title: "Draw Pile",
+          count: state.drawPile.length,
+          cards: state.drawPile,
+          note: "Top card is listed first. This is the upcoming fixed draw order.",
+          empty: "The draw pile is empty. The discard pile will refill it when cards are needed."
+        },
+        {
+          title: "Discard Pile",
+          count: state.discardPile.length,
+          cards: state.discardPile,
+          note: "Cards played or discarded this encounter. This order becomes the next draw pile refill.",
+          empty: "The discard pile is empty."
+        },
+        {
+          title: "Exhaust / Removed",
+          count: 0,
+          cards: [],
+          note: "No cards exhaust or leave the deck in this phase.",
+          empty: "None."
+        },
+        {
+          title: "Recent Reward Additions",
+          count: rewardCards.length,
+          cards: rewardCards,
+          note: "Chosen reward cards appended to the run deck.",
+          empty: "No reward card has been added yet."
+        }
+      ].forEach(section => {
+        elements.inspectContent.append(createInspectionSection(section));
+      });
+    }
+
+    function createInspectionSection(section) {
+      const wrapper = document.createElement("section");
+      wrapper.className = `inspect-section${section.full ? " full" : ""}`;
+
+      const header = document.createElement("header");
+      const title = document.createElement("h3");
+      title.textContent = section.title;
+      const count = document.createElement("span");
+      count.className = "inspect-count";
+      count.textContent = `${section.count} card${section.count === 1 ? "" : "s"}`;
+      header.append(title, count);
+      wrapper.append(header);
+
+      const note = document.createElement("p");
+      note.className = "inspect-note";
+      note.textContent = section.note;
+      wrapper.append(note);
+
+      if (!section.cards.length) {
+        const empty = document.createElement("p");
+        empty.className = "inspect-empty";
+        empty.textContent = section.empty;
+        wrapper.append(empty);
+        return wrapper;
+      }
+
+      const list = document.createElement("div");
+      list.className = "inspect-list";
+      section.cards.forEach((card, index) => {
+        list.append(createInspectionCard(card, index));
+      });
+      wrapper.append(list);
+      return wrapper;
+    }
+
+    function createInspectionCard(card, index) {
+      const row = document.createElement("article");
+      row.className = "inspect-card-row";
+
+      const title = document.createElement("strong");
+      const name = document.createElement("span");
+      name.textContent = `${index + 1}. ${card.name}`;
+      const meta = document.createElement("span");
+      meta.textContent = `${cardTypeLabel(card.type)} / Cost ${card.cost}`;
+      title.append(name, meta);
+
+      const effect = document.createElement("p");
+      effect.textContent = card.text;
+
+      const footer = document.createElement("span");
+      footer.textContent = cardFooter(card, false);
+
+      row.append(title, effect, footer);
+      return row;
+    }
+
+    function cardTypeLabel(type) {
+      if (type === "attack") return "Attack";
+      if (type === "guard") return "Guard";
+      if (type === "draw") return "Draw";
+      if (type === "mixed") return "Mixed";
+      if (type === "buff") return "Setup";
+      return "Card";
+    }
+
     function render() {
       elements.playerHp.textContent = `${state.playerHp} / ${MAX_PLAYER_HP}`;
       elements.playerHpFill.style.width = `${Math.max(0, (state.playerHp / MAX_PLAYER_HP) * 100)}%`;
@@ -1634,6 +1928,7 @@
 
       renderHand();
       renderLog();
+      if (!elements.inspectOverlay.hidden) renderInspection();
     }
 
     function renderIntentChips(container, intent) {
@@ -1821,7 +2116,11 @@
     });
     elements.settingsButton.addEventListener("click", openSettings);
     elements.startSettingsButton.addEventListener("click", openSettings);
+    elements.inspectButton.addEventListener("click", openInspection);
+    elements.pileInspectButton.addEventListener("click", openInspection);
+    elements.rewardInspectButton.addEventListener("click", openInspection);
     elements.closeSettingsButton.addEventListener("click", closeSettings);
+    elements.closeInspectButton.addEventListener("click", closeInspection);
     elements.resetSettingsButton.addEventListener("click", resetSettings);
     [
       elements.animationSpeedSelect,
@@ -1837,6 +2136,7 @@
     elements.restartButton.addEventListener("click", startCombat);
     elements.newGameButton.addEventListener("click", startCombat);
     elements.endTurnButton.addEventListener("click", endTurn);
+    document.addEventListener("keydown", handleInspectionKeydown);
 
     state = freshState();
     applySettings();

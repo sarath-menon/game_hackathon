@@ -14,11 +14,13 @@ Ash Circuit is a two-encounter, turn-based deck run. Defeat the first enemy, cho
 
 - Click **Start Run** to begin.
 - Click **Settings** from the title screen or combat header to adjust readability, feedback, confirmations, and persistence.
+- Click **Inspect Deck** from combat, or **Inspect Current Deck** during reward choice, to review the current deck, hand, draw pile, discard pile, removed cards, and reward additions.
 - Click a card in your hand to play it.
 - Read the card preview before clicking; it shows the current damage, guard, draw, and status outcome using active Focus or Fractured modifiers.
 - Hover, focus, or click the **Focus** and **Fractured** status chips to show a short rules explanation.
 - Click **End Turn** when finished playing cards.
 - Click one reward card after encounter 1 to add it to your deck and start encounter 2.
+- Press **Escape** or click **Close Inspection** to close the deck inspection panel and return focus to the control that opened it.
 - Click **New Run** or **Play Again** to restart the deterministic run.
 
 ## Settings
@@ -113,6 +115,10 @@ The chosen reward is added to the run deck before encounter 2. The run status li
 - The starter deck order is fixed, so combat is deterministic.
 - The selected reward is appended to the deck for encounter 2.
 - Draw pile, hand, and discard pile counts are shown in the center panel.
+- **Inspect Deck** opens a read-only panel with sections for Current Deck, Hand, Draw Pile, Discard Pile, Exhaust / Removed, and Recent Reward Additions.
+- Each inspection entry shows the card name, type, energy cost, and concise effect text.
+- The Draw Pile section lists the next card first, matching the fixed draw order.
+- Empty piles show an explicit empty message instead of a blank list.
 - When the draw pile is empty and more cards are needed, the discard pile refills the draw pile in fixed order.
 
 ## Final Victory And Defeat
