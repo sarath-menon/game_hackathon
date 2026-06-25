@@ -2529,3 +2529,26 @@ python3 -m http.server 8765 --bind 127.0.0.1
 - Nonblocking limitation:
   - dedicated mobile emulation was not attempted; shared Chrome viewport `782 x 859` was readable and stable.
 - Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` should mark Deckbuilder Upgrade Phase 3 `PASS/CLOSED`, surface evidence links, and preserve the full evidence trail.
+
+## Townscaper External QA Follow-Up Active - 2026-06-25
+
+- Track 2 next loop selected: Townscaper Web, Removal, Undo, Gear/Settings, And Placement-Clarity Follow-Up 1.
+- Rationale:
+  - prior Townscaper pass was `PASS_WITH_FINDINGS`;
+  - the highest-value remaining QA-methodology gaps are creative/WebGL before-after proof, removal/undo discoverability, gear/settings/help behavior, icon-only controls, and stable WebGL interaction evidence.
+- Canonical tester handoff sent to `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Allowed tester inputs:
+  - provider URL: `https://oskarstalberg.com/Townscaper/`
+  - manual: `external-qa/townscaper/README.md`
+  - evidence target: `evidence/external/townscaper-removal-undo-settings-followup-1/`
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Tester focus:
+  - distinguish slow WebGL startup from `BLOCKED_PROVIDER`;
+  - capture stable before/after placement framing;
+  - verify placement, removal, undo/redo, gear/settings/help behavior, camera drag/orbit, zoom, icon/color-only usability, accessibility/readability, performance, and WebGL stability.
+- Verdict taxonomy:
+  - `PASS_WITH_FINDINGS`, `FAIL`, `BLOCKED_PROVIDER`, or `BLOCKED_ENVIRONMENT`;
+  - provider/setup/WebGL/harness blockers must not be treated as final game failure.
