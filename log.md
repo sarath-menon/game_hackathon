@@ -2381,3 +2381,30 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - Deckbuilder Upgrade Phase 2 is approved/closed.
   - First-pass failed evidence remains preserved at `evidence/deckbuilder/upgrade-phase-2-intent-status/`.
   - Passing retest evidence is canonical at `evidence/deckbuilder/upgrade-phase-2-intent-status-retest-1/`.
+
+## OvO Classic Finish/Settings Follow-Up Handoff - 2026-06-25
+
+- Track: external-game QA methodology improvement.
+- Canonical tester: `019ef96e-99ee-7f62-b4d2-7d2c3cd29217`.
+- Provider URL: `https://poki.com/en/g/ovo-classic`.
+- Manual: `external-qa/ovo-poki/README.md`.
+- Prior evidence: `evidence/external/ovo-poki-shared-window-retry-1/`.
+- Prior verdict: `PASS_WITH_FINDINGS`.
+- Reason for follow-up:
+  - prior OvO Poki pass proved playability but left level finish/next-level transition only partially covered;
+  - settings/options/audio/fullscreen/skins/modes coverage was shallow;
+  - these are useful gaps for improving the shared external-game QA methodology.
+- Fresh evidence target:
+  - `evidence/external/ovo-poki-finish-settings-followup-1/`
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Tester instructions sent:
+  - use only the URL, manual, and evidence paths;
+  - use browser-harness only in the single shared Chrome window;
+  - distinguish `PASS_WITH_FINDINGS`, `FAIL`, `BLOCKED_PROVIDER`, and `BLOCKED_ENVIRONMENT`;
+  - do not mark a final game `FAIL` for provider shell, iframe, startup, storage, WebGL, ad/consent, or harness setup blockers;
+  - specifically capture finish crossing/level transition plus deeper visible settings/options/menu behavior.
+- Dashboard action:
+  - dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` was asked to surface this active follow-up in the existing OvO/external QA area while preserving the prior `PASS_WITH_FINDINGS` row.
