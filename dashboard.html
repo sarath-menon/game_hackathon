@@ -887,6 +887,27 @@
       font-size: 0.78rem;
     }
 
+    .markdown table {
+      width: 100%;
+      margin: 0.65rem 0;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+
+    .markdown th,
+    .markdown td {
+      padding: 7px 8px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .markdown th {
+      background: #f3f6f7;
+      color: var(--ink);
+      font-weight: 850;
+    }
+
     .viewer-actions {
       display: inline-flex;
       gap: 7px;
@@ -956,11 +977,11 @@
       <div class="summary-grid" aria-label="Current work summary">
         <div class="summary-card">
           <strong>Active Now</strong>
-          <p>Arcade Kart Racer assists upgrade is BLOCKED_ENVIRONMENT after target drift during driving checks. Cookie Clicker follow-up 3 is closed PASS_WITH_FINDINGS.</p>
+          <p>Arcade Kart Racer assists upgrade Retest 1 is PASS / CLOSED. Cookie Clicker follow-up 3 is closed PASS_WITH_FINDINGS.</p>
         </div>
         <div class="summary-card">
           <strong>Next Action</strong>
-          <p>Cleanup shared Chrome/browser-harness tabs, then retry the same Kart driving assists handoff.</p>
+          <p>Select the next highest-impact local polish or external QA methodology follow-up.</p>
         </div>
       </div>
 
@@ -974,8 +995,8 @@
             <tbody>
               <tr>
                 <td>Arcade Kart Racer</td>
-                <td><span class="badge" data-status="attention">BLOCKED_ENVIRONMENT</span><br>retry needed after target drift; not game FAIL</td>
-                <td><span class="badge" data-status="pass">PASS</span><br><a href="evidence/kart-racer/settings-depth-retest-2/TEST_REPORT.md">settings-depth retest 2</a></td>
+                <td><span class="badge" data-status="pass">PASS / CLOSED</span><br>driving assists Retest 1 closed</td>
+                <td><span class="badge" data-status="pass">PASS</span><br><a href="evidence/kart-racer/driving-assists-accessibility-retest-1/TEST_REPORT.md">driving assists retest 1</a></td>
                 <td><button class="action-btn" data-open-phase="kart-racer:driving-assists">View timeline</button></td>
               </tr>
               <tr>
@@ -1002,31 +1023,31 @@
             </thead>
             <tbody>
               <tr>
-                <td>Cookie Clicker</td>
+                <td>Cookie Clicker<br><a href="https://orteil.dashnet.org/cookieclicker/">URL</a></td>
                 <td><span class="badge" data-status="pass">CLOSED</span><br>accessibility, narrow viewport, settings persistence follow-up 3</td>
                 <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span><br><a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/TEST_REPORT.md">follow-up 3</a></td>
                 <td><a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/TEST_REPORT.md">report</a> · <a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/expected-flow.md">flow</a> · <a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/gameplay-recording.mp4">video</a></td>
               </tr>
               <tr>
-                <td>PolyTrack</td>
+                <td>PolyTrack<br><a href="https://poki.com/en/g/polytrack">URL</a></td>
                 <td><span class="badge" data-status="pass">CLOSED</span></td>
                 <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></td>
                 <td><a href="evidence/external/polytrack-poki-settings-race-followup-1/TEST_REPORT.md">View latest</a></td>
               </tr>
               <tr>
-                <td>OvO</td>
+                <td>OvO<br><a href="https://poki.com/en/g/ovo-classic">URL</a></td>
                 <td><span class="badge" data-status="pass">CLOSED</span></td>
                 <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></td>
                 <td><a href="evidence/external/ovo-poki-finish-settings-followup-1/TEST_REPORT.md">View latest</a></td>
               </tr>
               <tr>
-                <td>Dungeons &amp; Degenerate Gamblers</td>
+                <td>Dungeons &amp; Degenerate Gamblers<br><a href="https://html-classic.itch.zone/html/15020933/index.html">URL</a></td>
                 <td><span class="badge" data-status="pass">CLOSED</span></td>
                 <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></td>
                 <td><a href="evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/TEST_REPORT.md">View latest</a></td>
               </tr>
               <tr>
-                <td>Townscaper</td>
+                <td>Townscaper<br><a href="https://oskarstalberg.com/Townscaper/">URL</a></td>
                 <td><span class="badge" data-status="pass">CLOSED</span></td>
                 <td><span class="badge" data-status="pass">PASS_WITH_FINDINGS</span></td>
                 <td><a href="evidence/external/townscaper-removal-undo-settings-followup-1/TEST_REPORT.md">View latest</a></td>
@@ -1035,6 +1056,93 @@
           </table>
         </section>
       </div>
+
+      <section class="video-strip" aria-label="Latest external browser QA recordings">
+        <article class="milestone-video-card">
+          <header>
+            <div>
+              <h3>Cookie Clicker</h3>
+              <p>Latest external QA: Follow-Up 3</p>
+            </div>
+            <span class="badge" data-status="pass">PASS_WITH_FINDINGS</span>
+          </header>
+          <video controls preload="metadata" src="evidence/external/cookie-clicker-accessibility-narrow-followup-3/gameplay-recording.mp4"></video>
+          <footer>
+            <a href="https://orteil.dashnet.org/cookieclicker/">URL</a>
+            <a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/TEST_REPORT.md">report</a>
+            <a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/expected-flow.md">expected-flow</a>
+            <a href="evidence/external/cookie-clicker-accessibility-narrow-followup-3/gameplay-recording.mp4">recording</a>
+          </footer>
+        </article>
+
+        <article class="milestone-video-card">
+          <header>
+            <div>
+              <h3>PolyTrack</h3>
+              <p>Latest external QA: settings/race follow-up</p>
+            </div>
+            <span class="badge" data-status="pass">PASS_WITH_FINDINGS</span>
+          </header>
+          <video controls preload="metadata" src="evidence/external/polytrack-poki-settings-race-followup-1/gameplay-recording.mp4"></video>
+          <footer>
+            <a href="https://poki.com/en/g/polytrack">URL</a>
+            <a href="evidence/external/polytrack-poki-settings-race-followup-1/TEST_REPORT.md">report</a>
+            <a href="evidence/external/polytrack-poki-settings-race-followup-1/expected-flow.md">expected-flow</a>
+            <a href="evidence/external/polytrack-poki-settings-race-followup-1/gameplay-recording.mp4">recording</a>
+          </footer>
+        </article>
+
+        <article class="milestone-video-card">
+          <header>
+            <div>
+              <h3>OvO</h3>
+              <p>Latest external QA: finish/settings follow-up</p>
+            </div>
+            <span class="badge" data-status="pass">PASS_WITH_FINDINGS</span>
+          </header>
+          <video controls preload="metadata" src="evidence/external/ovo-poki-finish-settings-followup-1/gameplay-recording.mp4"></video>
+          <footer>
+            <a href="https://poki.com/en/g/ovo-classic">URL</a>
+            <a href="evidence/external/ovo-poki-finish-settings-followup-1/TEST_REPORT.md">report</a>
+            <a href="evidence/external/ovo-poki-finish-settings-followup-1/expected-flow.md">expected-flow</a>
+            <a href="evidence/external/ovo-poki-finish-settings-followup-1/gameplay-recording.mp4">recording</a>
+          </footer>
+        </article>
+
+        <article class="milestone-video-card">
+          <header>
+            <div>
+              <h3>Dungeons &amp; Degenerate Gamblers</h3>
+              <p>Latest external QA: legality/restart follow-up</p>
+            </div>
+            <span class="badge" data-status="pass">PASS_WITH_FINDINGS</span>
+          </header>
+          <video controls preload="metadata" src="evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/gameplay-recording.mp4"></video>
+          <footer>
+            <a href="https://html-classic.itch.zone/html/15020933/index.html">URL</a>
+            <a href="evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/TEST_REPORT.md">report</a>
+            <a href="evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/expected-flow.md">expected-flow</a>
+            <a href="evidence/external/dungeons-degenerate-gamblers-legality-restart-pass-1/gameplay-recording.mp4">recording</a>
+          </footer>
+        </article>
+
+        <article class="milestone-video-card">
+          <header>
+            <div>
+              <h3>Townscaper</h3>
+              <p>Latest external QA: removal/undo/settings follow-up</p>
+            </div>
+            <span class="badge" data-status="pass">PASS_WITH_FINDINGS</span>
+          </header>
+          <video controls preload="metadata" src="evidence/external/townscaper-removal-undo-settings-followup-1/gameplay-recording.mp4"></video>
+          <footer>
+            <a href="https://oskarstalberg.com/Townscaper/">URL</a>
+            <a href="evidence/external/townscaper-removal-undo-settings-followup-1/TEST_REPORT.md">report</a>
+            <a href="evidence/external/townscaper-removal-undo-settings-followup-1/expected-flow.md">expected-flow</a>
+            <a href="evidence/external/townscaper-removal-undo-settings-followup-1/gameplay-recording.mp4">recording</a>
+          </footer>
+        </article>
+      </section>
 
       <section class="video-strip" aria-label="Latest local milestone recordings">
         <article class="milestone-video-card">
@@ -1090,7 +1198,7 @@
         <h3 id="selected-detail-title">Selected Detail: Arcade Kart Racer</h3>
         <div class="detail-section">
           <strong>Current Work</strong>
-          <p>Driving Assists And Control Accessibility Upgrade is <strong>BLOCKED_ENVIRONMENT / RETRY NEEDED</strong>: game URL loaded and clean evidence captured title/settings plus visible assist controls, but browser-harness target drifted to dashboard before driving behavior, reset/audio defaults, persistence, race route, restart, drift/boost, orientation gate, and narrow viewport could be reliably evaluated. Game/manual changes remain pending QA and not approved yet. Evidence: <a href="evidence/kart-racer/driving-assists-accessibility/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/driving-assists-accessibility/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/driving-assists-accessibility/gameplay-recording.mp4">recording</a>.</p>
+          <p>Driving Assists And Control Accessibility Upgrade is <strong>PASS / CLOSED</strong> after Retest 1. Evidence: <a href="evidence/kart-racer/driving-assists-accessibility-retest-1/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/driving-assists-accessibility-retest-1/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/driving-assists-accessibility-retest-1/gameplay-recording.mp4">recording</a>. Previous attempt remains <a href="evidence/kart-racer/driving-assists-accessibility/TEST_REPORT.md">BLOCKED_ENVIRONMENT</a>, not game FAIL.</p>
         </div>
         <div class="detail-section">
           <strong>Latest Approved Evidence</strong>
@@ -1098,7 +1206,7 @@
         </div>
         <div class="detail-section">
           <strong>Feedback / Fix Trail</strong>
-          <p>Prior Kart settings, audio-default, orientation, and drift/boost evidence remains accessible in the timeline. Current assists attempt is blocked by environment, not game failure; retry after shared Chrome cleanup.</p>
+          <p>Prior Kart settings, audio-default, orientation, and drift/boost evidence remains accessible in the timeline. Retest 1 closed the driving-assists upgrade. Nonblocking follow-ups: full CP1 -> CP2 -> CP3 -> finish completion was not repeated; deeper assist-variant A/B comparison remains partial.</p>
           <button class="action-btn" data-open-phase="kart-racer:driving-assists">View Kart timeline</button>
         </div>
       </section>
@@ -1162,9 +1270,9 @@
       {
         id: "kart-racer",
         name: "Arcade Kart Racer",
-        status: "attention",
-        statusLabel: "BLOCKED_ENVIRONMENT",
-        summary: "Driving Assists And Control Accessibility Upgrade is BLOCKED_ENVIRONMENT / retry needed at evidence/kart-racer/driving-assists-accessibility/ after browser-harness target drift; not game FAIL and not approved. Historical phases, orientation, Drift/Boost upgrade, audio-default hotfix, and settings-depth retest 2 are PASS.",
+        status: "pass",
+        statusLabel: "PASS",
+        summary: "Driving Assists And Control Accessibility Upgrade Retest 1 is PASS/CLOSED at evidence/kart-racer/driving-assists-accessibility-retest-1/. The first attempt remains BLOCKED_ENVIRONMENT, not game FAIL. Nonblocking follow-ups: full CP1 -> CP2 -> CP3 -> finish completion was not repeated; deeper assist-variant A/B comparison remains partial.",
         gameUrl: "games/kart-racer/index.html",
         readmeUrl: "games/kart-racer/README.md",
         primaryPhase: "upgrade-a",
@@ -1179,7 +1287,7 @@
           { label: "Orientation Closure Retest", status: "pass", statusLabel: "PASS", note: "Natural orientation sanity check closed.", openKey: "kart-racer:3" },
           { label: "Drift/Boost Upgrade A", status: "pass", statusLabel: "FAIL -> PASS", note: "Original QA failed; Retest 1 fixed drift stages and release boost.", openKey: "kart-racer:upgrade-a" },
           { label: "Settings Depth Retest 2", status: "pass", statusLabel: "PASS", note: "Settings sections, audio defaults/reset/persistence, in-race pause/close, route/drift/restart smoke approved; full lap not repeated.", openKey: "kart-racer:settings-depth-retest-2" },
-          { label: "Driving Assists And Control Accessibility Upgrade", status: "attention", statusLabel: "BLOCKED_ENVIRONMENT", note: "Game URL loaded and visible assist controls were captured, but target drift blocked driving behavior, reset/audio defaults, persistence, race route, restart, drift/boost, orientation, and narrow viewport checks. Retry needed; not game FAIL and not approved.", openKey: "kart-racer:driving-assists" },
+          { label: "Driving Assists And Control Accessibility Upgrade", status: "pass", statusLabel: "PASS / CLOSED", note: "Retest 1 closed the upgrade. Nonblocking follow-ups: full CP1 -> CP2 -> CP3 -> finish was not repeated; deeper assist-variant A/B comparison remains partial.", openKey: "kart-racer:driving-assists" },
           { label: "Audio Default Hotfix", status: "pass", statusLabel: "PASS", note: "Retest 2 verifies default-off audio, opt-in audio, opt-out/reset silence, stale saved settings muted, smoke path, and manual match.", openKey: "kart-racer:audio-default" }
         ],
         evidenceSeries: [
@@ -1191,7 +1299,8 @@
           { label: "Retest 1: Drift And Boost Fix", status: "PASS - RETEST 1", hydrateStatus: true, evidenceDir: "evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1", extraLinks: [{ label: "first-playable-frame.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/first-playable-frame.png" }, { label: "hosted-load.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/hosted-load.png" }] },
           { label: "Audio Default Hotfix: Canonical Single-Tester Retest 1", status: "FAIL - FIXED IN NEXT BUILD", hydrateStatus: true, evidenceDir: "evidence/kart-racer/audio-default-hotfix-single-tester-retest-1", extraLinks: [{ label: "superseded shared-window report", href: "evidence/kart-racer/audio-default-hotfix-shared-window-retest-1/TEST_REPORT.md" }, { label: "old isolated-profile report", href: "evidence/kart-racer/audio-default-hotfix/TEST_REPORT.md" }] },
           { label: "Audio Default Hotfix: Canonical Single-Tester Retest 2", status: "PASS - CLOSING EVIDENCE", hydrateStatus: true, evidenceDir: "evidence/kart-racer/audio-default-hotfix-single-tester-retest-2" },
-          { label: "Driving Assists And Control Accessibility Upgrade", status: "BLOCKED_ENVIRONMENT / RETRY NEEDED", hydrateStatus: true, evidenceDir: "evidence/kart-racer/driving-assists-accessibility" }
+          { label: "Driving Assists And Control Accessibility Upgrade: Attempt 1", status: "BLOCKED_ENVIRONMENT - NOT GAME FAIL", hydrateStatus: true, evidenceDir: "evidence/kart-racer/driving-assists-accessibility" },
+          { label: "Driving Assists And Control Accessibility Upgrade: Retest 1", status: "PASS - CLOSING EVIDENCE", hydrateStatus: true, evidenceDir: "evidence/kart-racer/driving-assists-accessibility-retest-1" }
         ]
       },
       {
@@ -1415,12 +1524,38 @@
       let listType = null;
       let inCode = false;
       let codeLines = [];
+      let tableRows = [];
 
       function closeList() {
         if (listType) {
           out.push(`</${listType}>`);
           listType = null;
         }
+      }
+
+      function isTableLine(line) {
+        const trimmed = line.trim();
+        return trimmed.startsWith("|") && trimmed.endsWith("|") && trimmed.includes("|", 1);
+      }
+
+      function isTableDivider(line) {
+        return /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(line);
+      }
+
+      function tableCells(line) {
+        return line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((cell) => cell.trim());
+      }
+
+      function flushTable() {
+        if (!tableRows.length) return;
+        if (tableRows.length >= 2 && isTableDivider(tableRows[1])) {
+          const headers = tableCells(tableRows[0]);
+          const bodyRows = tableRows.slice(2).filter(isTableLine).map(tableCells);
+          out.push(`<table><thead><tr>${headers.map((cell) => `<th>${inlineMarkdown(cell)}</th>`).join("")}</tr></thead><tbody>${bodyRows.map((row) => `<tr>${headers.map((_, index) => `<td>${inlineMarkdown(row[index] || "")}</td>`).join("")}</tr>`).join("")}</tbody></table>`);
+        } else {
+          tableRows.forEach((row) => out.push(`<p>${inlineMarkdown(row)}</p>`));
+        }
+        tableRows = [];
       }
 
       function flushCode() {
@@ -1433,6 +1568,7 @@
 
       for (const line of lines) {
         if (line.startsWith("```")) {
+          flushTable();
           closeList();
           if (inCode) flushCode();
           else {
@@ -1446,9 +1582,16 @@
           continue;
         }
         if (!line.trim()) {
+          flushTable();
           closeList();
           continue;
         }
+        if (isTableLine(line)) {
+          closeList();
+          tableRows.push(line);
+          continue;
+        }
+        flushTable();
         const heading = line.match(/^(#{1,3})\s+(.+)$/);
         if (heading) {
           closeList();
@@ -1478,6 +1621,7 @@
         closeList();
         out.push(`<p>${inlineMarkdown(line)}</p>`);
       }
+      flushTable();
       closeList();
       flushCode();
       return out.join("");

@@ -2707,3 +2707,50 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - retry the same Kart Driving Assists handoff through the canonical tester after cleanup;
   - do not treat the builder changes as approved until a later tester pass returns `PASS`.
 - Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` was asked to mark this attempt `BLOCKED_ENVIRONMENT / RETRY NEEDED`, preserve the evidence links, and keep the Kart game/manual changes marked pending QA.
+
+## Kart Driving Assists Retest 1 Active After Browser Cleanup - 2026-06-25
+
+- Browser maintenance thread `019ef9ba-1477-7662-b7a3-c5da570cdb77` completed focused cleanup for the Kart retry.
+- Maintenance report:
+  - inspected 11 page-target observations;
+  - closed 9 stale/duplicate project/external/dashboard/newtab targets;
+  - left exactly one open tab: `http://127.0.0.1:8765/games/kart-racer/index.html`;
+  - reported no blockers/errors and did not touch the local HTTP server.
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` was handed Arcade Kart Racer Driving Assists And Control Accessibility Upgrade Retest 1.
+- Evidence target:
+  - `evidence/kart-racer/driving-assists-accessibility-retest-1/`
+- Required outputs:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Retest anti-drift requirements:
+  - verify current URL is still the Kart URL at each major segment;
+  - stop immediately and report `BLOCKED_ENVIRONMENT` if target drifts away;
+  - discard contaminated frames;
+  - prefer one continuous controlled browser-harness run for the core flow.
+- Retest scope remains the same as the blocked attempt: settings visibility/readability/selected states, persistence/reload where stable, reset/audio defaults, title/in-race settings, auto-accelerate, stability/driving assist, brake/recovery or edge recovery, camera height, route cue intensity, reduced effects, CP1 -> CP2 -> CP3 -> finish, restart, drift/boost if reachable, minimap/HUD readability, orientation/readability, and narrow viewport attempt if stable.
+
+## Kart Driving Assists Retest 1 PASS / Closed - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Arcade Kart Racer Driving Assists And Control Accessibility Upgrade Retest 1.
+- Evidence folder:
+  - `evidence/kart-racer/driving-assists-accessibility-retest-1/`
+- Required artifacts are present:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `PASS`.
+- The retest stayed on the Kart game URL with no observed dashboard/manual/evidence target drift after browser maintenance cleanup.
+- Approved coverage:
+  - settings readable from title and in-race contexts;
+  - selected states visible;
+  - Reset Defaults restores audio off and volume `0%`;
+  - race remains playable after closing settings;
+  - core driving, steering, drift build/release feedback, restart, HUD/minimap/route readability, and narrow-viewport smoke were verified;
+  - auto-accelerate was enabled through visible settings and produced forward speed without holding accelerate;
+  - readability/orientation gate passed.
+- Nonblocking follow-ups:
+  - full CP1 -> CP2 -> CP3 -> finish completion was not repeated in this stopped retest;
+  - driving-assist variant mechanical A/B comparison remains partial beyond visible setting/readability coverage.
+- The earlier `evidence/kart-racer/driving-assists-accessibility/` attempt remains historical `BLOCKED_ENVIRONMENT`, not a game `FAIL`.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` should mark the Kart Driving Assists And Control Accessibility Upgrade as `PASS/CLOSED`, surface Retest 1 report/flow/recording links, preserve Attempt 1 as historical `BLOCKED_ENVIRONMENT`, and keep the two coverage limitations visible as follow-ups rather than blockers.
