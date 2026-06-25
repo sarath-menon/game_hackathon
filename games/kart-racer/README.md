@@ -62,13 +62,19 @@ Settings are grouped into Controls/Handling, Visual/Readability, Camera/HUD, Aud
 
 - Steering sensitivity changes how sharply the kart turns while driving and drifting.
 - Driving assist changes acceleration, route alignment, and edge recovery. `Stable` is easiest to keep on route, `Standard` is the default, and `Sport` gives punchier throttle with less assist.
+- Auto-accelerate keeps the kart driving forward during a race without holding `W` or `Arrow Up`; brake/reverse still works normally.
+- Stability assist adds route-following correction after steering. Higher values help the kart settle back onto the road direction; lower values leave more manual control.
+- Brake / recovery assist strengthens braking and helps the kart regain control after a slowdown.
+- Edge recovery help softens wall slowdown and nudges the kart forward after road-edge contact.
 - Camera distance zooms the heading-up chase view in or out.
+- Camera height switches the chase camera between low, standard, and high views.
 - HUD scale changes the size of the objective panel, stats, message, and settings button.
 - Minimap size changes the heading-up minimap size.
 - Route chevrons, checkpoint labels, input help, and the heading-up minimap can be shown or hidden independently.
+- Route cue intensity changes the size and brightness of the forward-route chevrons.
 - Marker intensity changes checkpoint and finish gate brightness and line weight.
 - High contrast readability uses stronger guard rails, darker road surfaces, and heavier label outlines.
-- Effect intensity scales speed streaks, skid trails, and exhaust particles. Reduced motion cuts motion-heavy effects further.
+- Effect intensity scales speed streaks, skid trails, exhaust particles, and shake. Reduced motion cuts motion-heavy effects further.
 - Audio is off and muted by default on first load and after `Reset Defaults`; no sound plays before you opt in.
 - UI sounds enables short generated tones for start, boost, drift, collision, completion, and settings actions. Turn on `UI sounds` in settings and raise `Volume` above `0%` to hear them.
 - Older saved settings that predate the audio opt-in are treated as muted until you enable sounds again.

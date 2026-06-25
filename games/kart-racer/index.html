@@ -486,6 +486,23 @@
             </select>
             <span class="setting-copy">Stable adds stronger route alignment and gentler edge recovery. Sport gives punchier throttle with less assist.</span>
           </label>
+          <div class="setting-row">
+            <label class="setting-check"><input id="autoAccelSetting" type="checkbox"> Auto-accelerate</label>
+            <span class="setting-copy">Keeps the kart driving forward during races; brake still slows or reverses.</span>
+          </div>
+          <label class="setting-row">
+            <span class="setting-title">Stability assist <span id="stabilityValue">50%</span></span>
+            <input id="stabilitySetting" type="range" min="0" max="100" step="10">
+            <span class="setting-copy">Adds extra route-following correction after steering so the kart settles back onto the road.</span>
+          </label>
+          <div class="setting-row">
+            <label class="setting-check"><input id="brakeAssistSetting" type="checkbox"> Brake / recovery assist</label>
+            <span class="setting-copy">Strengthens braking and helps the kart regain speed after wall or obstacle scrubs.</span>
+          </div>
+          <div class="setting-row">
+            <label class="setting-check"><input id="trackRecoverySetting" type="checkbox"> Edge recovery help</label>
+            <span class="setting-copy">Softens wall slowdown and gently nudges the kart forward after touching the road edge.</span>
+          </div>
         </div>
       </div>
       <div class="settings-section">
@@ -537,6 +554,20 @@
             <label class="setting-check"><input id="routeCueSetting" type="checkbox"> Show route chevrons</label>
             <span class="setting-copy">Toggles the blue forward-route arrows between the kart and next gate.</span>
           </div>
+          <label class="setting-row">
+            <span class="setting-title">Route cue intensity <span id="routeCueIntensityValue">100%</span></span>
+            <input id="routeCueIntensitySetting" type="range" min="40" max="150" step="10">
+            <span class="setting-copy">Changes the size and brightness of the forward-route chevrons without affecting checkpoint rules.</span>
+          </label>
+          <label class="setting-row">
+            <span class="setting-title">Camera height <span id="cameraHeightValue">Standard</span></span>
+            <select id="cameraHeightSetting">
+              <option value="low">Low</option>
+              <option value="standard">Standard</option>
+              <option value="high">High</option>
+            </select>
+            <span class="setting-copy">Changes the chase camera height for either closer speed feel or a clearer view over the route.</span>
+          </label>
           <div class="setting-row">
             <label class="setting-check"><input id="markerSetting" type="checkbox"> Show checkpoint labels</label>
             <span class="setting-copy">Toggles large CP/finish labels and active gate posts while keeping the drivable gate line visible.</span>
@@ -601,6 +632,11 @@
       const steeringSetting = document.getElementById("steeringSetting");
       const steeringValue = document.getElementById("steeringValue");
       const assistSetting = document.getElementById("assistSetting");
+      const autoAccelSetting = document.getElementById("autoAccelSetting");
+      const stabilitySetting = document.getElementById("stabilitySetting");
+      const stabilityValue = document.getElementById("stabilityValue");
+      const brakeAssistSetting = document.getElementById("brakeAssistSetting");
+      const trackRecoverySetting = document.getElementById("trackRecoverySetting");
       const cameraSetting = document.getElementById("cameraSetting");
       const cameraValue = document.getElementById("cameraValue");
       const effectSetting = document.getElementById("effectSetting");
@@ -612,6 +648,10 @@
       const minimapSizeSetting = document.getElementById("minimapSizeSetting");
       const minimapSizeValue = document.getElementById("minimapSizeValue");
       const routeCueSetting = document.getElementById("routeCueSetting");
+      const routeCueIntensitySetting = document.getElementById("routeCueIntensitySetting");
+      const routeCueIntensityValue = document.getElementById("routeCueIntensityValue");
+      const cameraHeightSetting = document.getElementById("cameraHeightSetting");
+      const cameraHeightValue = document.getElementById("cameraHeightValue");
       const markerSetting = document.getElementById("markerSetting");
       const minimapSetting = document.getElementById("minimapSetting");
       const motionSetting = document.getElementById("motionSetting");
@@ -635,9 +675,15 @@
       const defaultSettings = {
         steering: 100,
         assist: "standard",
+        autoAccel: false,
+        stability: 50,
+        brakeAssist: false,
+        trackRecovery: true,
         camera: 100,
+        cameraHeight: "standard",
         effects: 100,
         markerIntensity: 100,
+        routeCueIntensity: 100,
         hudScale: 100,
         minimapSize: 100,
         routeCues: true,
@@ -749,9 +795,15 @@
         return {
           steering: clamp(Number(value.steering) || defaultSettings.steering, 70, 135),
           assist: ["stable", "standard", "sport"].includes(value.assist) ? value.assist : defaultSettings.assist,
+          autoAccel: Boolean(value.autoAccel),
+          stability: clamp(Number(value.stability ?? defaultSettings.stability), 0, 100),
+          brakeAssist: Boolean(value.brakeAssist),
+          trackRecovery: value.trackRecovery === undefined ? defaultSettings.trackRecovery : Boolean(value.trackRecovery),
           camera: clamp(Number(value.camera) || defaultSettings.camera, 85, 115),
+          cameraHeight: ["low", "standard", "high"].includes(value.cameraHeight) ? value.cameraHeight : defaultSettings.cameraHeight,
           effects: clamp(Number(value.effects ?? defaultSettings.effects), 0, 100),
           markerIntensity: clamp(Number(value.markerIntensity ?? defaultSettings.markerIntensity), 45, 130),
+          routeCueIntensity: clamp(Number(value.routeCueIntensity ?? defaultSettings.routeCueIntensity), 40, 150),
           hudScale: clamp(Number(value.hudScale ?? defaultSettings.hudScale), 85, 125),
           minimapSize: clamp(Number(value.minimapSize ?? defaultSettings.minimapSize), 80, 145),
           routeCues: Boolean(value.routeCues),
@@ -778,12 +830,21 @@
         steeringSetting.value = String(settings.steering);
         steeringValue.textContent = `${settings.steering}%`;
         assistSetting.value = settings.assist;
+        autoAccelSetting.checked = settings.autoAccel;
+        stabilitySetting.value = String(settings.stability);
+        stabilityValue.textContent = `${settings.stability}%`;
+        brakeAssistSetting.checked = settings.brakeAssist;
+        trackRecoverySetting.checked = settings.trackRecovery;
         cameraSetting.value = String(settings.camera);
         cameraValue.textContent = settings.camera < 98 ? "Wide" : settings.camera > 102 ? "Close" : "Balanced";
+        cameraHeightSetting.value = settings.cameraHeight;
+        cameraHeightValue.textContent = settings.cameraHeight === "high" ? "High" : settings.cameraHeight === "low" ? "Low" : "Standard";
         effectSetting.value = String(settings.effects);
         effectValue.textContent = settings.reducedMotion ? "Reduced" : `${settings.effects}%`;
         markerIntensitySetting.value = String(settings.markerIntensity);
         markerIntensityValue.textContent = `${settings.markerIntensity}%`;
+        routeCueIntensitySetting.value = String(settings.routeCueIntensity);
+        routeCueIntensityValue.textContent = `${settings.routeCueIntensity}%`;
         hudScaleSetting.value = String(settings.hudScale);
         hudScaleValue.textContent = `${settings.hudScale}%`;
         minimapSizeSetting.value = String(settings.minimapSize);
@@ -805,9 +866,15 @@
         settings = sanitizeSettings({
           steering: Number(steeringSetting.value),
           assist: assistSetting.value,
+          autoAccel: autoAccelSetting.checked,
+          stability: Number(stabilitySetting.value),
+          brakeAssist: brakeAssistSetting.checked,
+          trackRecovery: trackRecoverySetting.checked,
           camera: Number(cameraSetting.value),
+          cameraHeight: cameraHeightSetting.value,
           effects: Number(effectSetting.value),
           markerIntensity: Number(markerIntensitySetting.value),
+          routeCueIntensity: Number(routeCueIntensitySetting.value),
           hudScale: Number(hudScaleSetting.value),
           minimapSize: Number(minimapSizeSetting.value),
           routeCues: routeCueSetting.checked,
@@ -858,9 +925,12 @@
       }
 
       function assistProfile() {
-        if (settings.assist === "stable") return { accel: 0.94, brake: 1.08, align: 1.42, edge: 1.14 };
-        if (settings.assist === "sport") return { accel: 1.1, brake: 0.94, align: 0.72, edge: 0.88 };
-        return { accel: 1, brake: 1, align: 1, edge: 1 };
+        const stabilityBoost = settings.stability / 100;
+        const brakeBoost = settings.brakeAssist ? 0.28 : 0;
+        const recoveryBoost = settings.trackRecovery ? 0.24 : 0;
+        if (settings.assist === "stable") return { accel: 0.94, brake: 1.08 + brakeBoost, align: 1.18 + stabilityBoost * 0.95, edge: 1.02 + recoveryBoost, recovery: 1.1 + recoveryBoost };
+        if (settings.assist === "sport") return { accel: 1.1, brake: 0.94 + brakeBoost, align: 0.48 + stabilityBoost * 0.65, edge: 0.82 + recoveryBoost * 0.75, recovery: 0.92 + recoveryBoost * 0.8 };
+        return { accel: 1, brake: 1 + brakeBoost, align: 0.75 + stabilityBoost * 0.75, edge: 0.94 + recoveryBoost, recovery: 1 + recoveryBoost };
       }
 
       function effectScale() {
@@ -965,15 +1035,19 @@
 
       function makeCamera() {
         const f = forwardVector();
-        const shake = shakeTimer > 0 ? (Math.random() - 0.5) * 5 : 0;
+        const shakeAmount = settings.reducedMotion ? 0 : settings.effects / 100;
+        const shake = shakeTimer > 0 ? (Math.random() - 0.5) * 5 * shakeAmount : 0;
+        const height = settings.cameraHeight === "high" ? 86 : settings.cameraHeight === "low" ? 52 : 68;
+        const followDistance = settings.cameraHeight === "high" ? 158 : settings.cameraHeight === "low" ? 132 : 145;
+        const targetHeight = settings.cameraHeight === "high" ? 3 : settings.cameraHeight === "low" ? 10 : 7;
         const cam = {
-          x: kart.x - f.x * 145 + shake,
-          y: 68,
-          z: kart.z - f.z * 145 - shake
+          x: kart.x - f.x * followDistance + shake,
+          y: height,
+          z: kart.z - f.z * followDistance - shake
         };
         const target = {
           x: kart.x + f.x * 130,
-          y: 7,
+          y: targetHeight,
           z: kart.z + f.z * 130
         };
         const fx = target.x - cam.x;
@@ -1393,19 +1467,22 @@
         const currentAngle = normalizeAngle(nearestTrackInfo(kart.x, kart.z).angle);
         const ahead = forwardAngleDistance(currentAngle, targetAngle);
         if (ahead <= 0.02 || ahead > 1.4) return;
-        const chevrons = 4;
+        const cueScale = settings.routeCueIntensity / 100;
+        const chevrons = settings.routeCueIntensity >= 120 ? 5 : 4;
         for (let i = 1; i <= chevrons; i += 1) {
           const t = i / (chevrons + 1);
           const angle = currentAngle + ahead * t;
           const center = trackPoint(angle, 0);
           const tangent = tangentAt(angle);
           const normal = ellipseNormal(angle);
-          const size = 8 + i * 1.5;
+          const size = (8 + i * 1.5) * (0.75 + cueScale * 0.35);
           const tip = { x: center.x + tangent.x * size, y: 2.2, z: center.z + tangent.z * size };
           const left = { x: center.x - tangent.x * size * 0.5 - normal.x * size * 0.72, y: 2.2, z: center.z - tangent.z * size * 0.5 - normal.z * size * 0.72 };
           const right = { x: center.x - tangent.x * size * 0.5 + normal.x * size * 0.72, y: 2.2, z: center.z - tangent.z * size * 0.5 + normal.z * size * 0.72 };
-          line3d(left, tip, camera, "rgba(90, 200, 250, 0.78)", 4);
-          line3d(right, tip, camera, "rgba(90, 200, 250, 0.78)", 4);
+          const alpha = Math.min(0.95, 0.32 + cueScale * 0.46);
+          const width = 2.5 + cueScale * 2.4;
+          line3d(left, tip, camera, `rgba(90, 200, 250, ${alpha})`, width);
+          line3d(right, tip, camera, `rgba(90, 200, 250, ${alpha})`, width);
         }
       }
 
@@ -1630,7 +1707,7 @@
         previousX = kart.x;
         previousZ = kart.z;
 
-        const accelerating = keys.has("arrowup") || keys.has("w");
+        const accelerating = keys.has("arrowup") || keys.has("w") || settings.autoAccel;
         const braking = keys.has("arrowdown") || keys.has("s");
         const left = keys.has("arrowleft") || keys.has("a");
         const right = keys.has("arrowright") || keys.has("d");
@@ -1667,6 +1744,9 @@
           kart.x = info.center.x + info.normal.x * clampedOffset;
           kart.z = info.center.z + info.normal.z * clampedOffset;
           kart.speed *= (driftActive ? 0.68 : 0.42) * assist.edge;
+          if (settings.trackRecovery && kart.speed > 0) {
+            kart.speed = Math.max(kart.speed, Math.min(42, 18 + Math.abs(kart.speed) * 0.25));
+          }
           weakenDrift("Wall scrub: drift charge weakened.");
         }
 
@@ -1675,6 +1755,9 @@
           const desiredYaw = Math.atan2(trackDirection.x, trackDirection.z);
           const alignmentRate = (driftActive ? 2.0 : driftReleaseTimer > 0 ? 2.6 : 0.9) * assist.align;
           kart.yaw += clamp(angleDelta(desiredYaw, kart.yaw), -0.7, 0.7) * alignmentRate * dt;
+          if (settings.trackRecovery && Math.abs(info.offset) > maxOffset * 0.72) {
+            kart.speed += Math.min(18, 16 * assist.recovery) * dt;
+          }
         }
 
         checkBoostPads();
@@ -2079,9 +2162,15 @@
       [
         steeringSetting,
         assistSetting,
+        autoAccelSetting,
+        stabilitySetting,
+        brakeAssistSetting,
+        trackRecoverySetting,
         cameraSetting,
+        cameraHeightSetting,
         effectSetting,
         markerIntensitySetting,
+        routeCueIntensitySetting,
         hudScaleSetting,
         minimapSizeSetting,
         routeCueSetting,

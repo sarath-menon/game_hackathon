@@ -2681,3 +2681,29 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - settings open/close from title and in-race;
   - CP1 -> CP2 -> CP3 -> finish, restart, drift/boost if reachable, minimap/HUD readability, orientation/readability gate, desktop and narrow viewport attempt if stable;
   - classify any shared Chrome/browser-harness blocker as `BLOCKED_ENVIRONMENT` for the affected scope instead of game `FAIL`.
+
+## Kart Driving Assists QA BLOCKED_ENVIRONMENT - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed the first black-box pass for Arcade Kart Racer Driving Assists And Control Accessibility Upgrade.
+- Evidence folder:
+  - `evidence/kart-racer/driving-assists-accessibility/`
+- Required artifacts are present:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `BLOCKED_ENVIRONMENT`.
+- This is not a Kart game `FAIL` and not an approval.
+- Clean evidence verified:
+  - hosted Kart URL loaded;
+  - title Settings opened;
+  - visible assist/control settings were readable, including Driving assist, Auto-accelerate, Stability assist, Brake/recovery assist, Edge recovery help, Route cue intensity, Camera height, Reduced motion, High contrast readability, and related HUD/minimap controls.
+- Blocked scope:
+  - browser-harness repeatedly drifted from the Kart game to the dashboard before reliable driving behavior, reset/audio defaults, persistence, in-race settings, CP1 -> CP2 -> CP3 -> finish route, restart, drift/boost, race orientation/readability, or narrow viewport could be evaluated.
+- Evidence hygiene:
+  - dashboard-contaminated frames were removed;
+  - `gameplay-recording.mp4` was encoded only from clean Kart screenshots.
+- Required next action:
+  - run browser maintenance / cleanup so the shared Chrome/browser-harness surface has a stable Kart target and no stale dashboard/evidence/game tabs likely to steal focus;
+  - retry the same Kart Driving Assists handoff through the canonical tester after cleanup;
+  - do not treat the builder changes as approved until a later tester pass returns `PASS`.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` was asked to mark this attempt `BLOCKED_ENVIRONMENT / RETRY NEEDED`, preserve the evidence links, and keep the Kart game/manual changes marked pending QA.

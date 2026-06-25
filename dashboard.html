@@ -267,6 +267,26 @@
       table-layout: fixed;
     }
 
+    .ops-table th:nth-child(1),
+    .ops-table td:nth-child(1) {
+      width: 25%;
+    }
+
+    .ops-table th:nth-child(2),
+    .ops-table td:nth-child(2) {
+      width: 29%;
+    }
+
+    .ops-table th:nth-child(3),
+    .ops-table td:nth-child(3) {
+      width: 27%;
+    }
+
+    .ops-table th:nth-child(4),
+    .ops-table td:nth-child(4) {
+      width: 19%;
+    }
+
     .ops-table th,
     .ops-table td {
       padding: 9px 10px;
@@ -287,10 +307,78 @@
       border-bottom: 0;
     }
 
+    .ops-table .badge {
+      white-space: nowrap;
+      line-height: 1.15;
+      text-align: center;
+      font-size: 0.68rem;
+    }
+
+    .ops-table a {
+      overflow-wrap: anywhere;
+    }
+
+    .ops-table .action-btn {
+      width: 100%;
+      min-width: 0;
+      white-space: normal;
+    }
+
     .detail-panel {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
+    }
+
+    .video-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .milestone-video-card {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdfd;
+      overflow: hidden;
+    }
+
+    .milestone-video-card header {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .milestone-video-card h3 {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    .milestone-video-card p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .milestone-video-card video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      max-height: 180px;
+      background: #0f172a;
+      object-fit: contain;
+    }
+
+    .milestone-video-card footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 9px 12px 10px;
+      font-size: 0.8rem;
     }
 
     .detail-panel h3 {
@@ -300,6 +388,14 @@
 
     .detail-section {
       min-width: 0;
+    }
+
+    .detail-section p strong {
+      display: inline;
+      margin: 0;
+      font-size: inherit;
+      letter-spacing: 0;
+      text-transform: none;
     }
 
     .qa-links {
@@ -816,6 +912,7 @@
       .summary-grid,
       .tracks-grid,
       .detail-panel,
+      .video-strip,
       .game-body {
         grid-template-columns: 1fr;
       }
@@ -850,7 +947,7 @@
     <section class="ops-board" id="attention-panel" aria-label="Game QA Suite operations board">
       <div class="ops-title">
         <div>
-          <h2>Game QA Suite</h2>
+          <h2>Current Board</h2>
           <p>Local builds + external QA methodology. Current work is kept separate from closed evidence.</p>
         </div>
         <span class="badge" data-status="attention">Live</span>
@@ -859,11 +956,11 @@
       <div class="summary-grid" aria-label="Current work summary">
         <div class="summary-card">
           <strong>Active Now</strong>
-          <p>Arcade Kart Racer assists upgrade is with the canonical tester and evidence is pending. Cookie Clicker follow-up 3 is closed PASS_WITH_FINDINGS.</p>
+          <p>Arcade Kart Racer assists upgrade is BLOCKED_ENVIRONMENT after target drift during driving checks. Cookie Clicker follow-up 3 is closed PASS_WITH_FINDINGS.</p>
         </div>
         <div class="summary-card">
           <strong>Next Action</strong>
-          <p>Wait for Kart tester verdict at evidence/kart-racer/driving-assists-accessibility/, then route PASS closure or a narrow fix request.</p>
+          <p>Cleanup shared Chrome/browser-harness tabs, then retry the same Kart driving assists handoff.</p>
         </div>
       </div>
 
@@ -877,7 +974,7 @@
             <tbody>
               <tr>
                 <td>Arcade Kart Racer</td>
-                <td><span class="badge" data-status="attention">TESTER ACTIVE</span><br>driving assists evidence pending at evidence/kart-racer/driving-assists-accessibility/</td>
+                <td><span class="badge" data-status="attention">BLOCKED_ENVIRONMENT</span><br>retry needed after target drift; not game FAIL</td>
                 <td><span class="badge" data-status="pass">PASS</span><br><a href="evidence/kart-racer/settings-depth-retest-2/TEST_REPORT.md">settings-depth retest 2</a></td>
                 <td><button class="action-btn" data-open-phase="kart-racer:driving-assists">View timeline</button></td>
               </tr>
@@ -939,11 +1036,61 @@
         </section>
       </div>
 
+      <section class="video-strip" aria-label="Latest local milestone recordings">
+        <article class="milestone-video-card">
+          <header>
+            <div>
+              <h3>Arcade Kart Racer</h3>
+              <p>Latest approved milestone: settings-depth retest 2</p>
+            </div>
+            <span class="badge" data-status="pass">PASS</span>
+          </header>
+          <video controls preload="metadata" src="evidence/kart-racer/settings-depth-retest-2/gameplay-recording.mp4"></video>
+          <footer>
+            <a href="evidence/kart-racer/settings-depth-retest-2/TEST_REPORT.md">report</a>
+            <a href="evidence/kart-racer/settings-depth-retest-2/expected-flow.md">expected-flow</a>
+            <a href="evidence/kart-racer/settings-depth-retest-2/gameplay-recording.mp4">recording</a>
+          </footer>
+        </article>
+
+        <article class="milestone-video-card">
+          <header>
+            <div>
+              <h3>Side-Scrolling Platformer</h3>
+              <p>Latest approved milestone: Settings Polish 2 Retest 6</p>
+            </div>
+            <span class="badge" data-status="pass">PASS</span>
+          </header>
+          <video controls preload="metadata" src="evidence/platformer/settings-polish-2-retest-6/gameplay-recording.mp4"></video>
+          <footer>
+            <a href="evidence/platformer/settings-polish-2-retest-6/TEST_REPORT.md">report</a>
+            <a href="evidence/platformer/settings-polish-2-retest-6/expected-flow.md">expected-flow</a>
+            <a href="evidence/platformer/settings-polish-2-retest-6/gameplay-recording.mp4">recording</a>
+          </footer>
+        </article>
+
+        <article class="milestone-video-card">
+          <header>
+            <div>
+              <h3>Turn-Based Deckbuilder</h3>
+              <p>Latest approved milestone: Upgrade Phase 3</p>
+            </div>
+            <span class="badge" data-status="pass">PASS</span>
+          </header>
+          <video controls preload="metadata" src="evidence/deckbuilder/upgrade-phase-3-deck-inspection/gameplay-recording.mp4"></video>
+          <footer>
+            <a href="evidence/deckbuilder/upgrade-phase-3-deck-inspection/TEST_REPORT.md">report</a>
+            <a href="evidence/deckbuilder/upgrade-phase-3-deck-inspection/expected-flow.md">expected-flow</a>
+            <a href="evidence/deckbuilder/upgrade-phase-3-deck-inspection/gameplay-recording.mp4">recording</a>
+          </footer>
+        </article>
+      </section>
+
       <section class="detail-panel" aria-labelledby="selected-detail-title">
         <h3 id="selected-detail-title">Selected Detail: Arcade Kart Racer</h3>
         <div class="detail-section">
           <strong>Current Work</strong>
-          <p>Driving Assists And Control Accessibility Upgrade is <strong>TESTER ACTIVE / EVIDENCE PENDING</strong>: auto-accelerate, stability assist, brake/recovery assist, edge recovery help, camera height, route cue intensity, and reduced shake/effects. Game/manual changes are pending QA and not approved yet. Evidence target: <a href="evidence/kart-racer/driving-assists-accessibility/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/driving-assists-accessibility/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/driving-assists-accessibility/gameplay-recording.mp4">recording</a>.</p>
+          <p>Driving Assists And Control Accessibility Upgrade is <strong>BLOCKED_ENVIRONMENT / RETRY NEEDED</strong>: game URL loaded and clean evidence captured title/settings plus visible assist controls, but browser-harness target drifted to dashboard before driving behavior, reset/audio defaults, persistence, race route, restart, drift/boost, orientation gate, and narrow viewport could be reliably evaluated. Game/manual changes remain pending QA and not approved yet. Evidence: <a href="evidence/kart-racer/driving-assists-accessibility/TEST_REPORT.md">report</a>, <a href="evidence/kart-racer/driving-assists-accessibility/expected-flow.md">expected-flow</a>, <a href="evidence/kart-racer/driving-assists-accessibility/gameplay-recording.mp4">recording</a>.</p>
         </div>
         <div class="detail-section">
           <strong>Latest Approved Evidence</strong>
@@ -951,7 +1098,7 @@
         </div>
         <div class="detail-section">
           <strong>Feedback / Fix Trail</strong>
-          <p>Prior Kart settings, audio-default, orientation, and drift/boost evidence remains accessible in the timeline. Current assists upgrade is under canonical black-box QA.</p>
+          <p>Prior Kart settings, audio-default, orientation, and drift/boost evidence remains accessible in the timeline. Current assists attempt is blocked by environment, not game failure; retry after shared Chrome cleanup.</p>
           <button class="action-btn" data-open-phase="kart-racer:driving-assists">View Kart timeline</button>
         </div>
       </section>
@@ -1016,8 +1163,8 @@
         id: "kart-racer",
         name: "Arcade Kart Racer",
         status: "attention",
-        statusLabel: "TESTER ACTIVE",
-        summary: "Driving Assists And Control Accessibility Upgrade is tester-active with evidence pending at evidence/kart-racer/driving-assists-accessibility/; historical phases, orientation, Drift/Boost upgrade, audio-default hotfix, and settings-depth retest 2 are PASS.",
+        statusLabel: "BLOCKED_ENVIRONMENT",
+        summary: "Driving Assists And Control Accessibility Upgrade is BLOCKED_ENVIRONMENT / retry needed at evidence/kart-racer/driving-assists-accessibility/ after browser-harness target drift; not game FAIL and not approved. Historical phases, orientation, Drift/Boost upgrade, audio-default hotfix, and settings-depth retest 2 are PASS.",
         gameUrl: "games/kart-racer/index.html",
         readmeUrl: "games/kart-racer/README.md",
         primaryPhase: "upgrade-a",
@@ -1032,7 +1179,7 @@
           { label: "Orientation Closure Retest", status: "pass", statusLabel: "PASS", note: "Natural orientation sanity check closed.", openKey: "kart-racer:3" },
           { label: "Drift/Boost Upgrade A", status: "pass", statusLabel: "FAIL -> PASS", note: "Original QA failed; Retest 1 fixed drift stages and release boost.", openKey: "kart-racer:upgrade-a" },
           { label: "Settings Depth Retest 2", status: "pass", statusLabel: "PASS", note: "Settings sections, audio defaults/reset/persistence, in-race pause/close, route/drift/restart smoke approved; full lap not repeated.", openKey: "kart-racer:settings-depth-retest-2" },
-          { label: "Driving Assists And Control Accessibility Upgrade", status: "attention", statusLabel: "TESTER ACTIVE", note: "Canonical tester active; evidence pending at evidence/kart-racer/driving-assists-accessibility/. Game/manual changes are pending QA and not approved yet.", openKey: "kart-racer:driving-assists" },
+          { label: "Driving Assists And Control Accessibility Upgrade", status: "attention", statusLabel: "BLOCKED_ENVIRONMENT", note: "Game URL loaded and visible assist controls were captured, but target drift blocked driving behavior, reset/audio defaults, persistence, race route, restart, drift/boost, orientation, and narrow viewport checks. Retry needed; not game FAIL and not approved.", openKey: "kart-racer:driving-assists" },
           { label: "Audio Default Hotfix", status: "pass", statusLabel: "PASS", note: "Retest 2 verifies default-off audio, opt-in audio, opt-out/reset silence, stale saved settings muted, smoke path, and manual match.", openKey: "kart-racer:audio-default" }
         ],
         evidenceSeries: [
@@ -1044,7 +1191,7 @@
           { label: "Retest 1: Drift And Boost Fix", status: "PASS - RETEST 1", hydrateStatus: true, evidenceDir: "evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1", extraLinks: [{ label: "first-playable-frame.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/first-playable-frame.png" }, { label: "hosted-load.png", href: "evidence/kart-racer/upgrade-phase-a-drift-boost/retest-1/hosted-load.png" }] },
           { label: "Audio Default Hotfix: Canonical Single-Tester Retest 1", status: "FAIL - FIXED IN NEXT BUILD", hydrateStatus: true, evidenceDir: "evidence/kart-racer/audio-default-hotfix-single-tester-retest-1", extraLinks: [{ label: "superseded shared-window report", href: "evidence/kart-racer/audio-default-hotfix-shared-window-retest-1/TEST_REPORT.md" }, { label: "old isolated-profile report", href: "evidence/kart-racer/audio-default-hotfix/TEST_REPORT.md" }] },
           { label: "Audio Default Hotfix: Canonical Single-Tester Retest 2", status: "PASS - CLOSING EVIDENCE", hydrateStatus: true, evidenceDir: "evidence/kart-racer/audio-default-hotfix-single-tester-retest-2" },
-          { label: "Driving Assists And Control Accessibility Upgrade", status: "TESTER ACTIVE / EVIDENCE PENDING", evidenceDir: "evidence/kart-racer/driving-assists-accessibility" }
+          { label: "Driving Assists And Control Accessibility Upgrade", status: "BLOCKED_ENVIRONMENT / RETRY NEEDED", hydrateStatus: true, evidenceDir: "evidence/kart-racer/driving-assists-accessibility" }
         ]
       },
       {
