@@ -2815,3 +2815,42 @@ python3 -m http.server 8765 --bind 127.0.0.1
   - if a finding cannot yet be visually proven, mark `Needs Evidence Clip` and explain why;
   - for local-game retests, fixed findings should reference both the original evidence and the retest evidence when available.
 - Main orchestrator will treat missing clips as a dashboard/report quality gap, not automatically as a game failure, unless the missing evidence prevents approval of a required acceptance gate.
+
+## Platformer Upgrade Phase B FAIL / Fix Active - 2026-06-25
+
+- Canonical tester `019ef96e-99ee-7f62-b4d2-7d2c3cd29217` completed Side-Scrolling Platformer / Skyline Stepper Upgrade Phase B - Camera And Route Readability Pass.
+- Evidence folder:
+  - `evidence/platformer/upgrade-phase-b-camera-route-readability/`
+- Required artifacts are present:
+  - `TEST_REPORT.md`
+  - `expected-flow.md`
+  - `gameplay-recording.mp4`
+- Verdict: `FAIL`.
+- Accepted blocker:
+  - lower safe route visually points right and route/camera labels are readable, but the player stalls near the mid-checkpoint approach around HUD distance `179 m`;
+  - normal documented movement/jump input did not progress the player to the mid checkpoint or exit;
+  - this blocks the Phase B route/readability approval gate.
+- Finding-level evidence is present:
+  - `F-01 Critical - Lower safe route stalls before the mid checkpoint`;
+  - `Evidence clip: gameplay-recording.mp4 @ 00:08-00:15`;
+  - screenshots include `11-ordinary-jump-camera.png`, `16-after-refocus-move-check.png`, `18-jump-right-route-block-check.png`, `19-arrow-jump-route-block-check.png`, and `20-long-right-still-blocked-check.png`.
+- Narrow fix request sent to Platformer builder `019ef96e-1dd7-7f13-91d4-855909736edc`.
+- Required builder fix:
+  - preserve the improved camera/lookahead/readability work;
+  - adjust lower-route geometry/collision/cueing so a normal player can progress through the mid-checkpoint area and continue to Level Complete without hidden input or precision trick.
+- This phase remains open until the builder reports a fix and the canonical tester retests it to `PASS`.
+
+## Unified Track Reports Dashboard Goal Active - 2026-06-25
+
+- User requested replacing the scattered/multiple-final-report dashboard feel with one report surface split into two clear lanes:
+  - `Track 1: Local Game QA Reports`;
+  - `Track 2: External Browser QA Reports`.
+- Dashboard thread `019ef963-dc84-72f1-9542-1431bafaf31d` was given a static-only implementation goal.
+- Required dashboard behavior:
+  - one unified Reports area is the primary report surface;
+  - Track 1 rows show the three local games with latest status, phase, report, expected-flow, recording, and finding-level evidence;
+  - Track 2 rows show the five external games with latest verdict/provider, report, expected-flow, recording, and finding-level evidence;
+  - individual game drawers/pop-ups remain available for details, Markdown viewing, timelines, and videos, but should feel like drill-downs from the unified Reports section;
+  - findings without dedicated clips should show `Needs Evidence Clip` rather than being hidden;
+  - Platformer Phase B must be shown as `FAIL / FIX ACTIVE`, not `PASS`, until retested.
+- Main orchestrator goal is active to keep builder fixes, tester reports, dashboard state, `AGENTS.md`, and this log aligned around the unified report model.
